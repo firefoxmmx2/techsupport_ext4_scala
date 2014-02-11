@@ -3,7 +3,66 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index
+GET           /                    controllers.Application.index
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET           /assets/*file        controllers.Assets.at(path="/public", file)
+
+GET           /login               controllers.Application.login
+
+#用户
+PUT           /user                controllers.User.add
+
+DELETE        /user                controllers.User.remove
+
+POST          /user                controllers.User.update
+
+GET           /users/:id           controllers.User.get(id:Long)
+
+GET           /users               controllers.User.find
+
+#机构
+PUT           /department                controllers.Department.add
+
+DELETE        /department                controllers.Department.remove
+
+POST          /department                controllers.Department.update
+
+GET           /departments/:id           controllers.Department.get(id:Long)
+
+GET           /department               controllers.Department.find
+
+#菜单
+PUT           /menu                controllers.Menu.add
+
+DELETE        /menu                controllers.Menu.remove
+
+POST          /menu                controllers.Menu.update
+
+GET           /menus/:id           controllers.Menu.get(id:Long)
+
+GET           /menus               controllers.Menu.find
+
+#角色
+PUT           /role                controllers.Role.add
+
+DELETE        /role                controllers.Role.remove
+
+POST          /role                controllers.Role.update
+
+GET           /roles/:id           controllers.Role.get(id:Long)
+
+GET           /roles               controllers.Role.find
+
+#系统
+PUT           /system                controllers.System.add
+
+DELETE        /system                controllers.System.remove
+
+POST          /system                controllers.System.update
+
+GET           /systems/:id           controllers.System.get(id:Long)
+
+GET           /systems               controllers.System.find
+
+

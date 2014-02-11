@@ -10,7 +10,9 @@ object ApplicationBuild extends Build {
   val appDependencies = Seq(
     // Add your project dependencies here,
     jdbc,
-    anorm
+    anorm,
+    "org.squeryl" % "squeryl_2.10" % "0.9.5-6",
+    "com.cloudphysics" % "jerkson_2.10" % "0.6.3"
   )
 
 
