@@ -2,8 +2,15 @@ package models
 
 import scala.slick.lifted._
 import com.typesafe.slick.driver.oracle.OracleDriver.simple._
-import com.typesafe.slick.driver.oracle.OracleDriver._
 import play.api.Play.current
+import dao.Db
+import Db.{database => db}
+import scala.util.Try
+import org.apache.commons.lang3.StringUtils
+
+object SystemManage {
+
+}
 
 /**
  * 机构
@@ -32,6 +39,8 @@ class Departments(tag: Tag) extends Table[Department](tag, "t_department") {
 
   def departcode = column[String]("departcode")
 
+  def departname = column[String]("departname")
+
   def departlevel = column[Int]("departlevel")
 
   def departfullcode = column[String]("departfullcode")
@@ -42,15 +51,18 @@ class Departments(tag: Tag) extends Table[Department](tag, "t_department") {
 
   def isLeaf = column[String]("isleaf")
 
-  def departsimplepin = column[String]("departsimplepin")
+  def departsimplepin = column[String]("departsimplepin", O.Nullable)
 
-  def departallpin = column[String]("departallpin")
+  def departallpin = column[String]("departallpin", O.Nullable)
 
-  def departbrevitycode = column[String]("departbrevitycode")
+  def departbrevitycode = column[String]("departbrevitycode", O.Nullable)
 
   def * = (departid, departcode, departlevel, departfullcode, parentDepartid,
     nodeOrder, isLeaf, departsimplepin, departallpin, departbrevitycode) <>(Department.tupled, Department.unapply)
+
+  val sequence = Sequence[Long]("departid")
 }
+
 
 /**
  * 用户
@@ -74,6 +86,8 @@ case class User(userid: Long, departid: Long, useraccount: String, username: Str
                 email: String = None)
 
 class Users(tag: Tag) extends Table[User](tag, "t_user") {
+  val sequence = Sequence[Long]("userid")
+
   def userid = column[Long]("userid", O.PrimaryKey)
 
   def departid = column[Long]("departid")
@@ -102,6 +116,7 @@ class Users(tag: Tag) extends Table[User](tag, "t_user") {
 
   def * = (userid, departid, useraccount, username, password, idnum, mobilePhone, userorder,
     isVaild, userType, jzlbdm, jzlbmc, email) <>(User.tupled, User.unapply)
+
 }
 
 /**
@@ -118,6 +133,8 @@ case class Role(roleid: Long, departid: Long, rolename: String, roleDescription:
                 roleType: Int = None, jzlbdm: String = None, jzlbmc: String = None)
 
 class Roles(tag: Tag) extends Table[Role](tag, "t_role") {
+  val sequence = Sequence[Long]("roleid")
+
   def roleid = column[Long]("roleid", O.PrimaryKey)
 
   def departid = column[Long]("departid")
@@ -216,19 +233,4 @@ class Menus(tag: Tag) extends Table[Menu](tag, "t_menu") {
     isleaf,
     systemcode) <>(Menu.tupled, Menu.unapply)
 }
-
-/**
- * 系统管理模块
- */
-object SystemManage {
-
-  //  val departments = table[Department]("t_department")
-  //  val users = table[User]("t_user")
-  //  val roles = table[Role]("t_role")
-
-  val departments = TableQuery[Departments]
-  val users = TableQuery[Users]
-  val roles = TableQuery[Roles]
-}
-
 
