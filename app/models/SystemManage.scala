@@ -1,12 +1,8 @@
 package models
 
-import scala.slick.lifted._
+
 import com.typesafe.slick.driver.oracle.OracleDriver.simple._
-import play.api.Play.current
-import dao.Db
-import Db.{database => db}
-import scala.util.Try
-import org.apache.commons.lang3.StringUtils
+import scala.slick.driver.ExtendedDriver
 
 object SystemManage {
 
@@ -31,7 +27,7 @@ case class Department(departid: Long, departcode: String, departname: String,
                       departlevel: Int, departfullcode: String,
                       parentDepartid: Long,
                       nodeOrder: Int = 0, isLeaf: String = "Y",
-                      departsimplepin: String = None, departallpin: String = None,
+                      departsimplepin: Option[String], departallpin: Option[String],
                       departbrevitycode: String = departcode)
 
 class Departments(tag: Tag) extends Table[Department](tag, "t_department") {
@@ -81,9 +77,9 @@ class Departments(tag: Tag) extends Table[Department](tag, "t_department") {
  * @param email 邮箱
  */
 case class User(userid: Long, departid: Long, useraccount: String, username: String,
-                password: String, idnum: String, mobilePhone: String = None, userorder: Int = 1,
-                isVaild: String = "Y", userType: String = None, jzlbdm: String = None, jzlbmc: String = None,
-                email: String = None)
+                password: String, idnum: String, mobilePhone: Option[String], userorder: Int = 1,
+                isVaild: String = "Y", userType: Option[String], jzlbdm: Option[String], jzlbmc: Option[String],
+                email: Option[String])
 
 class Users(tag: Tag) extends Table[User](tag, "t_user") {
   val sequence = Sequence[Long]("userid")
@@ -129,8 +125,8 @@ class Users(tag: Tag) extends Table[User](tag, "t_user") {
  * @param jzlbdm
  * @param jzlbmc
  */
-case class Role(roleid: Long, departid: Long, rolename: String, roleDescription: String = None,
-                roleType: Int = None, jzlbdm: String = None, jzlbmc: String = None)
+case class Role(roleid: Long, departid: Long, rolename: String, roleDescription: Option[String],
+                roleType: Int = None, jzlbdm: Option[String], jzlbmc: Option[String])
 
 class Roles(tag: Tag) extends Table[Role](tag, "t_role") {
   val sequence = Sequence[Long]("roleid")
