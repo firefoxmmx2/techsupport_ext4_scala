@@ -3,23 +3,13 @@ package controllers
 import play.api.mvc._
 
 object Department extends Controller {
-  def add = Action {
+  def add = TODO
 
-  }
+  def remove = TODO
 
-  def remove = Action {
+  def update = TODO
 
-  }
+  def get(id:Long) = TODO
 
-  def update = Action {
-
-  }
-
-  def get(id:Long) = Action {
-
-  }
-
-  def find = Action {
-
-  }
+  def find = TODO
 }

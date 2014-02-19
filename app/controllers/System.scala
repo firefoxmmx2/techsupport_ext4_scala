@@ -6,23 +6,13 @@ import play.api.mvc.{Action, Controller}
  * Created by hooxin on 14-2-10.
  */
 object System extends Controller {
-  def add = Action {
+  def add = TODO
 
-  }
+  def remove = TODO
 
-  def remove = Action {
+  def update = TODO
 
-  }
+  def get(id: Long) = TODO
 
-  def update = Action {
-
-  }
-
-  def get(id: Long) = Action {
-
-  }
-
-  def find = Action {
-
-  }
+  def find = TODO
 }

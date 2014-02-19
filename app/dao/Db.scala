@@ -1,6 +1,7 @@
 package dao
 
 import play.api.db.DB
+import play.api.Play.current
 
 /**
  * Created by hooxin on 14-2-14.
