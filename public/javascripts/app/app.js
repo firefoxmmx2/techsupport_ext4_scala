@@ -5,8 +5,9 @@ Ext.application({
         Ext.create('Ext.container.Viewport', {
             layout: 'fit',
             items: [
-                {xtype:'login'}
+                {xtype: 'login'}
             ]
         })
-    }
+    },
+    constrollers: ['sysadmin.Login']
 })
