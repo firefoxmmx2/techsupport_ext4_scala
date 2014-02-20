@@ -4,9 +4,6 @@ package models
 import com.typesafe.slick.driver.oracle.OracleDriver.simple._
 import scala.slick.driver.ExtendedDriver
 
-object SystemManage {
-
-}
 
 /**
  * 机构
@@ -28,9 +25,9 @@ case class Department(departid: Long, departcode: String, departname: String,
                       parentDepartid: Long,
                       nodeOrder: Int = 0, isLeaf: String = "Y",
                       departsimplepin: Option[String], departallpin: Option[String],
-                      departbrevitycode: String = departcode)
+                      departbrevitycode: String)
 
-class Departments(tag: Tag) extends Table[Department](tag, "t_department") {
+class Departments(tag: Tag) extends Table[Department](tag, "T_DEPARTMENT") {
   def departid = column[Long]("departid", O.PrimaryKey)
 
   def departcode = column[String]("departcode")
@@ -47,13 +44,13 @@ class Departments(tag: Tag) extends Table[Department](tag, "t_department") {
 
   def isLeaf = column[String]("isleaf")
 
-  def departsimplepin = column[String]("departsimplepin", O.Nullable)
+  def departsimplepin = column[Option[String]]("departsimplepin", O.Nullable)
 
-  def departallpin = column[String]("departallpin", O.Nullable)
+  def departallpin = column[Option[String]]("departallpin", O.Nullable)
 
   def departbrevitycode = column[String]("departbrevitycode", O.Nullable)
 
-  def * = (departid, departcode, departlevel, departfullcode, parentDepartid,
+  def * = (departid, departcode, departname, departlevel, departfullcode, parentDepartid,
     nodeOrder, isLeaf, departsimplepin, departallpin, departbrevitycode) <>(Department.tupled, Department.unapply)
 
   val sequence = Sequence[Long]("departid")
@@ -81,34 +78,34 @@ case class User(userid: Long, departid: Long, useraccount: String, username: Str
                 isVaild: String = "Y", userType: Option[String], jzlbdm: Option[String], jzlbmc: Option[String],
                 email: Option[String])
 
-class Users(tag: Tag) extends Table[User](tag, "t_user") {
-  val sequence = Sequence[Long]("userid")
+class Users(tag: Tag) extends Table[User](tag, "T_USER") {
+  val sequence = Sequence[Long]("USERID")
 
-  def userid = column[Long]("userid", O.PrimaryKey)
+  def userid = column[Long]("USERID", O.PrimaryKey)
 
-  def departid = column[Long]("departid")
+  def departid = column[Long]("DEPARTID")
 
-  def useraccount = column[String]("useraccount")
+  def useraccount = column[String]("USERACCOUNT")
 
-  def username = column[String]("username")
+  def username = column[String]("USERNAME")
 
-  def password = column[String]("password")
+  def password = column[String]("PASSWORD")
 
-  def idnum = column[String]("idnum")
+  def idnum = column[String]("IDNUM")
 
-  def mobilePhone = column[String]("mobilePhone")
+  def mobilePhone = column[Option[String]]("MOBILEPHONE")
 
-  def userorder = column[Int]("userorder")
+  def userorder = column[Int]("USERORDER")
 
-  def isVaild = column[String]("isvaild")
+  def isVaild = column[String]("ISVAILD")
 
-  def userType = column[String]("usertype")
+  def userType = column[Option[String]]("USERTYPE")
 
-  def jzlbdm = column[String]("jzlbdm")
+  def jzlbdm = column[Option[String]]("JZLBDM")
 
-  def jzlbmc = column[String]("jzlbmc")
+  def jzlbmc = column[Option[String]]("JZLBMC")
 
-  def email = column[String]("email")
+  def email = column[Option[String]]("EMAIL")
 
   def * = (userid, departid, useraccount, username, password, idnum, mobilePhone, userorder,
     isVaild, userType, jzlbdm, jzlbmc, email) <>(User.tupled, User.unapply)
@@ -126,24 +123,24 @@ class Users(tag: Tag) extends Table[User](tag, "t_user") {
  * @param jzlbmc
  */
 case class Role(roleid: Long, departid: Long, rolename: String, roleDescription: Option[String],
-                roleType: Int = None, jzlbdm: Option[String], jzlbmc: Option[String])
+                roleType: Option[String], jzlbdm: Option[String], jzlbmc: Option[String])
 
-class Roles(tag: Tag) extends Table[Role](tag, "t_role") {
-  val sequence = Sequence[Long]("roleid")
+class Roles(tag: Tag) extends Table[Role](tag, "T_ROLE") {
+  val sequence = Sequence[Long]("ROLEID")
 
-  def roleid = column[Long]("roleid", O.PrimaryKey)
+  def roleid = column[Long]("ROLEID", O.PrimaryKey)
 
-  def departid = column[Long]("departid")
+  def departid = column[Long]("DEPARTID")
 
-  def rolename = column[String]("rolename")
+  def rolename = column[String]("ROLENAME")
 
-  def roleDescription = column[String]("roledescription")
+  def roleDescription = column[Option[String]]("ROLEDESCRIPTION")
 
-  def roleType = column[String]("roletype")
+  def roleType = column[Option[String]]("ROLETYPE")
 
-  def jzlbdm = column[String]("jzlbdm")
+  def jzlbdm = column[Option[String]]("JZLBDM")
 
-  def jzlbmc = column[String]("jzlbmc")
+  def jzlbmc = column[Option[String]]("JZLBMC")
 
   def * = (roleid, departid, rolename, roleDescription, roleType,
     jzlbdm, jzlbmc) <>(Role.tupled, Role.unapply)
@@ -163,24 +160,24 @@ class Roles(tag: Tag) extends Table[Role](tag, "t_role") {
 case class System(systemcode: String, systemname: String, systemdefine: String, picturepath: String,
                   parentsystemcode: String, nodeorder: Int, isleaf: String, fullcode: String)
 
-class Systems(tag: Tag) extends Table[System](tag, "t_system") {
-  def systemcode = column[String]("systemcode", O.PrimaryKey)
+class Systems(tag: Tag) extends Table[System](tag, "T_SYSTEM") {
+  def systemcode = column[String]("SYSTEMCODE", O.PrimaryKey)
 
-  def systemname = column[String]("systemname")
+  def systemname = column[String]("SYSTEMNAME")
 
-  def systemdefine = column[String]("systemdefine")
+  def systemdefine = column[String]("SYSTEMDEFINE")
 
-  def picturepath = column[String]("picturepath")
+  def picturepath = column[String]("PICTUREPATH")
 
-  def parentsystemcode = column[String]("parentsystemcode")
+  def parentsystemcode = column[String]("PARENTSYSTEMCODE")
 
-  def nodeorder = column[String]("nodeorder")
+  def nodeorder = column[Int]("NODEORDER")
 
-  def isleaf = column[String]("isleaf")
+  def isleaf = column[String]("ISLEAF")
 
-  def fullcode = column[String]("fullcode")
+  def fullcode = column[String]("FULLCODE")
 
-  def * = (systemcode, systemname, systemdefine, picturepath,
+  def * = (systemcode, systemname, systemdefine, picturepath, parentsystemcode,
     nodeorder, isleaf, fullcode) <>(System.tupled, System.unapply)
 }
 
@@ -200,22 +197,22 @@ case class Menu(menucode: String, menuname: String, funcentry: String, menulevel
                 parentmenucode: String, menufullcode: String, nodeorder: Int,
                 isleaf: String, systemcode: String)
 
-class Menus(tag: Tag) extends Table[Menu](tag, "t_menu") {
-  def menucode = column[String]("menucode", O.PrimaryKey)
+class Menus(tag: Tag) extends Table[Menu](tag, "T_MENU") {
+  def menucode = column[String]("MENUCODE", O.PrimaryKey)
 
-  def menuname = column[String]("menuname")
+  def menuname = column[String]("MENUNAME")
 
-  def funcentry = column[String]("funcentry")
+  def funcentry = column[String]("FUNCENTRY")
 
-  def menulevel = column[Int]("menulevel")
+  def menulevel = column[Int]("MENULEVEL")
 
-  def parentmenucode = column[String]("parentmenucode")
+  def parentmenucode = column[String]("PARENTMENUCODE")
 
-  def menufullcode = column[String]("menufullcode")
+  def menufullcode = column[String]("MENUFULLCODE")
 
-  def nodeorder = column[Int]("nodeorder")
+  def nodeorder = column[Int]("NODEORDER")
 
-  def isleaf = column[String]("isleaf")
+  def isleaf = column[String]("ISLEAF")
 
   def systemcode = column[String]("systemcode", O.NotNull)
 

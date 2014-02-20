@@ -7,8 +7,8 @@ import scala.slick.lifted.TableQuery
  */
 trait Models {
   val departments = TableQuery[Departments]
-  val users = TableQuery[Users]
-  val roles = TableQuery[Roles]
-  val systems = TableQuery[Systems]
-  val menus = TableQuery[Menus]
+//  val users = TableQuery[Users]
+//  val roles = TableQuery[Roles]
+//  val systems = TableQuery[Systems]
+//  val menus = TableQuery[Menus]
 }

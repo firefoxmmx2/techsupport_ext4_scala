@@ -18,10 +18,10 @@ object Departments {
 
     db withTransaction {
       implicit session =>
-      //        val nd = d.copy(departid = departments.baseTableRow.sequence.next.toString().toLong)
-        val nd = d.copy(departid = for (s <- departments.baseTableRow.sequence) yield departments.baseTableRow.sequence.next)
-        departments += nd
-        nd
+//              val nd = d.copy(departid = departments.baseTableRow.sequence.next.toString().toLong)
+//        val nd = d.copy(departid = for (s <- departments.baseTableRow.sequence) yield departments.baseTableRow.sequence.next)
+        departments += d
+        d
     }
   }
 
@@ -35,13 +35,12 @@ object Departments {
   }
 
   def deleteById(departid: Long) = Try {
-    require(departid == null, "被删除机构的机构id不能为空")
+    require(departid == None, "被删除机构的机构id不能为空")
     require(departid == 0, "被删除机构的机构id必须大于0")
 
     db.withTransaction {
       implicit session =>
-        departments.filter(_.departid === departid).delete
-
+//        departments.filter(_.departid === departid).delete
     }
   }
 
@@ -50,10 +49,10 @@ object Departments {
   }
 
   def list(params: Map[String, Object]) = Try {
-    var q = if (params.get("departid") != None) departments.withFilter(_.departid === params.get("departid"))
-    q = if (params.get("departname") != None) departments.withFilter(_.departname === params.get("departname"))
-    q = if (params.get("departcode") != None) departments.withFilter(_.departcode === params.get("departcode"))
-    q = if (params.get("departlevel") != None) departments.withFilter(_.departlevel === params.get("departlevel"))
-    q = if (params.get("departfullcode") != None) departments.withFilter(_.departfullcode like (params.get("departfullcode")))
+//    var q = if (params.get("departid") != None) departments.withFilter(_.departid === params.get("departid"))
+//    q = if (params.get("departname") != None) departments.withFilter(_.departname === params.get("departname"))
+//    q = if (params.get("departcode") != None) departments.withFilter(_.departcode === params.get("departcode"))
+//    q = if (params.get("departlevel") != None) departments.withFilter(_.departlevel === params.get("departlevel"))
+//    q = if (params.get("departfullcode") != None) departments.withFilter(_.departfullcode like (params.get("departfullcode")))
   }
 }
