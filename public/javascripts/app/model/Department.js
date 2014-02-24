@@ -1,7 +1,7 @@
 /**
  * Created by hooxin on 14-2-19.
  */
-Ext.define('Techsupport.Department',{
+Ext.define('Techsupport.model.Department',{
     extend:'Ext.data.Model',
     field:[
         {name:'departid',type:'int'},
