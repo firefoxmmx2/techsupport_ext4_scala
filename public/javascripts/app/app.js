@@ -1,14 +1,16 @@
 Ext.application({
-    requrie:['Ext.container.Viewport'],
+    requries: ['Ext.container.Viewport'],
     name: 'Techsupport',
     appFolder: 'assets/javascripts/app',
-    controllers:["sysadmin.Login"],
-    modals:['Login','Department','User'],
-    launch:function(){
-        Ext.create('Ext.container.Viewport',{
-            layout:'fit',
-            title:'head',
-            items:[{xtype:'login'}]
+    controllers: ["sysadmin.Login"],
+    launch: function () {
+        Ext.create('Ext.container.Viewport', {
+            layout: 'fit',
+            items: [
+                {xtype: 'panel', title: '测试', items: [
+                    {xtype:'login',autoShow:true}
+                ]}
+            ]
         })
     }
 });
