@@ -1,0 +1,44 @@
+{
+    "success": true,
+    "result": [
+        {
+            "departid": 1,
+            "departcode": "htjd",
+            "departname": "航天金盾",
+            "departlevel": 1,
+            "departfullcode": "htjd.",
+            "parentDepartid": 0,
+            "nodeOrder": 0,
+            "isLeaf": "N",
+            "departsimplepin": "htjd",
+            "departallpin": "hangtianjindun",
+            "departbrevitycode": "htjd"
+        },
+        {
+            "departid": 2,
+            "departcode": "cpfab",
+            "departname": "产品方案部",
+            "departlevel": 2,
+            "departfullcode": "cpfab.",
+            "parentDepartid": 1,
+            "nodeOrder": 0,
+            "isLeaf": "Y",
+            "departsimplepin": "cpfab",
+            "departallpin": "chanpingfanganbu",
+            "departbrevitycode": "cpfab"
+        },
+        {
+            "departid": 3,
+            "departcode": "jskfb",
+            "departname": "技术开发部",
+            "departlevel": 2,
+            "departfullcode": "jskfb.",
+            "parentDepartid": 1,
+            "nodeOrder": 1,
+            "isLeaf": "Y",
+            "departsimplepin": "jskfb",
+            "departallpin": "jishukaifabu",
+            "departbrevitycode": "jskfb"
+        }
+    ]
+}

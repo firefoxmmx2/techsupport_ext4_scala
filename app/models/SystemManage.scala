@@ -15,9 +15,9 @@ import scala.slick.driver.ExtendedDriver
  * @param parentDepartid 父机构id
  * @param nodeOrder 排序号
  * @param isLeaf 是否为叶子节点 默认Y
- * @param departsimplepin 机构
- * @param departallpin 机构简拼 搜索用
- * @param departbrevitycode 机构全拼 搜索用
+ * @param departsimplepin 机构简拼 搜索用
+ * @param departallpin 机构全拼 搜索用
+ * @param departbrevitycode 机构省级代码
  */
 
 case class Department(departid: Long, departcode: String, departname: String,

@@ -1,0 +1,20 @@
+{
+    "success": true,
+    "result": [
+        {
+            "userid": 1,
+            "departid": 1,
+            "useraccount": "superadmin",
+            "username": "系统管理员",
+            "password": "1",
+            "idnum": "500103198812124325",
+            "mobilePhone": null,
+            "userorder": 0,
+            "isVaild": "Y",
+            "userType": "9999",
+            "jzlbdm": null,
+            "jzlbmc": null,
+            "email": null
+        }
+    ]
+}

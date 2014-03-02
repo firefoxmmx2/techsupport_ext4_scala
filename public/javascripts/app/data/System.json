@@ -1,0 +1,15 @@
+{
+    "success": true,
+    "result": [
+        {
+            "systemcode": "ts",
+            "systemname": "技术支持单",
+            "systemdefine": "技术支持单",
+            "picturepath": "",
+            "parentsystemcode": null,
+            "nodeorder": 0,
+            "isleaf": "Y",
+            "fullcode": "ts"
+        }
+    ]
+}
