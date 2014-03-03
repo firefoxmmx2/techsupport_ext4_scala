@@ -8,10 +8,10 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
     init: function () {
         console.log('Initialized Users! This happens before the Application launch function is called');
         this.control({
-            'viewport > panel': {
+            'Login': {
                 afterrender: function (p) {
                     p.down('button[action=login]').on('click', function () {
-                        alert(1);
+                       alert(1);
                     }, this);
                 }
             }
