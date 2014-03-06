@@ -2,7 +2,6 @@ package models
 
 
 import com.typesafe.slick.driver.oracle.OracleDriver.simple._
-import scala.slick.driver.ExtendedDriver
 
 
 /**
@@ -25,30 +24,30 @@ case class Department(departid: Long, departcode: String, departname: String,
                       parentDepartid: Long,
                       nodeOrder: Int = 0, isLeaf: String = "Y",
                       departsimplepin: Option[String], departallpin: Option[String],
-                      departbrevitycode: String)
+                      departbrevitycode: Option[String])
 
 class Departments(tag: Tag) extends Table[Department](tag, "T_DEPARTMENT") {
-  def departid = column[Long]("departid", O.PrimaryKey)
+  def departid = column[Long]("DEPARTID", O.PrimaryKey)
 
-  def departcode = column[String]("departcode")
+  def departcode = column[String]("DEPARTCODE")
 
-  def departname = column[String]("departname")
+  def departname = column[String]("DEPARTNAME")
 
-  def departlevel = column[Int]("departlevel")
+  def departlevel = column[Int]("DEPARTLEVEL")
 
-  def departfullcode = column[String]("departfullcode")
+  def departfullcode = column[String]("DEPARTFULLCODE")
 
-  def parentDepartid = column[Long]("parentdepartid")
+  def parentDepartid = column[Long]("PARENTDEPARTID")
 
-  def nodeOrder = column[Int]("nodeorder")
+  def nodeOrder = column[Int]("NODEORDER")
 
-  def isLeaf = column[String]("isleaf")
+  def isLeaf = column[String]("ISLEAF")
 
-  def departsimplepin = column[Option[String]]("departsimplepin", O.Nullable)
+  def departsimplepin = column[Option[String]]("DEPARTSIMPLEPIN", O.Nullable)
 
-  def departallpin = column[Option[String]]("departallpin", O.Nullable)
+  def departallpin = column[Option[String]]("DEPARTALLPIN", O.Nullable)
 
-  def departbrevitycode = column[String]("departbrevitycode", O.Nullable)
+  def departbrevitycode = column[Option[String]]("DEPARTBREVITYCODE", O.Nullable)
 
   def * = (departid, departcode, departname, departlevel, departfullcode, parentDepartid,
     nodeOrder, isLeaf, departsimplepin, departallpin, departbrevitycode) <>(Department.tupled, Department.unapply)
