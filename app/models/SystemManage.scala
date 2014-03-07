@@ -26,7 +26,7 @@ case class Department(departid: Long, departcode: String, departname: String,
                       departsimplepin: Option[String], departallpin: Option[String],
                       departbrevitycode: Option[String])
 
-class Departments(tag: Tag) extends Table[Department](tag, "T_DEPARTMENT") {
+class DepartmentTable(tag: Tag) extends Table[Department](tag, "T_DEPARTMENT") {
   def departid = column[Long]("DEPARTID", O.PrimaryKey)
 
   def departcode = column[String]("DEPARTCODE")
@@ -77,7 +77,7 @@ case class User(userid: Long, departid: Long, useraccount: String, username: Str
                 isVaild: String = "Y", userType: Option[String], jzlbdm: Option[String], jzlbmc: Option[String],
                 email: Option[String])
 
-class Users(tag: Tag) extends Table[User](tag, "T_USER") {
+class UserTable(tag: Tag) extends Table[User](tag, "T_USER") {
   val sequence = Sequence[Long]("USERID")
 
   def userid = column[Long]("USERID", O.PrimaryKey)
@@ -124,7 +124,7 @@ class Users(tag: Tag) extends Table[User](tag, "T_USER") {
 case class Role(roleid: Long, departid: Long, rolename: String, roleDescription: Option[String],
                 roleType: Option[String], jzlbdm: Option[String], jzlbmc: Option[String])
 
-class Roles(tag: Tag) extends Table[Role](tag, "T_ROLE") {
+class RoleTable(tag: Tag) extends Table[Role](tag, "T_ROLE") {
   val sequence = Sequence[Long]("ROLEID")
 
   def roleid = column[Long]("ROLEID", O.PrimaryKey)
@@ -159,7 +159,7 @@ class Roles(tag: Tag) extends Table[Role](tag, "T_ROLE") {
 case class System(systemcode: String, systemname: String, systemdefine: String, picturepath: String,
                   parentsystemcode: String, nodeorder: Int, isleaf: String, fullcode: String)
 
-class Systems(tag: Tag) extends Table[System](tag, "T_SYSTEM") {
+class SystemTable(tag: Tag) extends Table[System](tag, "T_SYSTEM") {
   def systemcode = column[String]("SYSTEMCODE", O.PrimaryKey)
 
   def systemname = column[String]("SYSTEMNAME")
@@ -196,7 +196,7 @@ case class Menu(menucode: String, menuname: String, funcentry: String, menulevel
                 parentmenucode: String, menufullcode: String, nodeorder: Int,
                 isleaf: String, systemcode: String)
 
-class Menus(tag: Tag) extends Table[Menu](tag, "T_MENU") {
+class MenuTable(tag: Tag) extends Table[Menu](tag, "T_MENU") {
   def menucode = column[String]("MENUCODE", O.PrimaryKey)
 
   def menuname = column[String]("MENUNAME")
