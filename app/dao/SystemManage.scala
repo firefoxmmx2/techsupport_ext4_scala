@@ -4,6 +4,7 @@ import models._
 import scala.util.Try
 import org.apache.commons.lang3.StringUtils
 import com.typesafe.slick.driver.oracle.OracleDriver.profile.Implicit._
+import scala.slick.lifted.{CanBeQueryCondition, Query}
 
 /**
  * Created by hooxin on 14-2-14.
@@ -18,10 +19,10 @@ object Departments {
 
     db withTransaction {
       implicit session =>
-//              val nd = d.copy(departid = departments.baseTableRow.sequence.next.toString().toLong)
-//        val nd = d.copy(departid = for (s <- departments.baseTableRow.sequence) yield departments.baseTableRow.sequence.next)
+        val nd = d.copy(departid = departments.baseTableRow.sequence.next.toString().toLong)
+        //        val nd = d.copy(departid = for (s <- departments.baseTableRow.sequence) yield departments.baseTableRow.sequence.next)
         departments += d
-        d
+        nd
     }
   }
 
@@ -40,7 +41,7 @@ object Departments {
 
     db.withTransaction {
       implicit session =>
-//        departments.filter(_.departid === departid).delete
+        val q = departments.filter(_.departid === departid)
     }
   }
 
@@ -48,11 +49,38 @@ object Departments {
 
   }
 
-  def list(params: Map[String, Object]) = Try {
-//    var q = if (params.get("departid") != None) departments.withFilter(_.departid === params.get("departid"))
-//    q = if (params.get("departname") != None) departments.withFilter(_.departname === params.get("departname"))
-//    q = if (params.get("departcode") != None) departments.withFilter(_.departcode === params.get("departcode"))
-//    q = if (params.get("departlevel") != None) departments.withFilter(_.departlevel === params.get("departlevel"))
-//    q = if (params.get("departfullcode") != None) departments.withFilter(_.departfullcode like (params.get("departfullcode")))
+  def list(departid: Option[Long] = None, departname: Option[String] = None, departcode: Option[String] = None,
+           departfullcode: Option[String] = None, departlevel: Option[Int] = None) = Try {
+
+    //    var q = departments.filter(_.departid)
+    //    q = departid match {
+    //      case Some(d) => q.filter(_.departid === d)
+    //    }
+    //    q = departname match {
+    //      case Some(d) => q.filter(_.departname === d )
+    //    }
+    //    q= departcode match {
+    //      case Some(d) => q.filter(_.departcode === d)
+    //    }
+    //    q=departfullcode match {
+    //      case Some(d) => q.filter(_.departfullcode === d)
+    //    }
+    //    q=departlevel match {
+    //      case Some(d) => q.filter(_.departlevel === d)
+    //    }
+    MaybeFilter(departments)
+      .filter(departid)(v => d => d.departid === v)
+      .filter(departname)(v => d => d.departname === v)
+      .filter(departcode)(v => d => d.departcode === v)
+      .filter(departfullcode)(v => d => d.departfullcode === v)
+      .filter(departlevel)(v => d => d.departlevel === v)
+
   }
+
+  case class MaybeFilter[X, Y](val query: Query[X, Y]) {
+    def filter[T, R: CanBeQueryCondition](data: Option[T])(f: T => X => R) = {
+      data.map(v => MaybeFilter(query.filter(f(v)))).getOrElse(this)
+    }
+  }
+
 }
