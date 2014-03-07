@@ -77,10 +77,5 @@ object Departments {
 
   }
 
-  case class MaybeFilter[X, Y](val query: Query[X, Y]) {
-    def filter[T, R: CanBeQueryCondition](data: Option[T])(f: T => X => R) = {
-      data.map(v => MaybeFilter(query.filter(f(v)))).getOrElse(this)
-    }
-  }
 
 }
