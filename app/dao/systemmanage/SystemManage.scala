@@ -30,7 +30,8 @@ object DepartmentDaoImpl extends DepartmentDaoTrait {
   def deleteById(departid: Long)(implicit session: Session) = {
     if(departid == None)
       throw new RuntimeException("departid 不能为空")
-    val q = departments.filter(_.departid === departid)
+    import com.typesafe.slick.driver.oracle.OracleDriver.simple._
+    val q = departments.filter(_.departid === departid).delete
   }
 
   def page(pageno: Int, pagesize: Int, params: Map[String, Object], dir: String, sort: String)(implicit session: Session): Page[Department] = {
