@@ -1,32 +1,27 @@
 package dao
 
 import scala.slick.lifted.{CanBeQueryCondition, Query, TableQuery}
+import scala.util.Try
+import util.Page
 
 /**
  * Created by hooxin on 14-3-7.
  */
-trait BaseDao [M] {
+import com.typesafe.slick.driver.oracle.OracleDriver.simple.Session
+trait BaseDao [M,PRIMARY_KEY_T] {
   case class MaybeFilter[X, Y](val query: Query[X, Y]) {
     def filter[T, R: CanBeQueryCondition](data: Option[T])(f: T => X => R) = {
       data.map(v => MaybeFilter(query.filter(f(v)))).getOrElse(this)
     }
   }
 
-  def list(params:Map[String,Object]):M
+  def insert(m:M)(implicit session:Session):Try[M]
 
-  def page(pageno:Int,pagesize:Int,params:Map[String,Object])
+  def update(m:M)(implicit session:Session):Unit
 
-  def insert(m:M):M
+  def delete(m:M)(implicit session:Session):Unit
 
-  def update(m:M):Unit
+  def deleteById(id:PRIMARY_KEY_T)(implicit session:Session):Unit
 
-  def delete(m:M):Unit
-
-  def count(m:M):Int
-
-  def deleteById[L](id:L):Unit
-
-  def getById[L](id:L):M
+  def getById(id:PRIMARY_KEY_T)(implicit session:Session):M
 }
-
-

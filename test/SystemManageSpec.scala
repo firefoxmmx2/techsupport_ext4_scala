@@ -1,9 +1,10 @@
+import dao.systemmanage.DepartmentDaoImpl
 import play.api.test._
 import play.api.test.Helpers._
-import dao.{Queries, Departments}
+import dao.{Queries}
 import models.Department
 import org.specs2.mutable._
-import dao.Db._
+import dao.DB._
 
 import play.api.Play.current
 
@@ -20,8 +21,8 @@ class SystemManageSpec extends Specification with Queries {
           departsimplepin = None, departbrevitycode = None)
         database.withSession {
           implicit session =>
-            Departments.insert(department)
-            val d2 = Departments.list(departid = Option(9999L))
+            DepartmentDaoImpl.insert(department)
+            val d2 = DepartmentDaoImpl.list(departid = Option(9999L))
             assert(d2.get(0) == department)
         }
 
