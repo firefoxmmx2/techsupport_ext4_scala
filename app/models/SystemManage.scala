@@ -52,7 +52,7 @@ class DepartmentTable(tag: Tag) extends Table[Department](tag, "T_DEPARTMENT") {
   def * = (departid, departcode, departname, departlevel, departfullcode, parentDepartid,
     nodeOrder, isLeaf, departsimplepin, departallpin, departbrevitycode) <>(Department.tupled, Department.unapply)
 
-  val sequence = Sequence[Long]("departid")
+  val sequence = Sequence[Long]("DEPARTID")
 }
 
 

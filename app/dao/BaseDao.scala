@@ -15,7 +15,7 @@ trait BaseDao [M,PRIMARY_KEY_T] {
     }
   }
 
-  def insert(m:M)(implicit session:Session):Try[M]
+  def insert(m:M)(implicit session:Session):M
 
   def update(m:M)(implicit session:Session):Unit
 
