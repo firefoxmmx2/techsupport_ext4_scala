@@ -63,7 +63,7 @@ object DepartmentDaoImpl extends DepartmentDaoTrait{
   }
 
   def count(params: Map[String, Object])(implicit session:Session): Int = {
-    pageWhere(params).query.countDistinct
+    pageWhere(params).query.countDistinct.run
   }
 
   def getById(id: Long)(implicit session:Session): Department = {null}
@@ -72,10 +72,10 @@ object DepartmentDaoImpl extends DepartmentDaoTrait{
 
   def pageWhere(params:Map[String,Object]):MaybeFilter[DepartmentTable, DepartmentTable#TableElementType] = {
     MaybeFilter(departments)
-      .filter(params.get("departid"))(v => d => d.departid === v)
-      .filter(params.get("departname"))(v => d => d.departname === v)
-      .filter(params.get("departcode"))(v => d => d.departcode === v)
-      .filter(params.get("departfullcode"))(v => d => d.departfullcode === v)
-      .filter(params.get("departlevel"))(v => d => d.departlevel === v)
+      .filter(params.get("departid"))(v => d => d.departid === v.asInstanceOf[Long])
+      .filter(params.get("departname"))(v => d => d.departname === v.asInstanceOf[String])
+      .filter(params.get("departcode"))(v => d => d.departcode === v.asInstanceOf[String])
+      .filter(params.get("departfullcode"))(v => d => d.departfullcode === v.asInstanceOf[String])
+      .filter(params.get("departlevel"))(v => d => d.departlevel === v.asInstanceOf[Int])
   }
 }
