@@ -17,7 +17,7 @@ object DepartmentDaoImpl extends DepartmentDaoTrait {
   val departments = TableQuery[DepartmentTable]
 
   def insert(d: Department)(implicit session: Session) = {
-    val nd = d.copy(departid = departments.baseTableRow.sequence.next.run)
+    val nd = if (d.departid==0L) d.copy(departid = departments.baseTableRow.sequence.next.run) else d
     departments += d
     nd
   }
