@@ -1,6 +1,6 @@
-package controllers
+package controllers.systemmanage
 
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.Controller
 
 /**
  * Created by hooxin on 14-2-10.

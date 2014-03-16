@@ -1,8 +1,11 @@
-package controllers
+package controllers.systemmanage
 
 import play.api.mvc._
+import service.systemmanage.DepartmentServiceComponent
 
 object Department extends Controller {
+  this: DepartmentServiceComponent =>
+
   def add = TODO
 
   def remove = TODO
