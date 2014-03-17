@@ -1,12 +1,19 @@
 package dao.systemmanage
 
 import dao.BaseDao
-import models.{User, Department}
+import models._
+import models.Department
+import models.Menu
+import models.User
+import models.Role
 
 /**
  * Created by hooxin on 14-3-10.
  */
 
+/**
+ * 机构
+ */
 trait DepartmentDaoComponent {
   val departmentDao: DepartmentDao
 
@@ -16,7 +23,9 @@ trait DepartmentDaoComponent {
 
 }
 
-
+/**
+ * 用户
+ */
 trait UserDaoComponent {
   val userDao: UserDao
 
@@ -24,3 +33,31 @@ trait UserDaoComponent {
 
 }
 
+/**
+ * 系统
+ */
+trait SystemDaoComponent {
+  val systemDao: SystemDao
+
+  trait SystemDao extends BaseDao[System, String]
+
+}
+
+/**
+ * 菜单
+ */
+trait MenuDaoComponent {
+
+  trait MenuDao extends BaseDao[Menu, String]
+
+  val menuDao: MenuDao
+}
+
+/**
+ * 角色
+ */
+trait RoleDaoComponent {
+  trait RoleDao extends BaseDao[Role,Long]
+
+  val roleDao:RoleDao
+}
