@@ -1,13 +1,26 @@
 package dao.systemmanage
 
 import dao.BaseDao
-import models.Department
-import com.typesafe.slick.driver.oracle.OracleDriver.simple.Session
-import util.Page
+import models.{User, Department}
 
 /**
  * Created by hooxin on 14-3-10.
  */
-trait DepartmentDaoTrait extends BaseDao[Department,Long]{
+
+trait DepartmentDaoComponent {
+  val departmentDao: DepartmentDao
+
+  trait DepartmentDao extends BaseDao[Department, Long] {
+
+  }
 
 }
+
+
+trait UserDaoComponent {
+  val userDao: UserDao
+
+  trait UserDao extends BaseDao[User, Long]
+
+}
+
