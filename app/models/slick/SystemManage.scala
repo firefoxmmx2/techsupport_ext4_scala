@@ -11,6 +11,7 @@ import models._
 object SystemManage {
 
 }
+
 /**
  * 机构表
  * @param tag 别名
@@ -166,4 +167,31 @@ class UserTable(tag: Tag) extends Table[User](tag, "T_USER") {
     isVaild, userType, jzlbdm, jzlbmc, email) <>(User.tupled, User.unapply)
 
 }
+
+/**
+ * 用户角色
+ * @param tag 别名
+ */
+class UserRole(tag: Tag) extends Table[(Long, Long)](tag, "T_USER_ROLE") {
+  def roleid = column[Long]("ROLEID")
+
+  def userid = column[Long]("USERID")
+
+  def * = (roleid, userid)
+}
+
+/**
+ * 角色菜单
+ * @param tag 别名
+ */
+class RoleMenu(tag: Tag) extends Table[(Long, String)](tag, "T_ROLE_MENU") {
+  def roleid = column[Long]("ROLEID")
+
+  def menucode = column[String]("MENUCODE")
+
+  def * = (roleid, menucode)
+}
+
+
+
 

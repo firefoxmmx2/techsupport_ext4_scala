@@ -5,8 +5,13 @@ import com.typesafe.slick.driver.oracle.OracleDriver.profile.Implicit._
 import scala.slick.lifted.TableQuery
 import com.typesafe.slick.driver.oracle.OracleDriver.simple.Session
 import util.Page
-import models.slick.{MenuTable, SystemTable, UserTable, DepartmentTable}
+import models.slick._
 import com.typesafe.slick.driver.oracle.OracleDriver
+import models.Role
+import models.Department
+import models.Menu
+import models.User
+import models.System
 
 /**
  * Created by hooxin on 14-2-14.
@@ -307,7 +312,7 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
 
     import com.typesafe.slick.driver.oracle.OracleDriver.simple._
 
-    def pageWhere(query: Query[MenuTable] = menus, params: Map[String, Object]): MaybeFilter[MenuTable, MenuTable#TableElementType] = {
+    def pageWhere(params: Map[String, Object], query: Query[MenuTable, Menu] = menus): MaybeFilter[MenuTable, MenuTable#TableElementType] = {
       MaybeFilter(query).filter(params.get("menucode"))(v => m => m.menucode === v.asInstanceOf[String])
     }
 
@@ -321,7 +326,8 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
      * @param session 会话
      * @return 分页结果
      */
-    def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String, dir: String)(implicit session: Session): Page[Menu] = ???
+    def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String, dir: String)
+            (implicit session: Session): Page[Menu] = ???
 
     /**
      * 非分页查询
@@ -329,7 +335,7 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
      * @param session 会话
      * @return 结果列表
      */
-    def list(params: Map[String, Object])(implicit session: Session): List[Menu] = ???
+    def list(params: Map[String, Object])(implicit session: Session): List[Menu] = pageWhere(params).query.list()
 
     /**
      * 分页总数查询
@@ -337,7 +343,7 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
      * @param session 会话
      * @return 结果数
      */
-    def count(params: Map[String, Object])(implicit session: Session): Int = ???
+    def count(params: Map[String, Object])(implicit session: Session): Int = pageWhere(params).query.countDistinct.run
 
     /**
      * 通过主键获取单个实体
@@ -345,7 +351,7 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
      * @param session 会话
      * @return 实体
      */
-    def getById(id: String)(implicit session: Session): Menu = ???
+    def getById(id: String)(implicit session: Session): Menu = menus.filter(_.menucode === id).first()
 
     /**
      * 通过主键删除
@@ -353,7 +359,7 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
      * @param session 会话
      * @return
      */
-    def deleteById(id: String)(implicit session: Session): Unit = ???
+    def deleteById(id: String)(implicit session: Session): Unit = menus.filter(_.menucode === id).delete
 
     /**
      * 删除
@@ -361,7 +367,7 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
      * @param session 会话
      * @return
      */
-    def delete(m: Menu)(implicit session: Session): Unit = ???
+    def delete(m: Menu)(implicit session: Session): Unit = menus.filter(_.menucode === m.menucode).delete
 
     /**
      * 修改
@@ -369,7 +375,7 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
      * @param session 会话
      * @return
      */
-    def update(m: Menu)(implicit session: Session): Unit = ???
+    def update(m: Menu)(implicit session: Session): Unit = menus.filter(_.menucode === m.menucode).update(m)
 
     /**
      * 插入
@@ -377,7 +383,111 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
      * @param session 会话
      * @return 插入后的实体
      */
-    def insert(m: Menu)(implicit session: Session): Menu = ???
+    def insert(m: Menu)(implicit session: Session): Menu = {
+      menus += m
+      m
+    }
+  }
+
+}
+
+trait RoleDaoComponentImpl extends RoleDaoComponent {
+
+  class RoleDaoImpl extends RoleDao {
+    val roles = TableQuery[RoleTable]
+
+    import com.typesafe.slick.driver.oracle.OracleDriver.simple._
+
+
+    def pageWhere(params: Map[String, Object], query: Query[RoleTable, Role] = roles) =
+      MaybeFilter(query).filter(params.get("roleid"))(v => r => r.roleid === v.asInstanceOf[Long])
+        .filter(params.get("departid"))(v => r => r.roleid === v.asInstanceOf[Long])
+        .filter(params.get("rolename"))(v => r => r.rolename like v.asInstanceOf[String])
+        .filter(params.get("roleDescription"))(v => r => r.roleDescription like v.asInstanceOf[String])
+        .filter(params.get("roleType"))(v => r => r.roleType like v.asInstanceOf[String])
+
+    /**
+     * 分页查询
+     * @param pageno 页码
+     * @param pagesize 每页显示数
+     * @param params 分页查询条件
+     * @param sort 排序字段
+     * @param dir 升降序
+     * @param session 会话
+     * @return 分页结果
+     */
+    def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String, dir: String)
+            (implicit session: Session): Page[Role] = {
+      val page = new Page[Role](pageno, pagesize, count(params))
+      if (page.total == 0)
+        page
+      else {
+        val datas = pageWhere(params).query.sortBy(_.roleid.asc).drop(page.start)
+          .take(page.limit).list()
+        page.copy(datas = datas)
+      }
+    }
+
+    /**
+     * 非分页查询
+     * @param params 查询条件
+     * @param session 会话
+     * @return 结果列表
+     */
+    def list(params: Map[String, Object])(implicit session: Session): List[Role] = pageWhere(params).query.list()
+
+    /**
+     * 分页总数查询
+     * @param params 分页查询条件
+     * @param session 会话
+     * @return 结果数
+     */
+    def count(params: Map[String, Object])(implicit session: Session): Int =
+      pageWhere(params).query.countDistinct.run
+
+    /**
+     * 通过主键获取单个实体
+     * @param id 主键
+     * @param session 会话
+     * @return 实体
+     */
+    def getById(id: Long)(implicit session: Session): Role = roles.filter(_.roleid === id).first()
+
+    /**
+     * 通过主键删除
+     * @param id 主键
+     * @param session 会话
+     * @return
+     */
+    def deleteById(id: Long)(implicit session: Session): Unit = roles.filter(_.roleid === id).delete
+
+    /**
+     * 删除
+     * @param m 实体
+     * @param session 会话
+     * @return
+     */
+    def delete(m: Role)(implicit session: Session): Unit = roles.filter(_.roleid === m.roleid).delete
+
+    /**
+     * 修改
+     * @param m 实体
+     * @param session 会话
+     * @return
+     */
+    def update(m: Role)(implicit session: Session): Unit = roles.filter(_.roleid === m.roleid).update(m)
+
+    /**
+     * 插入
+     * @param m 实体
+     * @param session 会话
+     * @return 插入后的实体
+     */
+    def insert(m: Role)(implicit session: Session): Role = {
+      val insertingRole = m.copy(roleid = roles.baseTableRow.sequence.next.run)
+      roles.insert(insertingRole)
+      insertingRole
+    }
   }
 
 }
