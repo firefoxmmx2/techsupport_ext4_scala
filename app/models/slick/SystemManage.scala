@@ -3,6 +3,12 @@ package models.slick
 import com.typesafe.slick.driver.oracle.OracleDriver.simple._
 import scala.slick.lifted._
 import models._
+import java.util.Date
+import models.Role
+import models.Department
+import models.Menu
+import models.User
+import models.System
 
 /**
  * Created by hooxin on 14-3-16.
@@ -172,7 +178,7 @@ class UserTable(tag: Tag) extends Table[User](tag, "T_USER") {
  * 用户角色
  * @param tag 别名
  */
-class UserRole(tag: Tag) extends Table[(Long, Long)](tag, "T_USER_ROLE") {
+class UserRoleTable(tag: Tag) extends Table[(Long, Long)](tag, "T_USER_ROLE") {
   def roleid = column[Long]("ROLEID")
 
   def userid = column[Long]("USERID")
@@ -184,7 +190,7 @@ class UserRole(tag: Tag) extends Table[(Long, Long)](tag, "T_USER_ROLE") {
  * 角色菜单
  * @param tag 别名
  */
-class RoleMenu(tag: Tag) extends Table[(Long, String)](tag, "T_ROLE_MENU") {
+class RoleMenuTable(tag: Tag) extends Table[(Long, String)](tag, "T_ROLE_MENU") {
   def roleid = column[Long]("ROLEID")
 
   def menucode = column[String]("MENUCODE")
@@ -193,5 +199,167 @@ class RoleMenu(tag: Tag) extends Table[(Long, String)](tag, "T_ROLE_MENU") {
 }
 
 
+class SupportTicketTable(tag: Tag) extends Table[SupportTicket](tag, "T_TS_TECH_SUPPORT") {
+  def sequence = Sequence[Long]("SEQ_TS_ST")
 
+  def stNo = column[String]("ST_NO")
+
+  def applicant = column[Long]("APPLICANT")
+
+  def supportContent = column[String]("SUPPORT_CONTENT")
+
+  def stStatus = column[String]("ST_STATUS")
+
+  def region = column[String]("REGION")
+
+  def serialNumber = column[Int]("SERIAL_NUMBER")
+
+  def id = column[Long]("ID", O.PrimaryKey)
+
+  def devScheDate = column[Date]("DEV_SCHE_DATE", O.Nullable)
+
+  def psgScheDate = column[Date]("PSG_SCHE_DATE", O.Nullable)
+
+  def devDsScheDate = column[Date]("DEV_DS_SCHE_DATE", O.Nullable)
+
+  def devDdScheDate = column[Date]("DEV_DD_SCHE_DATE", O.Nullable)
+
+  def psgDsScheDate = column[Date]("PSG_DS_SCHE_DATE", O.Nullable)
+
+  def psgIsScheDate = column[Date]("PSG_IS_SCHE_DATE", O.Nullable)
+
+  def psgCompDate = column[Date]("PSG_COMP_DATE", O.Nullable)
+
+  def devCompDate = column[Date]("DEV_COMP_DATE", O.Nullable)
+
+  def applyingFeedbackDate = column[Date]("APPLYING_FEEDBACK_DATE", O.Nullable)
+
+  def psgDsCompDate = column[Date]("PSG_DS_COMP_DATE", O.Nullable)
+
+  def psgIsCompDate = column[Date]("PSG_IS_COMP_DATE", O.Nullable)
+
+  def devDsCompDate = column[Date]("DEV_DS_COMP_DATE", O.Nullable)
+
+  def devDdCompDate = column[Date]("DEV_DD_COMP_DATE", O.Nullable)
+
+  def feedbackConfirmDate = column[Date]("FEEDBACK_CONFIRM_DATE", O.Nullable)
+
+  def comments = column[String]("COMMENTS", O.Nullable)
+
+  def archiveDate = column[Date]("ARCHIVE_DATE", O.Nullable)
+
+  def archiveUserid = column[Long]("ARCHIVE_USERID", O.Nullable)
+
+  def devDtScheDate = column[Date]("DEV_DT_SCHE_DATE", O.Nullable)
+
+  def devDtCompDate = column[Date]("DEV_DT_COMP_DATE", O.Nullable)
+
+  def lastUpdateDate = column[Date]("LAST_UPDATE_DATE", O.Nullable)
+
+  def archiveCode = column[String]("ARCHIVE_CODE", O.Nullable)
+
+  def applyDate = column[Date]("APPLY_DATE", O.Nullable)
+
+  def * = (stNo,
+    applicant,
+    supportContent,
+    stStatus,
+    region,
+    serialNumber,
+    id,
+    devScheDate.?,
+    psgScheDate.?,
+    devDsScheDate.?,
+    devDdScheDate.?,
+    psgDsScheDate.?,
+    psgIsScheDate.?,
+    psgCompDate.?,
+    devScheDate.?,
+    applyingFeedbackDate.?,
+    psgDsCompDate.?,
+    psgIsCompDate.?,
+    devDsCompDate.?,
+    devDdCompDate.?,
+    feedbackConfirmDate.?,
+    comments.?,
+    archiveDate.?,
+    archiveUserid.?,
+    devDtScheDate.?,
+    devDtCompDate.?,
+    lastUpdateDate.?,
+    archiveCode.?,
+    applyDate.?) <>(SupportTicket.tupled, SupportTicket.unapply)
+}
+
+class TimeChangeTable(tag: Tag) extends Table[TimeChange](tag, "T_TS_TIMECHANGE") {
+  def sequence = Sequence[Long]("TIMECHANGE_ID")
+
+  def id = column[Long]("ID", O.PrimaryKey)
+
+  def trackingId = column[Long]("TRACKING_ID")
+
+  def devScheDate = column[Date]("DEV_SCHE_DATE", O.Nullable)
+
+  def psgScheDate = column[Date]("PSG_SCHE_DATE", O.Nullable)
+
+  def devDsScheDate = column[Date]("DEV_DS_SCHE_DATE", O.Nullable)
+
+  def devDdScheDate = column[Date]("dev_Dd_Sche_Date", O.Nullable)
+
+  def devDtScheDate = column[Date]("DEV_DT_SCHE_DATE", O.Nullable)
+
+  def psgDsScheDate = column[Date]("PSG_DS_SCHE_DATE", O.Nullable)
+
+  def psgIdScheDate = column[Date]("PSG_ID_SCHE_DATE", O.Nullable)
+
+  def _type = column[String]("TYPE", O.Nullable)
+
+  def * : ProvenShape[TimeChange] = (id,
+    trackingId,
+    devScheDate.?,
+    psgScheDate.?,
+    devDsScheDate.?,
+    devDdScheDate.?,
+    devDtScheDate.?,
+    psgDsScheDate.?,
+    psgIdScheDate.?) <>(TimeChange.tupled, TimeChange.unapply)
+}
+
+class TrackingTable(tag: Tag) extends Table[Tracking](tag, "T_TS_TRACKING") {
+  def sequence = Sequence[Long]("SEQ_TS_TRACK")
+
+  def id = column[Long]("ID", O.PrimaryKey)
+
+  def trackingDate = column[Date]("TRACKING_DATE")
+
+  def newProcess = column[String]("NEW_PROCESS")
+
+  def stId = column[Long]("ST_ID")
+
+  def approvalCode = column[String]("APPROVAL_CODE")
+
+  def _type = column[String]("TYPE")
+
+  def * : ProvenShape[Tracking] = (id, trackingDate, newProcess, stId,
+    approvalCode, _type) <>(Tracking.tupled, Tracking.unapply)
+}
+
+class SupervisionTable(tag: Tag) extends Table[Supervision](tag, "T_TS_SUPERVISION") {
+  def supervisionSuggestion = column[String]("SUPERVISION_SUGGESTION")
+
+  def supervisionPersion = column[Long]("SUPERVISION_PERSION")
+
+  def supervisionDate = column[Date]("SUPERVISION_DATE")
+
+  def stId = column[Long]("ST_ID")
+
+  def id = column[Long]("ID")
+
+  def * : ProvenShape[Supervision] = (supervisionSuggestion,
+    supervisionPersion,
+    supervisionDate,
+    stId,
+    id
+    ) <>(Supervision.tupled, Supervision.unapply)
+}
 

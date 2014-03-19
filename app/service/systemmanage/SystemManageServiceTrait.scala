@@ -1,8 +1,13 @@
 package service.systemmanage
 
-import models.Department
+import models._
 import util.Page
 import dao.systemmanage.DepartmentDaoComponent
+import service.BaseService
+import models.Department
+import models.System
+import models.User
+import models.Role
 
 /**
  * Created by hooxin on 14-3-10.
@@ -11,20 +16,47 @@ import dao.systemmanage.DepartmentDaoComponent
 trait DepartmentServiceComponent {
   val departmentService: DepartmentService
 
-  trait DepartmentService {
-    def insert(d: Department): Department
-
-    def update(d: Department)
-
-    def deleteById(id: Long)
-
-    def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String, dir: String): Page[Department]
-
-    def list(params: Map[String, Object]): List[Department]
-
-    def getById(id: Long): Department
+  trait DepartmentService extends BaseService[Department, Long] {
   }
 
 }
 
+trait UserServiceComponent {
+  val userService: UserService
+
+  trait UserService extends BaseService[User, Long] {
+  }
+
+}
+
+trait SystemServiceComponent {
+
+  trait SystemService extends BaseService[System, String] {
+  }
+
+  val systemService: SystemService
+}
+
+trait RoleServiceComponent {
+
+  trait RoleService extends BaseService[Role, Long] {
+
+  }
+
+  val roleService: RoleService
+}
+
+trait MenuServiceComponent {
+
+  trait MenuService extends BaseService[Menu, String]
+
+  val menuService: MenuService
+}
+
+trait GlobalParamServiceComponent {
+
+  trait GlobalParamService
+
+  val globalParamService: GlobalParamService
+}
 
