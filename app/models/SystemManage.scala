@@ -1,6 +1,6 @@
 package models
 
-import java.util.Date
+import java.sql.Date
 import scala.slick.model.codegen.StringGeneratorHelpers
 
 
@@ -161,8 +161,9 @@ case class Dict(dictcode: String,
                 dictSimplePin: Option[String] = None,
                 dictAllPin: Option[String] = None,
                 dictItemTableName: Option[String] = None,
-                dictVersion: Option[String] = "0",
-                id: Long = 0, createTime: Date)
+                dictVersion: Option[String] = Option("0"),
+                id: Option[Long] = Option(0),
+                createTime: Option[Date] = None)
 
 /**
  * 字典项
@@ -190,36 +191,83 @@ case class DictItem(dictcode: String,
                     itemSimplePin: Option[String] = None,
                     itemAllPin: Option[String] = None)
 
-case class SupportTicket(stNo: String,
-                         applicant: Long,
-                         supportContent: String,
-                         stStatus: String,
-                         region: String,
-                         serialNumber: Int,
-                         id: Option[Long] = None,
-                         devScheDate: Option[Date] = None,
-                         psgScheDate: Option[Date] = None,
-                         devDsScheDate: Option[Date] = None,
-                         devDdScheDate: Option[Date] = None,
-                         psgDsScheDate: Option[Date] = None,
-                         psgIsScheDate: Option[Date] = None,
-                         psgCompDate: Option[Date] = None,
-                         devCompDate: Option[Date] = None,
-                         applyingFeedbackDate: Option[Date] = None,
-                         psgDsCompDate: Option[Date] = None,
-                         psgIsCompDate: Option[Date] = None,
-                         devDsCompDate: Option[Date] = None,
-                         devDdCompDate: Option[Date] = None,
-                         feedbackConfirmDate: Option[Date] = None,
-                         comments: Option[String] = None,
-                         archiveDate: Option[Date] = None,
-                         archiveUserid: Option[Long] = None,
-                         devDtScheDate: Option[Date] = None,
-                         devDtCompDate: Option[Date] = None,
-                         lastUpdateDate: Option[Date] = None,
-                         archiveCode: Option[String] = None,
-                         applyDate: Option[Date] = None)
+/**
+ * 技术支持单
+ * @param stNo
+ * @param applicant
+ * @param supportContent
+ * @param stStatus
+ * @param region
+ * @param serialNumber
+ * @param id
+ * @param devScheDate
+ * @param psgScheDate
+ * @param devDsScheDate
+ * @param devDdScheDate
+ * @param psgDsScheDate
+ * @param psgIsScheDate
+ * @param psgCompDate
+ * @param devCompDate
+ * @param applyingFeedbackDate
+ * @param psgDsCompDate
+ * @param psgIsCompDate
+ * @param devDsCompDate
+ * @param devDdCompDate
+ * @param feedbackConfirmDate
+ * @param comments
+ * @param archiveDate
+ * @param archiveUserid
+ * @param devDtScheDate
+ * @param devDtCompDate
+ * @param lastUpdateDate
+ * @param archiveCode
+ * @param applyDate
+ */
+case class SupportTicket(
+                          stNo: String,
+                          applicant: Long,
+                          supportContent: String,
+                          stStatus: String,
+                          region: String,
+                          serialNumber: Int,
+                          id: Option[Long] = None,
+                          devScheDate: Option[Date] = None,
+                          psgScheDate: Option[Date] = None,
+                          devDsScheDate: Option[Date] = None,
+                          devDdScheDate: Option[Date] = None,
+                          psgDsScheDate: Option[Date] = None,
+                          psgIsScheDate: Option[Date] = None,
+                          psgCompDate: Option[Date] = None,
+                          devCompDate: Option[Date] = None,
+                          applyingFeedbackDate: Option[Date] = None,
+                          psgDsCompDate: Option[Date] = None,
+                          psgIsCompDate: Option[Date] = None,
+                          devDsCompDate: Option[Date] = None,
+                          devDdCompDate: Option[Date] = None,
+                          feedbackConfirmDate: Option[Date] = None,
+                          comments: Option[String] = None,
+                          archiveDate: Option[Date] = None,
+                          archiveUserid: Option[Long] = None,
+                          devDtScheDate: Option[Date] = None,
+                          devDtCompDate: Option[Date] = None,
+                          lastUpdateDate: Option[Date] = None,
+                          archiveCode: Option[String] = None,
+                          applyDate: Option[Date] = None)
 
+
+/**
+ * 时间变更
+ * @param id
+ * @param trackingId
+ * @param devScheDate
+ * @param psgScheDate
+ * @param devDsScheDate
+ * @param devDdScheDate
+ * @param devDtScheDate
+ * @param psgDsScheDate
+ * @param psgIdScheDate
+ * @param _type
+ */
 case class TimeChange(id: Option[Long] = None,
                       trackingId: Option[Long] = None,
                       devScheDate: Option[Date] = None,
@@ -231,6 +279,15 @@ case class TimeChange(id: Option[Long] = None,
                       psgIdScheDate: Option[Date] = None,
                       _type: Option[String] = None)
 
+/**
+ * 进展提示
+ * @param id
+ * @param trackingDate
+ * @param newProcess
+ * @param stId
+ * @param approvalCode
+ * @param _type
+ */
 case class Tracking(id: Option[Long] = None,
                     trackingDate: Date,
                     newProcess: String,
@@ -238,11 +295,33 @@ case class Tracking(id: Option[Long] = None,
                     approvalCode: String,
                     _type: String)
 
+/**
+ * 督办
+ * @param supervisionSuggestion
+ * @param supervisionPersion
+ * @param supervisionDate
+ * @param stId
+ * @param id
+ */
 case class Supervision(supervisionSuggestion: String,
                        supervisionPersion: Long,
                        supervisionDate: Date,
                        stId: Option[Long] = None,
                        id: Option[Long] = None)
+
+/**
+ * 版本
+ * @param versionNum
+ * @param versionInfo
+ * @param versionDate
+ * @param updateTime
+ * @param versionId
+ */
+case class Version(versionNum: String,
+                   versionInfo: String,
+                   versionDate: Date,
+                   updateTime: Date,
+                   versionId: Option[Long] = None)
 
 
 

@@ -50,5 +50,4 @@ trait DepartmentServiceComponentImpl extends DepartmentServiceComponent {
 
 }
 
-trait UserServiceComponentImpl extends
 
