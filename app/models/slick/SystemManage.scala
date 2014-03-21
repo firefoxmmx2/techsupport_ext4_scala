@@ -9,7 +9,8 @@ import models.Department
 import models.Menu
 import models.User
 import models.System
-import java.sql.Date
+import java.sql.{Timestamp, Date}
+import org.joda.time.DateTime
 import scala.slick.collection.heterogenous._
 import syntax._
 
@@ -17,9 +18,19 @@ import syntax._
  * Created by hooxin on 14-3-16.
  */
 
-object SystemManage {
+object MapperTypeImplicits {
+  implicit val DATETIME_COLUMN = MappedColumnType.base[DateTime, Timestamp](
+    dt => new Timestamp(dt.getMillis),
+    ts => new DateTime(ts)
+  )
 
+  implicit val javaUtilDateTypeMapper = MappedColumnType.base[java.util.Date, Timestamp](
+    dt => new Timestamp(dt.getTime),
+    ts => new java.util.Date(ts.getTime)
+  )
 }
+
+import MapperTypeImplicits._
 
 /**
  * 机构表
@@ -218,59 +229,133 @@ class SupportTicketTable(tag: Tag) extends Table[SupportTicket](tag, "T_TS_TECH_
 
   def serialNumber = column[Int]("SERIAL_NUMBER")
 
-  def id = column[Option[Long]]("ID", O.PrimaryKey)
+  def id = column[Long]("ID", O.PrimaryKey)
 
-  def devScheDate = column[Option[Date]]("DEV_SCHE_DATE", O.Nullable)
+  def devScheDate = column[DateTime]("DEV_SCHE_DATE", O.Nullable)
 
-  def psgScheDate = column[Option[Date]]("PSG_SCHE_DATE", O.Nullable)
+  def psgScheDate = column[DateTime]("PSG_SCHE_DATE", O.Nullable)
 
-  def devDsScheDate = column[Option[Date]]("DEV_DS_SCHE_DATE", O.Nullable)
+  def devDsScheDate = column[DateTime]("DEV_DS_SCHE_DATE", O.Nullable)
 
-  def devDdScheDate = column[Option[Date]]("DEV_DD_SCHE_DATE", O.Nullable)
+  def devDdScheDate = column[DateTime]("DEV_DD_SCHE_DATE", O.Nullable)
 
-  def psgDsScheDate = column[Option[Date]]("PSG_DS_SCHE_DATE", O.Nullable)
+  def psgDsScheDate = column[DateTime]("PSG_DS_SCHE_DATE", O.Nullable)
 
-  def psgIsScheDate = column[Option[Date]]("PSG_IS_SCHE_DATE", O.Nullable)
+  def psgIsScheDate = column[DateTime]("PSG_IS_SCHE_DATE", O.Nullable)
 
-  def psgCompDate = column[Option[Date]]("PSG_COMP_DATE", O.Nullable)
+  def psgCompDate = column[DateTime]("PSG_COMP_DATE", O.Nullable)
 
-  def devCompDate = column[Option[Date]]("DEV_COMP_DATE", O.Nullable)
+  def devCompDate = column[DateTime]("DEV_COMP_DATE", O.Nullable)
 
-  def applyingFeedbackDate = column[Option[Date]]("APPLYING_FEEDBACK_DATE", O.Nullable)
+  def applyingFeedbackDate = column[DateTime]("APPLYING_FEEDBACK_DATE", O.Nullable)
 
-  def psgDsCompDate = column[Option[Date]]("PSG_DS_COMP_DATE", O.Nullable)
+  def psgDsCompDate = column[DateTime]("PSG_DS_COMP_DATE", O.Nullable)
 
-  def psgIsCompDate = column[Option[Date]]("PSG_IS_COMP_DATE", O.Nullable)
+  def psgIsCompDate = column[DateTime]("PSG_IS_COMP_DATE", O.Nullable)
 
-  def devDsCompDate = column[Option[Date]]("DEV_DS_COMP_DATE", O.Nullable)
+  def devDsCompDate = column[DateTime]("DEV_DS_COMP_DATE", O.Nullable)
 
-  def devDdCompDate = column[Option[Date]]("DEV_DD_COMP_DATE", O.Nullable)
+  def devDdCompDate = column[DateTime]("DEV_DD_COMP_DATE", O.Nullable)
 
-  def feedbackConfirmDate = column[Option[Date]]("FEEDBACK_CONFIRM_DATE", O.Nullable)
+  def feedbackConfirmDate = column[DateTime]("FEEDBACK_CONFIRM_DATE", O.Nullable)
 
   def comments = column[String]("COMMENTS", O.Nullable)
 
-  def archiveDate = column[Option[Date]]("ARCHIVE_DATE", O.Nullable)
+  def archiveDate = column[DateTime]("ARCHIVE_DATE", O.Nullable)
 
   def archiveUserid = column[Long]("ARCHIVE_USERID", O.Nullable)
 
-  def devDtScheDate = column[Option[Date]]("DEV_DT_SCHE_DATE", O.Nullable)
+  def devDtScheDate = column[DateTime]("DEV_DT_SCHE_DATE", O.Nullable)
 
-  def devDtCompDate = column[Option[Date]]("DEV_DT_COMP_DATE", O.Nullable)
+  def devDtCompDate = column[DateTime]("DEV_DT_COMP_DATE", O.Nullable)
 
-  def lastUpdateDate = column[Option[Date]]("LAST_UPDATE_DATE", O.Nullable)
+  def lastUpdateDate = column[DateTime]("LAST_UPDATE_DATE", O.Nullable)
 
   def archiveCode = column[String]("ARCHIVE_CODE", O.Nullable)
 
-  def applyDate = column[Option[Date]]("APPLY_DATE", O.Nullable)
+  def applyDate = column[DateTime]("APPLY_DATE", O.Nullable)
 
-  def * = ((stNo , applicant , supportContent , stStatus , region ,
-    serialNumber , id) , (devScheDate , psgScheDate , devDsScheDate ,
-    devDdScheDate , psgDsScheDate , psgIsScheDate , psgCompDate ,
-    devScheDate ), (applyingFeedbackDate , psgDsCompDate , psgIsCompDate ,
-    devDsCompDate , devDdCompDate ), (feedbackConfirmDate) , (comments ,
-    archiveDate , archiveUserid , devDtScheDate , devDtCompDate ,
-    lastUpdateDate , archiveCode , applyDate ) )
+  def * = List(
+//    基本信息
+    stNo,
+    applicant,
+    supportContent,
+    stStatus,
+    region,
+    serialNumber,
+    applyDate,
+//    技术部门审批
+    devScheDate,
+    devDsScheDate,
+    devDdScheDate,
+    devDtScheDate,
+//    产品部门审批
+    psgScheDate,
+    psgDsScheDate,
+    psgIsScheDate,
+//    提请反馈与提示
+    applyingFeedbackDate,
+    psgCompDate,
+    devCompDate,
+    psgDsCompDate,
+    psgIsCompDate,
+    devDsCompDate,
+    devDdCompDate,
+    devDtCompDate,
+//    反馈确认
+    feedbackConfirmDate,
+//    归档
+    archiveCode,
+    comments,
+    archiveDate,
+    archiveUserid,
+    lastUpdateDate.?,
+    id.?
+    )  <> (st => SupportTicket(
+    SupportTicketBaseContent(st._1,st._2,st._3,st._4,st._5,st._6,st._7),
+    Option(SupportTicketCompanyApproval()),
+    Option(SupportTicketTechDepartmentApproval(st._8,st._9,st._10,st._11)),
+    Option(SupportTicketProductDepartmentApproval(st._12,st._13,st._14)),
+  Option(SupportTicketTracking(st._15,st._16,st._17,st._18,st._19,st._20,st._21,st._22)),
+  Option(SupportTicketFeedback(st._23)),
+  Option(SupportTicketArchive(st._24,st._25,st._26,st._27)),
+  st._28,
+  st._29
+  ),st => Some(//    基本信息
+    st._1,
+    st._2,
+    st._3,
+    st._4,
+    st._5,
+    st._6,
+    st._7,
+    //    技术部门审批
+    st._8,
+    st._9,
+    st._10,
+    st._11,
+    //    产品部门审批
+    st._12,
+    st._13,
+    st._14,
+    //    提请反馈与提示
+    st._15,
+    st._16,
+    st._17,
+    st._18,
+    st._19,
+    st._20,
+    st._21,
+    st._22,
+    //    反馈确认
+    st._23,
+    //    归档
+    st._24,
+    st._25,
+    st._26,
+    st._27,
+    st._28,
+    st._29))
 }
 
 class TimeChangeTable(tag: Tag) extends Table[TimeChange](tag, "T_TS_TIMECHANGE") {
@@ -280,39 +365,40 @@ class TimeChangeTable(tag: Tag) extends Table[TimeChange](tag, "T_TS_TIMECHANGE"
 
   def trackingId = column[Long]("TRACKING_ID")
 
-  def devScheDate = column[Option[Date]]("DEV_SCHE_DATE", O.Nullable)
+  def devScheDate = column[DateTime]("DEV_SCHE_DATE", O.Nullable)
 
-  def psgScheDate = column[Option[Date]]("PSG_SCHE_DATE", O.Nullable)
+  def psgScheDate = column[DateTime]("PSG_SCHE_DATE", O.Nullable)
 
-  def devDsScheDate = column[Option[Date]]("DEV_DS_SCHE_DATE", O.Nullable)
+  def devDsScheDate = column[DateTime]("DEV_DS_SCHE_DATE", O.Nullable)
 
-  def devDdScheDate = column[Option[Date]]("dev_Dd_Sche_Date", O.Nullable)
+  def devDdScheDate = column[DateTime]("dev_Dd_Sche_Date", O.Nullable)
 
-  def devDtScheDate = column[Option[Date]]("DEV_DT_SCHE_DATE", O.Nullable)
+  def devDtScheDate = column[DateTime]("DEV_DT_SCHE_DATE", O.Nullable)
 
-  def psgDsScheDate = column[Option[Date]]("PSG_DS_SCHE_DATE", O.Nullable)
+  def psgDsScheDate = column[DateTime]("PSG_DS_SCHE_DATE", O.Nullable)
 
-  def psgIdScheDate = column[Option[Date]]("PSG_ID_SCHE_DATE", O.Nullable)
+  def psgIdScheDate = column[DateTime]("PSG_ID_SCHE_DATE", O.Nullable)
 
-  def _type = column[Option[String]]("TYPE", O.Nullable)
+  def _type = column[String]("TYPE", O.Nullable)
 
-  def * : ProvenShape[TimeChange] = (id,
-    trackingId,
+  def * : ProvenShape[TimeChange] = (id.?,
+    trackingId.?,
     devScheDate.?,
     psgScheDate.?,
     devDsScheDate.?,
     devDdScheDate.?,
     devDtScheDate.?,
     psgDsScheDate.?,
-    psgIdScheDate.?) <>(TimeChange.tupled, TimeChange.unapply)
+    psgIdScheDate.?,
+    _type.?) <>(TimeChange.tupled, TimeChange.unapply)
 }
 
 class TrackingTable(tag: Tag) extends Table[Tracking](tag, "T_TS_TRACKING") {
   def sequence = Sequence[Long]("SEQ_TS_TRACK")
 
-  def id = column[Option[Long]]("ID", O.PrimaryKey)
+  def id = column[Long]("ID", O.PrimaryKey)
 
-  def trackingDate = column[Date]("TRACKING_DATE")
+  def trackingDate = column[DateTime]("TRACKING_DATE")
 
   def newProcess = column[String]("NEW_PROCESS")
 
@@ -322,7 +408,7 @@ class TrackingTable(tag: Tag) extends Table[Tracking](tag, "T_TS_TRACKING") {
 
   def _type = column[String]("TYPE")
 
-  def * : ProvenShape[Tracking] = (id, trackingDate, newProcess, stId,
+  def * : ProvenShape[Tracking] = (id.?, trackingDate, newProcess, stId,
     approvalCode, _type) <>(Tracking.tupled, Tracking.unapply)
 }
 
@@ -333,16 +419,16 @@ class SupervisionTable(tag: Tag) extends Table[Supervision](tag, "T_TS_SUPERVISI
 
   def supervisionPersion = column[Long]("SUPERVISION_PERSION")
 
-  def supervisionDate = column[Date]("SUPERVISION_DATE")
+  def supervisionDate = column[DateTime]("SUPERVISION_DATE")
 
-  def stId = column[Option[Long]]("ST_ID")
+  def stId = column[Long]("ST_ID")
 
-  def id = column[Option[Long]]("ID")
+  def id = column[Long]("ID")
 
   def * : ProvenShape[Supervision] = (supervisionSuggestion,
     supervisionPersion,
     supervisionDate,
-    stId,
-    id
+    stId.?,
+    id.?
     ) <>(Supervision.tupled, Supervision.unapply)
 }

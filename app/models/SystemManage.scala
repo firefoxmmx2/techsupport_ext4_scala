@@ -1,7 +1,7 @@
 package models
 
-import java.sql.Date
 import scala.slick.model.codegen.StringGeneratorHelpers
+import org.joda.time.DateTime
 
 
 /**
@@ -163,7 +163,7 @@ case class Dict(dictcode: String,
                 dictItemTableName: Option[String] = None,
                 dictVersion: Option[String] = Option("0"),
                 id: Option[Long] = Option(0),
-                createTime: Option[Date] = None)
+                createTime: Option[DateTime] = None)
 
 /**
  * 字典项
@@ -191,68 +191,71 @@ case class DictItem(dictcode: String,
                     itemSimplePin: Option[String] = None,
                     itemAllPin: Option[String] = None)
 
-/**
- * 技术支持单
- * @param stNo
- * @param applicant
- * @param supportContent
- * @param stStatus
- * @param region
- * @param serialNumber
- * @param id
- * @param devScheDate
- * @param psgScheDate
- * @param devDsScheDate
- * @param devDdScheDate
- * @param psgDsScheDate
- * @param psgIsScheDate
- * @param psgCompDate
- * @param devCompDate
- * @param applyingFeedbackDate
- * @param psgDsCompDate
- * @param psgIsCompDate
- * @param devDsCompDate
- * @param devDdCompDate
- * @param feedbackConfirmDate
- * @param comments
- * @param archiveDate
- * @param archiveUserid
- * @param devDtScheDate
- * @param devDtCompDate
- * @param lastUpdateDate
- * @param archiveCode
- * @param applyDate
- */
+
+case class SupportTicketBaseContent(stNo: String,
+                                    applicant: Long,
+                                    supportContent: String,
+                                    stStatus: String,
+                                    region: String,
+                                    serialNumber: Int,
+                                    applyDate: DateTime = DateTime.now()
+                                     )
+
+case class SupportTicketCompanyApproval(
+                                         supportDepartments: Option[List[Department]] = None,
+                                         tracking: Option[Tracking] = None)
+
+case class SupportTicketTechDepartmentApproval(
+                                                devScheDate: DateTime,
+                                                devDsScheDate: Option[DateTime] = None,
+                                                devDdScheDate: Option[DateTime] = None,
+                                                devDtScheDate: Option[DateTime] = None,
+                                                tracking: Option[Tracking] = None,
+                                                supportLeader: Option[User] = None
+                                                )
+
+case class SupportTicketProductDepartmentApproval(
+                                                   psgScheDate: Option[DateTime] = None,
+                                                   psgDsScheDate: Option[DateTime] = None,
+                                                   psgIsScheDate: Option[DateTime] = None,
+                                                   tracking: Option[Tracking] = None,
+                                                   supprotLeader: Option[User] = None
+                                                   )
+
+case class SupportTicketTracking(
+                                  applyingFeedbackDate: DateTime,
+                                  psgCompDate: Option[DateTime] = None,
+                                  devCompDate: Option[DateTime] = None,
+                                  psgDsCompDate: Option[DateTime] = None,
+                                  psgIsCompDate: Option[DateTime] = None,
+                                  devDsCompDate: Option[DateTime] = None,
+                                  devDdCompDate: Option[DateTime] = None,
+                                  devDtCompDate: Option[DateTime] = None,
+                                  tracking: Option[Tracking] = None
+                                  )
+
+case class SupportTicketFeedback(
+                                  feedbackConfirmDate: DateTime,
+                                  tracking: Option[Tracking] = None
+                                  )
+
+case class SupportTicketArchive(
+                                 archiveCode: String,
+                                 comments: String,
+                                 archiveDate: DateTime,
+                                 archiveUserid: Long
+                                 )
+
 case class SupportTicket(
-                          stNo: String,
-                          applicant: Long,
-                          supportContent: String,
-                          stStatus: String,
-                          region: String,
-                          serialNumber: Int,
-                          id: Option[Long] = None,
-                          devScheDate: Option[Date] = None,
-                          psgScheDate: Option[Date] = None,
-                          devDsScheDate: Option[Date] = None,
-                          devDdScheDate: Option[Date] = None,
-                          psgDsScheDate: Option[Date] = None,
-                          psgIsScheDate: Option[Date] = None,
-                          psgCompDate: Option[Date] = None,
-                          devCompDate: Option[Date] = None,
-                          applyingFeedbackDate: Option[Date] = None,
-                          psgDsCompDate: Option[Date] = None,
-                          psgIsCompDate: Option[Date] = None,
-                          devDsCompDate: Option[Date] = None,
-                          devDdCompDate: Option[Date] = None,
-                          feedbackConfirmDate: Option[Date] = None,
-                          comments: Option[String] = None,
-                          archiveDate: Option[Date] = None,
-                          archiveUserid: Option[Long] = None,
-                          devDtScheDate: Option[Date] = None,
-                          devDtCompDate: Option[Date] = None,
-                          lastUpdateDate: Option[Date] = None,
-                          archiveCode: Option[String] = None,
-                          applyDate: Option[Date] = None)
+                          baseContent: SupportTicketBaseContent,
+                          companyApproval: Option[SupportTicketCompanyApproval] = None,
+                          techDepartmentApproval: Option[SupportTicketTechDepartmentApproval] = None,
+                          productDepartmentApproval: Option[SupportTicketProductDepartmentApproval] = None,
+                          theTracking: Option[SupportTicketTracking] = None,
+                          feedback: Option[SupportTicketFeedback] = None,
+                          archive: Option[SupportTicketArchive] = None,
+                          lastUpdateDate: Option[DateTime] = Option(DateTime.now()),
+                          id: Option[Long] = None)
 
 
 /**
@@ -270,13 +273,13 @@ case class SupportTicket(
  */
 case class TimeChange(id: Option[Long] = None,
                       trackingId: Option[Long] = None,
-                      devScheDate: Option[Date] = None,
-                      psgScheDate: Option[Date] = None,
-                      devDsScheDate: Option[Date] = None,
-                      devDdScheDate: Option[Date] = None,
-                      devDtScheDate: Option[Date] = None,
-                      psgDsScheDate: Option[Date] = None,
-                      psgIdScheDate: Option[Date] = None,
+                      devScheDate: Option[DateTime] = None,
+                      psgScheDate: Option[DateTime] = None,
+                      devDsScheDate: Option[DateTime] = None,
+                      devDdScheDate: Option[DateTime] = None,
+                      devDtScheDate: Option[DateTime] = None,
+                      psgDsScheDate: Option[DateTime] = None,
+                      psgIdScheDate: Option[DateTime] = None,
                       _type: Option[String] = None)
 
 /**
@@ -289,7 +292,7 @@ case class TimeChange(id: Option[Long] = None,
  * @param _type
  */
 case class Tracking(id: Option[Long] = None,
-                    trackingDate: Date,
+                    trackingDate: DateTime,
                     newProcess: String,
                     stId: Long,
                     approvalCode: String,
@@ -305,7 +308,7 @@ case class Tracking(id: Option[Long] = None,
  */
 case class Supervision(supervisionSuggestion: String,
                        supervisionPersion: Long,
-                       supervisionDate: Date,
+                       supervisionDate: DateTime,
                        stId: Option[Long] = None,
                        id: Option[Long] = None)
 
@@ -319,8 +322,8 @@ case class Supervision(supervisionSuggestion: String,
  */
 case class Version(versionNum: String,
                    versionInfo: String,
-                   versionDate: Date,
-                   updateTime: Date,
+                   versionDate: DateTime,
+                   updateTime: DateTime,
                    versionId: Option[Long] = None)
 
 
