@@ -1,8 +1,21 @@
 package models
 
-import scala.slick.model.codegen.StringGeneratorHelpers
 import org.joda.time.DateTime
+import org.squeryl.annotations._
+import org.squeryl.Schema
 
+
+object SystemManage extends Schema {
+  val departments = table[Department]("T_DEPARTMENT")
+  val users = table[User]("T_USER")
+  val roles = table[Role]("T_ROLE")
+  val systems = table[System]("T_SYSTEM")
+  val menus = table[Menu]("T_MENU")
+  val globalParams = table[GlobalParam]("T_GLOBALPAR")
+  val versions = table[Version]("T_VERSION")
+  val dicts = table[Dict]("T_DICT")
+  val dictItems = table[DictItem]("T_DICT_ITEM")
+}
 
 /**
  * 机构
@@ -19,17 +32,21 @@ import org.joda.time.DateTime
  * @param departbrevitycode 机构省级代码
  */
 
-case class Department(departid: Long = 0,
-                      departcode: String,
-                      departname: String,
-                      departlevel: Int,
-                      departfullcode: String,
-                      parentDepartid: Long,
-                      nodeOrder: Int = 0,
-                      isLeaf: String = "Y",
-                      departsimplepin: Option[String] = None,
-                      departallpin: Option[String] = None,
-                      departbrevitycode: Option[String] = None)
+case class Department(
+                       departcode: String,
+                       departname: String,
+                       departlevel: Int,
+                       departfullcode: String,
+                       @ColumnBase("PARENT_DEPARTID")
+                       parentDepartid: Long,
+                       @ColumnBase("NODE_ORDER")
+                       nodeOrder: Int = 0,
+                       @ColumnBase("isleaf")
+                       isLeaf: String = "Y",
+                       departsimplepin: Option[String] = None,
+                       departallpin: Option[String] = None,
+                       departbrevitycode: Option[String] = None,
+                       departid: Option[Long] = 0)
 
 
 /**
@@ -54,12 +71,16 @@ case class User(userid: Long = 0,
                 username: String,
                 password: String,
                 idnum: String,
+                @ColumnBase("MOBILE_PHONE")
                 mobilePhone: Option[String],
                 userorder: Int = 1,
+                @ColumnBase("ISVAILD")
                 isVaild: String = "Y",
+                @ColumnBase("USERTYPE")
                 userType: Option[String],
                 jzlbdm: Option[String],
                 jzlbmc: Option[String],
+                @ColumnBase
                 email: Option[String])
 
 
@@ -73,13 +94,16 @@ case class User(userid: Long = 0,
  * @param jzlbdm
  * @param jzlbmc
  */
-case class Role(roleid: Long = 0,
-                departid: Long,
-                rolename: String,
-                roleDescription: Option[String],
-                roleType: Option[String],
-                jzlbdm: Option[String],
-                jzlbmc: Option[String])
+case class Role(
+                 rolename: String,
+                 @ColumnBase("ROLEDESCRIPTION")
+                 roleDescription: Option[String] = None,
+                 @ColumnBase("ROLETYPE")
+                 roleType: Option[String] = None,
+                 jzlbdm: Option[String] = None,
+                 jzlbmc: Option[String] = None,
+                 roleid: Option[Long] = 0,
+                 departid: Option[Long] = 0)
 
 
 /**
@@ -151,19 +175,33 @@ case class GlobalParam(globalparcode: String,
  * @param id
  * @param createTime
  */
-case class Dict(dictcode: String,
-                dictname: String,
-                superDictcode: String = "0",
-                sibOrder: Int = 0,
-                isleaf: Boolean = true,
-                maintFlag: Int = 0,
-                dictType: String,
-                dictSimplePin: Option[String] = None,
-                dictAllPin: Option[String] = None,
-                dictItemTableName: Option[String] = None,
-                dictVersion: Option[String] = Option("0"),
-                id: Option[Long] = Option(0),
-                createTime: Option[DateTime] = None)
+case class Dict(
+                 @ColumnBase("DICT_CODE")
+                 dictcode: String,
+                 @ColumnBase("DICT_NAME")
+                 dictname: String,
+                 @ColumnBase("SUPER_DICT_CODE")
+                 superDictcode: String = "0",
+                 @ColumnBase("SIB_ORDER")
+                 sibOrder: Int = 0,
+                 @ColumnBase("LEAF_FLAG")
+                 isleaf: Boolean = true,
+                 @ColumnBase("MAINT_FLAG")
+                 maintFlag: Int = 0,
+                 @ColumnBase("DICT_TYPE")
+                 dictType: String,
+                 @ColumnBase("DICT_SIMPLEPIN")
+                 dictSimplePin: Option[String] = None,
+                 @ColumnBase("DICT_ALLPIN")
+                 dictAllPin: Option[String] = None,
+                 @ColumnBase("DICT_ITEMTABLENAME")
+                 dictItemTableName: Option[String] = None,
+                 @ColumnBase("DICT_VERSIONID")
+                 dictVersion: Option[String] = Option("0"),
+                 @ColumnBase("DICT_ID")
+                 id: Option[Long] = Option(0),
+                 @ColumnBase("TXSJ")
+                 createTime: Option[DateTime] = None)
 
 /**
  * 字典项
@@ -179,138 +217,30 @@ case class Dict(dictcode: String,
  * @param itemSimplePin
  * @param itemAllPin
  */
-case class DictItem(dictcode: String,
-                    displayName: String,
-                    factValue: String,
-                    appendValue: Option[String] = None,
-                    superItemId: Long = 0,
-                    sibOrder: Int = 0,
-                    isleaf: Boolean = true,
-                    displayFlag: Boolean = true,
-                    isValid: Boolean = true,
-                    itemSimplePin: Option[String] = None,
-                    itemAllPin: Option[String] = None)
+case class DictItem(
+                     @ColumnBase("DICT_CODE")
+                     dictcode: String,
+                     @ColumnBase("DISPLAY_NAME")
+                     displayName: String,
+                     @ColumnBase("FACT_VALUE")
+                     factValue: String,
+                     @ColumnBase("APPEND_VALUE")
+                     appendValue: Option[String] = None,
+                     @ColumnBase("SUPER_ITEM_ID")
+                     superItemId: Long = 0,
+                     @ColumnBase("SIB_ORDER")
+                     sibOrder: Int = 0,
+                     @ColumnBase("LEAF_FLAG")
+                     isleaf: Boolean = true,
+                     @ColumnBase("DISPLAY_FLAG")
+                     displayFlag: Boolean = true,
+                     @ColumnBase("VAILD_FLAG")
+                     isValid: Boolean = true,
+                     @ColumnBase("ITEM_SIMPLEPIN")
+                     itemSimplePin: Option[String] = None,
+                     @ColumnBase("ITEM_ALLPIN")
+                     itemAllPin: Option[String] = None)
 
-
-case class SupportTicketBaseContent(stNo: String,
-                                    applicant: Long,
-                                    supportContent: String,
-                                    stStatus: String,
-                                    region: String,
-                                    serialNumber: Int,
-                                    applyDate: DateTime = DateTime.now()
-                                     )
-
-case class SupportTicketCompanyApproval(
-                                         supportDepartments: Option[List[Department]] = None,
-                                         tracking: Option[Tracking] = None)
-
-case class SupportTicketTechDepartmentApproval(
-                                                devScheDate: DateTime,
-                                                devDsScheDate: Option[DateTime] = None,
-                                                devDdScheDate: Option[DateTime] = None,
-                                                devDtScheDate: Option[DateTime] = None,
-                                                tracking: Option[Tracking] = None,
-                                                supportLeader: Option[User] = None
-                                                )
-
-case class SupportTicketProductDepartmentApproval(
-                                                   psgScheDate: Option[DateTime] = None,
-                                                   psgDsScheDate: Option[DateTime] = None,
-                                                   psgIsScheDate: Option[DateTime] = None,
-                                                   tracking: Option[Tracking] = None,
-                                                   supprotLeader: Option[User] = None
-                                                   )
-
-case class SupportTicketTracking(
-                                  applyingFeedbackDate: DateTime,
-                                  psgCompDate: Option[DateTime] = None,
-                                  devCompDate: Option[DateTime] = None,
-                                  psgDsCompDate: Option[DateTime] = None,
-                                  psgIsCompDate: Option[DateTime] = None,
-                                  devDsCompDate: Option[DateTime] = None,
-                                  devDdCompDate: Option[DateTime] = None,
-                                  devDtCompDate: Option[DateTime] = None,
-                                  tracking: Option[Tracking] = None
-                                  )
-
-case class SupportTicketFeedback(
-                                  feedbackConfirmDate: DateTime,
-                                  tracking: Option[Tracking] = None
-                                  )
-
-case class SupportTicketArchive(
-                                 archiveCode: String,
-                                 comments: String,
-                                 archiveDate: DateTime,
-                                 archiveUserid: Long
-                                 )
-
-case class SupportTicket(
-                          baseContent: SupportTicketBaseContent,
-                          companyApproval: Option[SupportTicketCompanyApproval] = None,
-                          techDepartmentApproval: Option[SupportTicketTechDepartmentApproval] = None,
-                          productDepartmentApproval: Option[SupportTicketProductDepartmentApproval] = None,
-                          theTracking: Option[SupportTicketTracking] = None,
-                          feedback: Option[SupportTicketFeedback] = None,
-                          archive: Option[SupportTicketArchive] = None,
-                          lastUpdateDate: Option[DateTime] = Option(DateTime.now()),
-                          id: Option[Long] = None)
-
-
-/**
- * 时间变更
- * @param id
- * @param trackingId
- * @param devScheDate
- * @param psgScheDate
- * @param devDsScheDate
- * @param devDdScheDate
- * @param devDtScheDate
- * @param psgDsScheDate
- * @param psgIdScheDate
- * @param _type
- */
-case class TimeChange(id: Option[Long] = None,
-                      trackingId: Option[Long] = None,
-                      devScheDate: Option[DateTime] = None,
-                      psgScheDate: Option[DateTime] = None,
-                      devDsScheDate: Option[DateTime] = None,
-                      devDdScheDate: Option[DateTime] = None,
-                      devDtScheDate: Option[DateTime] = None,
-                      psgDsScheDate: Option[DateTime] = None,
-                      psgIdScheDate: Option[DateTime] = None,
-                      _type: Option[String] = None)
-
-/**
- * 进展提示
- * @param id
- * @param trackingDate
- * @param newProcess
- * @param stId
- * @param approvalCode
- * @param _type
- */
-case class Tracking(id: Option[Long] = None,
-                    trackingDate: DateTime,
-                    newProcess: String,
-                    stId: Long,
-                    approvalCode: String,
-                    _type: String)
-
-/**
- * 督办
- * @param supervisionSuggestion
- * @param supervisionPersion
- * @param supervisionDate
- * @param stId
- * @param id
- */
-case class Supervision(supervisionSuggestion: String,
-                       supervisionPersion: Long,
-                       supervisionDate: DateTime,
-                       stId: Option[Long] = None,
-                       id: Option[Long] = None)
 
 /**
  * 版本
@@ -320,10 +250,15 @@ case class Supervision(supervisionSuggestion: String,
  * @param updateTime
  * @param versionId
  */
-case class Version(versionNum: String,
+case class Version(@ColumnBase("VERSIONNUM")
+                   versionNum: String,
+                   @ColumnBase("VERSIONINFO")
                    versionInfo: String,
+                   @ColumnBase("VERSIONDATE")
                    versionDate: DateTime,
+                   @ColumnBase("UPDATETIME")
                    updateTime: DateTime,
+                   @ColumnBase("VERSIONID")
                    versionId: Option[Long] = None)
 
 
