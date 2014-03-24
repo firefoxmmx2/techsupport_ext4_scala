@@ -2,24 +2,32 @@ package models
 
 import org.joda.time.DateTime
 import org.squeryl.annotations._
-import org.squeryl.Schema
-
+import org.squeryl.{KeyedEntity, Schema}
+import CommonTypeMode._
 
 object SystemManage extends Schema {
   val departments = table[Department]("T_DEPARTMENT")
+  on(departments)(d => declare(d.id is(autoIncremented("DEPARTID"), primaryKey)))
   val users = table[User]("T_USER")
+  on(users)(u => declare(u.id is(autoIncremented("USERID"), primaryKey)))
   val roles = table[Role]("T_ROLE")
+  on(roles)(r => declare(r.id is(autoIncremented("ROLEID"), primaryKey)))
   val systems = table[System]("T_SYSTEM")
+  on(systems)(s => declare(s.id is (primaryKey)))
   val menus = table[Menu]("T_MENU")
+  on(menus)(m => declare(m.id is (primaryKey)))
   val globalParams = table[GlobalParam]("T_GLOBALPAR")
+  on(globalParams)(g => declare(g.id is primaryKey))
   val versions = table[Version]("T_VERSION")
+  on(versions)(v => declare(v.id is(autoIncremented("VERSIONID"), primaryKey)))
   val dicts = table[Dict]("T_DICT")
+  on(dicts)(d => declare(d.id is (autoIncremented("DICT_ID"))))
   val dictItems = table[DictItem]("T_DICT_ITEM")
+  on(dictItems)(d => declare(d.id is(autoIncremented("ITEM_ID"), primaryKey)))
 }
 
 /**
  * 机构
- * @param departid 机构id 唯一
  * @param departcode 机构代码 唯一
  * @param departname 机构名称
  * @param departlevel 机构级别
@@ -41,17 +49,19 @@ case class Department(
                        parentDepartid: Long,
                        @ColumnBase("NODE_ORDER")
                        nodeOrder: Int = 0,
-                       @ColumnBase("isleaf")
+                       @ColumnBase("ISLEAF")
                        isLeaf: String = "Y",
                        departsimplepin: Option[String] = None,
                        departallpin: Option[String] = None,
                        departbrevitycode: Option[String] = None,
-                       departid: Option[Long] = 0)
+                       departid: Option[Long]) extends KeyedEntity[Option[Long]] {
+
+  def id: Option[Long] = departid
+}
 
 
 /**
  * 用户
- * @param userid 用户id
  * @param departid 机构id
  * @param useraccount 用户帐号
  * @param username 用户名称
@@ -65,28 +75,30 @@ case class Department(
  * @param jzlbmc
  * @param email 邮箱
  */
-case class User(userid: Long = 0,
-                departid: Long,
-                useraccount: String,
-                username: String,
-                password: String,
-                idnum: String,
-                @ColumnBase("MOBILE_PHONE")
-                mobilePhone: Option[String],
-                userorder: Int = 1,
-                @ColumnBase("ISVAILD")
-                isVaild: String = "Y",
-                @ColumnBase("USERTYPE")
-                userType: Option[String],
-                jzlbdm: Option[String],
-                jzlbmc: Option[String],
-                @ColumnBase
-                email: Option[String])
+case class User(
+                 departid: Long,
+                 useraccount: String,
+                 username: String,
+                 password: String,
+                 idnum: String,
+                 @ColumnBase("MOBILE_PHONE")
+                 mobilePhone: Option[String],
+                 userorder: Int = 1,
+                 @ColumnBase("ISVAILD")
+                 isVaild: String = "Y",
+                 @ColumnBase("USERTYPE")
+                 userType: Option[String],
+                 jzlbdm: Option[String],
+                 jzlbmc: Option[String],
+                 @ColumnBase
+                 email: Option[String],
+                 userid: Option[Long]) extends KeyedEntity[Option[Long]] {
+  def id: Option[Long] = userid
+}
 
 
 /**
  * 角色
- * @param roleid 角色id
  * @param departid 机构id
  * @param rolename 角色名称
  * @param roleDescription 角色描述
@@ -102,13 +114,14 @@ case class Role(
                  roleType: Option[String] = None,
                  jzlbdm: Option[String] = None,
                  jzlbmc: Option[String] = None,
-                 roleid: Option[Long] = 0,
-                 departid: Option[Long] = 0)
+                 departid: Option[Long] = None,
+                 roleid: Option[Long] = None) extends KeyedEntity[Option[Long]] {
+  def id: Option[Long] = roleid
+}
 
 
 /**
  * 系统
- * @param systemcode 系统代码
  * @param systemname 系统名称
  * @param systemdefine 系统定义
  * @param picturepath 系统图标路径
@@ -117,19 +130,22 @@ case class Role(
  * @param isleaf 是否为叶子节点 默认Y
  * @param fullcode 系统全码 如techsupport.systemmanage.
  */
-case class System(systemcode: String,
-                  systemname: String,
-                  systemdefine: String,
-                  picturepath: String,
-                  parentsystemcode: String,
-                  nodeorder: Int,
-                  isleaf: String,
-                  fullcode: String)
+case class System(
+                   systemcode: String,
+                   systemname: String,
+                   systemdefine: String,
+                   picturepath: String,
+                   parentsystemcode: String,
+                   nodeorder: Int,
+                   isleaf: String,
+                   fullcode: String) extends KeyedEntity[String] {
+
+  def id: String = systemcode
+}
 
 
 /**
  * 菜单
- * @param menucode 菜单代码 唯一
  * @param menuname 菜单名称
  * @param funcentry 菜单地址
  * @param menulevel 菜单
@@ -139,15 +155,18 @@ case class System(systemcode: String,
  * @param isleaf 是否为叶子节点 默认Y
  * @param systemcode 系统代码 关联 System.systemcode
  */
-case class Menu(menucode: String,
-                menuname: String,
-                funcentry: String,
-                menulevel: Int,
-                parentmenucode: String,
-                menufullcode: String,
-                nodeorder: Int,
-                isleaf: String,
-                systemcode: String)
+case class Menu(
+                 menucode: String,
+                 menuname: String,
+                 funcentry: String,
+                 menulevel: Int,
+                 parentmenucode: String,
+                 menufullcode: String,
+                 nodeorder: Int,
+                 isleaf: String,
+                 systemcode: String) extends KeyedEntity[String] {
+  def id: String = menucode
+}
 
 /**
  * 全局参数
@@ -155,9 +174,12 @@ case class Menu(menucode: String,
  * @param globalparname 参数名称
  * @param globalparvalue 参数值
  */
-case class GlobalParam(globalparcode: String,
-                       globalparname: String,
-                       globalparvalue: String)
+case class GlobalParam(
+                        globalparcode: String,
+                        globalparname: String,
+                        globalparvalue: String) extends KeyedEntity[String] {
+  def id: String = globalparcode
+}
 
 /**
  * 字典
@@ -172,7 +194,6 @@ case class GlobalParam(globalparcode: String,
  * @param dictAllPin
  * @param dictItemTableName
  * @param dictVersion
- * @param id
  * @param createTime
  */
 case class Dict(
@@ -198,10 +219,12 @@ case class Dict(
                  dictItemTableName: Option[String] = None,
                  @ColumnBase("DICT_VERSIONID")
                  dictVersion: Option[String] = Option("0"),
-                 @ColumnBase("DICT_ID")
-                 id: Option[Long] = Option(0),
                  @ColumnBase("TXSJ")
-                 createTime: Option[DateTime] = None)
+                 createTime: Option[DateTime] = None,
+                 @ColumnBase("DICT_ID")
+                 dictId: Option[Long] = None) extends KeyedEntity[Option[Long]] {
+  def id: Option[Long] = dictId
+}
 
 /**
  * 字典项
@@ -239,7 +262,11 @@ case class DictItem(
                      @ColumnBase("ITEM_SIMPLEPIN")
                      itemSimplePin: Option[String] = None,
                      @ColumnBase("ITEM_ALLPIN")
-                     itemAllPin: Option[String] = None)
+                     itemAllPin: Option[String] = None,
+                     @ColumnBase("ITEM_ID")
+                     itemId: Option[Long] = None) extends KeyedEntity[Option[Long]] {
+  def id: Option[Long] = itemId
+}
 
 
 /**
@@ -248,7 +275,6 @@ case class DictItem(
  * @param versionInfo
  * @param versionDate
  * @param updateTime
- * @param versionId
  */
 case class Version(@ColumnBase("VERSIONNUM")
                    versionNum: String,
@@ -259,7 +285,9 @@ case class Version(@ColumnBase("VERSIONNUM")
                    @ColumnBase("UPDATETIME")
                    updateTime: DateTime,
                    @ColumnBase("VERSIONID")
-                   versionId: Option[Long] = None)
+                   versionId: Option[Long]) extends KeyedEntity[Option[Long]] {
+  def id: Option[Long] = versionId
+}
 
 
 

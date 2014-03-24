@@ -1,21 +1,22 @@
 package models
 
 import org.squeryl.annotations._
-import models.Department
-import models.User
-import models.Department
-import models.User
 import org.joda.time.DateTime
-import org.squeryl.Schema
+import org.squeryl.{KeyedEntity, Schema}
+import CommonTypeMode._
 
 /**
  * Created by hooxin on 14-3-23.
  */
-object Techsupport extends Schema{
+object Techsupport extends Schema {
   val supportTickets = table[SupportTicket]("T_TS_TECH_SUPPORT")
+  on(supportTickets)(st => declare(st.id is(autoIncremented("SEQ_TS_ST"), primaryKey)))
   val supervision = table[Supervision]("T_TS_SUPERVISION")
+  on(supervision)(s => declare(s.id is(autoIncremented("SEQ_TS_SUPERVISION"), primaryKey)))
   val timeChanges = table[TimeChange]("T_TS_TIMECHANGE")
+  on(timeChanges)(t => declare(t.id is (autoIncremented("TIMECHANGE_ID"))))
   val trackings = table[Tracking]("T_TS_TRACKNG")
+  on(trackings)(t => declare(t.id is(autoIncremented("SEQ_TS_TRACK"), primaryKey)))
 
 }
 
@@ -85,8 +86,10 @@ class SupportTicket(
                      supportDepartments: Option[List[Department]] = None,
                      @ColumnBase("LAST_UPDATE_DATE")
                      lastUpdateDate: Option[DateTime] = Option(DateTime.now()),
-                     @ColumnBase("id")
-                     id: Option[Long] = None)
+                     @ColumnBase("ID")
+                     stId: Option[Long] = Option(0)) extends KeyedEntity[Option[Long]] {
+  def id: Option[Long] = stId
+}
 
 object SupportTicket {
   def apply(//基本信息
@@ -124,7 +127,8 @@ object SupportTicket {
             archiveUserid: Option[Long] = None,
             supportDepartments: Option[List[Department]] = None,
             lastUpdateDate: Option[DateTime] = Option(DateTime.now()),
-            id: Option[Long] = None) = new SupportTicket(
+            stId: Option[Long] = Option(0)
+             ) = new SupportTicket(
     stNo,
     applicant,
     supportContent,
@@ -159,7 +163,7 @@ object SupportTicket {
     archiveUserid,
     supportDepartments,
     lastUpdateDate,
-    id
+    stId
   )
 
 
@@ -197,11 +201,11 @@ case class TimeChange(@ColumnBase("TRACKING_ID")
                       psgIdScheDate: Option[DateTime] = None,
                       @ColumnBase("TYPE")
                       _type: Option[String] = None,
-                      id: Option[Long] = None)
+                      id: Option[Long] = None) extends KeyedEntity[Option[Long]]
 
 /**
  * 进展提示
- * @param id
+ * @param trackingId
  * @param trackingDate
  * @param newProcess
  * @param stId
@@ -219,7 +223,10 @@ case class Tracking(
                      approvalCode: String,
                      @ColumnBase("TYPE")
                      _type: String,
-                     id: Option[Long] = None)
+                     @ColumnBase("ID")
+                     trackingId: Option[Long] = None) extends KeyedEntity[Option[Long]] {
+  def id: Option[Long] = trackingId
+}
 
 /**
  * 督办
@@ -238,4 +245,4 @@ case class Supervision(
                         supervisionDate: DateTime,
                         @ColumnBase("ST_ID")
                         stId: Option[Long] = None,
-                        id: Option[Long] = None)
+                        id: Option[Long] = None) extends KeyedEntity[Option[Long]]

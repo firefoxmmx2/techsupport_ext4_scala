@@ -487,6 +487,7 @@ import models.System
 //
 //}
 
+
 import org.squeryl._
 import org.squeryl.dsl._
 import models.CommonTypeMode._
@@ -494,15 +495,16 @@ import models.CommonTypeMode._
 trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
   class DepartmentDaoImpl extends DepartmentDao {
-    def selectForListQuery(params: Map[String, Object], sort: String = "departid", dir: String = "asc") = from(SystemManage.departments)(d =>
+    def selectForListQuery[T](params: Map[String, Object], sort: String = "departid", dir: String = "asc",
+                           isCount: Boolean = false):Query[T] = from(SystemManage.departments)(d =>
       where {
         (d.departid === params.get("departid").asInstanceOf[d.departid.type].?)
           .and(d.departcode === params.get("departcode").asInstanceOf[d.departcode.type].?)
           .and(d.departname like params.get("departname").asInstanceOf[d.departname.type].?)
           .and(d.departfullcode like params.get("departfullcode").asInstanceOf[d.departfullcode.type].?)
-          .and(d.departlevel === params.get("departlevel").asInstanceOf[d.departlevel.type].?)
+          .and(d.departlevel === params.get("departlevel").asInstanceOf[Int].?)
       }
-        select (d)
+        select (if (isCount) countDistinct(d.departid).asInstanceOf[T] else d.asInstanceOf[T])
         orderBy (if (sort == "departid") if (dir == "asc") d.departid asc else d.departid desc else d.departid asc)
     )
 
@@ -521,8 +523,8 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
       if (page.total == 0)
         page
       else {
-        val datas = selectForListQuery(params,sort,dir).drop(page.start).take(page.limit).toList
-        page.copy(datas=datas)
+        val datas = selectForListQuery(params, sort, dir).page(page.start,page.limit).toList
+        page.copy(datas = datas)
       }
     }
 
@@ -532,7 +534,8 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return 结果列表
      */
-    def list(params: Map[String, Object]): List[Department] = ???
+    def list(params: Map[String, Object]): List[Department] = selectForListQuery(params)
+      .toList
 
     /**
      * 分页总数查询
@@ -540,7 +543,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return 结果数
      */
-    def count(params: Map[String, Object]): Int = ???
+    def count(params: Map[String, Object]): Int = selectForListQuery(params, isCount = true).single
 
     /**
      * 通过主键获取单个实体
@@ -548,7 +551,11 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): Department = ???
+    def getById(id: Long): Department = from(SystemManage.departments) {
+      d =>
+        where(d.departid === id)
+        select(d)
+    }.single
 
     /**
      * 通过主键删除
@@ -556,7 +563,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return
      */
-    def deleteById(id: Long): Unit = ???
+    def deleteById(id: Long): Unit = SystemManage.departments.deleteWhere( d => id === d.id)
 
     /**
      * 删除
@@ -564,7 +571,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return
      */
-    def delete(m: Department): Unit = ???
+    def delete(m: Department): Unit = SystemManage.departments.delete(m.id)
 
     /**
      * 修改
@@ -572,7 +579,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return
      */
-    def update(m: Department): Unit = ???
+    def update(m: Department): Unit = SystemManage.departments.update(m)
 
     /**
      * 插入
@@ -580,7 +587,9 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: Department): Department = ???
+    def insert(m: Department): Department = {
+      SystemManage.departments.insert(m)
+    }
   }
 
 }
