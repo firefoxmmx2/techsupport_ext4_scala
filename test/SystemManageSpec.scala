@@ -12,12 +12,12 @@ class SystemManageSpec extends Specification{
     "添加一个机构" in {
       running(FakeApplication()) {
         departmentService.deleteById(99999)
-        val d = Department("test", "测试", 0, "test.", parentDepartid = 0, departid = Option(99999))
+        val d = Department("test", "测试", 0, "test.", parentDepartid = 0, id = Option(99999))
         val insertingDeparment = departmentService.insert(d)
-        assert(d.departid != None)
-        assert(d.departid != insertingDeparment.departid)
-        departmentService.deleteById(d.departid.get)
-        val selectDepartment=departmentService.getById(d.departid.get)
+        assert(d.id != None)
+        assert(d.id != insertingDeparment.id)
+        departmentService.deleteById(d.id.get)
+        val selectDepartment=departmentService.getById(d.id.get)
         assert(selectDepartment == None)
       }
 
