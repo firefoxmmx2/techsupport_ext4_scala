@@ -1,11 +1,8 @@
 import models.Department
-import org.squeryl.adapters.OracleAdapter
-import org.squeryl.Session
-import play.api.db.DB
 import play.api.test._
 import play.api.test.Helpers._
 import org.specs2.mutable._
-import ComponentRegister._
+import util.ComponentRegister._
 /**
  * Created by hooxin on 14-2-12.
  */

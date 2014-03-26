@@ -86,7 +86,81 @@ class SupportTicket(
                      val supportDepartments: Option[List[Department]] = None,
                      @Column("LAST_UPDATE_DATE")
                      val lastUpdateDate: Option[DateTime] = Option(DateTime.now()),
-                     val id: Option[Long] = None) extends KeyedEntity[Option[Long]]
+                     val id: Option[Long] = None) extends KeyedEntity[Option[Long]] {
+  def copy(//基本信息
+           stNo: String = stNo,
+           applicant: Long = applicant,
+           supportContent: String = supportContent,
+           stStatus: String = stStatus,
+           region: String = region,
+           serialNumber: Int = serialNumber,
+           applyDate: DateTime = applyDate,
+           //部门审批
+           devScheDate: Option[DateTime] = devScheDate,
+           devDsScheDate: Option[DateTime] = devDsScheDate,
+           devDdScheDate: Option[DateTime] = devDdScheDate,
+           devDtScheDate: Option[DateTime] = devDtScheDate,
+           psgScheDate: Option[DateTime] = psgScheDate,
+           psgDsScheDate: Option[DateTime] = psgDsScheDate,
+           psgIsScheDate: Option[DateTime] = psgIsScheDate,
+           supportLeaders: Option[List[User]] = supportLeaders,
+           // 进展提示
+           applyingFeedbackDate: Option[DateTime] = applyingFeedbackDate,
+           psgCompDate: Option[DateTime] = psgCompDate,
+           devCompDate: Option[DateTime] = devCompDate,
+           psgDsCompDate: Option[DateTime] = psgDsCompDate,
+           psgIsCompDate: Option[DateTime] = psgIsCompDate,
+           devDsCompDate: Option[DateTime] = devDsCompDate,
+           devDdCompDate: Option[DateTime] = devDdCompDate,
+           devDtCompDate: Option[DateTime] = devDtCompDate,
+           //反馈确认
+           feedbackConfirmDate: Option[DateTime] = feedbackConfirmDate,
+           //归档
+           archiveCode: Option[String] = archiveCode,
+           comments: Option[String] = comments,
+           archiveDate: Option[DateTime] = archiveDate,
+           archiveUserid: Option[Long] = archiveUserid,
+           supportDepartments: Option[List[Department]] = supportDepartments,
+           lastUpdateDate: Option[DateTime] = lastUpdateDate,
+           id: Option[Long] = id) =
+    new SupportTicket(
+      stNo,
+      applicant,
+      supportContent,
+      stStatus,
+      region,
+      serialNumber,
+      applyDate,
+      //部门审批
+      devScheDate,
+      devDsScheDate,
+      devDdScheDate,
+      devDtScheDate,
+      psgScheDate,
+      psgDsScheDate,
+      psgIsScheDate,
+      supportLeaders,
+      // 进展提示
+      applyingFeedbackDate,
+      psgCompDate,
+      devCompDate,
+      psgDsCompDate,
+      psgIsCompDate,
+      devDsCompDate,
+      devDdCompDate,
+      devDtCompDate,
+      //反馈确认
+      feedbackConfirmDate,
+      //归档
+      archiveCode,
+      comments,
+      archiveDate,
+      archiveUserid,
+      supportDepartments,
+      lastUpdateDate,
+      id
+    )
+}
 
 object SupportTicket {
   def apply(//基本信息
