@@ -55,7 +55,7 @@ trait MenuServiceComponent {
 
 trait GlobalParamServiceComponent {
 
-  trait GlobalParamService
+  trait GlobalParamService extends BaseService[GlobalParam,String]
 
   val globalParamService: GlobalParamService
 }

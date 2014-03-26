@@ -20,9 +20,9 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
   class DepartmentDaoImpl extends DepartmentDao {
     def selectForListQuery[T](params: Map[String, Object], sort: String = "departid", dir: String = "asc",
-                           isCount: Boolean = false):Query[T] = from(SystemManage.departments)(d =>
+                              isCount: Boolean = false): Query[T] = from(SystemManage.departments)(d =>
       where {
-        (d.id === params.get("departid").asInstanceOf[Option[Long]].?)
+        (d.id === params.get("id").asInstanceOf[d.id.type].?)
           .and(d.departcode === params.get("departcode").asInstanceOf[d.departcode.type].?)
           .and(d.departname like params.get("departname").asInstanceOf[d.departname.type].?)
           .and(d.departfullcode like params.get("departfullcode").asInstanceOf[d.departfullcode.type].?)
@@ -47,7 +47,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
       if (page.total == 0)
         page
       else {
-        val datas = selectForListQuery(params, sort, dir).page(page.start,page.limit).toList
+        val datas = selectForListQuery(params, sort, dir).page(page.start, page.limit).toList
         page.copy(datas = datas)
       }
     }
@@ -87,7 +87,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return
      */
-    def deleteById(id: Long): Unit = SystemManage.departments.deleteWhere( d => id === d.id)
+    def deleteById(id: Long): Unit = SystemManage.departments.deleteWhere(d => id === d.id)
 
     /**
      * 删除
@@ -112,6 +112,498 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
      * @return 插入后的实体
      */
     def insert(m: Department): Department = SystemManage.departments.insert(m)
+  }
+
+}
+
+trait UserDaoComponentImpl extends UserDaoComponent {
+
+  class UserDaoImpl extends UserDao {
+    def selectForPage(params: Map[String, Object], sort: String = "userid", dir: String = "asc") = {
+      from(SystemManage.users) {
+        u =>
+          where {
+            (u.id === params.get("id").asInstanceOf[u.id.type].?) and
+              (u.userType like params.get("userType").asInstanceOf[u.userType.type].?) and
+              (u.useraccount === params.get("useraccount").asInstanceOf[u.useraccount.type].?) and
+              (u.departid === params.get("departid").asInstanceOf[u.departid.type].?) and
+              (u.isVaild === params.get("isValid").asInstanceOf[u.isVaild.type].?) and
+              (u.mobilePhone === params.get("mobilePhone").asInstanceOf[u.mobilePhone.type].?) and
+              (u.idnum === params.get("idnum").asInstanceOf[u.idnum.type].?) and
+              (u.userorder === params.get("userorder").asInstanceOf[u.userorder.type].?) and
+              (u.password === params.get("password").asInstanceOf[u.password.type].?)
+          }
+          select(u)
+      }
+    }
+
+
+    /**
+     * 分页查询
+     * @param pageno 页码
+     * @param pagesize 每页显示数
+     * @param params 分页查询条件
+     * @param sort 排序字段
+     * @param dir 升降序
+
+     * @return 分页结果
+     */
+    def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String, dir: String): Page[User] = {
+      val page = new Page[User](pageno, pagesize, count(params))
+      if (page.total == 0)
+        page
+      else {
+        val datas = selectForPage(params, sort, dir).page(page.start, page.limit).toList
+        page.copy(datas = datas)
+      }
+    }
+
+
+    /**
+     * 非分页查询
+     * @param params 查询条件
+
+     * @return 结果列表
+     */
+    def list(params: Map[String, Object]): List[User] = inTransaction(userDao.list(params))
+
+    /**
+     * 分页总数查询
+     * @param params 分页查询条件
+
+     * @return 结果数
+     */
+    def count(params: Map[String, Object]): Int = selectForPage(params).Count.toInt
+
+    /**
+     * 通过主键获取单个实体
+     * @param id 主键
+
+     * @return 实体
+     */
+    def getById(id: Long): User = SystemManage.users.where(u => u.id === id).single
+
+    /**
+     * 通过主键删除
+     * @param id 主键
+
+     * @return
+     */
+    def deleteById(id: Long): Unit = SystemManage.users.deleteWhere(u => u.id === id)
+
+    /**
+     * 删除
+     * @param m 实体
+
+     * @return
+     */
+    def delete(m: User): Unit = SystemManage.users.delete(m)
+
+    /**
+     * 修改
+     * @param m 实体
+
+     * @return
+     */
+    def update(m: User): Unit = SystemManage.users.update(m)
+
+    /**
+     * 插入
+     * @param m 实体
+
+     * @return 插入后的实体
+     */
+    def insert(m: User): User = SystemManage.users.insert(m)
+  }
+
+}
+
+
+trait SystemDaoComponentImpl extends SystemDaoComponent {
+
+  class SystemDaoImpl extends SystemDao {
+    def selectForPage(params: Map[String, Object], sort: String = "systemcode", dir: String = "asc") = {
+      from(SystemManage.systems) {
+        s =>
+          where {
+            (s.id === params.get("id").asInstanceOf[s.id.type].?) and
+              (s.isleaf === params.get("isleaf").asInstanceOf[s.isleaf.type].?) and
+              (s.parentsystemcode === params.get("paramsystemcode").asInstanceOf[s.parentsystemcode.type].?) and
+              (s.nodeorder === params.get("nodeorder").asInstanceOf[s.nodeorder.type].?) and
+              (s.systemname like params.get("systemname").asInstanceOf[s.systemname.type].?) and
+              (s.fullcode like params.get("fullcode").asInstanceOf[s.fullcode.type].?)
+          }
+          select(s)
+      }
+    }
+
+    /**
+     * 分页查询
+     * @param pageno 页码
+     * @param pagesize 每页显示数
+     * @param params 分页查询条件
+     * @param sort 排序字段
+     * @param dir 升降序
+
+     * @return 分页结果
+     */
+    def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String, dir: String): Page[System] = {
+      val page = Page[System](pageno, pagesize, count(params))
+      if (page.total == 0)
+        page
+      else {
+        val datas = selectForPage(params, sort, dir).page(page.start, page.limit).toList
+        page.copy(datas = datas)
+      }
+    }
+
+    /**
+     * 非分页查询
+     * @param params 查询条件
+
+     * @return 结果列表
+     */
+    def list(params: Map[String, Object]): List[System] = selectForPage(params).toList
+
+    /**
+     * 分页总数查询
+     * @param params 分页查询条件
+
+     * @return 结果数
+     */
+    def count(params: Map[String, Object]): Int = selectForPage(params).Count.toInt
+
+    /**
+     * 通过主键获取单个实体
+     * @param id 主键
+
+     * @return 实体
+     */
+    def getById(id: String): System = SystemManage.systems.where(s => s.id === id).single
+
+    /**
+     * 通过主键删除
+     * @param id 主键
+
+     * @return
+     */
+    def deleteById(id: String): Unit = SystemManage.systems.deleteWhere(s => s.id === id)
+
+    /**
+     * 删除
+     * @param m 实体
+
+     * @return
+     */
+    def delete(m: System): Unit = SystemManage.systems.delete(m)
+
+    /**
+     * 修改
+     * @param m 实体
+
+     * @return
+     */
+    def update(m: System): Unit = SystemManage.systems.update(m)
+
+    /**
+     * 插入
+     * @param m 实体
+
+     * @return 插入后的实体
+     */
+    def insert(m: System): System = SystemManage.systems.insert(m)
+  }
+
+}
+
+trait RoleDaoComponentImpl extends RoleDaoComponent {
+
+  class RoleDaoImpl extends RoleDao {
+    def selectForPage(params: Map[String, Object], sort: String = "id", dir: String = "asc") = {
+      from(SystemManage.roles) {
+        r => where {
+          (r.id === params.get("id").asInstanceOf[r.id.type].?) and (r.departid === params.get("departid").asInstanceOf[r.departid.type].?) and (r.rolename like params.get("rolename").asInstanceOf[r.rolename.type].?) and (r.roleType like params.get("roleType").asInstanceOf[r.roleType.type].?) and (r.roleDescription like params.get("roleDescription").asInstanceOf[r.roleDescription.type].?)
+        } select (r) orderBy {
+          if (sort == "id") if (dir == "asc") r.id asc else r.id desc else r.id.asc
+        }
+      }
+    }
+
+    /**
+     * 分页查询
+     * @param pageno 页码
+     * @param pagesize 每页显示数
+     * @param params 分页查询条件
+     * @param sort 排序字段
+     * @param dir 升降序
+
+     * @return 分页结果
+     */
+    def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String, dir: String): Page[Role] = {
+      val page = Page[Role](pageno, pagesize, count(params))
+      if (page.total == 0)
+        page
+      else
+        page.copy(datas = selectForPage(params, sort, dir).page(page.start, page.limit).toList)
+    }
+
+    /**
+     * 非分页查询
+     * @param params 查询条件
+
+     * @return 结果列表
+     */
+    def list(params: Map[String, Object]): List[Role] = selectForPage(params).toList
+
+    /**
+     * 分页总数查询
+     * @param params 分页查询条件
+
+     * @return 结果数
+     */
+    def count(params: Map[String, Object]): Int = selectForPage(params).Count.toInt
+
+    /**
+     * 通过主键获取单个实体
+     * @param id 主键
+
+     * @return 实体
+     */
+    def getById(id: Long): Role = SystemManage.roles.where(r => r.id === id).single
+
+    /**
+     * 通过主键删除
+     * @param id 主键
+
+     * @return
+     */
+    def deleteById(id: Long): Unit = SystemManage.roles.deleteWhere(r => r.id === id)
+
+    /**
+     * 删除
+     * @param m 实体
+
+     * @return
+     */
+    def delete(m: Role): Unit = SystemManage.roles.delete(m)
+
+    /**
+     * 修改
+     * @param m 实体
+
+     * @return
+     */
+    def update(m: Role): Unit = SystemManage.roles.update(m)
+
+    /**
+     * 插入
+     * @param m 实体
+
+     * @return 插入后的实体
+     */
+    def insert(m: Role): Role = SystemManage.roles.insert(m)
+  }
+
+}
+
+trait MenuDaoComponentImpl extends MenuDaoComponent {
+
+  class MenuDaoImpl extends MenuDao {
+    def selectForPage(params: Map[String, Object], sort: String = "id", dir: String = "asc") =
+      from(SystemManage.menus) {
+        m =>
+          where {
+            (m.id === params.get("id").asInstanceOf[m.id.type].?) and
+              (m.menuname like params.get("menuname").asInstanceOf[m.menuname.type].?) and
+              (m.menufullcode like params.get("menufullcode").asInstanceOf[m.menufullcode.type].?) and
+              (m.menulevel === params.get("menulevel").asInstanceOf[m.menulevel.type].?) and
+              (m.parentmenucode === params.get("parentmenucode").asInstanceOf[m.parentmenucode.type].?) and
+              (m.systemcode === params.get("systemcode").asInstanceOf[m.systemcode.type].?) and
+              (m.isleaf === params.get("isleaft").asInstanceOf[m.isleaf.type].?) and
+              (m.funcentry like params.get("funcentry").asInstanceOf[m.funcentry.type].?)
+          }
+          select(m) orderBy {
+            if (sort == "id")
+              if (dir == "asc")
+                m.id asc
+              else m.id desc
+            else
+              m.id asc
+          }
+      }
+
+    /**
+     * 分页查询
+     * @param pageno 页码
+     * @param pagesize 每页显示数
+     * @param params 分页查询条件
+     * @param sort 排序字段
+     * @param dir 升降序
+
+     * @return 分页结果
+     */
+    def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String = "id", dir: String = "asc"): Page[Menu] = {
+      val page = Page[Menu](pageno, pagesize, count(params))
+      if (page.total == 0)
+        page
+      else
+        page.copy(datas = selectForPage(params, sort, dir).page(page.start, page.limit).toList)
+    }
+
+    /**
+     * 非分页查询
+     * @param params 查询条件
+
+     * @return 结果列表
+     */
+    def list(params: Map[String, Object]): List[Menu] = selectForPage(params).toList
+
+    /**
+     * 分页总数查询
+     * @param params 分页查询条件
+
+     * @return 结果数
+     */
+    def count(params: Map[String, Object]): Int = selectForPage(params).Count.toInt
+
+    /**
+     * 通过主键获取单个实体
+     * @param id 主键
+
+     * @return 实体
+     */
+    def getById(id: String): Menu = SystemManage.menus.where(m => m.id === id).single
+
+    /**
+     * 通过主键删除
+     * @param id 主键
+
+     * @return
+     */
+    def deleteById(id: String): Unit = SystemManage.menus.deleteWhere(m => m.id === id)
+
+    /**
+     * 删除
+     * @param m 实体
+
+     * @return
+     */
+    def delete(m: Menu): Unit = SystemManage.menus.delete(m)
+
+    /**
+     * 修改
+     * @param m 实体
+
+     * @return
+     */
+    def update(m: Menu): Unit = SystemManage.menus.update(m)
+
+    /**
+     * 插入
+     * @param m 实体
+
+     * @return 插入后的实体
+     */
+    def insert(m: Menu): Menu = SystemManage.menus.insert(m)
+  }
+
+}
+
+trait GlobalParamDaoComponentImpl extends GlobalParamDaoComponent {
+
+  class GlobalParamDaoImpl extends GlobalParamDao {
+    def selectForPage(params: Map[String, Object], sort: String = "id", dir: String = "asc") =
+      from(SystemManage.globalParams) {
+        g =>
+          where {
+            (g.id === params.get("id").asInstanceOf[g.id.type].?) and
+              (g.globalparname like params.get("globalparname").asInstanceOf[g.globalparname.type].?) and
+              (g.globalparvalue === params.get("globalparvalue").asInstanceOf[g.globalparvalue.type].?)
+          }
+          select(g) orderBy {
+            if (sort == "id")
+              if (dir == "asc")
+                g.id asc
+              else
+                g.id desc
+            else
+              g.id asc
+          }
+      }
+
+    /**
+     * 分页查询
+     * @param pageno 页码
+     * @param pagesize 每页显示数
+     * @param params 分页查询条件
+     * @param sort 排序字段
+     * @param dir 升降序
+
+     * @return 分页结果
+     */
+    def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String, dir: String): Page[GlobalParam] = {
+      val page = Page[GlobalParam](pageno, pagesize, count(params))
+      if (page.total == 0)
+        page
+      else
+        page.copy(datas = selectForPage(params).page(page.start, page.limit).toList)
+    }
+
+    /**
+     * 非分页查询
+     * @param params 查询条件
+
+     * @return 结果列表
+     */
+    def list(params: Map[String, Object]): List[GlobalParam] = selectForPage(params).toList
+
+    /**
+     * 分页总数查询
+     * @param params 分页查询条件
+
+     * @return 结果数
+     */
+    def count(params: Map[String, Object]): Int = selectForPage(params).Count.toInt
+
+    /**
+     * 通过主键获取单个实体
+     * @param id 主键
+
+     * @return 实体
+     */
+    def getById(id: String): GlobalParam = SystemManage.globalParams.where(g => g.id === id).single
+
+    /**
+     * 通过主键删除
+     * @param id 主键
+
+     * @return
+     */
+    def deleteById(id: String): Unit = SystemManage.globalParams.deleteWhere(g => g.id === id)
+
+    /**
+     * 删除
+     * @param m 实体
+
+     * @return
+     */
+    def delete(m: GlobalParam): Unit = SystemManage.globalParams.delete(m)
+
+    /**
+     * 修改
+     * @param m 实体
+
+     * @return
+     */
+    def update(m: GlobalParam): Unit = SystemManage.globalParams.update(m)
+
+    /**
+     * 插入
+     * @param m 实体
+
+     * @return 插入后的实体
+     */
+    def insert(m: GlobalParam): GlobalParam = SystemManage.globalParams.insert(m)
   }
 
 }

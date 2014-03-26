@@ -61,3 +61,13 @@ trait RoleDaoComponent {
 
   val roleDao:RoleDao
 }
+
+/**
+ * 全局参数
+ */
+trait GlobalParamDaoComponent {
+  trait GlobalParamDao extends BaseDao[GlobalParam,String]
+
+  val globalParamDao:GlobalParamDao
+}
+
