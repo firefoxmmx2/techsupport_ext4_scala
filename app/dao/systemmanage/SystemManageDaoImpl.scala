@@ -19,18 +19,18 @@ import models.CommonTypeMode._
 trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
   class DepartmentDaoImpl extends DepartmentDao {
-    def selectForListQuery[T](params: Map[String, Object], sort: String = "departid", dir: String = "asc",
-                              isCount: Boolean = false): Query[T] = from(SystemManage.departments)(d =>
+    def selectForListQuery(params: DepartmentQueryCondition, sort: String = "departid", dir: String = "asc") = from(SystemManage.departments)(d =>
       where {
-        (d.id === params.get("id").asInstanceOf[d.id.type].?)
-          .and(d.departcode === params.get("departcode").asInstanceOf[d.departcode.type].?)
-          .and(d.departname like params.get("departname").asInstanceOf[d.departname.type].?)
-          .and(d.departfullcode like params.get("departfullcode").asInstanceOf[d.departfullcode.type].?)
-          .and(d.departlevel === params.get("departlevel").asInstanceOf[Int].?)
+        (d.id === params.id.?)
+          .and(d.departcode === params.departcode.?)
+          .and(d.departname like params.departname.?)
+          .and(d.departfullcode like params.departfullcode.?)
+          .and(d.departlevel === params.departlevel.?)
       }
-        select (if (isCount) countDistinct(d.id).asInstanceOf[T] else d.asInstanceOf[T])
+        select (d)
         orderBy (if (sort == "departid") if (dir == "asc") d.id asc else d.id desc else d.id asc)
     )
+
 
     /**
      * 分页查询
@@ -42,7 +42,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return 分页结果
      */
-    def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String = "departid", dir: String = "asc"): Page[Department] = {
+    def page(pageno: Int, pagesize: Int, params: DepartmentQueryCondition, sort: String = "departid", dir: String = "asc"): Page[Department] = {
       val page = new Page[Department](pageno, pagesize, count(params))
       if (page.total == 0)
         page
@@ -58,7 +58,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return 结果列表
      */
-    def list(params: Map[String, Object]): List[Department] = selectForListQuery(params)
+    def list(params: DepartmentQueryCondition): List[Department] = selectForListQuery(params)
       .toList
 
     /**
@@ -67,7 +67,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return 结果数
      */
-    def count(params: Map[String, Object]): Int = selectForListQuery(params, isCount = true).single
+    def count(params: DepartmentQueryCondition): Int = selectForListQuery(params).Count.toInt
 
     /**
      * 通过主键获取单个实体
@@ -87,7 +87,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return
      */
-    def deleteById(id: Long): Unit = SystemManage.departments.deleteWhere(d => id === d.id)
+    def deleteById(id: Long): Unit = SystemManage.departments.deleteWhere(d => d.id === id)
 
     /**
      * 删除
@@ -119,19 +119,19 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 trait UserDaoComponentImpl extends UserDaoComponent {
 
   class UserDaoImpl extends UserDao {
-    def selectForPage(params: Map[String, Object], sort: String = "userid", dir: String = "asc") = {
+    def selectForPage(params: UserQueryCondition, sort: String = "userid", dir: String = "asc") = {
       from(SystemManage.users) {
         u =>
           where {
-            (u.id === params.get("id").asInstanceOf[u.id.type].?) and
-              (u.userType like params.get("userType").asInstanceOf[u.userType.type].?) and
-              (u.useraccount === params.get("useraccount").asInstanceOf[u.useraccount.type].?) and
-              (u.departid === params.get("departid").asInstanceOf[u.departid.type].?) and
-              (u.isVaild === params.get("isValid").asInstanceOf[u.isVaild.type].?) and
-              (u.mobilePhone === params.get("mobilePhone").asInstanceOf[u.mobilePhone.type].?) and
-              (u.idnum === params.get("idnum").asInstanceOf[u.idnum.type].?) and
-              (u.userorder === params.get("userorder").asInstanceOf[u.userorder.type].?) and
-              (u.password === params.get("password").asInstanceOf[u.password.type].?)
+            (u.id === params.id.?) and
+              (u.userType like params.userType.?) and
+              (u.useraccount === params.useraccount.?) and
+              (u.departid === params.departid.?) and
+              (u.isVaild === params.isValid.?) and
+              (u.mobilePhone === params.mobilePhone.?) and
+              (u.idnum === params.idnum.?) and
+              (u.userorder === params.userorder.?) and
+              (u.password === params.password.?)
           }
           select(u)
       }
@@ -148,7 +148,7 @@ trait UserDaoComponentImpl extends UserDaoComponent {
 
      * @return 分页结果
      */
-    def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String, dir: String): Page[User] = {
+    def page(pageno: Int, pagesize: Int, params: UserQueryCondition, sort: String, dir: String): Page[User] = {
       val page = new Page[User](pageno, pagesize, count(params))
       if (page.total == 0)
         page
@@ -165,7 +165,7 @@ trait UserDaoComponentImpl extends UserDaoComponent {
 
      * @return 结果列表
      */
-    def list(params: Map[String, Object]): List[User] = inTransaction(userDao.list(params))
+    def list(params: UserQueryCondition): List[User] = inTransaction(userDao.list(params))
 
     /**
      * 分页总数查询
@@ -173,7 +173,7 @@ trait UserDaoComponentImpl extends UserDaoComponent {
 
      * @return 结果数
      */
-    def count(params: Map[String, Object]): Int = selectForPage(params).Count.toInt
+    def count(params: UserQueryCondition): Int = selectForPage(params).Count.toInt
 
     /**
      * 通过主键获取单个实体
@@ -222,16 +222,16 @@ trait UserDaoComponentImpl extends UserDaoComponent {
 trait SystemDaoComponentImpl extends SystemDaoComponent {
 
   class SystemDaoImpl extends SystemDao {
-    def selectForPage(params: Map[String, Object], sort: String = "systemcode", dir: String = "asc") = {
+    def selectForPage(params: SystemQueryCondition, sort: String = "systemcode", dir: String = "asc") = {
       from(SystemManage.systems) {
         s =>
           where {
-            (s.id === params.get("id").asInstanceOf[s.id.type].?) and
-              (s.isleaf === params.get("isleaf").asInstanceOf[s.isleaf.type].?) and
-              (s.parentsystemcode === params.get("paramsystemcode").asInstanceOf[s.parentsystemcode.type].?) and
-              (s.nodeorder === params.get("nodeorder").asInstanceOf[s.nodeorder.type].?) and
-              (s.systemname like params.get("systemname").asInstanceOf[s.systemname.type].?) and
-              (s.fullcode like params.get("fullcode").asInstanceOf[s.fullcode.type].?)
+            (s.id === params.id.?) and
+              (s.isleaf === params.isleaf.?) and
+              (s.parentsystemcode === params.parentsystemcode.?) and
+              (s.systemname like params.systemname.?) and
+              (s.fullcode like params.fullcode.?) and
+              (s.systemdefine === params.systemdefine.?)
           }
           select(s)
       }
@@ -247,7 +247,7 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
 
      * @return 分页结果
      */
-    def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String, dir: String): Page[System] = {
+    def page(pageno: Int, pagesize: Int, params: SystemQueryCondition, sort: String, dir: String): Page[System] = {
       val page = Page[System](pageno, pagesize, count(params))
       if (page.total == 0)
         page
@@ -263,7 +263,7 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
 
      * @return 结果列表
      */
-    def list(params: Map[String, Object]): List[System] = selectForPage(params).toList
+    def list(params: SystemQueryCondition): List[System] = selectForPage(params).toList
 
     /**
      * 分页总数查询
@@ -271,7 +271,7 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
 
      * @return 结果数
      */
-    def count(params: Map[String, Object]): Int = selectForPage(params).Count.toInt
+    def count(params: SystemQueryCondition): Int = selectForPage(params).Count.toInt
 
     /**
      * 通过主键获取单个实体
@@ -319,10 +319,14 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
 trait RoleDaoComponentImpl extends RoleDaoComponent {
 
   class RoleDaoImpl extends RoleDao {
-    def selectForPage(params: Map[String, Object], sort: String = "id", dir: String = "asc") = {
+    def selectForPage(params: RoleQueryCondition, sort: String = "id", dir: String = "asc") = {
       from(SystemManage.roles) {
         r => where {
-          (r.id === params.get("id").asInstanceOf[r.id.type].?) and (r.departid === params.get("departid").asInstanceOf[r.departid.type].?) and (r.rolename like params.get("rolename").asInstanceOf[r.rolename.type].?) and (r.roleType like params.get("roleType").asInstanceOf[r.roleType.type].?) and (r.roleDescription like params.get("roleDescription").asInstanceOf[r.roleDescription.type].?)
+          (r.id === params.id.?) and
+            (r.departid === params.departid.?) and
+            (r.rolename like params.rolename.?) and
+            (r.roleType like params.roleType.?) and
+            (r.roleDescription like params.roleDescript.?)
         } select (r) orderBy {
           if (sort == "id") if (dir == "asc") r.id asc else r.id desc else r.id.asc
         }
@@ -339,7 +343,7 @@ trait RoleDaoComponentImpl extends RoleDaoComponent {
 
      * @return 分页结果
      */
-    def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String, dir: String): Page[Role] = {
+    def page(pageno: Int, pagesize: Int, params: RoleQueryCondition, sort: String, dir: String): Page[Role] = {
       val page = Page[Role](pageno, pagesize, count(params))
       if (page.total == 0)
         page
@@ -353,7 +357,7 @@ trait RoleDaoComponentImpl extends RoleDaoComponent {
 
      * @return 结果列表
      */
-    def list(params: Map[String, Object]): List[Role] = selectForPage(params).toList
+    def list(params: RoleQueryCondition): List[Role] = selectForPage(params).toList
 
     /**
      * 分页总数查询
@@ -361,7 +365,7 @@ trait RoleDaoComponentImpl extends RoleDaoComponent {
 
      * @return 结果数
      */
-    def count(params: Map[String, Object]): Int = selectForPage(params).Count.toInt
+    def count(params: RoleQueryCondition): Int = selectForPage(params).Count.toInt
 
     /**
      * 通过主键获取单个实体
@@ -409,18 +413,18 @@ trait RoleDaoComponentImpl extends RoleDaoComponent {
 trait MenuDaoComponentImpl extends MenuDaoComponent {
 
   class MenuDaoImpl extends MenuDao {
-    def selectForPage(params: Map[String, Object], sort: String = "id", dir: String = "asc") =
+    def selectForPage(params: MenuQueryCondition, sort: String = "id", dir: String = "asc") =
       from(SystemManage.menus) {
         m =>
           where {
-            (m.id === params.get("id").asInstanceOf[m.id.type].?) and
-              (m.menuname like params.get("menuname").asInstanceOf[m.menuname.type].?) and
-              (m.menufullcode like params.get("menufullcode").asInstanceOf[m.menufullcode.type].?) and
-              (m.menulevel === params.get("menulevel").asInstanceOf[m.menulevel.type].?) and
-              (m.parentmenucode === params.get("parentmenucode").asInstanceOf[m.parentmenucode.type].?) and
-              (m.systemcode === params.get("systemcode").asInstanceOf[m.systemcode.type].?) and
-              (m.isleaf === params.get("isleaft").asInstanceOf[m.isleaf.type].?) and
-              (m.funcentry like params.get("funcentry").asInstanceOf[m.funcentry.type].?)
+            (m.id === params.id.?) and
+              (m.menuname like params.menuname.?) and
+              (m.menufullcode like params.menufullcode.?) and
+              (m.menulevel === params.menulevel.?) and
+              (m.parentmenucode === params.parentmenucode.?) and
+              (m.systemcode === params.systemcode.?) and
+              (m.isleaf === params.isleaf.?) and
+              (m.funcentry like params.funcentry.?)
           }
           select(m) orderBy {
             if (sort == "id")
@@ -442,7 +446,7 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
 
      * @return 分页结果
      */
-    def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String = "id", dir: String = "asc"): Page[Menu] = {
+    def page(pageno: Int, pagesize: Int, params: MenuQueryCondition, sort: String = "id", dir: String = "asc"): Page[Menu] = {
       val page = Page[Menu](pageno, pagesize, count(params))
       if (page.total == 0)
         page
@@ -456,7 +460,7 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
 
      * @return 结果列表
      */
-    def list(params: Map[String, Object]): List[Menu] = selectForPage(params).toList
+    def list(params: MenuQueryCondition): List[Menu] = selectForPage(params).toList
 
     /**
      * 分页总数查询
@@ -464,7 +468,7 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
 
      * @return 结果数
      */
-    def count(params: Map[String, Object]): Int = selectForPage(params).Count.toInt
+    def count(params: MenuQueryCondition): Int = selectForPage(params).Count.toInt
 
     /**
      * 通过主键获取单个实体
@@ -512,13 +516,13 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
 trait GlobalParamDaoComponentImpl extends GlobalParamDaoComponent {
 
   class GlobalParamDaoImpl extends GlobalParamDao {
-    def selectForPage(params: Map[String, Object], sort: String = "id", dir: String = "asc") =
+    def selectForPage(params: GlobalParamQueryCondition, sort: String = "id", dir: String = "asc") =
       from(SystemManage.globalParams) {
         g =>
           where {
-            (g.id === params.get("id").asInstanceOf[g.id.type].?) and
-              (g.globalparname like params.get("globalparname").asInstanceOf[g.globalparname.type].?) and
-              (g.globalparvalue === params.get("globalparvalue").asInstanceOf[g.globalparvalue.type].?)
+            (g.id === params.id.?) and
+              (g.globalparname like params.globalparname.?) and
+              (g.globalparvalue === params.globalparvalue.?)
           }
           select(g) orderBy {
             if (sort == "id")
@@ -541,7 +545,7 @@ trait GlobalParamDaoComponentImpl extends GlobalParamDaoComponent {
 
      * @return 分页结果
      */
-    def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String, dir: String): Page[GlobalParam] = {
+    def page(pageno: Int, pagesize: Int, params: GlobalParamQueryCondition, sort: String, dir: String): Page[GlobalParam] = {
       val page = Page[GlobalParam](pageno, pagesize, count(params))
       if (page.total == 0)
         page
@@ -555,7 +559,7 @@ trait GlobalParamDaoComponentImpl extends GlobalParamDaoComponent {
 
      * @return 结果列表
      */
-    def list(params: Map[String, Object]): List[GlobalParam] = selectForPage(params).toList
+    def list(params: GlobalParamQueryCondition): List[GlobalParam] = selectForPage(params).toList
 
     /**
      * 分页总数查询
@@ -563,7 +567,7 @@ trait GlobalParamDaoComponentImpl extends GlobalParamDaoComponent {
 
      * @return 结果数
      */
-    def count(params: Map[String, Object]): Int = selectForPage(params).Count.toInt
+    def count(params: GlobalParamQueryCondition): Int = selectForPage(params).Count.toInt
 
     /**
      * 通过主键获取单个实体

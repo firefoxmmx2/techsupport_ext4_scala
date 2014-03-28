@@ -19,9 +19,9 @@ trait DepartmentServiceComponentImpl extends DepartmentServiceComponent {
   class DepartmentServiceImpl extends DepartmentService {
     def getById(id: Long): Department = inTransaction(departmentDao.getById(id))
 
-    def list(params: Map[String, Object]): List[Department] = inTransaction(departmentDao.list(params))
+    def list(params: DepartmentQueryCondition): List[Department] = inTransaction(departmentDao.list(params))
 
-    def page(pageno: Int = 1, pagesize: Int = 20, params: Map[String, Object], sort: String, dir: String): Page[Department] =
+    def page(pageno: Int = 1, pagesize: Int = 20, params: DepartmentQueryCondition, sort: String, dir: String): Page[Department] =
       inTransaction(departmentDao.page(pageno, pagesize, params, sort, dir))
 
     def deleteById(id: Long): Unit = inTransaction {
@@ -45,9 +45,9 @@ trait GlobalParamServiceComponentImpl extends GlobalParamServiceComponent {
   class GlobalParamServiceImpl extends GlobalParamService {
     def getById(id: String): models.GlobalParam = inTransaction(globalParamDao.getById(id))
 
-    def list(params: Map[String, Object]): List[models.GlobalParam] = inTransaction(globalParamDao.list(params))
+    def list(params: GlobalParamQueryCondition): List[models.GlobalParam] = inTransaction(globalParamDao.list(params))
 
-    def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String, dir: String): Page[models.GlobalParam] =
+    def page(pageno: Int, pagesize: Int, params: GlobalParamQueryCondition, sort: String, dir: String): Page[models.GlobalParam] =
       inTransaction(globalParamDao.page(pageno, pagesize, params, sort, dir))
 
     def deleteById(id: String): Unit = inTransaction(globalParamDao.deleteById(id))
@@ -65,9 +65,9 @@ trait MenuServiceComponentImpl extends MenuServiceComponent {
   class MenuSerivceImpl extends MenuService {
     def getById(id: String): Menu = inTransaction(menuDao.getById(id))
 
-    def list(params: Map[String, Object]): List[Menu] = inTransaction(menuDao.list(params))
+    def list(params: MenuQueryCondition): List[Menu] = inTransaction(menuDao.list(params))
 
-    def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String, dir: String): Page[Menu] =
+    def page(pageno: Int, pagesize: Int, params: MenuQueryCondition, sort: String, dir: String): Page[Menu] =
       inTransaction(menuDao.page(pageno, pagesize, params, sort, dir))
 
     def deleteById(id: String): Unit = inTransaction(menuDao.deleteById(id))
@@ -85,9 +85,9 @@ trait RoleServiceComponentImpl extends RoleServiceComponent {
   class RoleServiceImpl extends RoleService {
     def getById(id: Long): Role = inTransaction(roleDao.getById(id))
 
-    def list(params: Map[String, Object]): List[Role] = inTransaction(roleDao.list(params))
+    def list(params: RoleQueryCondition): List[Role] = inTransaction(roleDao.list(params))
 
-    def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String, dir: String): Page[Role] =
+    def page(pageno: Int, pagesize: Int, params: RoleQueryCondition, sort: String, dir: String): Page[Role] =
       inTransaction(roleDao.page(pageno, pagesize, params, sort, dir))
 
     def deleteById(id: Long): Unit = inTransaction(roleDao.deleteById(id))
@@ -105,9 +105,9 @@ trait SystemServiceComponentImpl extends SystemServiceComponent {
   class SystemServiceImpl extends SystemService {
     def getById(id: String): models.System = inTransaction(systemDao.getById(id))
 
-    def list(params: Map[String, Object]): List[models.System] = inTransaction(systemDao.list(params))
+    def list(params: SystemQueryCondition): List[models.System] = inTransaction(systemDao.list(params))
 
-    def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String, dir: String): Page[models.System] =
+    def page(pageno: Int, pagesize: Int, params: SystemQueryCondition, sort: String, dir: String): Page[models.System] =
       inTransaction(systemDao.page(pageno, pagesize, params, sort, dir))
 
     def deleteById(id: String): Unit = inTransaction(systemDao.deleteById(id))
@@ -125,9 +125,9 @@ trait UserServiceComponentImpl extends UserServiceComponent {
   class UserServiceImpl extends UserService {
     def getById(id: Long): User = inTransaction(userDao.getById(id))
 
-    def list(params: Map[String, Object]): List[User] = inTransaction(userDao.list(params))
+    def list(params: UserQueryCondition): List[User] = inTransaction(userDao.list(params))
 
-    def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String, dir: String): Page[User] =
+    def page(pageno: Int, pagesize: Int, params: UserQueryCondition, sort: String, dir: String): Page[User] =
       inTransaction(userDao.page(pageno, pagesize, params, sort, dir))
 
     def deleteById(id: Long): Unit = inTransaction(userDao.deleteById(id))
