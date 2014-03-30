@@ -13,18 +13,18 @@ GET           /login                                 controllers.Application.log
 #用户
 PUT           /user                                  controllers.systemmanage.User.add
 
-DELETE        /user                                  controllers.systemmanage.User.remove
+DELETE        /user/:id                              controllers.systemmanage.User.remove(id:Long)
 
 POST          /user                                  controllers.systemmanage.User.update
 
 GET           /user/:id                              controllers.systemmanage.User.get(id:Long)
 
-GET           /user                                  controllers.systemmanage.User.find
+GET           /user/list/:pageno/:limit              controllers.systemmanage.User.list(pageno:Int,limit:Int)
 
 #机构
 PUT           /department                            controllers.systemmanage.Department.add
 
-DELETE        /department                            controllers.systemmanage.Department.remove
+DELETE        /department/:id                        controllers.systemmanage.Department.remove(id:Long)
 
 POST          /department                            controllers.systemmanage.Department.update
 

@@ -6,6 +6,7 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.Logger
 import models.DepartmentQueryCondition
+import com.codahale.jerkson.Json
 
 object Department extends Controller {
   val log = Logger.logger
@@ -44,18 +45,18 @@ object Department extends Controller {
   def add = Action {
     implicit request =>
       addForm.bindFromRequest.fold(errors => {
-        BadRequest()
+        BadRequest("错误")
       }, department => {
         try {
           val inserted = departmentService.insert(department)
-          Ok(Map("result" -> 0,
+          Ok(Json.generate(Map("result" -> 0,
             "message" -> "添加成功",
-            "inserted" -> inserted)).as(JSON)
+            "inserted" -> inserted))).as(JSON)
         } catch {
           case e =>
-            log.error(e.toString,e.fillInStackTrace())
-            Ok(Map("result" -> -1,
-              "message" -> "添加错误")).as(JSON)
+            log.error(e.toString, e.fillInStackTrace())
+            Ok(Json.generate(Map("result" -> -1,
+              "message" -> "添加错误"))).as(JSON)
         }
 
       })
@@ -66,14 +67,14 @@ object Department extends Controller {
     implicit request =>
       try {
         departmentService.deleteById(id)
-        Ok(Map("result" -> 0,
-          "message" -> "删除成功")).as(JSON)
+        Ok(Json.generate(Map("result" -> 0,
+          "message" -> "删除成功"))).as(JSON)
       } catch {
         case e =>
           log.error(e.toString, e.fillInStackTrace())
           val resultMap = Map("result" -> -1,
             "message" -> "删除错误")
-          Ok(resultMap).as(JSON)
+          Ok(Json.generate(resultMap)).as(JSON)
       }
 
   }
@@ -85,13 +86,13 @@ object Department extends Controller {
       }, department => {
         try {
           departmentService.update(department)
-          Ok(Map("result" -> 0,
-            "message" -> "修改成功")).as(JSON)
+          Ok(Json.generate(Map("result" -> 0,
+            "message" -> "修改成功"))).as(JSON)
         } catch {
           case e =>
             log.error(e.toString, e.fillInStackTrace())
-            Ok(Map("result" -> -1,
-              "message" -> "修改失败")).as(JSON)
+            Ok(Json.generate(Map("result" -> -1,
+              "message" -> "修改失败"))).as(JSON)
         }
       })
   }
@@ -99,14 +100,14 @@ object Department extends Controller {
   def get(id: Long) = Action {
     try {
       val d = departmentService.getById(id)
-      Ok(Map("result" -> 0,
+      Ok(Json.generate(Map("result" -> 0,
         "message" -> "",
-        "department" -> d)).as(JSON)
+        "department" -> d))).as(JSON)
     } catch {
       case e =>
         log.error(e.toString, e.fillInStackTrace())
-        Ok(Map("result" -> -1,
-          "message" -> "获取错误")).as(JSON)
+        Ok(Json.generate(Map("result" -> -1,
+          "message" -> "获取错误"))).as(JSON)
     }
   }
 
@@ -129,26 +130,26 @@ object Department extends Controller {
   def list(pageno: Int = 1, limit: Int = 20) = Action {
     implicit req =>
       listParamForm.bindFromRequest().fold(hasErrors =>
-        BadRequest(),
+        BadRequest,
         dq => {
           try {
             val page = departmentService.page(pageno, limit, dq, "", "")
-            Ok(Map("result" -> 0,
+            Ok(Json.generate(Map("result" -> 0,
               "message" -> "",
               "datas" -> page.datas,
               "total" -> page.total,
               "start" -> page.pageno,
-              "limit" -> page.pagesize)).as(JSON)
+              "limit" -> page.pagesize))).as(JSON)
           } catch {
             case e =>
               log.error(e.toString, e.fillInStackTrace())
-              Ok(Map("result" -> -1,
+              Ok(Json.generate(Map("result" -> -1,
                 "message" -> "机构列表查询错误",
                 "datas" -> List(),
                 "total" -> 0,
                 "start" -> pageno,
                 "limit" -> limit
-              )).as(JSON)
+              ))).as(JSON)
           }
 
         }

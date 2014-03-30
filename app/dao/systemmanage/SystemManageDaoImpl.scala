@@ -197,7 +197,7 @@ trait UserDaoComponentImpl extends UserDaoComponent {
 
      * @return
      */
-    def delete(m: User): Unit = SystemManage.users.delete(m)
+    def delete(m: User): Unit = SystemManage.users.delete(m.id)
 
     /**
      * 修改
@@ -295,7 +295,7 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
 
      * @return
      */
-    def delete(m: System): Unit = SystemManage.systems.delete(m)
+    def delete(m: System): Unit = SystemManage.systems.delete(m.id)
 
     /**
      * 修改
@@ -389,7 +389,7 @@ trait RoleDaoComponentImpl extends RoleDaoComponent {
 
      * @return
      */
-    def delete(m: Role): Unit = SystemManage.roles.delete(m)
+    def delete(m: Role): Unit = SystemManage.roles.delete(m.id)
 
     /**
      * 修改
@@ -492,7 +492,7 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
 
      * @return
      */
-    def delete(m: Menu): Unit = SystemManage.menus.delete(m)
+    def delete(m: Menu): Unit = SystemManage.menus.delete(m.id)
 
     /**
      * 修改
@@ -591,7 +591,7 @@ trait GlobalParamDaoComponentImpl extends GlobalParamDaoComponent {
 
      * @return
      */
-    def delete(m: GlobalParam): Unit = SystemManage.globalParams.delete(m)
+    def delete(m: GlobalParam): Unit = SystemManage.globalParams.delete(m.id)
 
     /**
      * 修改

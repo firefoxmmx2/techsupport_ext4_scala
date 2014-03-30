@@ -25,6 +25,7 @@ trait UserServiceComponent {
   val userService: UserService
 
   trait UserService extends BaseService[User, Long, UserQueryCondition] {
+    def getByUseraccountPassword(useraccount:String,password:String):User
   }
 
 }

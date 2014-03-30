@@ -6,6 +6,7 @@ import play.api.data.Forms._
 import play.api.Logger
 import util.ComponentRegister._
 import models.UserQueryCondition
+import com.codahale.jerkson.Json
 
 /**
  * Created by hooxin on 14-2-10.
@@ -39,14 +40,14 @@ object User extends Controller {
         u => {
           try {
             val inserted = userService.insert(u)
-            Ok(Map("result" -> 0,
+            Ok(Json.generate(Map("result" -> 0,
               "message" -> "添加成功",
-              "inserted" -> inserted)).as(JSON)
+              "inserted" -> inserted))).as(JSON)
           } catch {
             case e =>
               log.error(e.toString, e.fillInStackTrace())
-              Ok(Map("result" -> -1,
-                "message" -> "添加错误")).as(JSON)
+              Ok(Json.generate(Map("result" -> -1,
+                "message" -> "添加错误"))).as(JSON)
           }
 
         }
@@ -57,13 +58,13 @@ object User extends Controller {
     implicit request =>
       try {
         userService.deleteById(id)
-        Ok(Map("result" -> 0,
-          "message" -> "删除成功")).as(JSON)
+        Ok(Json.generate(Map("result" -> 0,
+          "message" -> "删除成功"))).as(JSON)
       } catch {
         case e =>
           log.error(e.toString, e.fillInStackTrace())
-          Ok(Map("result" -> -1,
-            "message" -> "删除错误")).as(JSON)
+          Ok(Json.generate(Map("result" -> -1,
+            "message" -> "删除错误"))).as(JSON)
       }
 
   }
@@ -92,22 +93,22 @@ object User extends Controller {
         uq => {
           try {
             val page = userService.page(pageno, limit, uq, "", "")
-            Ok(Map("result" -> 0,
+            Ok(Json.generate(Map("result" -> 0,
               "message" -> "",
               "datas" -> page.datas,
               "total" -> page.total,
               "start" -> pageno,
-              "limit" -> limit)).as(JSON)
+              "limit" -> limit))).as(JSON)
           }
           catch {
             case e =>
               log.error(e.toString, e.fillInStackTrace())
-              Ok(Map("result" -> -1,
+              Ok(Json.generate(Map("result" -> -1,
                 "message" -> "查询列表错误",
                 "total" -> 0,
                 "datas" -> List(),
                 "start" -> pageno,
-                "limit" -> limit)).as(JSON)
+                "limit" -> limit))).as(JSON)
           }
         }
       )
@@ -116,15 +117,15 @@ object User extends Controller {
   def get(id: Long) = Action {
     try {
       val user = userService.getById(id)
-      Ok(Map("result" -> 0,
+      Ok(Json.generate(Map("result" -> 0,
         "message" -> "",
-        "user" -> user)).as(JSON)
+        "user" -> user))).as(JSON)
     }
     catch {
       case e =>
         log.error(e.toString, e.fillInStackTrace())
-        Ok(Map("result" -> -1,
-          "message" -> "获取用户发生错误")).as(JSON)
+        Ok(Json.generate(Map("result" -> -1,
+          "message" -> "获取用户发生错误"))).as(JSON)
     }
   }
 
@@ -137,14 +138,14 @@ object User extends Controller {
         user => {
           try {
             userService.update(user)
-            Ok(Map("result" -> 0,
-              "message" -> "修改成功")).as(JSON)
+            Ok(Json.generate(Map("result" -> 0,
+              "message" -> "修改成功")))
           }
           catch {
             case e =>
               log.error(e.toString, e.fillInStackTrace())
-              Ok(Map("result" -> -1,
-                "message" -> "修改发生错误")).as(JSON)
+              Ok(Json.generate(Map("result" -> -1,
+                "message" -> "修改发生错误")))
           }
         }
       )

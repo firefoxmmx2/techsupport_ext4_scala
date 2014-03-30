@@ -6,6 +6,7 @@ import models.Department
 import models.Menu
 import util.Page
 import models.Role
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Created by hooxin on 14-3-10.
@@ -135,6 +136,17 @@ trait UserServiceComponentImpl extends UserServiceComponent {
     def update(e: User): Unit = inTransaction(userDao.update(e))
 
     def insert(e: User): User = inTransaction(userDao.insert(e))
+
+    def getByUseraccountPassword(useraccount: String, password: String): User = inTransaction{
+      require(StringUtils.isEmpty(useraccount))
+      require(StringUtils.isEmpty(password))
+
+      val users = userDao.list(UserQueryCondition(useraccount=Option(useraccount),password = Option(password)))
+      if(users.size>0)
+        users(0)
+      else
+        null
+    }
   }
 
 }
