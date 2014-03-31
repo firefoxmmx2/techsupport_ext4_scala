@@ -1,11 +1,12 @@
 package dao
 
 import util.Page
+import models.QueryCondition
 
 /**
  * Created by hooxin on 14-3-7.
  */
-trait BaseDao[M, L] {
+trait BaseDao[M, L,Q<:QueryCondition] {
   //  case class MaybeFilter[X, Y](val query: Query[X, Y]) {
   //    def filter[T, R: CanBeQueryCondition](data: Option[T])(f: T => X => R) = {
   //      data.map(v => MaybeFilter(query.filter(f(v)))).getOrElse(this)
@@ -58,7 +59,7 @@ trait BaseDao[M, L] {
 
    * @return 结果数
    */
-  def count(params: Map[String, Object]): Int
+  def count(params : Q ): Int
 
   /**
    * 非分页查询
@@ -66,7 +67,7 @@ trait BaseDao[M, L] {
 
    * @return 结果列表
    */
-  def list(params: Map[String, Object]): List[M]
+  def list(params: Q): List[M]
 
   /**
    * 分页查询
@@ -78,5 +79,5 @@ trait BaseDao[M, L] {
 
    * @return 分页结果
    */
-  def page(pageno: Int, pagesize: Int, params: Map[String, Object], sort: String, dir: String): Page[M]
+  def page(pageno: Int, pagesize: Int, params: Q, sort: String, dir: String): Page[M]
 }

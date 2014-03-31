@@ -19,6 +19,7 @@ object ApplicationBuild extends Build {
     "com.cloudphysics" % "jerkson_2.10" % "0.6.3",
     //    "com.typesafe.slick" %% "slick-extensions" % "2.0.0",
     "org.squeryl" %% "squeryl" % "0.9.6-RC2"
+//    "com.typesafe.play" %% "play" % "2.2.2"
   )
 
 

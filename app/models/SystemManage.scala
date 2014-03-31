@@ -56,6 +56,17 @@ case class Department(
 
 }
 
+case class DepartmentQueryCondition(
+                                     id: Option[Long] = None,
+                                     departcode: Option[String] = None,
+                                     departname: Option[String] = None,
+                                     departlevel: Option[Int] = None,
+                                     departfullcode: Option[String] = None,
+                                     departsimplepin: Option[String] = None,
+                                     departallpin: Option[String] = None,
+                                     isLeaf: Option[String] = None,
+                                     parentDepartid: Option[Long] = None
+                                     ) extends QueryCondition
 
 /**
  * 用户
@@ -90,6 +101,17 @@ case class User(
                  id: Option[Long]) extends KeyedEntity[Option[Long]] {
 }
 
+case class UserQueryCondition(
+                               id: Option[Long] = None,
+                               departid: Option[Long] = None,
+                               useraccount: Option[String] = None,
+                               password: Option[String] = None,
+                               idnum: Option[String] = None,
+                               mobilePhone: Option[String] = None,
+                               userorder: Option[Int] = None,
+                               isValid: Option[String] = None,
+                               userType: Option[String] = None,
+                               email: Option[String] = None) extends QueryCondition
 
 /**
  * 角色
@@ -111,6 +133,11 @@ case class Role(
                  id: Option[Long] = None) extends KeyedEntity[Option[Long]] {
 }
 
+case class RoleQueryCondition(id: Option[Long] = None,
+                              rolename: Option[String] = None,
+                              roleDescript: Option[String] = None,
+                              roleType: Option[String] = None,
+                              departid: Option[Long] = None) extends QueryCondition
 
 /**
  * 系统
@@ -135,6 +162,12 @@ case class System(
 
 }
 
+case class SystemQueryCondition(id: Option[String] = None,
+                                systemname: Option[String] = None,
+                                systemdefine: Option[String] = None,
+                                parentsystemcode: Option[String] = None,
+                                isleaf: Option[String] = None,
+                                fullcode: Option[String] = None) extends QueryCondition
 
 /**
  * 菜单
@@ -160,6 +193,15 @@ case class Menu(
                  systemcode: String) extends KeyedEntity[String] {
 }
 
+case class MenuQueryCondition(id: Option[String] = None,
+                              menuname: Option[String] = None,
+                              funcentry: Option[String] = None,
+                              menulevel: Option[Int] = None,
+                              parentmenucode: Option[String] = None,
+                              menufullcode: Option[String] = None,
+                              isleaf: Option[String] = None,
+                              systemcode: Option[String] = None) extends QueryCondition
+
 /**
  * 全局参数
  * @param id 参数代码 唯一
@@ -171,6 +213,10 @@ case class GlobalParam(
                         globalparname: String,
                         globalparvalue: String) extends KeyedEntity[String] {
 }
+
+case class GlobalParamQueryCondition(id: Option[String] = None,
+                                     globalparname: Option[String] = None,
+                                     globalparvalue: Option[String] = None) extends QueryCondition
 
 /**
  * 字典
@@ -216,6 +262,12 @@ case class Dict(
                  id: Option[Long] = None) extends KeyedEntity[Option[Long]] {
 }
 
+case class DictQueryCondition(id: Option[Long] = None,
+                              dictcode: Option[String] = None,
+                              dictname: Option[String] = None,
+                              superDictcode: Option[String] = None,
+                              createTime: Option[DateTime] = None)
+
 /**
  * 字典项
  * @param dictcode
@@ -257,6 +309,13 @@ case class DictItem(
                      id: Option[Long] = None) extends KeyedEntity[Option[Long]] {
 }
 
+case class DictItemQueryCondition(id: Option[Long] = None,
+                                  dictcode: Option[String] = None,
+                                  displayName: Option[String] = None,
+                                  factValue: Option[String] = None,
+                                  appendValue: Option[String] = None,
+                                  superItemId: Option[Long] = None,
+                                  displayFlag: Option[Boolean] = None) extends QueryCondition
 
 /**
  * 版本

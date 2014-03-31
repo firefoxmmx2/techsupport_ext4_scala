@@ -17,7 +17,7 @@ import models.Role
 trait DepartmentDaoComponent {
   val departmentDao: DepartmentDao
 
-  trait DepartmentDao extends BaseDao[Department, Long] {
+  trait DepartmentDao extends BaseDao[Department, Long, DepartmentQueryCondition] {
 
   }
 
@@ -29,7 +29,7 @@ trait DepartmentDaoComponent {
 trait UserDaoComponent {
   val userDao: UserDao
 
-  trait UserDao extends BaseDao[User, Long]
+  trait UserDao extends BaseDao[User, Long, UserQueryCondition]
 
 }
 
@@ -39,7 +39,7 @@ trait UserDaoComponent {
 trait SystemDaoComponent {
   val systemDao: SystemDao
 
-  trait SystemDao extends BaseDao[System, String]
+  trait SystemDao extends BaseDao[System, String, SystemQueryCondition]
 
 }
 
@@ -48,7 +48,7 @@ trait SystemDaoComponent {
  */
 trait MenuDaoComponent {
 
-  trait MenuDao extends BaseDao[Menu, String]
+  trait MenuDao extends BaseDao[Menu, String, MenuQueryCondition]
 
   val menuDao: MenuDao
 }
@@ -57,17 +57,19 @@ trait MenuDaoComponent {
  * 角色
  */
 trait RoleDaoComponent {
-  trait RoleDao extends BaseDao[Role,Long]
 
-  val roleDao:RoleDao
+  trait RoleDao extends BaseDao[Role, Long, RoleQueryCondition]
+
+  val roleDao: RoleDao
 }
 
 /**
  * 全局参数
  */
 trait GlobalParamDaoComponent {
-  trait GlobalParamDao extends BaseDao[GlobalParam,String]
 
-  val globalParamDao:GlobalParamDao
+  trait GlobalParamDao extends BaseDao[GlobalParam, String, GlobalParamQueryCondition]
+
+  val globalParamDao: GlobalParamDao
 }
 

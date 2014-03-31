@@ -11,11 +11,11 @@ Ext.define('Techsupport.view.sysadmin.Login', {
     title: '技术支持单用户登录',
     layout: 'border',
     items: [
-        {xtype: 'image', region: 'west', split: true, width: 160, height: 200, src: 'assets/images/favicon.png'},
+        {xtype: 'image', region: 'west', split: false, width: 160, height: 200, src: 'assets/images/favicon.png'},
         {xtype: 'form', region: 'center', defaults: {margin: "5 5 0 15%", labelWidth: "25%"}, items: [
             {xtype: 'textfield', fieldLabel: '帐号', name: 'useraccount', maxLength: 20, allowBlank: false, anchor: "90%"},
             {xtype: 'textfield', fieldLabel: '密码', name: 'password', maxLength: 20, allowBlank: false, anchor: "90%"},
-            {xtype: 'panel', border:false, margin:'0 0 0 0', html: "<hr />"}
+            {xtype: 'panel', border: false, margin: '0 0 0 0', html: "<hr />"}
         ]}
     ],
     buttons: [

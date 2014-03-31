@@ -15,10 +15,14 @@ object CommonTypeMode extends PrimitiveTypeMode {
     def convertToJdbc(t: DateTime) = new Timestamp(t.getMillis())
   }
 
-  implicit val optionJotaTimeTEF = new TypedExpressionFactory[Option[DateTime],TOptionTimestamp]
-    with DeOptionizer[Timestamp,DateTime,TTimestamp,Option[DateTime],TOptionTimestamp]{
-    val deOptionizer=jodaTimeTEF
+  implicit val optionJotaTimeTEF = new TypedExpressionFactory[Option[DateTime], TOptionTimestamp]
+    with DeOptionizer[Timestamp, DateTime, TTimestamp, Option[DateTime], TOptionTimestamp] {
+    val deOptionizer = jodaTimeTEF
   }
-  implicit def jodaTimeToElf(s:DateTime)=jodaTimeTEF.create(s)
-  implicit def optionJodaTimeToTE(s:Option[DateTime])=optionJotaTimeTEF.create(s)
+
+  implicit def jodaTimeToElf(s: DateTime) = jodaTimeTEF.create(s)
+
+  implicit def optionJodaTimeToTE(s: Option[DateTime]) = optionJotaTimeTEF.create(s)
 }
+
+trait QueryCondition
