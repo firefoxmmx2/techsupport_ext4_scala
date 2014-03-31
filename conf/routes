@@ -1,0 +1,68 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET           /                                      controllers.Application.index
+
+# Map static resources from the /public folder to the /assets URL path
+GET           /assets/*file                          controllers.Assets.at(path="/public", file)
+
+GET           /login                                 controllers.Application.login
+
+#用户
+PUT           /user                                  controllers.systemmanage.User.add
+
+DELETE        /user/:id                              controllers.systemmanage.User.remove(id:Long)
+
+POST          /user                                  controllers.systemmanage.User.update
+
+GET           /user/:id                              controllers.systemmanage.User.get(id:Long)
+
+GET           /user/list/:pageno/:limit              controllers.systemmanage.User.list(pageno:Int,limit:Int)
+
+#机构
+PUT           /department                            controllers.systemmanage.Department.add
+
+DELETE        /department/:id                        controllers.systemmanage.Department.remove(id:Long)
+
+POST          /department                            controllers.systemmanage.Department.update
+
+GET           /department/:id                        controllers.systemmanage.Department.get(id:Long)
+
+GET           /department/list/:pageno/:limit        controllers.systemmanage.Department.list(pageno:Int,limit:Int)
+
+#菜单
+PUT           /menu                                  controllers.systemmanage.Menu.add
+
+DELETE        /menu                                  controllers.systemmanage.Menu.remove
+
+POST          /menu                                  controllers.systemmanage.Menu.update
+
+GET           /menu/:id                              controllers.systemmanage.Menu.get(id:Long)
+
+GET           /menu                                  controllers.systemmanage.Menu.find
+
+#角色
+PUT           /role                                  controllers.systemmanage.Role.add
+
+DELETE        /role                                  controllers.systemmanage.Role.remove
+
+POST          /role                                  controllers.systemmanage.Role.update
+
+GET           /role/:id                              controllers.systemmanage.Role.get(id:Long)
+
+GET           /role                                  controllers.systemmanage.Role.find
+
+#系统
+PUT           /system                                controllers.systemmanage.System.add
+
+DELETE        /system                                controllers.systemmanage.System.remove
+
+POST          /system                                controllers.systemmanage.System.update
+
+GET           /system/:id                            controllers.systemmanage.System.get(id:Long)
+
+GET           /system                                controllers.systemmanage.System.find
+
+
