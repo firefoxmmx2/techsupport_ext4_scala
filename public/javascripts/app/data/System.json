@@ -2,14 +2,24 @@
     "success": true,
     "result": [
         {
+            "systemcode": "test",
+            "systemname": "测试系统",
+            "systemdefine": "测试系统",
+            "picturepath": "",
+            "parentsystemcode": null,
+            "nodeorder": 0,
+            "isleaf": "Y",
+            "fullcode": "test."
+        },
+        {
             "systemcode": "ts",
             "systemname": "技术支持单",
             "systemdefine": "技术支持单",
             "picturepath": "",
             "parentsystemcode": null,
-            "nodeorder": 0,
+            "nodeorder": 1,
             "isleaf": "Y",
-            "fullcode": "ts"
+            "fullcode": "ts."
         }
     ]
 }

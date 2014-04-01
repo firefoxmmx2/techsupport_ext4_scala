@@ -3,6 +3,7 @@
  */
 Ext.define('Techsupport.model.Login', {
     extend: 'Ext.data.Model',
+    idProperty: "useraccount",
     fields: [
         {name: 'useraccount', type: 'string'},
         {name: "password", type: 'string'}

@@ -1,0 +1,50 @@
+{
+    "result": 0,
+    "message": "",
+    "data": [
+        {
+            "id": "test1",
+            "menuname": "测试1",
+            "funcentry": "1",
+            "menulevel": "1",
+            "parentmenucode": "0",
+            "menufullcode": "test1.",
+            "nodeorder":"0",
+            "isleaf":"N",
+            "systemcode":"test"
+        },
+        {
+            "id": "test2",
+            "menuname": "测试2",
+            "funcentry": "1",
+            "menulevel": "1",
+            "parentmenucode": "0",
+            "menufullcode": "test2.",
+            "nodeorder":"1",
+            "isleaf":"Y",
+            "systemcode":"test"
+        },
+        {
+            "id": "test3",
+            "menuname": "测试3",
+            "funcentry": "1",
+            "menulevel": "2",
+            "parentmenucode": "test1",
+            "menufullcode": "test1.test3.",
+            "nodeorder":"0",
+            "isleaf":"N",
+            "systemcode":"test"
+        },
+        {
+            "id": "test4",
+            "menuname": "测试4",
+            "funcentry": "1",
+            "menulevel": "3",
+            "parentmenucode": "test3",
+            "menufullcode": "test1.test3.test4.",
+            "nodeorder":"0",
+            "isleaf":"Y",
+            "systemcode":"test"
+        }
+    ]
+}
