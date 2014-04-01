@@ -5,6 +5,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 import util.ComponentRegister._
 import com.codahale.jerkson.Json
+import scala.util.Random
 
 /**
  * Created by hooxin on 14-3-30.
@@ -34,9 +35,14 @@ object Login extends Controller {
             Ok(Json.generate(Map("result" -> -3,
               "message" -> "帐号或者密码错误")))
           else {
+            val authCode = Random.nextString(12)
+            val userInfoMap = Map("user" -> user)
             Ok(Json.generate(Map("result" -> 0,
               "message" -> "登录成功",
-              "userInfo" -> Map("user" -> user)))).withSession("userInfo" -> Json.generate(Map("user" -> user)))
+              "auth-code" -> authCode,
+              "user-info" -> userInfoMap)))
+              .withSession("user-info" -> Json.generate(userInfoMap),
+                "auth-code" -> authCode)
           }
         }
       )
