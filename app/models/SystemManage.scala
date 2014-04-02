@@ -243,7 +243,7 @@ case class Dict(
                  @Column("SIB_ORDER")
                  sibOrder: Int = 0,
                  @Column("LEAF_FLAG")
-                 isleaf: Boolean = true,
+                 isleaf: String = "Y",
                  @Column("MAINT_FLAG")
                  maintFlag: Int = 0,
                  @Column("DICT_TYPE")
@@ -296,11 +296,11 @@ case class DictItem(
                      @Column("SIB_ORDER")
                      sibOrder: Int = 0,
                      @Column("LEAF_FLAG")
-                     isleaf: Boolean = true,
+                     isleaf: String = "Y",
                      @Column("DISPLAY_FLAG")
-                     displayFlag: Boolean = true,
+                     displayFlag: String = "Y",
                      @Column("VAILD_FLAG")
-                     isValid: Boolean = true,
+                     isValid: String = "Y",
                      @Column("ITEM_SIMPLEPIN")
                      itemSimplePin: Option[String] = None,
                      @Column("ITEM_ALLPIN")

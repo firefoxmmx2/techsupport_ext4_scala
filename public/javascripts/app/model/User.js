@@ -1,18 +1,19 @@
-Ext.define('Techsupport.model.User',{
-    extend:'Ext.data.Model',
-    fields:[
-        {name:'userid',type:'int'},
-        {name:'useraccount',type:'string'},
-        {name:'username',type:'string'},
-        {name:'password',type:'string'},
-        {name:'idnum',type:'string'},
-        {name:'departid',type:'int'},
-        {name:'mobilePhone',type:'string'},
-        {name:'userorder',type:'int'},
-        {name:'isVaild',type:'string'},
-        {name:'userType',type:'string'},
-        {name:'jzlbdm',type:'string'},
-        {name:'jzlbmc',type:'string'},
-        {name:'email',type:'string'}
+Ext.define('Techsupport.model.User', {
+    extend: 'Ext.data.Model',
+    idProperty: "id",
+    fields: [
+        {name: 'id', type: 'int'},
+        {name: 'useraccount', type: 'string'},
+        {name: 'username', type: 'string'},
+        {name: 'password', type: 'string'},
+        {name: 'idnum', type: 'string'},
+        {name: 'departid', type: 'int'},
+        {name: 'mobilePhone', type: 'string'},
+        {name: 'userorder', type: 'int'},
+        {name: 'isVaild', type: 'string'},
+        {name: 'userType', type: 'string'},
+        {name: 'jzlbdm', type: 'string'},
+        {name: 'jzlbmc', type: 'string'},
+        {name: 'email', type: 'string'}
     ]
 })

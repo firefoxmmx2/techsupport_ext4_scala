@@ -1,8 +1,9 @@
 {
-    "success": true,
-    "result": [
+    "result": 0,
+    "message": "",
+    "data": [
         {
-            "departid": 1,
+            "id": 1,
             "departcode": "htjd",
             "departname": "航天金盾",
             "departlevel": 1,
