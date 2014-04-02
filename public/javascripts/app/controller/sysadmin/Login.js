@@ -4,17 +4,27 @@
 Ext.define('Techsupport.controller.sysadmin.Login', {
     extend: 'Ext.app.Controller',
     views: ['sysadmin.Login'],
-    models: ['Login'],
+    stores: ['User'],
+    models: ['User'],
+    refs: [
+        {ref: 'loginForm', selector: 'Login form'}
+    ],
     init: function () {
 
         this.control({
-            'Login': {
-                afterrender: function (p) {
-                    p.down('button[action=login]').on('click', function () {
-                        alert(1);
-                    }, this);
+            'Login button[action=login]': {
+                click: function () {
+                    alert(1);
                 }
             }
+        })
+    },
+    login: function () {
+        var form = this.getLoginForm();
+        var store = this.getUserStore();
+        var url = "/user";
+        form.submit({
+            url:url
         })
     }
 });

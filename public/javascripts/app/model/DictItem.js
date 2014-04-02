@@ -2,7 +2,7 @@
  * Created by hooxin on 14-4-1.
  */
 Ext.define("Techsupport.model.DictItem", {
-    extends: "Ext.data.Model",
+    extend: "Ext.data.Model",
     idProperty: "id",
     fields: [
         {name: "id", type: "int"},

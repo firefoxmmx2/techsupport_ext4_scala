@@ -7,8 +7,8 @@ Ext.application({
         Ext.create('Ext.container.Viewport', {
             layout: 'fit',
             items: [
-                {xtype:'image',src:"assets/images/favicon.png"},
-                {xtype:'login',autoShow:true}
+                {xtype: 'image', src: "assets/images/favicon.png"},
+                {xtype: 'login', autoShow: true}
             ]
         })
     }
