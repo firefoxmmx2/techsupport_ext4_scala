@@ -148,7 +148,8 @@ object Department extends Controller {
                 "datas" -> List(),
                 "total" -> 0,
                 "start" -> pageno,
-                "limit" -> limit
+                "limit" -> limit,
+                "1"->"1"
               ))).as(JSON)
           }
 
