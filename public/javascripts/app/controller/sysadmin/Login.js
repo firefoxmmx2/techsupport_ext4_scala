@@ -10,22 +10,26 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
     ],
     init: function () {
         this.control({
-            'login button[action=login]': {
-                click: function () {
-                    this.login();
+            'viewport login': {
+                afterrender: function (gp) {
+                    gp.down('button[action=login]').on('click', function () {
+                        this.login();
+                    }, this)
+                    gp.down('button[action=reset]').on('click', function () {
+                        this.getLoginForm().reset();
+                    }, this)
                 }
             },
-            'login button[action=reset]': {
-                click: function () {
-                    this.getLoginForm().reset();
-                }
-            },
-            'login textfield': {
-                keydown:function(){
-                    alert(1);
-                },
-                keyup:function(){
-                    alert(2)
+            'login > form': {
+                afterrender: function (gp) {
+                    var me = this;
+                    gp.query('textfield').forEach(function (el, idx, items) {
+                        el.on('specialkey', function (o,e) {
+                            if(e.ENTER == e.getKey()){
+                                this.login();
+                            }
+                        }, me)
+                    })
                 }
             }
         })
