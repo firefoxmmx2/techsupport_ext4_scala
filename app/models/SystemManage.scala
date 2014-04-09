@@ -77,7 +77,7 @@ case class DepartmentQueryCondition(
  * @param idnum 身份证号码
  * @param mobilePhone 手机号码
  * @param userorder 排序号
- * @param isVaild 是否有效 默认Y
+ * @param isValid 是否有效 默认Y
  * @param userType 用户类别
  * @param jzlbdm
  * @param jzlbmc
@@ -89,10 +89,10 @@ case class User(
                  username: String,
                  password: String,
                  idnum: String,
-                 @Column("MOBILE_PHONE")
+                 @Column("MOBILEPHONE")
                  mobilePhone: Option[String],
                  userorder: Int = 1,
-                 isVaild: String = "Y",
+                 isValid: String = "Y",
                  userType: Option[String],
                  jzlbdm: Option[String],
                  jzlbmc: Option[String],

@@ -127,7 +127,7 @@ trait UserDaoComponentImpl extends UserDaoComponent {
               (u.userType like params.userType.?) and
               (u.useraccount === params.useraccount.?) and
               (u.departid === params.departid.?) and
-              (u.isVaild === params.isValid.?) and
+              (u.isValid === params.isValid.?) and
               (u.mobilePhone === params.mobilePhone.?) and
               (u.idnum === params.idnum.?) and
               (u.userorder === params.userorder.?) and
@@ -165,7 +165,7 @@ trait UserDaoComponentImpl extends UserDaoComponent {
 
      * @return 结果列表
      */
-    def list(params: UserQueryCondition): List[User] = inTransaction(userDao.list(params))
+    def list(params: UserQueryCondition): List[User] = selectForPage(params).toList
 
     /**
      * 分页总数查询

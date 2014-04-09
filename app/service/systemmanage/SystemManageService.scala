@@ -137,12 +137,12 @@ trait UserServiceComponentImpl extends UserServiceComponent {
 
     def insert(e: User): User = inTransaction(userDao.insert(e))
 
-    def getByUseraccountPassword(useraccount: String, password: String): User = inTransaction{
-      require(StringUtils.isEmpty(useraccount))
-      require(StringUtils.isEmpty(password))
+    def getByUseraccountPassword(useraccount: String, password: String): User = inTransaction {
+      require(StringUtils.isNotEmpty(useraccount))
+      require(StringUtils.isNotEmpty(password))
 
-      val users = userDao.list(UserQueryCondition(useraccount=Option(useraccount),password = Option(password)))
-      if(users.size>0)
+      val users = userDao.list(UserQueryCondition(useraccount = Option(useraccount), password = Option(password)))
+      if (users.size > 0)
         users(0)
       else
         null

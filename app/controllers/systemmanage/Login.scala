@@ -11,6 +11,7 @@ import scala.util.Random
  * Created by hooxin on 14-3-30.
  */
 object Login extends Controller {
+  val log = play.api.Logger.logger
 
   case class Login(useraccount: String, password: String)
 
@@ -36,7 +37,8 @@ object Login extends Controller {
               "message" -> "帐号或者密码错误")))
           else {
             val authCode = Random.nextString(12)
-            val userInfoMap = Map("user" -> user)
+            val userInfoMap = Map("userid" -> user.id,
+              "username" -> user.username)
             Ok(Json.generate(Map("result" -> 0,
               "message" -> "登录成功",
               "auth-code" -> authCode,
