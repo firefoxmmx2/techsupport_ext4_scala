@@ -24,8 +24,8 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
                 afterrender: function (gp) {
                     var me = this;
                     gp.query('textfield').forEach(function (el, idx, items) {
-                        el.on('specialkey', function (o,e) {
-                            if(e.ENTER == e.getKey()){
+                        el.on('specialkey', function (o, e) {
+                            if (e.ENTER == e.getKey()) {
                                 this.login();
                             }
                         }, me)
@@ -34,7 +34,9 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
             }
         })
     },
+//    登录
     login: function () {
+        var me = this;
         var form = this.getLoginForm();
         var url = "/login";
         if (form.getForm().isValid) {
@@ -45,6 +47,8 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
                     var res = Ext.decode(result.responseText);
                     if (res.result == 0) {
                         Ext.Msg.alert("提示", "登录成功");
+                        me.getApplication().authCode = res.authCode;
+                        me.getApplication().userInfo = res.userInfo;
                     }
                     else
                         Ext.Msg.alert("提示", "登录失败");
@@ -52,5 +56,46 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
             })
         }
 
+    },
+    //注销
+    logout: function () {
+        this.getApplication().authCode = null;
+        this.getApplication().userInfo = null;
+        var me = this;
+        Ext.Ajax.request({
+            url: "/logout",
+            onSuccess: function (res) {
+                var res = Ext.decode(res.responseText);
+                if (res.result == 0) {
+                    if (res.message)
+                        Ext.Msg.alert("提示", res.message);
+                    me.getApplication().removeAll();
+                    me.getApplication().add({xtype: 'image', src: "assets/images/favicon.png"},
+                        {xtype: 'login', autoShow: true});
+                }
+            }
+        })
+    },
+    //心跳验证
+    heartCheck: function () {
+        var me = this;
+
+        Ext.Ajax.request({
+            url: "/heartCheck",
+            onSuccess: function (res) {
+                var res = Ext.decode(res.responseText);
+                if (res.result == 0) {
+                    me.getApplication().authCode = res.authCode;
+                    me.getApplication().userInfo = res.userInfo;
+                }
+                else {
+                    if (me.getApplication().query('login').length == 0) {
+                        me.getApplication().removeAll();
+                        me.getApplication().add({xtype: 'image', src: "assets/images/favicon.png"},
+                            {xtype: 'login', autoShow: true});
+                    }
+                }
+            }
+        })
     }
 });

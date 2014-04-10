@@ -15,6 +15,8 @@ object ApplicationBuild extends Build {
     jdbc,
     //    anorm,
     //    "com.typesafe.slick" %% "slick" % "2.0.0",
+    cache,
+    filters,
     "org.slf4j" % "slf4j-nop" % "1.6.4",
     "com.cloudphysics" % "jerkson_2.10" % "0.6.3",
     //    "com.typesafe.slick" %% "slick-extensions" % "2.0.0",

@@ -3,9 +3,11 @@ package controllers.systemmanage
 import play.api.mvc._
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.cache.Cache
 import util.ComponentRegister._
 import com.codahale.jerkson.Json
-import scala.util.Random
+import play.api.Play.current
+import java.util.UUID
 
 /**
  * Created by hooxin on 14-3-30.
@@ -36,15 +38,15 @@ object Login extends Controller {
             Ok(Json.generate(Map("result" -> -3,
               "message" -> "帐号或者密码错误")))
           else {
-            val authCode = Random.nextString(12)
+            val authCode = UUID.randomUUID().toString
             val userInfoMap = Map("userid" -> user.id,
               "username" -> user.username)
+            Cache.set(authCode, userInfoMap)
             Ok(Json.generate(Map("result" -> 0,
               "message" -> "登录成功",
-              "auth-code" -> authCode,
-              "user-info" -> userInfoMap)))
-              .withSession("user-info" -> Json.generate(userInfoMap),
-                "auth-code" -> authCode)
+              "authCode" -> authCode,
+              "userInfo" -> userInfoMap)))
+              .withSession("authCode" -> authCode)
           }
         }
       )
@@ -55,9 +57,26 @@ object Login extends Controller {
    * @return
    */
   def logout = Action {
-    implicit reqeust =>
-      reqeust.session - "userInfo"
+    implicit request =>
+      Cache.remove(request.session.get("authCode").getOrElse(""))
       Ok(Json.generate(Map("result" -> 0,
-        "message" -> "登出成功")))
+        "message" -> "登出成功"))).withNewSession
+  }
+
+  /**
+   * 心跳验证
+   * @return
+   */
+  def heartCheck = Action {
+    implicit request =>
+      request.session.get("authCode") match {
+        case Some(code) => Ok(Json.generate(Map("result" -> 0,
+          "message" -> "",
+          "authCode" -> code,
+          "userInfo" -> Cache.get(code)
+        )))
+        case _ => Ok(Json.generate(Map("result" -> -2, "message" -> "未登录或者登录已过期")))
+      }
+
   }
 }
