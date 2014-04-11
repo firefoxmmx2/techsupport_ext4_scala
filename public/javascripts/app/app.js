@@ -1,13 +1,12 @@
 Ext.application({
     name: 'Techsupport',
     appFolder: 'assets/javascripts/app',
-    controllers: ["sysadmin.Login"],
+    controllers: ["sysadmin.Login","Main","sysadmin.SystemMenu"],
     launch: function () {
         Ext.create('Ext.container.Viewport', {
             layout: 'fit',
             items: [
-                {xtype: 'image', src: "assets/images/favicon.png"},
-                {xtype: 'login', autoShow: true}
+                {xtype: 'main', autoShow: true}
             ]
         })
 
@@ -15,7 +14,8 @@ Ext.application({
         var loginController = this.getController('sysadmin.Login');
         var heartCheckTask = Ext.TaskManager.start({
             run: loginController.heartCheck,
-            interval: 3000
+            interval: 3000,
+            scope:this
         })
     }
 });

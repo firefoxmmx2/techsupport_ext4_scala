@@ -82,14 +82,26 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
 
         Ext.Ajax.request({
             url: "/heartCheck",
-            onSuccess: function (res) {
+            success: function (res) {
                 var res = Ext.decode(res.responseText);
                 if (res.result == 0) {
-                    me.getApplication().authCode = res.authCode;
-                    me.getApplication().userInfo = res.userInfo;
+                    if (me.getSysadminLogin) {
+                        me.authCode = res.authCode;
+                        me.userInfo = res.userInfo;
+                    }
+                    else {
+                        me.getApplication().authCode = res.authCode;
+                        me.getApplication().userInfo = res.userInfo;
+                    }
+
                 }
                 else {
-                    if (me.getApplication().query('login').length == 0) {
+                    if (me.getSysadminLogin) {
+                        me.removeAll();
+                        me.add({xtype: 'image', src: "assets/images/favicon.png"},
+                            {xtype: 'login', autoShow: true});
+                    }
+                    else if (me.getApplication().query('login').length == 0) {
                         me.getApplication().removeAll();
                         me.getApplication().add({xtype: 'image', src: "assets/images/favicon.png"},
                             {xtype: 'login', autoShow: true});

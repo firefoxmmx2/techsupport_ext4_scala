@@ -200,7 +200,10 @@ case class MenuQueryCondition(id: Option[String] = None,
                               parentmenucode: Option[String] = None,
                               menufullcode: Option[String] = None,
                               isleaf: Option[String] = None,
-                              systemcode: Option[String] = None) extends QueryCondition
+                              systemcode: Option[String] = None) extends QueryCondition {
+  var userid: Option[Long] = _
+
+}
 
 /**
  * 全局参数

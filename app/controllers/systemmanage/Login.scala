@@ -64,18 +64,22 @@ object Login extends Controller {
   }
 
   /**
-   * 心跳验证
+   *
    * @return
    */
   def heartCheck = Action {
     implicit request =>
       request.session.get("authCode") match {
-        case Some(code) => Ok(Json.generate(Map("result" -> 0,
-          "message" -> "",
-          "authCode" -> code,
-          "userInfo" -> Cache.get(code)
-        )))
-        case _ => Ok(Json.generate(Map("result" -> -2, "message" -> "未登录或者登录已过期")))
+        case Some(code) =>
+          if (Cache.get(code) != None)
+            Ok(Json.generate(Map("result" -> 0,
+              "message" -> "",
+              "authCode" -> code,
+              "userInfo" -> Cache.get(code)
+            )))
+          else
+            Ok(Json.generate(Map("result" -> -2, "message" -> "未登录")))
+        case _ => Ok(Json.generate(Map("result" -> -2, "message" -> "未登录")))
       }
 
   }

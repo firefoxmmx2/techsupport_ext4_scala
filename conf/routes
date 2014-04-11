@@ -9,6 +9,7 @@ GET           /                                      controllers.Application.ind
 GET           /assets/*file                          controllers.Assets.at(path="/public", file)
 
 POST          /login                                 controllers.systemmanage.Login.login
+GET           /heartCheck                            controllers.systemmanage.Login.heartCheck
 
 #用户
 PUT           /user                                  controllers.systemmanage.User.add
@@ -42,7 +43,7 @@ POST          /menu                                  controllers.systemmanage.Me
 GET           /menu/:id                              controllers.systemmanage.Menu.get(id:Long)
 
 GET           /menu                                  controllers.systemmanage.Menu.find
-
+GET           /userMenuNode                          controllers.systemmanage.Menu.userMenuNode
 #角色
 PUT           /role                                  controllers.systemmanage.Role.add
 
