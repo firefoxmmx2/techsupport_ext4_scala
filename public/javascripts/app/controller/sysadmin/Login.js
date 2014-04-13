@@ -6,7 +6,8 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
     views: ['sysadmin.Login'],
     models: ['User'],
     refs: [
-        {ref: 'loginForm', selector: 'login form'}
+        {ref: 'loginForm', selector: 'login form'},
+        {ref: 'viewport', selector: 'viewport'}
     ],
     init: function () {
         this.control({
@@ -49,6 +50,8 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
                         Ext.Msg.alert("提示", "登录成功");
                         me.getApplication().authCode = res.authCode;
                         me.getApplication().userInfo = res.userInfo;
+                        me.getViewport().removeAll();
+                        me.getViewport().add({xtype: 'main'})
                     }
                     else
                         Ext.Msg.alert("提示", "登录失败");
@@ -57,7 +60,7 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
         }
 
     },
-    //注销
+//注销
     logout: function () {
         this.getApplication().authCode = null;
         this.getApplication().userInfo = null;
@@ -76,7 +79,7 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
             }
         })
     },
-    //心跳验证
+//心跳验证
     heartCheck: function () {
         var me = this;
 
@@ -85,29 +88,21 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
             success: function (res) {
                 var res = Ext.decode(res.responseText);
                 if (res.result == 0) {
-                    if (me.getSysadminLogin) {
-                        me.authCode = res.authCode;
-                        me.userInfo = res.userInfo;
-                    }
-                    else {
-                        me.getApplication().authCode = res.authCode;
-                        me.getApplication().userInfo = res.userInfo;
-                    }
+                    me.authCode = res.authCode;
+                    me.userInfo = res.userInfo;
 
                 }
                 else {
-                    if (me.getSysadminLogin) {
-                        me.removeAll();
-                        me.add({xtype: 'image', src: "assets/images/favicon.png"},
+                    var viewport = me.getViewport();
+                    if (viewport.query('login').length == 0) {
+                        viewport.removeAll();
+                        viewport.add({xtype: 'image', src: "assets/images/favicon.png"},
                             {xtype: 'login', autoShow: true});
                     }
-                    else if (me.getApplication().query('login').length == 0) {
-                        me.getApplication().removeAll();
-                        me.getApplication().add({xtype: 'image', src: "assets/images/favicon.png"},
-                            {xtype: 'login', autoShow: true});
-                    }
+
                 }
             }
         })
     }
-});
+})
+;

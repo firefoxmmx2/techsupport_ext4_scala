@@ -151,6 +151,7 @@ case class RoleQueryCondition(id: Option[Long] = None,
  * @param fullcode 系统全码 如techsupport.systemmanage.
  */
 case class System(
+                   @Column("systemcode")
                    id: String,
                    systemname: String,
                    systemdefine: String,
@@ -182,6 +183,7 @@ case class SystemQueryCondition(id: Option[String] = None,
  * @param systemcode 系统代码 关联 System.systemcode
  */
 case class Menu(
+                 @Column("menucode")
                  id: String,
                  menuname: String,
                  funcentry: String,
@@ -212,6 +214,7 @@ case class MenuQueryCondition(id: Option[String] = None,
  * @param globalparvalue 参数值
  */
 case class GlobalParam(
+                        @Column("globalparcode")
                         id: String,
                         globalparname: String,
                         globalparvalue: String) extends KeyedEntity[String] {

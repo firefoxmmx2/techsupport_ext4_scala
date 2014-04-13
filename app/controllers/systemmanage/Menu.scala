@@ -15,13 +15,13 @@ import com.codahale.jerkson.Json
 object Menu extends Controller {
   def add = TODO
 
-  def remove = TODO
+  def remove(id: Long) = TODO
 
   def update = TODO
 
   def get(id: Long) = TODO
 
-  def find = TODO
+  def list = TODO
 
   val menuForm = Form(mapping("id" -> text,
     "menuname" -> text,
@@ -49,14 +49,14 @@ object Menu extends Controller {
       menuQueryForm.bindFromRequest().fold(
         hasError => BadRequest,
         query => {
-          val userInfo = Cache.get(req.session.get("authCode").get)
+          val userInfo = Cache.get(req.session.get("authCode").getOrElse("")).getOrElse(None)
           if (userInfo == null || userInfo == None)
             Ok(Json.generate(Map("result" -> -2,
               "message" -> "未登录或者登录已过期")))
           else {
             val userInfo_ = userInfo.asInstanceOf[Map[String, Any]]
             val userid = userInfo_.get("userid");
-            query.userid = Option(userid.asInstanceOf[Long])
+            query.userid = userid.asInstanceOf[Option[Long]]
             val menuList = menuService.list(query);
             val root = menuList.map(m => {
               val leaf = if (m.isleaf == "Y") true else false

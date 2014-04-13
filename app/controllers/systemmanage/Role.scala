@@ -8,11 +8,11 @@ import play.api.mvc.Controller
 object Role extends Controller {
   def add = TODO
 
-  def remove = TODO
+  def remove(id:Long) = TODO
 
   def update = TODO
 
   def get(id: Long) = TODO
 
-  def find = TODO
+  def list = TODO
 }
