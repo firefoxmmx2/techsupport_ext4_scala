@@ -3,72 +3,45 @@
 # ~~~~
 
 # Home page
-GET         /                                      controllers.Application.index
-
+GET           /                                   controllers.Application.index
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                          controllers.Assets.at(path="/public", file)
-
+GET           /assets/*file                       controllers.Assets.at(path="/public", file)
 #用户
-POST        /user/add                              controllers.systemmanage.User.add
-
-POST        /user/delete/:id                       controllers.systemmanage.User.remove(id:Long)
-
-POST        /user/update                           controllers.systemmanage.User.update
-
-GET         /user/:id                              controllers.systemmanage.User.get(id:Long)
-
-GET         /user/list/:pageno/:limit              controllers.systemmanage.User.list(pageno:Int,limit:Int)
+POST          /api/users.json                     controllers.systemmanage.User.add
+DELETE        /api/users/:id.json                 controllers.systemmanage.User.remove(id:Long)
+PUT           /api/users/:id.json                 controllers.systemmanage.User.update(id:Long)
+GET           /api/users/:id.json                 controllers.systemmanage.User.get(id:Long)
+GET           /api/users.json                     controllers.systemmanage.User.list
 
 #机构
-POST        /department/add                        controllers.systemmanage.Department.add
-
-POST        /department/delete/:id                 controllers.systemmanage.Department.remove(id:Long)
-
-POST        /department/update                     controllers.systemmanage.Department.update
-
-GET         /department/:id                        controllers.systemmanage.Department.get(id:Long)
-
-GET         /department/list/:pageno/:limit        controllers.systemmanage.Department.list(pageno:Int,limit:Int)
+POST          /api/departments.json               controllers.systemmanage.Department.add
+DELETE        /api/departments/:id.json           controllers.systemmanage.Department.remove(id:Long)
+POST          /api/departments/:id.json           controllers.systemmanage.Department.update(id:Long)
+GET           /api/departments/:id.json           controllers.systemmanage.Department.get(id:Long)
+GET           /api/departments.json               controllers.systemmanage.Department.list
 
 #菜单
-POST        /menu/add                              controllers.systemmanage.Menu.add
-
-POST        /menu/delete/:id                       controllers.systemmanage.Menu.remove(id:Long)
-
-POST        /menu/update                           controllers.systemmanage.Menu.update
-
-GET         /menu/:id                              controllers.systemmanage.Menu.get(id:Long)
-
-GET         /menu/list                             controllers.systemmanage.Menu.list
-GET         /menu/userMenuNode                     controllers.systemmanage.Menu.userMenuNode
+POST          /api/menus.json                     controllers.systemmanage.Menu.add
+DELETE        /api/menus/:id.json                 controllers.systemmanage.Menu.remove(id:Long)
+PUT           /api/menus/:id.json                 controllers.systemmanage.Menu.update(id:Long)
+GET           /api/menus/:id.json                 controllers.systemmanage.Menu.get(id:Long)
+GET           /api/menus.json                     controllers.systemmanage.Menu.list
+GET           /api/menus/userMenuNode.json        controllers.systemmanage.Menu.userMenuNode
 #角色
-POST        /role/add                              controllers.systemmanage.Role.add
-
-POST        /role/delete/:id                       controllers.systemmanage.Role.remove(id:Long)
-
-POST        /role/update                           controllers.systemmanage.Role.update
-
-GET         /role/:id                              controllers.systemmanage.Role.get(id:Long)
-
-GET         /role/list                             controllers.systemmanage.Role.list
-
+POST          /api/roles.json                     controllers.systemmanage.Role.add
+DELETE        /api/roles/:id.json                 controllers.systemmanage.Role.remove(id:Long)
+PUT           /api/roles/:id.json                 controllers.systemmanage.Role.update
+GET           /api/roles/:id.json                 controllers.systemmanage.Role.get(id:Long)
+GET           /api/roles.json                     controllers.systemmanage.Role.list
 #系统
-POST        /system/add                            controllers.systemmanage.System.add
-
-POST        /system/delete/:id                     controllers.systemmanage.System.remove(id:String)
-
-POST        /system/update                         controllers.systemmanage.System.update
-
-GET         /system/:id                            controllers.systemmanage.System.get(id:String)
-
-GET         /system/list                           controllers.systemmanage.System.list
-
-GET         /system/userSystemNode                 controllers.systemmanage.System.userSystemNode
-
+POST          /api/system/add                     controllers.systemmanage.System.add
+POST          /api/system/delete/:id              controllers.systemmanage.System.remove(id:String)
+POST          /api/system/update                  controllers.systemmanage.System.update
+GET           /api/system/:id                     controllers.systemmanage.System.get(id:String)
+GET           /api/system/list                    controllers.systemmanage.System.list
+GET           /api/system/userSystemNode          controllers.systemmanage.System.userSystemNode
 #登录
-POST        /login                                 controllers.systemmanage.Login.login
-
-GET         /heartCheck                            controllers.systemmanage.Login.heartCheck
-
-POST        /logout                                controllers.systemmanage.Login.logout
+POST          /login                              controllers.systemmanage.Login.login
+GET           /heartCheck                         controllers.systemmanage.Login.heartCheck
+POST          /logout                             controllers.systemmanage.Login.logout
 

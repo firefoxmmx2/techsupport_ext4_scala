@@ -17,7 +17,7 @@ object Menu extends Controller {
 
   def remove(id: Long) = TODO
 
-  def update = TODO
+  def update(id:Long) = TODO
 
   def get(id: Long) = TODO
 

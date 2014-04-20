@@ -79,7 +79,7 @@ object Department extends Controller {
 
   }
 
-  def update = Action {
+  def update(id:Long) = Action {
     implicit request =>
       updateForm.bindFromRequest().fold(errors => {
         BadRequest

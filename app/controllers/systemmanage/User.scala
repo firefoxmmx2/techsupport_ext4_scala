@@ -12,6 +12,9 @@ import com.codahale.jerkson.Json
  * Created by hooxin on 14-2-10.
  */
 object User extends Controller {
+  var pageno = 1
+  var pagesize = 20;
+
   val log = Logger.logger
   val userForm = Form(
     mapping(
@@ -129,7 +132,7 @@ object User extends Controller {
     }
   }
 
-  def update = Action {
+  def update(id:Long) = Action {
     implicit request =>
       userForm.bindFromRequest().fold(
         hasError => {
