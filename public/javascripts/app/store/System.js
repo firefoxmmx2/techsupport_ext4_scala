@@ -7,7 +7,7 @@ Ext.define("Techsupport.store.SystemStore", {
     proxy: {
         type: "ajax",
         method: "GET",
-        url: "/system/list",
+        url: "/api/systems.json",
         reader: {
             type: "json",
             root: "data"

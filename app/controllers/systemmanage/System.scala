@@ -6,6 +6,9 @@ import play.api.data.Forms._
 import util.ComponentRegister._
 import com.codahale.jerkson.Json
 import play.api.Logger
+import models.SystemQueryCondition
+import play.api.cache.Cache
+import play.api.Play.current
 
 /**
  * Created by hooxin on 14-2-10.
@@ -62,7 +65,7 @@ object System extends Controller {
       }
   }
 
-  def update = TODO
+  def update(id: String) = TODO
 
   def get(id: String) = Action {
     implicit request =>
@@ -82,8 +85,42 @@ object System extends Controller {
 
   def list = TODO
 
+  val systemQueryForm = Form(
+    mapping(
+      "id" -> optional(text),
+      "systemname" -> optional(text),
+      "systemdefine" -> optional(text),
+      "parentsystemcode" -> optional(text),
+      "isleaf" -> optional(text),
+      "fullcode" -> optional(text)
+    )(SystemQueryCondition.apply)(SystemQueryCondition.unapply)
+  )
 
   def userSystemNode = Action {
-    Ok()
+    implicit request =>
+      systemQueryForm.bindFromRequest().fold(
+        hasErrors => {
+          BadRequest
+        },
+        query => {
+          val userInfo = Cache.get(request.session.get("authCode").getOrElse("")).getOrElse(None)
+          if (userInfo == null || userInfo == None)
+            Ok(Json.generate(Map("result" -> -2,
+              "message" -> "未登录或者登录已过期")))
+          else {
+            val userInfo_ = userInfo.asInstanceOf[Map[String, Any]]
+            println("=" * 13 + "[" + userInfo_.get("userid") + "]" + "=" * 13)
+            val userid = userInfo_.get("userid").asInstanceOf[Option[Long]] match {
+              case Some(x) => x
+            }
+            val systems = systemService.getUserSystems(userid)
+            Ok(Json.generate(
+              Map("result" -> 0,
+                "message" -> "",
+                "systems" -> systems)
+            ))
+          }
+        }
+      )
   }
 }

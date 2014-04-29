@@ -87,8 +87,10 @@ object User extends Controller {
     )(UserQueryCondition.apply)(UserQueryCondition.unapply)
   )
 
-  def list(pageno: Int = 1, limit: Int = 20) = Action {
+  def list = Action {
     implicit request =>
+      var pageno: Int = 1
+      var limit: Int = 20
       userQueryForm.bindFromRequest().fold(
         hasErrors => {
           BadRequest

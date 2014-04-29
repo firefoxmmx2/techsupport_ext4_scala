@@ -222,6 +222,20 @@ trait UserDaoComponentImpl extends UserDaoComponent {
 trait SystemDaoComponentImpl extends SystemDaoComponent {
 
   class SystemDaoImpl extends SystemDao {
+
+    def getUserSystem(userid: Long): List[System] =
+      from(SystemManage.systems, SystemManage.userRoles, SystemManage.roleMenus, SystemManage.menus) {
+        (s, ur, rm, m) =>
+          where {
+            (ur.roleid === rm.roleid) and
+              (s.id === m.systemcode) and
+              (rm.menucode === m.id) and
+              (ur.userid === userid)
+          }
+          select(s)
+      }.distinct.toList
+
+
     def selectForPage(params: SystemQueryCondition, sort: String = "systemcode", dir: String = "asc") = {
       from(SystemManage.systems) {
         s =>
@@ -413,6 +427,22 @@ trait RoleDaoComponentImpl extends RoleDaoComponent {
 trait MenuDaoComponentImpl extends MenuDaoComponent {
 
   class MenuDaoImpl extends MenuDao {
+
+
+    def getUserMenus(userid: Long, parentmenucode: String = "0", systemcode: Option[String] = None): List[Menu] =
+      from(SystemManage.menus, SystemManage.userRoles, SystemManage.roleMenus) {
+        (m, ur, rm) => {
+          where {
+            (ur.roleid === rm.roleid) and
+              (m.id === rm.menucode) and
+              (ur.userid === userid) and
+              (m.parentmenucode === parentmenucode) and
+              (systemcode === m.systemcode.?)
+          }
+          select(m)
+        }
+      }.toList
+
     def selectForPage(params: MenuQueryCondition, sort: String = "id", dir: String = "asc") =
       from(SystemManage.menus) {
         m =>

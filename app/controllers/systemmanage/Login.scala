@@ -39,7 +39,7 @@ object Login extends Controller {
               "message" -> "帐号或者密码错误")))
           else {
             val authCode = UUID.randomUUID().toString
-            val userInfoMap = Map("userid" -> user.id,
+            val userInfoMap = Map("userid" -> user.id.get,
               "username" -> user.username)
             Cache.set(authCode, userInfoMap)
             Ok(Json.generate(Map("result" -> 0,

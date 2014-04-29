@@ -47,7 +47,6 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
                 onSuccess: function (result, request) {
                     var res = Ext.decode(result.responseText);
                     if (res.result == 0) {
-                        Ext.Msg.alert("提示", "登录成功");
                         me.getApplication().authCode = res.authCode;
                         me.getApplication().userInfo = res.userInfo;
                         me.getViewport().removeAll();
@@ -80,7 +79,7 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
         })
     },
 //心跳验证
-    heartCheck: function () {
+    heartCheck: function (func) {
         var me = this;
 
         Ext.Ajax.request({
@@ -90,7 +89,9 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
                 if (res.result == 0) {
                     me.authCode = res.authCode;
                     me.userInfo = res.userInfo;
-
+                    if(func){
+                        func();
+                    }
                 }
                 else {
                     var viewport = me.getViewport();

@@ -17,7 +17,7 @@ object Menu extends Controller {
 
   def remove(id: Long) = TODO
 
-  def update(id:Long) = TODO
+  def update(id: Long) = TODO
 
   def get(id: Long) = TODO
 
@@ -34,15 +34,16 @@ object Menu extends Controller {
     "systemcode" -> text)(models.Menu.apply)(models.Menu.unapply))
 
   //查询表单
-  var menuQueryForm = Form(mapping("id" -> optional(text),
-    "menuname" -> optional(text),
-    "funcentry" -> optional(text),
-    "menulevel" -> optional(number),
-    "parentmenucode" -> optional(text),
-    "menufullcode" -> optional(text),
-    "isleaf" -> optional(text),
-    "systemcode" -> optional(text)
-  )(MenuQueryCondition.apply)(MenuQueryCondition.unapply))
+  val menuQueryForm = Form(
+    mapping("id" -> optional(text),
+      "menuname" -> optional(text),
+      "funcentry" -> optional(text),
+      "menulevel" -> optional(number),
+      "parentmenucode" -> optional(text),
+      "menufullcode" -> optional(text),
+      "isleaf" -> optional(text),
+      "systemcode" -> optional(text)
+    )(MenuQueryCondition.apply)(MenuQueryCondition.unapply))
 
   def userMenuNode = Action {
     implicit req =>
@@ -55,15 +56,15 @@ object Menu extends Controller {
               "message" -> "未登录或者登录已过期")))
           else {
             val userInfo_ = userInfo.asInstanceOf[Map[String, Any]]
-            val userid = userInfo_.get("userid");
-            query.userid = userid.asInstanceOf[Option[Long]]
-            val menuList = menuService.list(query);
+            val userid = userInfo_.get("userid").asInstanceOf[Option[Long]].get
+            val menuList = menuService.getUserMenus(userid, query.parentmenucode.get,query.systemcode);
             val root = menuList.map(m => {
               val leaf = if (m.isleaf == "Y") true else false
               Map("id" -> m.id,
                 "text" -> m.menuname,
                 "funcentry" -> m.funcentry,
-                "leaf" -> leaf)
+                "leaf" -> leaf,
+                "parentId" -> m.parentmenucode)
             })
             Ok(Json.generate(Map("result" -> 0,
               "message" -> "",

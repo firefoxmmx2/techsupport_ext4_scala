@@ -76,6 +76,10 @@ trait MenuServiceComponentImpl extends MenuServiceComponent {
     def update(e: Menu): Unit = inTransaction(menuDao.update(e))
 
     def insert(e: Menu): Menu = inTransaction(menuDao.insert(e))
+
+    def getUserMenus(userid: Long, parentmenucode: String,systemcode:Option[String]=None): List[Menu] = inTransaction(
+      menuDao.getUserMenus(userid,parentmenucode,systemcode)
+    )
   }
 
 }
@@ -104,6 +108,8 @@ trait SystemServiceComponentImpl extends SystemServiceComponent {
   this: SystemDaoComponent =>
 
   class SystemServiceImpl extends SystemService {
+    def getUserSystems(userid: Long): List[System] = inTransaction(systemDao.getUserSystem(userid))
+
     def getById(id: String): models.System = inTransaction(systemDao.getById(id))
 
     def list(params: SystemQueryCondition): List[models.System] = inTransaction(systemDao.list(params))

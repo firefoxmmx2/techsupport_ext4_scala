@@ -127,8 +127,10 @@ object Department extends Controller {
       (DepartmentQueryCondition.unapply)
   )
 
-  def list(pageno: Int = 1, limit: Int = 20) = Action {
+  def list = Action {
     implicit req =>
+      var pageno: Int = 1
+      var limit: Int = 20
       listParamForm.bindFromRequest().fold(hasErrors =>
         BadRequest,
         dq => {

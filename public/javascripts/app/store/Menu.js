@@ -7,7 +7,7 @@ Ext.define('Techsupport.store.Menu',{
     proxy:{
         type:'ajax',
         method:'GET',
-        url: "/menu/list",
+        url: "/api/menus.json",
         reader: {
             type: "json",
             root: "data"

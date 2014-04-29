@@ -6,7 +6,7 @@ Ext.define("Techsupport.store.DepartmentStore", {
     model:"Techsupport.model.Department",
     proxy:{
         type:"ajax",
-        url:"/Department/list",
+        url:"/api/departments.json",
         method:"GET",
         reader:{
             type:"json",

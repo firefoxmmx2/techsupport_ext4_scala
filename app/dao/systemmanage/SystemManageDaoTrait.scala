@@ -39,7 +39,9 @@ trait UserDaoComponent {
 trait SystemDaoComponent {
   val systemDao: SystemDao
 
-  trait SystemDao extends BaseDao[System, String, SystemQueryCondition]
+  trait SystemDao extends BaseDao[System, String, SystemQueryCondition] {
+    def getUserSystem(userid:Long):List[System]
+  }
 
 }
 
@@ -48,7 +50,9 @@ trait SystemDaoComponent {
  */
 trait MenuDaoComponent {
 
-  trait MenuDao extends BaseDao[Menu, String, MenuQueryCondition]
+  trait MenuDao extends BaseDao[Menu, String, MenuQueryCondition] {
+    def getUserMenus(userid: Long, parentmenucode: String = "0",systemcode:Option[String]=None):List[Menu]
+  }
 
   val menuDao: MenuDao
 }

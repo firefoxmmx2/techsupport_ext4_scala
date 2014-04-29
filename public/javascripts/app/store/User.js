@@ -6,7 +6,7 @@ Ext.define("Techsupport.store.User", {
     model: "Techsupport.model.User",
     proxy: {
         type: "ajax",
-        url: "/user/list",
+        url: "/api/users.json",
         method: "GET",
         reader: {
             type: "json",

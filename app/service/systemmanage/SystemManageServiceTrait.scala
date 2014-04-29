@@ -25,7 +25,7 @@ trait UserServiceComponent {
   val userService: UserService
 
   trait UserService extends BaseService[User, Long, UserQueryCondition] {
-    def getByUseraccountPassword(useraccount:String,password:String):User
+    def getByUseraccountPassword(useraccount: String, password: String): User
   }
 
 }
@@ -33,6 +33,7 @@ trait UserServiceComponent {
 trait SystemServiceComponent {
 
   trait SystemService extends BaseService[System, String, SystemQueryCondition] {
+    def getUserSystems(userid: Long): List[System]
   }
 
   val systemService: SystemService
@@ -49,7 +50,9 @@ trait RoleServiceComponent {
 
 trait MenuServiceComponent {
 
-  trait MenuService extends BaseService[Menu, String, MenuQueryCondition]
+  trait MenuService extends BaseService[Menu, String, MenuQueryCondition] {
+    def getUserMenus(userid: Long, parentmenucode: String = "0", systemcode: Option[String] = None): List[Menu]
+  }
 
   val menuService: MenuService
 }

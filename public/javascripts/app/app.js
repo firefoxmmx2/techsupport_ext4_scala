@@ -17,7 +17,9 @@ Ext.application({
         //心跳检查，当登录验证不通过的返回登录页面
         var loginController = this.getController('sysadmin.Login');
         var heartCheckTask = Ext.TaskManager.start({
-            run: loginController.heartCheck,
+            run: function(){
+                loginController.heartCheck();
+            },
             interval: 10000,
             scope: this
         })

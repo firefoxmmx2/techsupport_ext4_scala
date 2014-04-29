@@ -4,6 +4,7 @@ import org.joda.time.DateTime
 import org.squeryl.annotations.Column
 import org.squeryl.{KeyedEntity, Schema}
 import CommonTypeMode._
+import org.squeryl.dsl.{CompositeKey2, CompositeKey}
 
 object SystemManage extends Schema {
   val departments = table[Department]("t_department")
@@ -24,6 +25,8 @@ object SystemManage extends Schema {
   on(dicts)(d => declare(d.id is (autoIncremented("dict_id"))))
   val dictItems = table[DictItem]("t_dict_item")
   on(dictItems)(d => declare(d.id is(autoIncremented("item_id"), primaryKey)))
+  val userRoles = table[UserRole]("t_user_role")
+  val roleMenus = table[RoleMenu]("t_role_menu")
 }
 
 /**
@@ -168,7 +171,9 @@ case class SystemQueryCondition(id: Option[String] = None,
                                 systemdefine: Option[String] = None,
                                 parentsystemcode: Option[String] = None,
                                 isleaf: Option[String] = None,
-                                fullcode: Option[String] = None) extends QueryCondition
+                                fullcode: Option[String] = None) extends QueryCondition {
+
+}
 
 /**
  * 菜单
@@ -341,6 +346,28 @@ case class Version(@Column("VERSIONNUM")
                    @Column("VERSIONID")
                    id: Option[Long]) extends KeyedEntity[Option[Long]] {
 }
+
+/**
+ * 角色菜单
+ * @param menucode
+ * @param roleid
+ */
+case class RoleMenu(
+                     menucode: String,
+                     roleid: Long
+                     ) extends KeyedEntity[CompositeKey2[String, Long]] {
+  def id = compositeKey(menucode, roleid)
+}
+
+/**
+ * 用户角色
+ * @param roleid
+ * @param userid
+ */
+case class UserRole(roleid: Long, userid: Long) extends KeyedEntity[CompositeKey2[Long, Long]] {
+  def id = compositeKey(roleid, userid)
+}
+
 
 
 
