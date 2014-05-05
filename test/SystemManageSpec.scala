@@ -16,7 +16,8 @@ class SystemManageSpec extends Specification{
         assert(d.id != None)
         departmentService.deleteById(insertingDeparment.id.get)
         val selectDepartment=departmentService.getById(insertingDeparment.id.get)
-        assert(selectDepartment == None)
+        
+        selectDepartment must beEqualTo( null) 
       }
 
     }
