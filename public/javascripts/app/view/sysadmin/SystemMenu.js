@@ -13,15 +13,4 @@ Ext.define('Techsupport.view.sysadmin.SystemMenu', {
     defaults: {
         bodyPadding: 15
     }
-//    dockedItems: [
-//        {xtype: 'panel', items: [
-//            {xtype: 'button', text: '按钮1'},
-//            {xtype: 'button', text: '按钮2'}
-//        ]}
-//    ],
-//    items: [
-//        {title: '系统', html: '系统'},
-//        {title: '命令', html: '命令'},
-//        {title: '支持单', html: '支持单'}
-//    ]
 })
