@@ -6,6 +6,7 @@ import models.Department
 import models.Menu
 import models.User
 import models.Role
+import org.squeryl.dsl.CompositeKey2
 
 /**
  * Created by hooxin on 14-3-10.
@@ -40,7 +41,7 @@ trait SystemDaoComponent {
   val systemDao: SystemDao
 
   trait SystemDao extends BaseDao[System, String, SystemQueryCondition] {
-    def getUserSystem(userid:Long):List[System]
+    def getUserSystem(userid: Long): List[System]
   }
 
 }
@@ -51,7 +52,7 @@ trait SystemDaoComponent {
 trait MenuDaoComponent {
 
   trait MenuDao extends BaseDao[Menu, String, MenuQueryCondition] {
-    def getUserMenus(userid: Long, parentmenucode: String = "0",systemcode:Option[String]=None):List[Menu]
+    def getUserMenus(userid: Long, parentmenucode: String = "0", systemcode: Option[String] = None): List[Menu]
   }
 
   val menuDao: MenuDao
@@ -76,4 +77,27 @@ trait GlobalParamDaoComponent {
 
   val globalParamDao: GlobalParamDao
 }
+
+/**
+ * 用户角色映射
+ */
+trait UserRoleDaoComponent {
+
+  trait UserRoleDao extends BaseDao[UserRole, (Long,Long), UserRoleQueryCondition] {
+  }
+
+  val userRoleDao: UserRoleDao
+}
+
+/**
+ * 角色菜单映射
+ */
+trait RoleMenuDaoComponent {
+
+  trait RoleMenuDao extends BaseDao[RoleMenu, (String, Long), RoleMenuQueryCondition]
+
+  val roleMenuDao: RoleMenuDao
+}
+
+
 

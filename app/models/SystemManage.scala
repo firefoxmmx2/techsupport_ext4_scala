@@ -359,6 +359,8 @@ case class RoleMenu(
   def id = compositeKey(menucode, roleid)
 }
 
+case class RoleMenuQueryCondition(menucode: Option[String], roleid: Option[Long]) extends QueryCondition
+
 /**
  * 用户角色
  * @param roleid
@@ -368,6 +370,4 @@ case class UserRole(roleid: Long, userid: Long) extends KeyedEntity[CompositeKey
   def id = compositeKey(roleid, userid)
 }
 
-
-
-
+case class UserRoleQueryCondition(roleid: Option[Long], userid: Option[Long]) extends QueryCondition

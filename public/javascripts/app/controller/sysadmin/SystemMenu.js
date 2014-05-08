@@ -4,26 +4,50 @@
 Ext.define('Techsupport.controller.sysadmin.SystemMenu', {
     extend: 'Ext.app.Controller',
     views: ['sysadmin.SystemMenu'],
-    stores: ['UserMenuNode', 'UserSystemNode'],
+    stores: ['UserSystemNode'],
     init: function () {
-        var menuStore = this.getUserMenuNodeStore()
         var systemStore = this.getUserSystemNodeStore();
-
         this.control({
             'systemMenuAccordion': {
                 render: function (p) {
-//                    var menus = menuStore;
                     var me = this;
                     systemStore.load({scope: this, params: {parentsystemcode: 0},
                         callback: function (records, operation, success) {
                             systemStore.each(function (s) {
-                                var userMenuNodeStore = me.getUserMenuNodeStore();
-                                userMenuNodeStore.load({scope: this, params: {parentmenucode: "0", systemcode: s.get("id")},
-                                    callback: function (records, operation, success) {
-                                        p.add({title: s.get("systemname"), items: [
-                                            {xtype: 'treepanel', store: userMenuNodeStore}
-                                        ]})
-                                    }});
+                                var userMenuNodeStore = Ext.create("Techsupport.store.UserMenuNode");
+                                p.add({title: s.get("systemname"), items: [
+                                    {xtype: 'treepanel',
+                                        store: userMenuNodeStore,
+                                        border:false,
+                                        listeners: {
+                                            itemclick: {
+                                                fn: function (view, record, item, index, e, eOpts) {
+                                                    this.currentMenucode = record.raw.id;
+                                                    this.currentSystemcode = record.raw.systemcode;
+                                                }
+                                            },
+                                            beforeload: {
+                                                fn: function (store, operation, eOpts) {
+                                                    if (!this.currentMenucode)
+                                                        this.currentMenucode = "0";
+                                                    if (!this.currentSystemcode)
+                                                        this.currentSystemcode = s.get("id");
+//                                                    store.proxy.url = store.proxy.url + "?" + "parentmenucode=" + this.currentMenucode +
+//                                                        "&systemcode=" + this.currentSystemcode;
+                                                    store.getProxy().setExtraParam("parentmenucode", this.currentMenucode);
+                                                    store.getProxy().setExtraParam("systemcode", this.currentSystemcode);
+
+                                                }
+                                            },
+                                            beforeitemexpand: {
+                                                fn: function (n, eOpts) {
+                                                    this.currentMenucode = n.raw.id;
+                                                    this.currentSystemcode = n.raw.systemcode;
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]});
 
                             });
                         }})
