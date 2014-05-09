@@ -18,12 +18,18 @@ Ext.define('Techsupport.controller.sysadmin.SystemMenu', {
                                 p.add({title: s.get("systemname"), items: [
                                     {xtype: 'treepanel',
                                         store: userMenuNodeStore,
-                                        border:false,
+                                        border: false,
                                         listeners: {
                                             itemclick: {
                                                 fn: function (view, record, item, index, e, eOpts) {
                                                     this.currentMenucode = record.raw.id;
                                                     this.currentSystemcode = record.raw.systemcode;
+//                                                    打开对应组件内容在tab容器里
+                                                    me.getApplication().getViewport().query('panel > tabpanel').map(function (tp) {
+                                                        tp.add({title: '用户列表', items: [
+                                                            {xtype: 'user.List'}
+                                                        ]});
+                                                    });
                                                 }
                                             },
                                             beforeload: {

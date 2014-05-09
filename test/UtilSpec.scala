@@ -22,7 +22,7 @@ class UtilSpec  extends Specification{
       val md5str=Utils.md5(s)
       println("="*13+"md5str = "+md5str+"="*13)
       println(md5str == "c4ca4238a0b923820dcc509a6f75849b")
-      md5str must be eq "c4ca4238a0b923820dcc509a6f75849b"
+      md5str must be equalTo "c4ca4238a0b923820dcc509a6f75849b"
     }
   }
 }
