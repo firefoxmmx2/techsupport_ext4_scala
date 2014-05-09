@@ -1,35 +1,15 @@
 import scala.io.Source
-
 /**
  * Created by hooxin on 14-5-5.
  */
 object Test {
-  class RichedInt(i: Int) {
-    def ! = (1 to i) reduce (_ * _)
-  }
-  implicit def int2RichedInt(i: Int) = new RichedInt(i)
-  println("helloWorld")
+  val hexDigests = (0 to 9).map(_.toString).toArray ++ Array("a", "b", "c", "d", "e", "f")
+  println(hexDigests.mkString)
 
-  println(5!)
+  println((0 to 9).flatMap(x => List(x,x + 10)))
 
 
 
-  var cont:(Unit=>Unit) = null
-  var filename = "/home/hooxin/剪贴板.txt"
-  var contents = ""
 
-//  reset {
-//    while(contents == "") {
-//      try {
-//        contents = Source.fromFile(filename,"utf8").mkString
-//      }
-//      catch {
-//        case _ =>
-//      }
-//      shift {
-//        k:(Unit=>Unit) =>
-//          cont = k
-//      }
-//    }
-//  }
+//  hexDigits[(bt & 0xf0) >> 4]
 }

@@ -33,11 +33,16 @@ object Login extends Controller {
       loginForm.bindFromRequest().fold(
         hasErrors => BadRequest,
         login => {
+          log.debug("调试登录函数")
+
           val user = userService.getByUseraccountPassword(login.useraccount, login.password)
+          log.debug("="*13+"user = "+user+"="*13)
+
           if (user == null)
             Ok(Json.generate(Map("result" -> -3,
               "message" -> "帐号或者密码错误")))
           else {
+            log.debug("存在指定用户")
             val authCode = UUID.randomUUID().toString
             val userInfoMap = Map("userid" -> user.id.get,
               "username" -> user.username)

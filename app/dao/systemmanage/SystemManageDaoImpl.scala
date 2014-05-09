@@ -119,6 +119,20 @@ trait UserDaoComponentImpl extends UserDaoComponent {
 
   class UserDaoImpl extends UserDao {
     def selectForPage(params: UserQueryCondition, sort: String = "userid", dir: String = "asc") = {
+      Logger.debug(from(SystemManage.users)(
+        u =>
+          where(
+            u.id === params.id.?
+              and (u.userType like params.userType.?)
+              and u.useraccount === params.useraccount.?
+              and u.departid === params.departid.?
+              and u.isValid === params.isValid.?
+              and u.mobilePhone === params.mobilePhone.?
+              and u.idnum === params.idnum.?
+              and u.userorder === params.userorder.?
+              and u.password === params.password.?)
+            select (u)
+      ).statement)
       from(SystemManage.users)(
         u => where(
           u.id === params.id.?

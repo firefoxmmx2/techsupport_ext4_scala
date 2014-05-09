@@ -7,6 +7,7 @@ import models.Menu
 import util.Page
 import models.Role
 import org.apache.commons.lang3.StringUtils
+import util.Utils
 
 /**
  * Created by hooxin on 14-3-10.
@@ -77,8 +78,8 @@ trait MenuServiceComponentImpl extends MenuServiceComponent {
 
     def insert(e: Menu): Menu = inTransaction(menuDao.insert(e))
 
-    def getUserMenus(userid: Long, parentmenucode: String,systemcode:Option[String]=None): List[Menu] = inTransaction(
-      menuDao.getUserMenus(userid,parentmenucode,systemcode)
+    def getUserMenus(userid: Long, parentmenucode: String, systemcode: Option[String] = None): List[Menu] = inTransaction(
+      menuDao.getUserMenus(userid, parentmenucode, systemcode)
     )
   }
 
@@ -147,7 +148,8 @@ trait UserServiceComponentImpl extends UserServiceComponent {
       require(StringUtils.isNotEmpty(useraccount))
       require(StringUtils.isNotEmpty(password))
 
-      val users = userDao.list(UserQueryCondition(useraccount = Option(useraccount), password = Option(password)))
+
+      val users = userDao.list(UserQueryCondition(useraccount = Some(useraccount), password = Some(Utils.md5(password))))
       if (users.size > 0)
         users(0)
       else
