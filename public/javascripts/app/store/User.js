@@ -10,7 +10,8 @@ Ext.define("Techsupport.store.User", {
         method: "GET",
         reader: {
             type: "json",
-            root: "data"
+            root: "datas",
+            totalProperty: 'total'
         }
     }
 })

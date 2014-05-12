@@ -1,7 +1,7 @@
 Ext.application({
     name: 'Techsupport',
     appFolder: 'assets/javascripts/app',
-    controllers: ["sysadmin.Login", "Main", "sysadmin.SystemMenu"],
+    controllers: ["sysadmin.Login", "Main", "sysadmin.SystemMenu","sysadmin.User"],
     refs: [
         {ref: 'viewport', selector: 'viewport'}
     ],

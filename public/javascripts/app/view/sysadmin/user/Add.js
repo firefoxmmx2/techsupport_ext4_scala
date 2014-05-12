@@ -5,6 +5,7 @@ Ext.define('Techsupport.view.sysadmin.user.Add', {
     extend: 'Ext.window.Window',
     title: '添加用户',
     layout: 'form',
+    alias:'widget.user.add',
     defaults: {
         xtype: 'textfield'
     },

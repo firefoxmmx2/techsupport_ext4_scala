@@ -25,11 +25,13 @@ Ext.define('Techsupport.controller.sysadmin.SystemMenu', {
                                                     this.currentMenucode = record.raw.id;
                                                     this.currentSystemcode = record.raw.systemcode;
 //                                                    打开对应组件内容在tab容器里
-                                                    me.getApplication().getViewport().query('panel > tabpanel').map(function (tp) {
-                                                        tp.add({title: '用户列表', items: [
-                                                            {xtype: 'user.List'}
-                                                        ]});
-                                                    });
+                                                    if (record.raw.id != "0")
+                                                        me.getApplication().getViewport().query('panel > tabpanel').map(function (tp) {
+                                                            tp.add({id:record.raw.id,title: record.raw.text, items: [
+                                                                {xtype: 'user.list'}
+                                                            ]});
+                                                            tp.setActiveTab(record.raw.id);
+                                                        });
                                                 }
                                             },
                                             beforeload: {
