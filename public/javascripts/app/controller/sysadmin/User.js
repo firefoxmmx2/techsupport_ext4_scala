@@ -12,14 +12,8 @@ Ext.define('Techsupport.controller.sysadmin.User', {
         this.control({
             'gridpanel': {
                 afterrender: function (g, eOpts) {
-                    var dockedHeight = g.getDockedItems().map(function (x) {
-                        return x.getHeight();
-                    }).reduce(function (x, y) {
-                        return x + y;
-                    });
-
-                    g.setHeight(g.ownerCt.ownerCt.body.getHeight()
-                        - dockedHeight - g.getEl().getMargin('tb'));
+                    g.setHeight(g.ownerCt.ownerCt.body.getHeight() -
+                        g.ownerCt.bodyPadding * 2 - g.getEl().getMargin('tb'));
                 }
             }
         });
