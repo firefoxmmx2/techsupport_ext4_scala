@@ -89,8 +89,10 @@ object User extends Controller {
 
   def list = Action {
     implicit request =>
-      var pageno: Int = 1
-      var limit: Int = 20
+      val pageno: Int = request.getQueryString("page").getOrElse("1").toInt
+      val limit = request.getQueryString("limit").getOrElse("20").toInt
+
+      log.debug("=" * 13 + " pageno = " + pageno + " ,limit = " + limit + "=" * 13)
       userQueryForm.bindFromRequest().fold(
         hasErrors => {
           BadRequest
@@ -134,7 +136,7 @@ object User extends Controller {
     }
   }
 
-  def update(id:Long) = Action {
+  def update(id: Long) = Action {
     implicit request =>
       userForm.bindFromRequest().fold(
         hasError => {

@@ -119,20 +119,6 @@ trait UserDaoComponentImpl extends UserDaoComponent {
 
   class UserDaoImpl extends UserDao {
     def selectForPage(params: UserQueryCondition, sort: String = "userid", dir: String = "asc") = {
-      Logger.debug(from(SystemManage.users)(
-        u =>
-          where(
-            u.id === params.id.?
-              and (u.userType like params.userType.?)
-              and u.useraccount === params.useraccount.?
-              and u.departid === params.departid.?
-              and u.isValid === params.isValid.?
-              and u.mobilePhone === params.mobilePhone.?
-              and u.idnum === params.idnum.?
-              and u.userorder === params.userorder.?
-              and u.password === params.password.?)
-            select (u)
-      ).statement)
       from(SystemManage.users)(
         u => where(
           u.id === params.id.?
@@ -164,6 +150,8 @@ trait UserDaoComponentImpl extends UserDaoComponent {
       if (page.total == 0)
         page
       else {
+        Logger.debug("="*13 + " user dao page "+"[page.start]=["+page.start+"],[page.limit]=["+page.limit+"]"+ "="*13 )
+        Logger.debug("="*13 + selectForPage(params, sort, dir).page(page.start, page.limit).statement + "="*13)
         val datas = selectForPage(params, sort, dir).page(page.start, page.limit).toList
         page.copy(datas = datas)
       }

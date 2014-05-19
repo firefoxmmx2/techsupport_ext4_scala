@@ -6,7 +6,7 @@ Ext.define('Techsupport.view.sysadmin.user.List', {
     alias: 'widget.user.list',
     store: 'User',
     loadMask: true,
-    height:'100%',
+    height: '100%',
     columns: [
         {header: 'ID', dataIndex: 'id', sortable: false},
         {header: '帐号', dataIndex: 'useraccount', sortable: false},
@@ -41,6 +41,6 @@ Ext.define('Techsupport.view.sysadmin.user.List', {
         {xtype: 'pagingtoolbar',
             store: 'User',
             dock: 'bottom',
-            displayInfo: true}
+            pageSize: 10}
     ]
 });
