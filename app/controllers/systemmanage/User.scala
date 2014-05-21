@@ -92,6 +92,7 @@ object User extends Controller {
       val pageno: Int = request.getQueryString("page").getOrElse("1").toInt
       val limit = request.getQueryString("limit").getOrElse("20").toInt
 
+      log.debug("="*13+request.getQueryString("useraccount")+"="*13)
       log.debug("=" * 13 + " pageno = " + pageno + " ,limit = " + limit + "=" * 13)
       userQueryForm.bindFromRequest().fold(
         hasErrors => {
@@ -99,6 +100,7 @@ object User extends Controller {
         },
         uq => {
           try {
+            log.debug("="*13+" uq = "+uq+"="*13)
             val page = userService.page(pageno, limit, uq, "", "")
             Ok(Json.generate(Map("result" -> 0,
               "message" -> "",

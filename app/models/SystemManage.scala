@@ -114,7 +114,11 @@ case class UserQueryCondition(
                                userorder: Option[Int] = None,
                                isValid: Option[String] = None,
                                userType: Option[String] = None,
-                               email: Option[String] = None) extends QueryCondition
+                               email: Option[String] = None) extends QueryCondition {
+  override def toString: String = "[id:" + id + ",departid:" + departid + ",useraccount:" + useraccount + "," +
+    "password:" + password + ",idnum:" + idnum + ",mobilePhone:" + mobilePhone + ",userorder:" + userorder + "," +
+    "isValid:" + isValid + ",userType:" + userType + ",email:" + email + "]";
+}
 
 /**
  * 角色

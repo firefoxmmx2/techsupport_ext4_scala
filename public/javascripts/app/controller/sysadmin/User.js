@@ -5,6 +5,9 @@ Ext.define('Techsupport.controller.sysadmin.User', {
     extend: 'Ext.app.Controller',
     views: ['sysadmin.user.Add', 'sysadmin.user.List'],
     stores: ['User', 'YN'],
+    refs:[
+        {ref:'queryForm',selector:'gridpanel toolbar[dock=top] form'}
+    ],
     init: function () {
         this.control({
             'gridpanel': {
@@ -23,6 +26,25 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                     g.getStore().pageSize = pagesize;
                     g.getStore().trailingBufferZone = pagesize;
                     g.getStore().getProxy().setExtraParam('limit', pagesize);
+                }
+            },
+            'gridpanel button[action=add]': {
+//                添加按钮
+                click: function () {
+
+                }
+            },
+            'gridpanel button[action=remove]': {
+//                删除按钮
+                click: function () {
+                }
+            },
+            'gridpanel button[action=query]': {
+//                查询按钮
+                click: function () {
+                    this.getUserStore().load({
+                        params: this.getQueryForm().getForm().getValues()
+                    });
                 }
             }
         });
