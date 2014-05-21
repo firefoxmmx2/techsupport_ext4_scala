@@ -9,26 +9,17 @@ Ext.define('Techsupport.controller.sysadmin.User', {
         this.control({
             'gridpanel': {
                 afterrender: function (g, eOpts) {
-                    g.setHeight(g.ownerCt.ownerCt.body.getHeight() -
-                        g.ownerCt.bodyPadding * 2 - g.getEl().getMargin('tb'));
+                    var gridHeight = g.ownerCt.ownerCt.body.getHeight() -
+                        g.ownerCt.bodyPadding * 2 - g.getEl().getMargin('tb');
+                    g.setHeight(gridHeight);
 
-                    var dockedItemsHeight = g.getDockedItems().filter(function (x) {
-                        if (x.id.indexOf("headerHeight") == -1)
-                            return x;
-                    }).map(function (x) {
+                    var dockedItemsHeight = g.getDockedItems("[id!=headercontainer]").map(function (x) {
                         return x.getHeight();
                     }).reduce(function (x, y) {
                         return x + y;
                     });
-                    alert(dockedItemsHeight)
-                    var headerHeight = g.getDockedItems('[id*=headercontainer]').map(function (x) {
-                        return x.getHeight();
-                    }).reduce(function (x, y) {
-                        return x + y;
-                    }, 0);
-                    alert(g.getHeight())
-                    var pagesize = (g.getHeight() - dockedItemsHeight) / headerHeight;
-                    alert("pagesize = " + pagesize + ", g.getHeight() - dockedItemsHeight  = " + (g.getHeight() - dockedItemsHeight));
+                    var headerHeight = g.headerCt.down('[id*=gridcolumn]').getHeight();
+                    var pagesize = Math.floor((gridHeight - dockedItemsHeight) / headerHeight);
                     g.getStore().pageSize = pagesize;
                     g.getStore().trailingBufferZone = pagesize;
                     g.getStore().getProxy().setExtraParam('limit', pagesize);
