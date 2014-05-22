@@ -26,6 +26,10 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                     g.getStore().pageSize = pagesize;
                     g.getStore().trailingBufferZone = pagesize;
                     g.getStore().getProxy().setExtraParam('limit', pagesize);
+                },
+                render: function (g) {
+                    g.getStore().clear();
+
                 }
             },
             'gridpanel button[action=add]': {
