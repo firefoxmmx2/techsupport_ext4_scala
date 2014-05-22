@@ -7,18 +7,23 @@ Ext.define('Techsupport.view.sysadmin.user.List', {
     store: 'User',
     loadMask: true,
     height: '100%',
-    columns: [
-        {header: 'ID', dataIndex: 'id', sortable: false},
-        {header: '帐号', dataIndex: 'useraccount', sortable: false},
-        {header: '姓名', dataIndex: 'username', sortable: false},
-        {header: '密码', dataIndex: 'password', sortable: false},
-        {header: '身份证', dataIndex: 'idnum', sortable: false},
-        {header: '移动电话', dataIndex: 'mobilePhone', sortable: false},
-        {header: '序号', dataIndex: 'userorder', sortable: false},
-        {header: '是否有效', dataIndex: 'isVaild', sortable: false},
-        {header: '用户类别', dataIndex: 'userType', sortable: false},
-        {header: '邮箱', dataIndex: 'email', sortable: false}
-    ],
+    columns: {
+        items: [
+            {text: 'ID', dataIndex: 'id', sortable: false},
+            {text: '帐号', dataIndex: 'useraccount', sortable: false},
+            {text: '姓名', dataIndex: 'username', sortable: false},
+            {text: '密码', dataIndex: 'password', sortable: false},
+            {text: '身份证', dataIndex: 'idnum', sortable: false},
+            {text: '移动电话', dataIndex: 'mobilePhone', sortable: false},
+            {text: '序号', dataIndex: 'userorder', sortable: false},
+            {text: '是否有效', dataIndex: 'isVaild', sortable: false},
+            {text: '用户类别', dataIndex: 'userType', sortable: false},
+            {text: '邮箱', dataIndex: 'email', sortable: false}
+        ],
+        defaults: {
+            flex: 1
+        }
+    },
     dockedItems: [
         {xtype: 'toolbar', dock: 'top', ui: 'footer', items: [
             {text: '添加', xtype: 'button', action: 'add'} ,
@@ -30,7 +35,7 @@ Ext.define('Techsupport.view.sysadmin.user.List', {
                 {xtype: 'textfield', name: 'useraccount', fieldLabel: '帐号'},
                 {xtype: 'textfield', name: "username", fieldLabel: '用户姓名'},
                 {xtype: 'combobox',
-                    name:'isValid',
+                    name: 'isValid',
                     store: 'YN',
                     queryMode: 'local',
                     displayField: 'text',

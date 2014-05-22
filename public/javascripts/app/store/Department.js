@@ -3,14 +3,13 @@
  */
 Ext.define("Techsupport.store.DepartmentStore", {
     extend: "Ext.data.Store",
-    model:"Techsupport.model.Department",
-    proxy:{
-        type:"ajax",
-        url:"/api/departments.json",
-        method:"GET",
-        reader:{
-            type:"json",
-            root:"data"
+    model: "Techsupport.model.Department",
+    proxy: {
+        type: "rest",
+        url:'/api/departments',
+        reader: {
+            type: "json",
+            root: "data"
         }
     }
 })

@@ -5,12 +5,13 @@ Ext.define("Techsupport.store.SystemStore", {
     extend: "Ext.data.Store",
     model: "Techsupport.model.System",
     proxy: {
-        type: "ajax",
-        method: "GET",
-        url: "/api/systems.json",
+        type: "rest",
+        url: "/api/systems",
         reader: {
             type: "json",
-            root: "data"
+            root: "data",
+            totalProperty: 'total',
+            successProperty: 'success'
         }
     }
 })

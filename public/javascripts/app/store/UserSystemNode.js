@@ -3,14 +3,15 @@
  */
 Ext.define('Techsupport.store.UserSystemNode', {
     extend: "Ext.data.Store",
-    model:"Techsupport.model.System",
+    model: "Techsupport.model.System",
     proxy: {
         type: 'ajax',
         method: 'GET',
-        url: "/api/systems/userSystemNode.json",
+        url: "/api/systems/userSystemNode",
         reader: {
             type: "json",
-            root: "systems"
+            root: "systems",
+            successProperty: 'success'
         }
     }
 })

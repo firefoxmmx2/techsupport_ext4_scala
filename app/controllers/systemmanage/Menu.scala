@@ -54,6 +54,7 @@ object Menu extends Controller {
           val userInfo = Cache.get(req.session.get("authCode").getOrElse("")).getOrElse(None)
           if (userInfo == null || userInfo == None)
             Ok(Json.generate(Map("result" -> -2,
+              "success" -> false,
               "message" -> "未登录或者登录已过期")))
           else {
             val userInfo_ = userInfo.asInstanceOf[Map[String, Any]]
@@ -72,7 +73,9 @@ object Menu extends Controller {
                 "systemcode"->m.systemcode)
             })
             Logger.debug("封装结束")
-            Ok(Json.generate(Map("result" -> 0,
+            Ok(Json.generate(Map(
+              "success" -> true,
+              "result" -> 0,
               "message" -> "",
               "root" -> root)))
           }

@@ -5,13 +5,13 @@ Ext.define("Techsupport.store.User", {
     extend: "Ext.data.Store",
     model: "Techsupport.model.User",
     proxy: {
-        type: "ajax",
-        url: "/api/users.json",
-        method: "GET",
+        type: "rest",
+        url: "/api/users",
         reader: {
             type: "json",
             root: "datas",
-            totalProperty: 'total'
+            totalProperty: 'total',
+            successProperty: 'success'
         }
     }
 })

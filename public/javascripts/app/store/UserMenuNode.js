@@ -13,10 +13,11 @@ Ext.define('Techsupport.store.UserMenuNode', {
     proxy: {
         type: 'ajax',
         method: 'GET',
-        url: "/api/menus/userMenuNode.json",
+        url: "/api/menus/userMenuNode",
         reader: {
             type: "json",
-            root: "root"
+            root: "root",
+            successProperty: 'success'
         }
     }
 })
