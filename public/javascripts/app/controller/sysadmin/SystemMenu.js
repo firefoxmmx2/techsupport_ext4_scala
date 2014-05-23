@@ -28,7 +28,7 @@ Ext.define('Techsupport.controller.sysadmin.SystemMenu', {
                                                     if (record.raw.id != "0")
                                                         me.getApplication().getViewport().query('panel > tabpanel').map(function (tp) {
                                                             tp.add({id:record.raw.id,title: record.raw.text, items: [
-                                                                {xtype: 'user.list'}
+                                                                {xtype: 'usermanage'}
                                                             ]});
                                                             tp.setActiveTab(record.raw.id);
                                                         });
