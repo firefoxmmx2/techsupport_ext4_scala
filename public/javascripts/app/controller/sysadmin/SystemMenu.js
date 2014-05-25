@@ -27,8 +27,8 @@ Ext.define('Techsupport.controller.sysadmin.SystemMenu', {
 //                                                    打开对应组件内容在tab容器里
                                                     if (record.raw.id != "0")
                                                         me.getApplication().getViewport().query('panel > tabpanel').map(function (tp) {
-                                                            tp.add({id:record.raw.id,title: record.raw.text, items: [
-                                                                {xtype: 'usermanage'}
+                                                            tp.add({id:record.raw.id,title: record.raw.text,layout:'fit', items: [
+                                                                {xtype:'usermanage'}
                                                             ]});
                                                             tp.setActiveTab(record.raw.id);
                                                         });
@@ -52,24 +52,18 @@ Ext.define('Techsupport.controller.sysadmin.SystemMenu', {
                                                     this.currentMenucode = n.raw.id;
                                                     this.currentSystemcode = n.raw.systemcode;
                                                 }
+                                            },
+                                            afterrender: {
+                                                fn: function (t, opts) {
+                                                    t.getRootNode().expand();
+                                                }
                                             }
                                         }
                                     }
                                 ]});
 
                             });
-                        }})
-
-//                    p.removeAll();
-//                    p.items = systems.map(function ( v) {
-//                        return {
-//                            title: v.systemname,
-//                            items: [
-//                                {xtype: 'treepanel', store: menuStore }
-//                            ]
-//                        }
-//                    });
-
+                        }});
                 }
             }
         })

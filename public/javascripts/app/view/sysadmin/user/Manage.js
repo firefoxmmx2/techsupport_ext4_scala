@@ -4,11 +4,14 @@
 Ext.define('Techsupport.view.sysadmin.user.Manage', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.usermanage',
-    layout: 'hbox',
-    height:'100%',
+    layout: {
+        type: 'border',
+        align: 'stretch',
+        pack: 'start'
+    },
     border: false,
     items: [
-        {xtype: 'panel',layout:'fit', width: '100%', border: false, defaults: {bodyBorder: false}, items: [
+        {xtype: 'panel', region: 'center', border: false, layout: 'fit', items: [
             {xtype: 'userlist'}
         ],
             dockedItems: [
@@ -29,10 +32,12 @@ Ext.define('Techsupport.view.sysadmin.user.Manage', {
                             valueField: 'value',
                             fieldLabel: '是否可用',
                             editable: false
-                        }
+                        },
+                        {xtype: 'hidden', name: 'departid', fieldLabel: '机构ID'}
                     ]} ,
                     {xtype: 'button', text: '查询', action: 'query'}
                 ]}
-            ]}
+            ]},
+        {xtype: 'departmenttree', region: 'west', width: '20%', split: true}
     ]
 });

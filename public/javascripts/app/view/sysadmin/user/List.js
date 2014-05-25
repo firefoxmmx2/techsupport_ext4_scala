@@ -6,7 +6,6 @@ Ext.define('Techsupport.view.sysadmin.user.List', {
     alias: 'widget.userlist',
     store: 'User',
     loadMask: true,
-    height: '100%',
     columns: {
         items: [
             {text: 'ID', dataIndex: 'id', sortable: false},

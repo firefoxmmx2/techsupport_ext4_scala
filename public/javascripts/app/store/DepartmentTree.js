@@ -8,6 +8,7 @@ Ext.define('Techsupport.store.DepartmentTree', {
     root: {
         id: '0',
         text: '根节点',
+        departcode: '',
         expanded: false
     },
     proxy: {
