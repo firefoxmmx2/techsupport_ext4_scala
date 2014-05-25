@@ -79,7 +79,7 @@ object Department extends Controller {
 
   }
 
-  def update(id:Long) = Action {
+  def update(id: Long) = Action {
     implicit request =>
       updateForm.bindFromRequest().fold(errors => {
         BadRequest
@@ -137,8 +137,9 @@ object Department extends Controller {
           try {
             val page = departmentService.page(pageno, limit, dq, "", "")
             Ok(Json.generate(Map("result" -> 0,
+              "success" -> true,
               "message" -> "",
-              "datas" -> page.datas,
+              "data" -> page.data,
               "total" -> page.total,
               "start" -> page.pageno,
               "limit" -> page.pagesize))).as(JSON)
@@ -146,17 +147,55 @@ object Department extends Controller {
             case e =>
               log.error(e.toString, e.fillInStackTrace())
               Ok(Json.generate(Map("result" -> -1,
+                "success" -> false,
                 "message" -> "机构列表查询错误",
-                "datas" -> List(),
+                "data" -> List(),
                 "total" -> 0,
                 "start" -> pageno,
                 "limit" -> limit,
-                "1"->"1"
+                "1" -> "1"
               ))).as(JSON)
           }
 
         }
 
       )
+  }
+
+  /**
+   * 机构树节点
+   * @return
+   */
+  def departmentTreeNode = Action {
+    implicit request =>
+      listParamForm.bindFromRequest().fold(hasErrors =>
+        BadRequest,
+        dq => {
+          try {
+            val departmentList = departmentService.list(dq)
+            val nodeList = departmentList.map {
+              x =>
+                val leaf = if (x.isLeaf == "Y") true else false
+                Map("id" -> x.id,
+                  "text" -> x.departname,
+                  "parentId" -> x.parentDepartid,
+                  "leaf" -> leaf,
+                  "departcode" -> x.departcode
+                )
+            }
+            Ok(Json.generate(Map("result" -> 0,
+              "success" -> true,
+              "message" -> "",
+              "data" -> nodeList))).as(JSON)
+          } catch {
+            case e =>
+              log.error(e.toString, e.fillInStackTrace())
+              Ok(Json.generate(Map("result" -> -1,
+                "success" -> false,
+                "message" -> "机构树查询错误",
+                "data" -> ""
+              ))).as(JSON)
+          }
+        })
   }
 }

@@ -52,7 +52,7 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                     tree.cdata.departid = n.raw.id;
                 },
                 render: function (t) {
-                    t.cdata = {departid: "", departcode: ""};
+                    t.cdata = {departid: 0, departcode: ""};
                 },
                 afterrender: function (t, opts) {
                     t.getRootNode().expand();

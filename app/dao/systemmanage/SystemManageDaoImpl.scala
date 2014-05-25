@@ -25,7 +25,8 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
         and d.departcode === params.departcode.?
         and (d.departname like params.departname.?)
         and (d.departfullcode like params.departfullcode.?)
-        and d.departlevel === params.departlevel.?)
+        and d.departlevel === params.departlevel.?
+        and d.parentDepartid === params.parentDepartid.?)
         select (d)
         orderBy (if (sort == "departid") if (dir == "asc") d.id asc else d.id desc else d.id asc)
     )
@@ -47,7 +48,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
         page
       else {
         val datas = selectForListQuery(params, sort, dir).page(page.start, page.limit).toList
-        page.copy(datas = datas)
+        page.copy(data = datas)
       }
     }
 
@@ -150,10 +151,10 @@ trait UserDaoComponentImpl extends UserDaoComponent {
       if (page.total == 0)
         page
       else {
-        Logger.debug("="*13 + " user dao page "+"[page.start]=["+page.start+"],[page.limit]=["+page.limit+"]"+ "="*13 )
-        Logger.debug("="*13 + selectForPage(params, sort, dir).page(page.start, page.limit).statement + "="*13)
+        Logger.debug("=" * 13 + " user dao page " + "[page.start]=[" + page.start + "],[page.limit]=[" + page.limit + "]" + "=" * 13)
+        Logger.debug("=" * 13 + selectForPage(params, sort, dir).page(page.start, page.limit).statement + "=" * 13)
         val datas = selectForPage(params, sort, dir).page(page.start, page.limit).toList
-        page.copy(datas = datas)
+        page.copy(data = datas)
       }
     }
 
@@ -267,7 +268,7 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
         page
       else {
         val datas = selectForPage(params, sort, dir).page(page.start, page.limit).toList
-        page.copy(datas = datas)
+        page.copy(data = datas)
       }
     }
 
@@ -368,7 +369,7 @@ trait RoleDaoComponentImpl extends RoleDaoComponent {
       if (page.total == 0)
         page
       else
-        page.copy(datas = selectForPage(params, sort, dir).page(page.start, page.limit).toList)
+        page.copy(data = selectForPage(params, sort, dir).page(page.start, page.limit).toList)
     }
 
     /**
@@ -485,7 +486,7 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
       if (page.total == 0)
         page
       else
-        page.copy(datas = selectForPage(params, sort, dir).page(page.start, page.limit).toList)
+        page.copy(data = selectForPage(params, sort, dir).page(page.start, page.limit).toList)
     }
 
     /**
@@ -582,7 +583,7 @@ trait GlobalParamDaoComponentImpl extends GlobalParamDaoComponent {
       if (page.total == 0)
         page
       else
-        page.copy(datas = selectForPage(params).page(page.start, page.limit).toList)
+        page.copy(data = selectForPage(params).page(page.start, page.limit).toList)
     }
 
     /**
@@ -681,7 +682,7 @@ trait UserRoleDaoComponentImpl extends UserRoleDaoComponent {
       if (pager.total == 0)
         pager
       else
-        pager.copy(datas = selectForPage(params, sort, dir).page(pager.start, pager.limit).toList)
+        pager.copy(data = selectForPage(params, sort, dir).page(pager.start, pager.limit).toList)
     }
 
     /**
@@ -783,7 +784,7 @@ trait RoleMenuDaoComponentImpl extends RoleMenuDaoComponent {
       if (pager.total == 0)
         pager
       else
-        pager.copy(datas = selectForPage(params, sort, dir).page(pager.start, pager.limit).toList)
+        pager.copy(data = selectForPage(params, sort, dir).page(pager.start, pager.limit).toList)
     }
 
     /**

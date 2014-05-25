@@ -104,7 +104,7 @@ object User extends Controller {
             val page = userService.page(pageno, limit, uq, "", "")
             Ok(Json.generate(Map("result" -> 0,
               "message" -> "",
-              "datas" -> page.datas,
+              "datas" -> page.data,
               "total" -> page.total,
               "start" -> pageno,
               "limit" -> limit))).as(JSON)
