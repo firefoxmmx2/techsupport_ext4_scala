@@ -27,9 +27,15 @@ Ext.define('Techsupport.controller.sysadmin.SystemMenu', {
 //                                                    打开对应组件内容在tab容器里
                                                     if (record.raw.id != "0")
                                                         me.getApplication().getViewport().query('panel > tabpanel').map(function (tp) {
-                                                            tp.add({id:record.raw.id,title: record.raw.text,layout:'fit', items: [
-                                                                {xtype:'usermanage'}
-                                                            ]});
+                                                            if (record.raw.funcentry && record.raw.funcentry.length > 3 &&
+                                                                record.raw.funcentry.indexOf(".jsp") == -1
+                                                                && record.raw.funcentry.indexOf(".action") == -1) {
+//                                                                alert(record.raw.funcentry);
+                                                                tp.add({id: record.raw.id, title: record.raw.text, layout: 'fit', items: [
+                                                                    {xtype: record.raw.funcentry}
+                                                                ]});
+                                                            }
+
                                                             tp.setActiveTab(record.raw.id);
                                                         });
                                                 }

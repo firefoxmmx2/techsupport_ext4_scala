@@ -7,7 +7,7 @@ Ext.define('Techsupport.controller.sysadmin.User', {
         'sysadmin.department.DepartmentTree'],
     stores: ['User', 'YN', 'DepartmentTree'],
     refs: [
-        {ref: 'queryForm', selector: 'panel toolbar[dock=top] form'},
+        {ref: 'queryForm', selector: 'panel buttongroup[dock=top] form'},
         {ref: 'departmentTree', selector: 'departmenttree'}
     ],
     init: function () {

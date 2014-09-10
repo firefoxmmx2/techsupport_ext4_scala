@@ -1,9 +1,6 @@
-/**
- * Created by hooxin on 14-5-23.
- */
-Ext.define('Techsupport.view.sysadmin.user.Manage', {
+Ext.define('Techsupport.view.sysadmin.Department.Manage', {
     extend: 'Ext.panel.Panel',
-    alias: 'widget.usermanage',
+    alias: 'widget.departmentManage',
     layout: {
         type: 'border',
         align: 'stretch',
@@ -13,7 +10,7 @@ Ext.define('Techsupport.view.sysadmin.user.Manage', {
     items: [
         {xtype: 'departmenttree', region: 'west', width: '20%', split: true},
         {xtype: 'panel', region: 'center', border: false, layout: 'fit', items: [
-            {xtype: 'userlist'}
+            {xtype: 'department.list'}
         ],
             dockedItems: [
                 {xtype: 'toolbar', dock: 'top', ui: 'footer', items: [
@@ -21,23 +18,26 @@ Ext.define('Techsupport.view.sysadmin.user.Manage', {
                     '-',
                     {xtype: 'button', text: '删除', action: 'remove'}
                 ]},
-                {xtype: 'buttongroup', dock: 'top',items: [
-                    {xtype: 'form', layout: 'column', defaults: {margin: {top: 2, bottom: 2, left: 0, right: 20}}, border: false, items: [
-                        {xtype: 'textfield', name: 'useraccount', fieldLabel: '帐号'},
-                        {xtype: 'textfield', name: "username", fieldLabel: '用户姓名'},
+                {xtype: 'buttongroup', dock: 'top', items: [
+                    {xtype: 'form', layout: 'column', defaults: {bodyPadding: 2, margin: {top: 0, bottom: 0, left: 0, right: 20}}, border: false, items: [
+                        {xtype: 'textfield', name: 'departcode', fieldLabel: '机构代码'},
+                        {xtype: 'textfield', name: "departname", fieldLabel: '机构名称'},
                         {xtype: 'combobox',
-                            name: 'isValid',
+                            blank:false,
+                            name: 'isLeaf',
                             store: 'YN',
                             queryMode: 'local',
                             displayField: 'text',
                             valueField: 'value',
-                            fieldLabel: '是否可用',
+                            fieldLabel: '是否有下级',
                             editable: false
-                        },
-                        {xtype: 'hidden', name: 'departid', fieldLabel: '机构ID'}
-                    ]},
-                    {xtype: 'button', text: '查询', action: 'query',margin:{top:2,bottom:2}}
+                        }
+                    ]} ,
+                    {xtype: 'button', text: '查询', action: 'query'}
                 ]}
-            ]}
+            ]
+        }
+
+
     ]
-});
+})
