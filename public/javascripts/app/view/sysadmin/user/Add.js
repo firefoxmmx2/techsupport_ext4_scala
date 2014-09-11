@@ -3,9 +3,9 @@
  */
 Ext.define('Techsupport.view.sysadmin.user.Add', {
     extend: 'Ext.window.Window',
-    title: '添加用户',
+    title: '新增用户',
     layout: 'form',
-    alias:'widget.useradd',
+    alias: 'widget.useradd',
     defaults: {
         xtype: 'textfield'
     },
@@ -18,9 +18,13 @@ Ext.define('Techsupport.view.sysadmin.user.Add', {
             inputType: 'password', allowBlank: false, blankText: '不能为空',
             maxLength: 16, maxLengthText: '最长16位'},
         {fieldLabel: '用户名称', name: 'username', allowBlank: false, blankText: '不能为空'},
-        {fieldLabel: '身份证', name: 'idnum', allowBlank: false, blankText: '不能为空'},
+        {fieldLabel: '身份证', name: 'idnum'},
         {fieldLabel: '邮箱', name: 'email'},
         {fieldLabel: '手机', name: 'mobilePhone'},
         {fieldLabel: '序号', name: 'userorder'}
+    ],
+    buttons: [
+        {xtype: 'button', text: '确定', action: 'add'},
+        {xtype: 'button', text: '取消', action: 'cancel'}
     ]
 });

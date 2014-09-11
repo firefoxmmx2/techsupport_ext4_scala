@@ -27,7 +27,7 @@ Ext.define('Techsupport.view.sysadmin.user.Manage', {
                         {xtype: 'textfield', name: "username", fieldLabel: '用户姓名'},
                         {xtype: 'combobox',
                             name: 'isValid',
-                            store: 'YN',
+                            store: 'OneZero',
                             queryMode: 'local',
                             displayField: 'text',
                             valueField: 'value',

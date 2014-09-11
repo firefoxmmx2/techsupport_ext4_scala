@@ -26,6 +26,7 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
                     var me = this;
                     gp.query('textfield').forEach(function (el, idx, items) {
                         el.on('specialkey', function (o, e) {
+                            alert(e.ENTER == e.getKey());
                             if (e.ENTER == e.getKey()) {
                                 this.login();
                             }

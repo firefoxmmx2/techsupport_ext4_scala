@@ -5,7 +5,7 @@ Ext.define('Techsupport.controller.sysadmin.User', {
     extend: 'Ext.app.Controller',
     views: ['sysadmin.user.Add', 'sysadmin.user.List', 'sysadmin.user.Manage',
         'sysadmin.department.DepartmentTree'],
-    stores: ['User', 'YN', 'DepartmentTree'],
+    stores: ['User', 'OneZero', 'DepartmentTree'],
     refs: [
         {ref: 'queryForm', selector: 'panel buttongroup[dock=top] form'},
         {ref: 'departmentTree', selector: 'departmenttree'}

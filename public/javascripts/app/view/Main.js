@@ -16,7 +16,7 @@ Ext.define('Techsupport.view.Main', {
             closable: true
         }, items: [
             {
-                title: 'Tab 1',
+                title: '首页',
                 html: 'Free-standing tab panel',
                 layout:'fit',
                 closable: false

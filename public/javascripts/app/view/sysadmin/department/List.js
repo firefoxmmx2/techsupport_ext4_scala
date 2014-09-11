@@ -27,6 +27,17 @@ Ext.define('Techsupport.view.sysadmin.department.List', {
         {xtype: 'pagingtoolbar',
             store: 'Department',
             dock: 'bottom',
-            pageSize: 10}
+            pageSize: 10,
+            listeners: {
+                afterrender: function (p, eOpts) {
+                    p.query('button:last').map(function (b) {
+                        p.remove(b);
+                    });
+                    p.query('tbseparator:last').map(function (s) {
+                        p.remove(s);
+                    })
+                }
+            }
+        }
     ]
 });

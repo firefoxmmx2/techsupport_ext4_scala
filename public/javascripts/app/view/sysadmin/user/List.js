@@ -27,6 +27,17 @@ Ext.define('Techsupport.view.sysadmin.user.List', {
         {xtype: 'pagingtoolbar',
             store: 'User',
             dock: 'bottom',
-            pageSize: 10}
+            pageSize: 10,
+            listeners:{
+                afterrender: function (p, eOpts) {
+                    p.query('button:last').map(function (b) {
+                        p.remove(b);
+                    });
+                    p.query('tbseparator:last').map(function (s) {
+                        p.remove(s);
+                    })
+                }
+            }
+        }
     ]
 });

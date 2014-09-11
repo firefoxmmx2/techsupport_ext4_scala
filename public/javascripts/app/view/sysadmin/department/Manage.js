@@ -1,4 +1,4 @@
-Ext.define('Techsupport.view.sysadmin.Department.Manage', {
+Ext.define('Techsupport.view.sysadmin.department.Manage', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.departmentManage',
     layout: {
