@@ -27,7 +27,21 @@ Ext.define('Techsupport.controller.sysadmin.User', {
             'usermanage button[action=add]': {
 //                添加按钮
                 click: function () {
-
+                    var _departmentTree = this.getDepartmentTree();
+                    var _window  = Ext.create('Techsupport.view.sysadmin.user.Add');
+                    _window.query('form:first').map(function (f) {
+                        if (_departmentTree.cdata.departid && _departmentTree.cdata.departid != 0) {
+                            f.getForm().setValues({
+                                departid: _departmentTree.cdata.departid,
+                                departname: _departmentTree.cdata.departname
+                            });
+                            _window.title += "[" + _departmentTree.cdata.departname + "]";
+                            _window.show();
+                        }
+                        else {
+                            Ext.Msg.alert('提示', '请选择机构');
+                        }
+                    });
                 }
             },
             'usermanage button[action=remove]': {
@@ -45,30 +59,36 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                     });
                 }
             },
-            'departmenttree': {
-                beforeitemexpand: function (n, opts) {
-                    var tree = n.getOwnerTree();
-                    tree.cdata.departcode = n.raw.departcode;
-                    tree.cdata.departid = n.raw.id;
-                },
-                render: function (t) {
-                    t.cdata = {departid: 0, departcode: ""};
-                },
-                afterrender: function (t, opts) {
-                    t.getRootNode().expand();
-                },
-                beforeload: function (store, operation, opts) {
-                    var tree = store.getRootNode().getOwnerTree();
-                    if (!tree.cdata.departid) {
-                        tree.cdata.departid = tree.getRootNode().id;
-                        tree.cdata.departcode = tree.getRootNode().departcode;
-                    }
-                    store.getProxy().setExtraParam("parentDepartid", tree.cdata.departid);
-                },
-                itemclick: function (v, record, item, index, e, eOpts) {
-                    var tree = v.ownerCt;
-                    tree.cdata.departid = record.raw.id;
-                    tree.cdata.departcode = record.raw.departcode;
+            'useradd button[action=cancel]': {
+                //添加窗口取消按钮
+                click: function (button,evt) {
+                    button.findParentByType('window').close();
+                }
+            },
+            'useradd button[action=enter]':{
+                //添加窗口确认按钮
+                click: function (button,evt) {
+                    var _window=Ext.getCmp(Ext.get(Ext.EventObject.getTarget()).id).findParentByType('window');
+                    _window.query('form:first').map(function (form) {
+                        if(form.getForm().isValid){
+                            form.submit({
+                                url:"/api/users",
+                                method:'POST',
+                                params:form.getForm().getValues(),
+                                waitMsg:'正在添加用户...',
+                                success: function (form, action) {
+                                    //成功
+                                    if(action.result.result == 0){
+                                        _window.close();
+                                    }
+                                },
+                                failure: function (form, action) {
+                                    //失败
+                                    Ext.Msg.alert("错误","错误代码:"+action.result.result+";"+action.result.message);
+                                }
+                            });
+                        }
+                    });
                 }
             }
         });

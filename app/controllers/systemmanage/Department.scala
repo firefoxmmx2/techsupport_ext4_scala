@@ -51,11 +51,13 @@ object Department extends Controller {
           val inserted = departmentService.insert(department)
           Ok(Json.generate(Map("result" -> 0,
             "message" -> "添加成功",
+            "success" -> true,
             "inserted" -> inserted))).as(JSON)
         } catch {
           case e =>
             log.error(e.toString, e.fillInStackTrace())
             Ok(Json.generate(Map("result" -> -1,
+              "success" -> false,
               "message" -> "添加错误"))).as(JSON)
         }
 
@@ -68,11 +70,13 @@ object Department extends Controller {
       try {
         departmentService.deleteById(id)
         Ok(Json.generate(Map("result" -> 0,
+          "success" -> true,
           "message" -> "删除成功"))).as(JSON)
       } catch {
         case e =>
           log.error(e.toString, e.fillInStackTrace())
           val resultMap = Map("result" -> -1,
+            "success" -> false,
             "message" -> "删除错误")
           Ok(Json.generate(resultMap)).as(JSON)
       }
@@ -87,11 +91,13 @@ object Department extends Controller {
         try {
           departmentService.update(department)
           Ok(Json.generate(Map("result" -> 0,
+            "success" -> true,
             "message" -> "修改成功"))).as(JSON)
         } catch {
           case e =>
             log.error(e.toString, e.fillInStackTrace())
             Ok(Json.generate(Map("result" -> -1,
+              "success" -> false,
               "message" -> "修改失败"))).as(JSON)
         }
       })
@@ -101,12 +107,14 @@ object Department extends Controller {
     try {
       val d = departmentService.getById(id)
       Ok(Json.generate(Map("result" -> 0,
+        "success" -> true,
         "message" -> "",
         "department" -> d))).as(JSON)
     } catch {
       case e =>
         log.error(e.toString, e.fillInStackTrace())
         Ok(Json.generate(Map("result" -> -1,
+          "success" -> false,
           "message" -> "获取错误"))).as(JSON)
     }
   }

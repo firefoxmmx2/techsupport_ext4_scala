@@ -36,10 +36,11 @@ object Login extends Controller {
           log.debug("调试登录函数")
 
           val user = userService.getByUseraccountPassword(login.useraccount, login.password)
-          log.debug("="*13+"user = "+user+"="*13)
+          log.debug("=" * 13 + "user = " + user + "=" * 13)
 
           if (user == null)
             Ok(Json.generate(Map("result" -> -3,
+              "success" -> false,
               "message" -> "帐号或者密码错误")))
           else {
             log.debug("存在指定用户")
@@ -48,6 +49,7 @@ object Login extends Controller {
               "username" -> user.username)
             Cache.set(authCode, userInfoMap)
             Ok(Json.generate(Map("result" -> 0,
+              "success" -> true,
               "message" -> "登录成功",
               "authCode" -> authCode,
               "userInfo" -> userInfoMap)))
@@ -78,13 +80,14 @@ object Login extends Controller {
         case Some(code) =>
           if (Cache.get(code) != None)
             Ok(Json.generate(Map("result" -> 0,
+              "success" -> true,
               "message" -> "",
               "authCode" -> code,
               "userInfo" -> Cache.get(code)
             )))
           else
-            Ok(Json.generate(Map("result" -> -2, "message" -> "未登录")))
-        case _ => Ok(Json.generate(Map("result" -> -2, "message" -> "未登录")))
+            Ok(Json.generate(Map("result" -> -2, "message" -> "未登录", "success" -> false)))
+        case _ => Ok(Json.generate(Map("result" -> -2, "message" -> "未登录", "success" -> false)))
       }
 
   }

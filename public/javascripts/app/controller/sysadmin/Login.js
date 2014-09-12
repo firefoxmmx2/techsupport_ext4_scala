@@ -26,7 +26,6 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
                     var me = this;
                     gp.query('textfield').forEach(function (el, idx, items) {
                         el.on('specialkey', function (o, e) {
-                            alert(e.ENTER == e.getKey());
                             if (e.ENTER == e.getKey()) {
                                 this.login();
                             }
@@ -45,8 +44,9 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
             form.submit({
                 url: url,
                 params: form.getForm().getValues(),
-                onSuccess: function (result, request) {
-                    var res = Ext.decode(result.responseText);
+                waitMsg:'正在登录中...',
+                success: function (form, action) {
+                    var res = action.result;
                     if (res.result == 0) {
                         me.getApplication().authCode = res.authCode;
                         me.getApplication().userInfo = res.userInfo;
@@ -55,6 +55,9 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
                     }
                     else
                         Ext.Msg.alert("提示", "登录失败");
+                },
+                failure: function (res) {
+                    alert(2);
                 }
             })
         }

@@ -60,8 +60,8 @@ object Menu extends Controller {
             val userInfo_ = userInfo.asInstanceOf[Map[String, Any]]
             val userid = userInfo_.get("userid").asInstanceOf[Option[Long]].get
             Logger.debug("开始查询用户菜单列表")
-            val menuList = menuService.getUserMenus(userid, query.parentmenucode.get,query.systemcode)
-            Logger.debug("="*13+"menuList = "+menuList+"="*13)
+            val menuList = menuService.getUserMenus(userid, query.parentmenucode.get, query.systemcode)
+            Logger.debug("=" * 13 + "menuList = " + menuList + "=" * 13)
             Logger.debug("开始封装为json")
             val root = menuList.map(m => {
               val leaf = if (m.isleaf == "Y") true else false
@@ -70,7 +70,7 @@ object Menu extends Controller {
                 "funcentry" -> m.funcentry,
                 "leaf" -> leaf,
                 "parentId" -> m.parentmenucode,
-                "systemcode"->m.systemcode)
+                "systemcode" -> m.systemcode)
             })
             Logger.debug("封装结束")
             Ok(Json.generate(Map(

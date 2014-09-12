@@ -36,6 +36,7 @@ object System extends Controller {
           try {
             val insertedSystem = systemService.insert(system)
             Ok(Json.generate(Map("result" -> 0,
+              "success" -> true,
               "message" -> "添加成功",
               "inserted" -> insertedSystem)))
           }
@@ -43,6 +44,7 @@ object System extends Controller {
             case e: Exception =>
               log.error(e.toString, e.fillInStackTrace())
               Ok(Json.generate(Map("result" -> -1,
+                "success" -> false,
                 "message" -> "添加错误")))
           }
 
@@ -55,12 +57,14 @@ object System extends Controller {
       try {
         systemService.deleteById(id)
         Ok(Json.generate(Map("result" -> 0,
+          "success" -> true,
           "message" -> "删除成功")))
       }
       catch {
         case e: Exception =>
           log.error(e.toString, e.fillInStackTrace())
           Ok(Json.generate(Map("result" -> -1,
+            "success" -> false,
             "message" -> "删除发生错误")))
       }
   }
@@ -73,13 +77,15 @@ object System extends Controller {
         val system = systemService.getById(id)
         Ok(Json.generate(Map("result" -> 0,
           "message" -> "",
+          "success" -> true,
           "data" -> system)))
       }
       catch {
         case e: Exception =>
           log.error(e.toString, e.fillInStackTrace())
           Ok(Json.generate(Map("result" -> -1,
-            "message" -> "获取系统发生错误")))
+            "message" -> "获取系统发生错误",
+            "success" -> false)))
       }
   }
 
@@ -106,6 +112,7 @@ object System extends Controller {
           val userInfo = Cache.get(request.session.get("authCode").getOrElse("")).getOrElse(None)
           if (userInfo == null || userInfo == None)
             Ok(Json.generate(Map("result" -> -2,
+              "success" -> false,
               "message" -> "未登录或者登录已过期")))
           else {
             val userInfo_ = userInfo.asInstanceOf[Map[String, Any]]
@@ -116,6 +123,7 @@ object System extends Controller {
             val systems = systemService.getUserSystems(userid)
             Ok(Json.generate(
               Map("result" -> 0,
+                "success" -> true,
                 "message" -> "",
                 "systems" -> systems)
             ))

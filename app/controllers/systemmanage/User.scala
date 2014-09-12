@@ -44,12 +44,14 @@ object User extends Controller {
           try {
             val inserted = userService.insert(u)
             Ok(Json.generate(Map("result" -> 0,
+              "success" -> true,
               "message" -> "添加成功",
               "inserted" -> inserted))).as(JSON)
           } catch {
             case e =>
               log.error(e.toString, e.fillInStackTrace())
               Ok(Json.generate(Map("result" -> -1,
+                "success" -> false,
                 "message" -> "添加错误"))).as(JSON)
           }
 
@@ -62,11 +64,13 @@ object User extends Controller {
       try {
         userService.deleteById(id)
         Ok(Json.generate(Map("result" -> 0,
+          "success" -> true,
           "message" -> "删除成功"))).as(JSON)
       } catch {
         case e =>
           log.error(e.toString, e.fillInStackTrace())
           Ok(Json.generate(Map("result" -> -1,
+            "success" -> false,
             "message" -> "删除错误"))).as(JSON)
       }
 
@@ -92,7 +96,7 @@ object User extends Controller {
       val pageno: Int = request.getQueryString("page").getOrElse("1").toInt
       val limit = request.getQueryString("limit").getOrElse("20").toInt
 
-      log.debug("="*13+request.getQueryString("useraccount")+"="*13)
+      log.debug("=" * 13 + request.getQueryString("useraccount") + "=" * 13)
       log.debug("=" * 13 + " pageno = " + pageno + " ,limit = " + limit + "=" * 13)
       userQueryForm.bindFromRequest().fold(
         hasErrors => {
@@ -100,9 +104,10 @@ object User extends Controller {
         },
         uq => {
           try {
-            log.debug("="*13+" uq = "+uq+"="*13)
+            log.debug("=" * 13 + " uq = " + uq + "=" * 13)
             val page = userService.page(pageno, limit, uq, "", "")
             Ok(Json.generate(Map("result" -> 0,
+              "success" -> true,
               "message" -> "",
               "datas" -> page.data,
               "total" -> page.total,
@@ -113,6 +118,7 @@ object User extends Controller {
             case e =>
               log.error(e.toString, e.fillInStackTrace())
               Ok(Json.generate(Map("result" -> -1,
+                "success" -> false,
                 "message" -> "查询列表错误",
                 "total" -> 0,
                 "datas" -> List(),
@@ -127,6 +133,7 @@ object User extends Controller {
     try {
       val user = userService.getById(id)
       Ok(Json.generate(Map("result" -> 0,
+        "success" -> true,
         "message" -> "",
         "user" -> user))).as(JSON)
     }
@@ -134,6 +141,7 @@ object User extends Controller {
       case e =>
         log.error(e.toString, e.fillInStackTrace())
         Ok(Json.generate(Map("result" -> -1,
+          "success" -> false,
           "message" -> "获取用户发生错误"))).as(JSON)
     }
   }
@@ -148,12 +156,14 @@ object User extends Controller {
           try {
             userService.update(user)
             Ok(Json.generate(Map("result" -> 0,
+              "success" -> true,
               "message" -> "修改成功")))
           }
           catch {
             case e =>
               log.error(e.toString, e.fillInStackTrace())
               Ok(Json.generate(Map("result" -> -1,
+                "success" -> false,
                 "message" -> "修改发生错误")))
           }
         }
