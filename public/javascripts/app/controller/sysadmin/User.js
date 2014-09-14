@@ -68,9 +68,10 @@ Ext.define('Techsupport.controller.sysadmin.User', {
             'useradd button[action=enter]':{
                 //添加窗口确认按钮
                 click: function (button,evt) {
-                    var _window=Ext.getCmp(Ext.get(Ext.EventObject.getTarget()).id).findParentByType('window');
+                    var _window=button.findParentByType('window');
                     _window.query('form:first').map(function (form) {
                         if(form.getForm().isValid){
+
                             form.submit({
                                 url:"/api/users",
                                 method:'POST',
@@ -89,6 +90,12 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                             });
                         }
                     });
+                }
+            },
+            'useradd checkboxgroup':{
+                render: function (cg) {
+
+                    cg.callParent(cg);
                 }
             }
         });

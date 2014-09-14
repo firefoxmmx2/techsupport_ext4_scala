@@ -12,7 +12,9 @@ import models.Role
 /**
  * Created by hooxin on 14-3-10.
  */
-
+/**
+ * 机构服务组件声明
+ */
 trait DepartmentServiceComponent {
   val departmentService: DepartmentService
 
@@ -21,6 +23,9 @@ trait DepartmentServiceComponent {
 
 }
 
+/**
+ * 用户服务组件声明
+ */
 trait UserServiceComponent {
   val userService: UserService
 
@@ -30,6 +35,9 @@ trait UserServiceComponent {
 
 }
 
+/**
+ * 系统服务组件声明
+ */
 trait SystemServiceComponent {
 
   trait SystemService extends BaseService[System, String, SystemQueryCondition] {
@@ -39,6 +47,9 @@ trait SystemServiceComponent {
   val systemService: SystemService
 }
 
+/**
+ * 角色服务组件声明
+ */
 trait RoleServiceComponent {
 
   trait RoleService extends BaseService[Role, Long, RoleQueryCondition] {
@@ -48,6 +59,9 @@ trait RoleServiceComponent {
   val roleService: RoleService
 }
 
+/**
+ * 菜单服务组件声明
+ */
 trait MenuServiceComponent {
 
   trait MenuService extends BaseService[Menu, String, MenuQueryCondition] {
@@ -57,10 +71,23 @@ trait MenuServiceComponent {
   val menuService: MenuService
 }
 
+/**
+ * 全局参数服务组件声明
+ */
 trait GlobalParamServiceComponent {
 
   trait GlobalParamService extends BaseService[GlobalParam, String, GlobalParamQueryCondition]
 
   val globalParamService: GlobalParamService
+}
+
+/**
+ * 字典项服务组件声明
+ */
+trait DictItemServiceComponent {
+
+  trait DictItemService extends BaseService[DictItem, Long, DictItemQueryCondition]
+
+  val dictItemService: DictItemService
 }
 

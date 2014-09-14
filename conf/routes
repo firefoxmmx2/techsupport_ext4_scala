@@ -41,6 +41,12 @@ DELETE        /api/systems/:id                           controllers.systemmanag
 PUT           /api/systems/:id                           controllers.systemmanage.System.update(id:String)
 GET           /api/systems/:id                           controllers.systemmanage.System.get(id:String)
 GET           /api/systems                               controllers.systemmanage.System.list
+#字典项
+GET           /api/dictitems                             controllers.systemmanage.DictItem.list
+POST          /api/dictitems                             controllers.systemmanage.DictItem.add
+DELETE        /api/dictitems/:id                         controllers.systemmanage.DictItem.remove(id:Long)
+PUT           /api/dictitems/:id                         controllers.systemmanage.DictItem.update(id:Long)
+
 
 #登录
 POST          /login                                     controllers.systemmanage.Login.login

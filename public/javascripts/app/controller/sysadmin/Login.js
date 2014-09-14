@@ -15,10 +15,10 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
                 afterrender: function (gp) {
                     gp.down('button[action=login]').on('click', function () {
                         this.login();
-                    }, this)
+                    }, this);
                     gp.down('button[action=reset]').on('click', function () {
                         this.getLoginForm().reset();
-                    }, this)
+                    }, this);
                 }
             },
             'login > form': {
@@ -29,7 +29,7 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
                             if (e.ENTER == e.getKey()) {
                                 this.login();
                             }
-                        }, me)
+                        }, me);
                     })
                 }
             }
@@ -51,13 +51,14 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
                         me.getApplication().authCode = res.authCode;
                         me.getApplication().userInfo = res.userInfo;
                         me.getViewport().removeAll();
-                        me.getViewport().add({xtype: 'main'})
+                        me.getViewport().add({xtype: 'main'});
                     }
                     else
                         Ext.Msg.alert("提示", "登录失败");
                 },
-                failure: function (res) {
-                    alert(2);
+                failure: function (form,action) {
+                    var res=action.result;
+                    Ext.Msg.alert("错误","错误代码:"+res.result+"; "+res.message);
                 }
             })
         }

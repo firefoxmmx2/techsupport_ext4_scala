@@ -851,3 +851,102 @@ trait RoleMenuDaoComponentImpl extends RoleMenuDaoComponent {
   }
 
 }
+
+/**
+ * 字典项数据访问组件实现
+ */
+trait DictItemDaoComponentImpl extends DictItemDaoComponent {
+
+  class DictItemDaoImpl extends DictItemDao {
+
+    def selectForPage(params:DictItemQueryCondition,sort:String="id",dir:String="asc") =  {
+      from(SystemManage.dictItems)(
+        di=>
+          where(
+          di.id === params.id.?
+          and di.dictcode === params.dictcode.?
+          and params.factValue.? === di.factValue
+          and params.appendValue.? === di.appendValue
+          and (di.displayName like params.displayName.?)
+          and di.displayFlag === params.displayFlag.?
+          )
+        select(di)
+      )
+    }
+    /**
+     * 插入
+     * @param m 实体
+
+     * @return 插入后的实体
+     */
+    def insert(m: DictItem): DictItem = SystemManage.dictItems.insert(m)
+
+    /**
+     * 分页总数查询
+     * @param params 分页查询条件
+
+     * @return 结果数
+     */
+    def count(params: DictItemQueryCondition): Int = selectForPage(params).Count.toInt
+
+    /**
+     * 修改
+     * @param m 实体
+
+     * @return
+     */
+    def update(m: DictItem): Unit = SystemManage.dictItems.update(m)
+
+    /**
+     * 删除
+     * @param m 实体
+
+     * @return
+     */
+    def delete(m: DictItem): Unit = SystemManage.dictItems.delete(m)
+
+    /**
+     * 通过主键删除
+     * @param id 主键
+
+     * @return
+     */
+    def deleteById(id: Long): Unit = SystemManage.dictItems.deleteWhere(d => d.id === id)
+
+    /**
+     * 分页查询
+     * @param pageno 页码
+     * @param pagesize 每页显示数
+     * @param params 分页查询条件
+     * @param sort 排序字段
+     * @param dir 升降序
+
+     * @return 分页结果
+     */
+    def page(pageno: Int, pagesize: Int, params: DictItemQueryCondition, sort: String, dir: String): Page[DictItem] = {
+      val pager=Page[DictItem](pageno,pagesize,count(params))
+      if(pager.total==0)
+        pager
+      else
+        pager.copy(data = selectForPage(params,sort,dir).page(pager.start,pager.limit).toList)
+    }
+
+    /**
+     * 非分页查询
+     * @param params 查询条件
+
+     * @return 结果列表
+     */
+    def list(params: DictItemQueryCondition): List[DictItem] = selectForPage(params).toList
+
+    /**
+     * 通过主键获取单个实体
+     * @param id 主键
+
+     * @return 实体
+     */
+    def getById(id: Long): DictItem = SystemManage.dictItems.where(di =>
+      di.id === id).single
+  }
+
+}

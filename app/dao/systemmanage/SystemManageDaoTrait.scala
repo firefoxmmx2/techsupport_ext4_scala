@@ -83,7 +83,7 @@ trait GlobalParamDaoComponent {
  */
 trait UserRoleDaoComponent {
 
-  trait UserRoleDao extends BaseDao[UserRole, (Long,Long), UserRoleQueryCondition] {
+  trait UserRoleDao extends BaseDao[UserRole, (Long, Long), UserRoleQueryCondition] {
   }
 
   val userRoleDao: UserRoleDao
@@ -97,6 +97,16 @@ trait RoleMenuDaoComponent {
   trait RoleMenuDao extends BaseDao[RoleMenu, (String, Long), RoleMenuQueryCondition]
 
   val roleMenuDao: RoleMenuDao
+}
+
+/**
+ * 字典项数据访问声明
+ */
+trait DictItemDaoComponent {
+
+  trait DictItemDao extends BaseDao[DictItem, Long, DictItemQueryCondition]
+
+  val dictItemDao: DictItemDao
 }
 
 
