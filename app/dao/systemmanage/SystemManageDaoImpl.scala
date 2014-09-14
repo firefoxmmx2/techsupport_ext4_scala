@@ -859,20 +859,21 @@ trait DictItemDaoComponentImpl extends DictItemDaoComponent {
 
   class DictItemDaoImpl extends DictItemDao {
 
-    def selectForPage(params:DictItemQueryCondition,sort:String="id",dir:String="asc") =  {
+    def selectForPage(params: DictItemQueryCondition, sort: String = "id", dir: String = "asc") = {
       from(SystemManage.dictItems)(
-        di=>
+        di =>
           where(
-          di.id === params.id.?
-          and di.dictcode === params.dictcode.?
-          and params.factValue.? === di.factValue
-          and params.appendValue.? === di.appendValue
-          and (di.displayName like params.displayName.?)
-          and di.displayFlag === params.displayFlag.?
+            di.id === params.id.?
+              and di.dictcode === params.dictcode.?
+              and params.factValue.? === di.factValue
+              and params.appendValue.? === di.appendValue
+              and (di.displayName like params.displayName.?)
+//              and params.displayFlag === di.displayFlag
           )
-        select(di)
+            select (di)
       )
     }
+
     /**
      * 插入
      * @param m 实体
@@ -903,7 +904,7 @@ trait DictItemDaoComponentImpl extends DictItemDaoComponent {
 
      * @return
      */
-    def delete(m: DictItem): Unit = SystemManage.dictItems.delete(m)
+    def delete(m: DictItem): Unit = SystemManage.dictItems.delete(m.id)
 
     /**
      * 通过主键删除
@@ -924,11 +925,11 @@ trait DictItemDaoComponentImpl extends DictItemDaoComponent {
      * @return 分页结果
      */
     def page(pageno: Int, pagesize: Int, params: DictItemQueryCondition, sort: String, dir: String): Page[DictItem] = {
-      val pager=Page[DictItem](pageno,pagesize,count(params))
-      if(pager.total==0)
+      val pager = Page[DictItem](pageno, pagesize, count(params))
+      if (pager.total == 0)
         pager
       else
-        pager.copy(data = selectForPage(params,sort,dir).page(pager.start,pager.limit).toList)
+        pager.copy(data = selectForPage(params, sort, dir).page(pager.start, pager.limit).toList)
     }
 
     /**

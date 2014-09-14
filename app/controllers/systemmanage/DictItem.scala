@@ -151,7 +151,7 @@ object DictItem extends Controller {
    * @param id
    * @return
    */
-  def delete(id: Long) = Action {
+  def remove(id: Long) = Action {
     implicit request =>
       try {
         dictItemService.deleteById(id)
