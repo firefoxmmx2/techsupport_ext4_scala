@@ -159,3 +159,25 @@ trait UserServiceComponentImpl extends UserServiceComponent {
 
 }
 
+/**
+ * 字典项服务组件实现
+ */
+trait DictItemServiceComponentImpl extends DictItemServiceComponent {
+  // 混入字典项数据访问组件
+  this: DictItemDaoComponent =>
+  class DictItemServiceImpl extends DictItemService {
+    def insert(e: DictItem): DictItem = dictItemDao.insert(e)
+
+    def update(e: DictItem): Unit = dictItemDao.update(e)
+
+    def deleteById(id: Long): Unit = dictItemDao.deleteById(id)
+
+    def page(pageno: Int, pagesize: Int, params: DictItemQueryCondition, sort: String=null, dir: String=null): Page[DictItem] =
+      dictItemDao.page(pageno,pagesize,params,sort,dir)
+
+    def getById(id: Long): DictItem = dictItemDao.getById(id)
+
+    def list(params: DictItemQueryCondition): List[DictItem] = dictItemDao.list(params)
+  }
+}
+

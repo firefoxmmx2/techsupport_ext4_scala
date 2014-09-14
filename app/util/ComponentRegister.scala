@@ -17,7 +17,9 @@ with MenuDaoComponentImpl
 with RoleServiceComponentImpl
 with RoleDaoComponentImpl
 with SystemDaoComponentImpl
-with SystemServiceComponentImpl {
+with SystemServiceComponentImpl
+with DictItemDaoComponentImpl
+with DictItemServiceComponentImpl{
 
   val departmentService: DepartmentService = new DepartmentServiceImpl
   val departmentDao: DepartmentDao = new DepartmentDaoImpl
@@ -31,4 +33,6 @@ with SystemServiceComponentImpl {
   val userService: ComponentRegister.UserService = new UserServiceImpl
   val globalParamDao: ComponentRegister.GlobalParamDao = new GlobalParamDaoImpl
   val menuDao: ComponentRegister.MenuDao = new MenuDaoImpl
+  val dictItemDao: ComponentRegister.DictItemDao = new DictItemDaoImpl
+  val dictItemService: ComponentRegister.DictItemService = new DictItemServiceImpl
 }
