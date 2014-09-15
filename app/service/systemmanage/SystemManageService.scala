@@ -155,6 +155,16 @@ trait UserServiceComponentImpl extends UserServiceComponent {
       else
         null
     }
+
+    /**
+     * 获取指定机构上的最大用户序列
+     * @param departid 机构ID
+     * @return
+     */
+    def getMaxUserOrder(departid: Long): Int = inTransaction {
+      require(departid != 0l)
+      userDao.maxUserOrder(departid)
+    }
   }
 
 }
@@ -166,18 +176,18 @@ trait DictItemServiceComponentImpl extends DictItemServiceComponent {
   // 混入字典项数据访问组件
   this: DictItemDaoComponent =>
   class DictItemServiceImpl extends DictItemService {
-    def insert(e: DictItem): DictItem = dictItemDao.insert(e)
+    def insert(e: DictItem): DictItem = inTransaction(dictItemDao.insert(e))
 
-    def update(e: DictItem): Unit = dictItemDao.update(e)
+    def update(e: DictItem): Unit = inTransaction (dictItemDao.update(e))
 
-    def deleteById(id: Long): Unit = dictItemDao.deleteById(id)
+    def deleteById(id: Long): Unit = inTransaction(dictItemDao.deleteById(id))
 
     def page(pageno: Int, pagesize: Int, params: DictItemQueryCondition, sort: String=null, dir: String=null): Page[DictItem] =
-      dictItemDao.page(pageno,pagesize,params,sort,dir)
+      inTransaction(dictItemDao.page(pageno,pagesize,params,sort,dir))
 
-    def getById(id: Long): DictItem = dictItemDao.getById(id)
+    def getById(id: Long): DictItem = inTransaction(dictItemDao.getById(id))
 
-    def list(params: DictItemQueryCondition): List[DictItem] = dictItemDao.list(params)
+    def list(params: DictItemQueryCondition): List[DictItem] = inTransaction(dictItemDao.list(params))
   }
 }
 

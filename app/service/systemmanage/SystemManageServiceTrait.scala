@@ -30,7 +30,20 @@ trait UserServiceComponent {
   val userService: UserService
 
   trait UserService extends BaseService[User, Long, UserQueryCondition] {
+    /**
+     * 通过用户帐号和密码获取用户信息
+     * @param useraccount
+     * @param password
+     * @return
+     */
     def getByUseraccountPassword(useraccount: String, password: String): User
+
+    /**
+     * 获取指定机构上的最大用户序列
+     * @param departid 机构ID
+     * @return
+     */
+    def getMaxUserOrder(departid:Long):Int
   }
 
 }

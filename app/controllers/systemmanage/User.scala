@@ -22,23 +22,24 @@ object User extends Controller {
       "useraccount" -> text,
       "password" -> text,
       "username" -> text,
-      "idnum" -> text,
+      "idnum" -> optional(text),
       "mobilePhone" -> optional(text),
-      "userorder" -> number(),
-      "isVaild" -> text(),
-      "userType" -> optional(text()),
-      "jzlbdm" -> optional(text()),
-      "jzlbmc" -> optional(text()),
+      "userorder" -> number,
+      "isValid" -> text,
+      "userType" -> optional(text),
+      "jzlbdm" -> optional(text),
+      "jzlbmc" -> optional(text),
       "email" -> optional(email),
-      "id" -> optional(longNumber())
+      "id" -> optional(longNumber)
     )(models.User.apply)(models.User.unapply)
   )
 
   def add = Action {
     implicit request =>
       userForm.bindFromRequest().fold(
-        hasErrors => {
-          BadRequest
+        hasErrors = form => {
+          log.debug("=" * 13 + "nihao" + "=" * 13)
+          BadRequest(form.errorsAsJson)
         },
         u => {
           try {
@@ -78,15 +79,15 @@ object User extends Controller {
 
   val userQueryForm = Form(
     mapping(
-      "id" -> optional(longNumber()),
-      "departid" -> optional(longNumber()),
-      "useraccount" -> optional(text()),
+      "id" -> optional(longNumber),
+      "departid" -> optional(longNumber),
+      "useraccount" -> optional(text),
       "password" -> optional(text),
-      "idnum" -> optional(text()),
-      "mobilePhone" -> optional(text()),
-      "userorder" -> optional(number()),
-      "isValid" -> optional(text()),
-      "userType" -> optional(text()),
+      "idnum" -> optional(text),
+      "mobilePhone" -> optional(text),
+      "userorder" -> optional(number),
+      "isValid" -> optional(text),
+      "userType" -> optional(text),
       "email" -> optional(email)
     )(UserQueryCondition.apply)(UserQueryCondition.unapply)
   )
@@ -168,5 +169,28 @@ object User extends Controller {
           }
         }
       )
+  }
+
+  def maxUserOrder = Action {
+    implicit request =>
+      val departid = request.getQueryString("departid").getOrElse("0").toLong
+      try {
+        if (departid == 0)
+          throw new RuntimeException("机构id为空")
+        //获取最大的用户序号
+        val maxUserOrder = userService.getMaxUserOrder(departid)
+        Ok(Json.generate(Map("result" -> 0,
+          "success" -> true,
+          "message" -> "获取最大用户序号成功",
+          "data" -> maxUserOrder))).as(JSON)
+      }
+      catch {
+        case e: Exception =>
+          log.error("获取最大用户序号发生错误")
+          log.error(e.getMessage, e.fillInStackTrace().toString)
+          Ok(Json.generate(Map("result" -> -1,
+            "success" -> false,
+            "message" -> "获取最大用户序号发生错误"))).as(JSON)
+      }
   }
 }

@@ -7,6 +7,7 @@ GET           /                                          controllers.Application
 # Map static resources from the /public folder to the /assets URL path
 GET           /assets/*file                              controllers.Assets.at(path="/public", file)
 #用户
+POST          /api/users/maxUserOrder                    controllers.systemmanage.User.maxUserOrder
 POST          /api/users                                 controllers.systemmanage.User.add
 DELETE        /api/users/:id                             controllers.systemmanage.User.remove(id:Long)
 PUT           /api/users/:id                             controllers.systemmanage.User.update(id:Long)

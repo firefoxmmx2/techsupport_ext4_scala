@@ -30,7 +30,14 @@ trait DepartmentDaoComponent {
 trait UserDaoComponent {
   val userDao: UserDao
 
-  trait UserDao extends BaseDao[User, Long, UserQueryCondition]
+  trait UserDao extends BaseDao[User, Long, UserQueryCondition]{
+    /**
+     * 获取指定机构上最大的用户序列
+     * @param departid
+     * @return
+     */
+    def maxUserOrder(departid:Long):Int
+  }
 
 }
 

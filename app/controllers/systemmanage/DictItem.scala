@@ -58,6 +58,7 @@ object DictItem extends Controller {
           }
           catch {
             case e: Exception =>
+              log.error(e.getMessage,e.fillInStackTrace().toString)
               Ok(Json.generate(Map("result" -> -1,
                 "success" -> false,
                 "message" -> "字典项列表查询失败",
@@ -79,11 +80,11 @@ object DictItem extends Controller {
       "displayName" -> text,
       "factValue" -> text,
       "appendValue" -> optional(text),
-      "superItemId" -> default(longNumber, 0l),
+      "superItemId" -> optional(longNumber),
       "sibOrder" -> default(number, 0),
       "isleaf" -> default(text, "Y"),
-      "displayFlag" -> default(text, "Y"),
-      "isValid" -> default(text, "Y"),
+      "displayFlag" -> default(number, 0),
+      "isValid" -> default(number, 0),
       "itemSimplePin" -> optional(text),
       "itemAllPin" -> optional(text),
       "id" -> optional(longNumber)

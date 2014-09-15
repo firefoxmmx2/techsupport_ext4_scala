@@ -91,7 +91,7 @@ case class User(
                  useraccount: String,
                  username: String,
                  password: String,
-                 idnum: String,
+                 idnum: Option[String],
                  @Column("MOBILEPHONE")
                  mobilePhone: Option[String],
                  userorder: Int = 1,
@@ -307,15 +307,15 @@ case class DictItem(
                      @Column("APPEND_VALUE")
                      appendValue: Option[String] = None,
                      @Column("SUPER_ITEM_ID")
-                     superItemId: Long = 0,
+                     superItemId: Option[Long]=None,
                      @Column("SIB_ORDER")
                      sibOrder: Int = 0,
                      @Column("LEAF_FLAG")
                      isleaf: String = "Y",
                      @Column("DISPLAY_FLAG")
-                     displayFlag: String = "Y",
-                     @Column("VAILD_FLAG")
-                     isValid: String = "Y",
+                     displayFlag: Int = 0,
+                     @Column("VALID_FLAG")
+                     isValid: Int = 0,
                      @Column("ITEM_SIMPLEPIN")
                      itemSimplePin: Option[String] = None,
                      @Column("ITEM_ALLPIN")

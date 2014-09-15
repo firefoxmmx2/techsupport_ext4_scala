@@ -214,6 +214,17 @@ trait UserDaoComponentImpl extends UserDaoComponent {
      * @return 插入后的实体
      */
     def insert(m: User): User = SystemManage.users.insert(m)
+
+    /**
+     * 获取指定机构上最大的用户序列
+     * @param departid
+     * @return
+     */
+    def maxUserOrder(departid: Long): Int = from(SystemManage.users)(
+      u=>
+        where(u.departid === departid)
+        compute(max(u.userorder))
+    ).single.measures.getOrElse(0)
   }
 
 }
