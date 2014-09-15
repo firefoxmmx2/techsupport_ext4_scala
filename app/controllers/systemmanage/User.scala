@@ -171,9 +171,10 @@ object User extends Controller {
       )
   }
 
-  def maxUserOrder = Action {
+  def maxUserOrder(departid:Long) = Action {
     implicit request =>
-      val departid = request.getQueryString("departid").getOrElse("0").toLong
+      log.debug("="*13+"开始获取做大用户序列"+"="*13)
+      log.debug("="*13+s"departid = $departid"+"="*13)
       try {
         if (departid == 0)
           throw new RuntimeException("机构id为空")
