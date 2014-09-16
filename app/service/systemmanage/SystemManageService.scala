@@ -165,6 +165,17 @@ trait UserServiceComponentImpl extends UserServiceComponent {
       require(departid != 0l)
       userDao.maxUserOrder(departid)
     }
+
+    /**
+     * 检查用户帐号是否重复
+     * @param useraccount
+     * @return
+     */
+    def checkUseraccountAvailable(useraccount: String): Boolean = inTransaction {
+      require(StringUtils.isNotEmpty(useraccount))
+      val count = userDao.count(UserQueryCondition(useraccount=Option(useraccount)))
+      count == 0
+    }
   }
 
 }

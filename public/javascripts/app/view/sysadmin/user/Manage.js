@@ -19,7 +19,11 @@ Ext.define('Techsupport.view.sysadmin.user.Manage', {
                 {xtype: 'toolbar', dock: 'top', ui: 'footer', items: [
                     {text: '添加', xtype: 'button', action: 'add'} ,
                     '-',
-                    {xtype: 'button', text: '删除', action: 'remove'}
+                    {xtype: 'button', text: '删除', action: 'remove'},
+                    '-',
+                    {xtype:'button',text:'上移',action:'up'},
+                    '-',
+                    {xtype:'button',text:'下移',action:'down'}
                 ]},
                 {xtype: 'buttongroup', dock: 'top',items: [
                     {xtype: 'form', layout: 'column', defaults: {margin: {top: 2, bottom: 2, left: 0, right: 20}}, border: false, items: [

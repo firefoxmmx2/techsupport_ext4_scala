@@ -3,54 +3,55 @@
 # ~~~~
 
 # Home page
-GET           /                                          controllers.Application.index
+GET           /                                           controllers.Application.index
 # Map static resources from the /public folder to the /assets URL path
-GET           /assets/*file                              controllers.Assets.at(path="/public", file)
+GET           /assets/*file                               controllers.Assets.at(path="/public", file)
 #用户
-GET          /api/users/maxUserOrder/:departid                    controllers.systemmanage.User.maxUserOrder(departid:Long)
-POST          /api/users                                 controllers.systemmanage.User.add
-DELETE        /api/users/:id                             controllers.systemmanage.User.remove(id:Long)
-PUT           /api/users/:id                             controllers.systemmanage.User.update(id:Long)
-GET           /api/users/:id                             controllers.systemmanage.User.get(id:Long)
-GET           /api/users                                 controllers.systemmanage.User.list
+POST          /api/users/checkUseraccountAvailable        controllers.systemmanage.User.checkUseraccountAvailable
+GET           /api/users/maxUserOrder/:departid           controllers.systemmanage.User.maxUserOrder(departid:Long)
+POST          /api/users                                  controllers.systemmanage.User.add
+DELETE        /api/users/:id                              controllers.systemmanage.User.remove(id:Long)
+PUT           /api/users/:id                              controllers.systemmanage.User.update(id:Long)
+GET           /api/users/:id                              controllers.systemmanage.User.get(id:Long)
+GET           /api/users                                  controllers.systemmanage.User.list
 
 #机构
-GET           /api/departments/departmentTreeNode        controllers.systemmanage.Department.departmentTreeNode
-POST          /api/departments                           controllers.systemmanage.Department.add
-DELETE        /api/departments/:id                       controllers.systemmanage.Department.remove(id:Long)
-POST          /api/departments/:id                       controllers.systemmanage.Department.update(id:Long)
-GET           /api/departments/:id                       controllers.systemmanage.Department.get(id:Long)
-GET           /api/departments                           controllers.systemmanage.Department.list
+GET           /api/departments/departmentTreeNode         controllers.systemmanage.Department.departmentTreeNode
+POST          /api/departments                            controllers.systemmanage.Department.add
+DELETE        /api/departments/:id                        controllers.systemmanage.Department.remove(id:Long)
+POST          /api/departments/:id                        controllers.systemmanage.Department.update(id:Long)
+GET           /api/departments/:id                        controllers.systemmanage.Department.get(id:Long)
+GET           /api/departments                            controllers.systemmanage.Department.list
 
 #菜单
-GET           /api/menus/userMenuNode                    controllers.systemmanage.Menu.userMenuNode
-POST          /api/menus                                 controllers.systemmanage.Menu.add
-DELETE        /api/menus/:id                             controllers.systemmanage.Menu.remove(id:Long)
-PUT           /api/menus/:id                             controllers.systemmanage.Menu.update(id:Long)
-GET           /api/menus/:id                             controllers.systemmanage.Menu.get(id:Long)
-GET           /api/menus                                 controllers.systemmanage.Menu.list
+GET           /api/menus/userMenuNode                     controllers.systemmanage.Menu.userMenuNode
+POST          /api/menus                                  controllers.systemmanage.Menu.add
+DELETE        /api/menus/:id                              controllers.systemmanage.Menu.remove(id:Long)
+PUT           /api/menus/:id                              controllers.systemmanage.Menu.update(id:Long)
+GET           /api/menus/:id                              controllers.systemmanage.Menu.get(id:Long)
+GET           /api/menus                                  controllers.systemmanage.Menu.list
 #角色
-POST          /api/roles                                 controllers.systemmanage.Role.add
-DELETE        /api/roles/:id                             controllers.systemmanage.Role.remove(id:Long)
-PUT           /api/roles/:id                             controllers.systemmanage.Role.update(id:Long)
-GET           /api/roles/:id                             controllers.systemmanage.Role.get(id:Long)
-GET           /api/roles                                 controllers.systemmanage.Role.list
+POST          /api/roles                                  controllers.systemmanage.Role.add
+DELETE        /api/roles/:id                              controllers.systemmanage.Role.remove(id:Long)
+PUT           /api/roles/:id                              controllers.systemmanage.Role.update(id:Long)
+GET           /api/roles/:id                              controllers.systemmanage.Role.get(id:Long)
+GET           /api/roles                                  controllers.systemmanage.Role.list
 #系统
-GET           /api/systems/userSystemNode                controllers.systemmanage.System.userSystemNode
-POST          /api/systems                               controllers.systemmanage.System.add
-DELETE        /api/systems/:id                           controllers.systemmanage.System.remove(id:String)
-PUT           /api/systems/:id                           controllers.systemmanage.System.update(id:String)
-GET           /api/systems/:id                           controllers.systemmanage.System.get(id:String)
-GET           /api/systems                               controllers.systemmanage.System.list
+GET           /api/systems/userSystemNode                 controllers.systemmanage.System.userSystemNode
+POST          /api/systems                                controllers.systemmanage.System.add
+DELETE        /api/systems/:id                            controllers.systemmanage.System.remove(id:String)
+PUT           /api/systems/:id                            controllers.systemmanage.System.update(id:String)
+GET           /api/systems/:id                            controllers.systemmanage.System.get(id:String)
+GET           /api/systems                                controllers.systemmanage.System.list
 #字典项
-GET           /api/dictitems                             controllers.systemmanage.DictItem.list
-POST          /api/dictitems                             controllers.systemmanage.DictItem.add
-DELETE        /api/dictitems/:id                         controllers.systemmanage.DictItem.remove(id:Long)
-PUT           /api/dictitems/:id                         controllers.systemmanage.DictItem.update(id:Long)
+GET           /api/dictitems                              controllers.systemmanage.DictItem.list
+POST          /api/dictitems                              controllers.systemmanage.DictItem.add
+DELETE        /api/dictitems/:id                          controllers.systemmanage.DictItem.remove(id:Long)
+PUT           /api/dictitems/:id                          controllers.systemmanage.DictItem.update(id:Long)
 
 
 #登录
-POST          /login                                     controllers.systemmanage.Login.login
-GET           /heartCheck                                controllers.systemmanage.Login.heartCheck
-POST          /logout                                    controllers.systemmanage.Login.logout
+POST          /login                                      controllers.systemmanage.Login.login
+GET           /heartCheck                                 controllers.systemmanage.Login.heartCheck
+POST          /logout                                     controllers.systemmanage.Login.logout
 

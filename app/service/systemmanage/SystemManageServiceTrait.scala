@@ -44,6 +44,13 @@ trait UserServiceComponent {
      * @return
      */
     def getMaxUserOrder(departid:Long):Int
+
+    /**
+     * 检查用户帐号是否重复
+      * @param useraccount
+     * @return
+     */
+    def checkUseraccountAvailable(useraccount:String):Boolean
   }
 
 }

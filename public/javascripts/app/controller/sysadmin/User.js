@@ -47,11 +47,11 @@ Ext.define('Techsupport.controller.sysadmin.User', {
             'usermanage button[action=remove]': {
 //                删除按钮
                 click: function (b, evt) {
-                    var controller=this;
+                    var controller = this;
                     var grid = b.findParentByType('usermanage').query('grid')[0];
                     var store = grid.getStore();
                     var selection = grid.getSelectionModel().getSelection();
-                    if(selection.length>0){
+                    if (selection.length > 0) {
                         store.remove(selection);
                         store.sync({
                             success: function (batch, options) {
@@ -64,7 +64,7 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                         });
                     }
                     else
-                        Ext.Msg.alert("提示","请选择需要删除的数据");
+                        Ext.Msg.alert("提示", "请选择需要删除的数据");
                 }
             },
             'usermanage button[action=query]': {
@@ -82,7 +82,7 @@ Ext.define('Techsupport.controller.sysadmin.User', {
             'useradd button[action=enter]': {
                 //添加窗口确认按钮
                 click: function (button, evt) {
-                    var controller=this;
+                    var controller = this;
                     var _window = button.findParentByType('window');
                     _window.query('form:first').map(function (form) {
                         if (form.getForm().isValid()) {
@@ -100,11 +100,11 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                                 },
                                 failure: function (form, action) {
                                     //失败
-                                    if (action.response.statusCode == 200)
+                                    if (action.response.status == 200)
                                         Ext.Msg.alert("错误", "错误代码:" + action.result.result + ";" + action.result.message);
-                                    else if (action.response.statusCode == 400)
+                                    else if (action.response.status == 400)
                                         Ext.Msg.alert("错误", "错误的请求");
-                                    else if (action.response.statusCode == 500)
+                                    else if (action.response.status == 500)
                                         Ext.Msg.alert("错误", "服务器发生错误");
                                 }
                             });
@@ -132,7 +132,7 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                 //自动获取最大用户序号
                 render: function (t) {
                     Ext.Ajax.request({
-                        url: '/api/users/maxUserOrder/'+t.findParentByType('panel').query('textfield[name=departid]')[0].getValue(),
+                        url: '/api/users/maxUserOrder/' + t.findParentByType('panel').query('textfield[name=departid]')[0].getValue(),
                         success: function (response) {
                             var res = Ext.decode(response.responseText);
                             if (res.result == 0) {
@@ -140,6 +140,44 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                             }
                         }
                     })
+                }
+            },
+            'usermanage button[action=up]': {
+
+            },
+            'usermanage button[action=down]': {
+
+            },
+            'useradd textfield[name=useraccount]': {
+                //用户帐号加上不可重复验证
+                initComponent: function (t) {
+                    t.textValid = false;
+                    t.validator = function (value) {
+                        return t.textValid;
+                    }
+                },
+                'change': function (textfield, newValue, oldValue) {
+                    Ext.Ajax.request({
+                        url: '/api/users/checkUseraccountAvailable',
+                        params: {'useraccount': newValue},
+                        scope: textfield,
+                        success: function (response) {
+                            var res = Ext.decode(response.responseText);
+                            if (res.result == 0) {
+                                this.clearInvalid();
+                                this.textValid = true;
+                            }
+                            else {
+                                this.markInvalid(res.message);
+                                this.textValid = false;
+                                this.focus();
+                            }
+                        },
+                        failure: function (response) {
+                            Ext.Msg.alert("错误",'账户重复验证发生错误');
+                            this.focus();
+                        }
+                    });
                 }
             }
         });

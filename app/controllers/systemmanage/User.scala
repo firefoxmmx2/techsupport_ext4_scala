@@ -171,10 +171,10 @@ object User extends Controller {
       )
   }
 
-  def maxUserOrder(departid:Long) = Action {
+  def maxUserOrder(departid: Long) = Action {
     implicit request =>
-      log.debug("="*13+"开始获取做大用户序列"+"="*13)
-      log.debug("="*13+s"departid = $departid"+"="*13)
+      log.debug("=" * 13 + "开始获取做大用户序列" + "=" * 13)
+      log.debug("=" * 13 + s"departid = $departid" + "=" * 13)
       try {
         if (departid == 0)
           throw new RuntimeException("机构id为空")
@@ -193,5 +193,47 @@ object User extends Controller {
             "success" -> false,
             "message" -> "获取最大用户序号发生错误"))).as(JSON)
       }
+  }
+
+  val checkUserAccountAvailableForm=Form(
+      single(
+        "useraccount"->text
+      )
+  )
+  /**
+   * 检查用户帐号可用
+   * @return
+   */
+  def checkUseraccountAvailable = Action {
+    implicit request =>
+      log.debug("=" * 13 + "账户重复验证" + "=" * 13)
+      checkUserAccountAvailableForm.bindFromRequest().fold(hasErrors=
+        form =>{
+              BadRequest(form.errorsAsJson)
+        },
+      success=
+        useraccount =>
+          try {
+            // 验证重复账户
+            val isAvailable = userService.checkUseraccountAvailable(useraccount)
+            if (isAvailable)
+              Ok(Json.generate(Map("result" -> 0,
+                "success" -> true,
+                "message" -> "该账户可用"))).as(JSON)
+            else
+              Ok(Json.generate(Map("result" -> 1,
+                "success" -> true,
+                "message" -> "该账户不可用"))).as(JSON)
+          }
+          catch {
+            case e: Exception =>
+              log.error("检查用户帐号是否可用发生错误")
+              log.error(e.getMessage, e.fillInStackTrace().toString)
+              Ok(Json.generate(Map("result" -> -1,
+                "success" -> false,
+                "message" -> "检查用户帐号是否可用发生错误"))).as(JSON)
+          }
+      )
+
   }
 }
