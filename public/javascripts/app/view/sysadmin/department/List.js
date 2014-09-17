@@ -3,25 +3,28 @@
  */
 Ext.define('Techsupport.view.sysadmin.department.List', {
     extend: 'Ext.grid.Panel',
-    alias: 'widget.department.list',
+    alias: 'widget.departmentlist',
     store: 'Department',
     loadMask: true,
+    selType: 'checkboxmodel',
+    selModel: {
+        flex: 0,
+        showHeaderCheckbox: true,
+        width: 16
+    },
     columns: {
         items: [
-            {text: 'ID', dataIndex: 'id'},
-            {text: '机构代码', dataIndex: 'departcode'},
-            {text: '机构名称', dataIndex: 'departname'},
-            {text: '机构级别', dataIndex: 'departlevel'},
-            {text: '机构全码', dataIndex: 'departfullcode'},
-            {text: '序号', dataIndex: 'nodeOrder'},
-            {text: '是否有下级', dataIndex: 'isLeaf'},
-            {text: '机构简拼', dataIndex: 'departsimplepin'},
-            {text: '机构全拼', dataIndex: 'departallpin'},
-            {text: '机构省级代码', dataIndex: 'departbrevitycode'}
-        ],
-        defaults: {
-            flex: 1
-        }
+            {text: 'ID', dataIndex: 'id',flex:1},
+            {text: '机构代码', dataIndex: 'departcode',flex:1},
+            {text: '机构名称', dataIndex: 'departname',flex:1},
+            {text: '机构级别', dataIndex: 'departlevel',flex:1},
+            {text: '机构全码', dataIndex: 'departfullcode',flex:1},
+            {text: '序号', dataIndex: 'nodeOrder',flex:1},
+            {text: '是否有下级', dataIndex: 'isLeaf',flex:1},
+            {text: '机构简拼', dataIndex: 'departsimplepin',flex:1},
+            {text: '机构全拼', dataIndex: 'departallpin',flex:1},
+            {text: '机构省级代码', dataIndex: 'departbrevitycode',flex:1}
+        ]
     },
     dockedItems: [
         {xtype: 'pagingtoolbar',

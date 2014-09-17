@@ -137,13 +137,15 @@ object Department extends Controller {
 
   def list = Action {
     implicit req =>
-      var pageno: Int = 1
-      var limit: Int = 20
+      var pageno: Int = req.getQueryString("page").getOrElse("1").toInt
+      var limit: Int = req.getQueryString("limit").getOrElse("20").toInt
+      var sort = req.getQueryString("sort").getOrElse("")
+      var dir = req.getQueryString("dir").getOrElse("")
       listParamForm.bindFromRequest().fold(hasErrors =>
         BadRequest,
         dq => {
           try {
-            val page = departmentService.page(pageno, limit, dq, "", "")
+            val page = departmentService.page(pageno, limit, dq, sort, dir)
             Ok(Json.generate(Map("result" -> 0,
               "success" -> true,
               "message" -> "",
