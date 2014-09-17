@@ -9,7 +9,9 @@ Ext.define("Techsupport.store.Department", {
         url:'/api/departments',
         reader: {
             type: "json",
-            root: "data"
+            root: "data",
+            successProperty:"success",
+            totalProperty:'total'
         }
     }
 });

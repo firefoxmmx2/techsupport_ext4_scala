@@ -3,7 +3,7 @@
  */
 Ext.define('Techsupport.controller.sysadmin.Department', {
     extend: 'Ext.app.Controller',
-    views: ['sysadmin.department.DepartmentTree',
+    views: [
         "sysadmin.department.List", "sysadmin.department.Manage"
         /*,
          "sysadmin.department.Add", "sysadmin.department.Edit"*/],
@@ -24,7 +24,7 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
                     g.getStore().pageSize = pagesize;
                     g.getStore().trailingBufferZone = pagesize;
                     g.getStore().getProxy().setExtraParam('limit', pagesize);
-                },
+                }
             },
             'departmentManage button[action=add]': {
                 //添加机构

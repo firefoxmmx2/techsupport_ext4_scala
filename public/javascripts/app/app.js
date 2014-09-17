@@ -2,7 +2,7 @@ Ext.application({
     name: 'Techsupport',
     appFolder: 'assets/javascripts/app',
     controllers: ["sysadmin.Login", "Main", "sysadmin.SystemMenu","sysadmin.User",
-        "sysadmin.Department"],
+        "sysadmin.Department",'sysadmin.DepartmentTree'],
     refs: [
         {ref: 'viewport', selector: 'viewport'}
     ],

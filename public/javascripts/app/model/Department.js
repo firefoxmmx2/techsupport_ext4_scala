@@ -4,7 +4,7 @@
 Ext.define('Techsupport.model.Department', {
     extend: 'Ext.data.Model',
     idProperty: "id",
-    field: [
+    fields: [
         {name: 'id', type: 'int'},
         {name: 'departcode', type: 'string'},
         {name: 'departname', type: "string"},
