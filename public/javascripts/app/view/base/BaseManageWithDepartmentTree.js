@@ -18,6 +18,8 @@ Ext.define('Techsupport.view.base.BaseManageWithDepartmentTree',{
                 {xtype: 'toolbar', dock: 'top', ui: 'footer', items: [
                     {text: '添加', xtype: 'button', action: 'add'} ,
                     '-',
+                    {xtype:'button',text:'修改',action:'modify'},
+                    '-',
                     {xtype: 'button', text: '删除', action: 'remove'},
                     '-',
                     {xtype:'button',text:'上移',action:'up'},

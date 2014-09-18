@@ -44,8 +44,8 @@ object Department extends Controller {
 
   def add = Action {
     implicit request =>
-      addForm.bindFromRequest.fold(errors => {
-        BadRequest("错误")
+      addForm.bindFromRequest.fold(hasErrors= form => {
+        BadRequest(form.errorsAsJson)
       }, department => {
         try {
           val inserted = departmentService.insert(department)
@@ -85,8 +85,8 @@ object Department extends Controller {
 
   def update(id: Long) = Action {
     implicit request =>
-      updateForm.bindFromRequest().fold(errors => {
-        BadRequest
+      updateForm.bindFromRequest().fold(hasErrors=form => {
+        BadRequest(form.errorsAsJson)
       }, department => {
         try {
           departmentService.update(department)
@@ -141,8 +141,8 @@ object Department extends Controller {
       var limit: Int = req.getQueryString("limit").getOrElse("20").toInt
       var sort = req.getQueryString("sort").getOrElse("")
       var dir = req.getQueryString("dir").getOrElse("")
-      listParamForm.bindFromRequest().fold(hasErrors =>
-        BadRequest,
+      listParamForm.bindFromRequest().fold(hasErrors=form =>
+        BadRequest(form.errorsAsJson),
         dq => {
           try {
             val page = departmentService.page(pageno, limit, dq, sort, dir)
