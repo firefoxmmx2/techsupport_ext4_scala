@@ -2,46 +2,31 @@
  * Created by hooxin on 14-5-23.
  */
 Ext.define('Techsupport.view.sysadmin.user.Manage', {
-    extend: 'Ext.panel.Panel',
+    extend: 'Techsupport.view.base.BaseManageWithDepartmentTree',
     alias: 'widget.usermanage',
-    layout: {
-        type: 'border',
-        align: 'stretch',
-        pack: 'start'
-    },
-    border: false,
-    items: [
-        {xtype: 'departmenttree', region: 'west', width: '20%', split: true},
-        {xtype: 'panel', region: 'center', border: false, layout: 'fit', items: [
-            {xtype: 'userlist'}
-        ],
-            dockedItems: [
-                {xtype: 'toolbar', dock: 'top', ui: 'footer', items: [
-                    {text: '添加', xtype: 'button', action: 'add'} ,
-                    '-',
-                    {xtype: 'button', text: '删除', action: 'remove'},
-                    '-',
-                    {xtype:'button',text:'上移',action:'up'},
-                    '-',
-                    {xtype:'button',text:'下移',action:'down'}
-                ]},
-                {xtype: 'buttongroup', dock: 'top',items: [
-                    {xtype: 'form', layout: 'column', defaults: {margin: {top: 2, bottom: 2, left: 0, right: 20}}, border: false, items: [
-                        {xtype: 'textfield', name: 'useraccount', fieldLabel: '帐号'},
-                        {xtype: 'textfield', name: "username", fieldLabel: '用户姓名'},
-                        {xtype: 'combobox',
-                            name: 'isValid',
-                            store: 'OneZero',
-                            queryMode: 'local',
-                            displayField: 'text',
-                            valueField: 'value',
-                            fieldLabel: '是否可用',
-                            editable: false
-                        },
-                        {xtype: 'hidden', name: 'departid', fieldLabel: '机构ID'}
-                    ]},
-                    {xtype: 'button', text: '查询', action: 'query',margin:{top:2,bottom:2}}
-                ]}
-            ]}
-    ]
+    initComponent: function () {
+        this.callParent(arguments);
+
+        this.query('panel[region=center]').map(function (p) {
+            p.removeAll();
+            p.add({xtype: 'userlist'});
+        });
+        this.query('form').map(function (f) {
+            f.removeAll();
+            f.add([
+                {xtype: 'textfield', name: 'useraccount', fieldLabel: '帐号'},
+                {xtype: 'textfield', name: "username", fieldLabel: '用户姓名'},
+                {xtype: 'combobox',
+                    name: 'isValid',
+                    store: 'OneZero',
+                    queryMode: 'local',
+                    displayField: 'text',
+                    valueField: 'value',
+                    fieldLabel: '是否可用',
+                    editable: false
+                },
+                {xtype: 'hidden', name: 'departid', fieldLabel: '机构ID'}
+            ])
+        });
+    }
 });

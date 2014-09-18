@@ -3,11 +3,21 @@
  */
 Ext.define('Techsupport.controller.sysadmin.User', {
     extend: 'Ext.app.Controller',
-    views: ['sysadmin.user.Add', 'sysadmin.user.List', 'sysadmin.user.Manage'],
-    stores: ['User', 'OneZero', 'DepartmentTree', 'DictItem'],
+    views: [
+        'sysadmin.user.Add',
+        'sysadmin.user.List',
+        'sysadmin.user.Manage'
+    ],
+//    requires:[
+//        'Techsupport.view.sysadmin.department.DepartmentTree'
+//    ],
+    stores: [
+        'User',
+        'OneZero',
+        'DictItem'],
     refs: [
-        {ref: 'queryForm', selector: 'panel buttongroup[dock=top] form'},
-        {ref: 'departmentTree', selector: 'departmenttree'}
+        {ref: 'queryForm', selector: 'usermanage panel buttongroup[dock=top] form'},
+        {ref: 'departmentTree', selector: 'usermanage departmenttree'}
     ],
     init: function () {
         this.control({

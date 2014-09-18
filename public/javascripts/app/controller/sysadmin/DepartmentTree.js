@@ -1,12 +1,11 @@
 /**
  * Created by hooxin on 14-9-18.
  */
-Ext.define('Techsupport.controller.DepartmentTree', {
+Ext.define('Techsupport.controller.sysadmin.DepartmentTree', {
     extend: 'Ext.app.Controller',
     stores:['DepartmentTree'],
     views: ['sysadmin.department.DepartmentTree'],
     init: function () {
-        console.log("aaaaaaaaaaaaaa");
         this.control({
             'departmenttree': {
                 beforeitemexpand: function (n, opts) {
@@ -16,7 +15,6 @@ Ext.define('Techsupport.controller.DepartmentTree', {
                     tree.cdata.departname = n.raw.text;
                 },
                 render: function (t) {
-                    alert(1)
                     t.cdata = {departid: 0, departcode: "", departname: ""};
                 },
                 afterrender: function (t, opts) {

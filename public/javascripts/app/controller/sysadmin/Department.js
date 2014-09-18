@@ -4,13 +4,18 @@
 Ext.define('Techsupport.controller.sysadmin.Department', {
     extend: 'Ext.app.Controller',
     views: [
-        "sysadmin.department.List", "sysadmin.department.Manage"
+        "sysadmin.department.List",
+        "sysadmin.department.Manage"
         /*,
-         "sysadmin.department.Add", "sysadmin.department.Edit"*/],
+         "sysadmin.department.Add", "sysadmin.department.Edit"*/
+    ],
     stores: ['OneZero', 'DepartmentTree', 'Department'],
+//    requires:[
+//        'Techsupport.view.sysadmin.department.DepartmentTree'
+//    ],
     refs: [
-        {ref: 'departmentTree', selector: 'departmenttree'},
-        {ref: 'queryForm', selector: 'panel buttongroup[dock=top] form'}
+        {ref: 'departmentTree', selector: 'departmentManage departmenttree'},
+        {ref: 'queryForm', selector: 'departmentManage panel buttongroup[dock=top] form'}
     ],
     init: function () {
         this.control({
