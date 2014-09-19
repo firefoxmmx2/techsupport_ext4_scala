@@ -29,7 +29,7 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
                 }
             },
             'departmentManage button[action=add]': {
-                //添加机构
+                //添加按钮
                 click: function (button, evt) {
                     var _window = Ext.create('Techsupport.view.sysadmin.department.Add');
                     var tree = this.getDepartmentTree();
@@ -50,13 +50,13 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
                 }
             },
             'departmentManage button[action=query]': {
-                //查询
+                //查询按钮
                 click: function (button, evt) {
                     this.queryDepartment(this);
                 }
             },
             'departmentManage button[action=remove]': {
-                //删除
+                //删除按钮
                 click: function (button, evt) {
                     this.removeDeparment(button.findParentByType('departmentManage').query('grid')[0], this);
                 }
