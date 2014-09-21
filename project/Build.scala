@@ -14,20 +14,23 @@ object ApplicationBuild extends Build {
     // Add your project dependencies here,
     jdbc,
     //    anorm,
-    //    "com.typesafe.slick" %% "slick" % "2.0.0",
+    "com.typesafe.slick" %% "slick" % "2.1.0",
     cache,
     filters,
     "org.slf4j" % "slf4j-nop" % "1.6.4",
     "com.cloudphysics" % "jerkson_2.10" % "0.6.3",
-    //    "com.typesafe.slick" %% "slick-extensions" % "2.0.0",
+    "com.typesafe.slick" %% "slick-extensions" % "2.1.0",
     "org.squeryl" %% "squeryl" % "0.9.6-RC2"
-//    "com.typesafe.play" %% "play" % "2.2.2"
+//    "com.typesafe" %% "webdriver" % "1.0.0",
+//    "com.typesafe" %% "jse" % "1.0.0",
+//    "com.typesafe" %% "npm" % "1.0.0"
+    //    "com.typesafe.play" %% "play" % "2.2.2"
   )
 
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
     // Add your own project settings here
-
+//    scalaVersion := "2.11.2"
   )
 
 }

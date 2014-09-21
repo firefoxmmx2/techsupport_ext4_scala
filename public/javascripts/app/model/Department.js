@@ -12,14 +12,15 @@ Ext.define('Techsupport.model.Department', {
         {name: 'departfullcode', type: 'string'},
         {name: 'parentDepartid', type: 'int'},
         {name: 'nodeOrder', type: 'int'},
-        {name: 'isLeaf', type: 'boolean', defaultValue: true},
+        {name: 'isLeaf', type: 'string', defaultValue: 'Y'},
         {name: 'departsimplepin', type: 'string'},
         {name: 'departallpin', type: 'string'},
-        {name: 'departbrevitycode', type: 'string'}
+        {name: 'departbrevitycode', type: 'string'},
+        {name: 'parentDepartname', type: 'string'}
     ]/*,
-    validations: [
-        {field: 'departcode', type: 'length', min: 1, max: 12},
-        {field: 'departname', type: 'length', min: 1, max: 20}
-    ]*/
+     validations: [
+     {field: 'departcode', type: 'length', min: 1, max: 12},
+     {field: 'departname', type: 'length', min: 1, max: 20}
+     ]*/
 });
 

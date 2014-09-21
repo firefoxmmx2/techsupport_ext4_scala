@@ -16,7 +16,7 @@ object Department extends Controller {
       "departname" -> nonEmptyText,
       "departlevel" -> number,
       "departfullcode" -> nonEmptyText,
-      "parentDepartid" -> longNumber,
+      "parentDepartid" -> optional(longNumber),
       "nodeOrder" -> number,
       "isLeaf" -> nonEmptyText,
       "departsimplepin" -> optional(text),
@@ -32,7 +32,7 @@ object Department extends Controller {
       "departname" -> nonEmptyText,
       "departlevel" -> number,
       "departfullcode" -> nonEmptyText,
-      "parentDepartid" -> longNumber,
+      "parentDepartid" -> optional(longNumber),
       "nodeOrder" -> number,
       "isLeaf" -> nonEmptyText,
       "departsimplepin" -> optional(text),
@@ -94,7 +94,7 @@ object Department extends Controller {
             "success" -> true,
             "message" -> "修改成功"))).as(JSON)
         } catch {
-          case e =>
+          case e:Exception =>
             log.error(e.toString, e.fillInStackTrace())
             Ok(Json.generate(Map("result" -> -1,
               "success" -> false,
@@ -103,19 +103,26 @@ object Department extends Controller {
       })
   }
 
+  /**
+   * 获取单一机构
+   * @param id
+   * @return
+   */
   def get(id: Long) = Action {
     try {
+      log.debug("="*13+"获取单一机构..."+"="*13)
+      log.debug("="*13+"id = "+id+"="*13)
       val d = departmentService.getById(id)
       Ok(Json.generate(Map("result" -> 0,
         "success" -> true,
         "message" -> "",
-        "department" -> d))).as(JSON)
+        "data" -> d))).as(JSON)
     } catch {
-      case e =>
+      case e:Exception =>
         log.error(e.toString, e.fillInStackTrace())
         Ok(Json.generate(Map("result" -> -1,
           "success" -> false,
-          "message" -> "获取错误"))).as(JSON)
+          "message" -> "获取单一机构"))).as(JSON)
     }
   }
 
@@ -146,6 +153,7 @@ object Department extends Controller {
         dq => {
           try {
             val page = departmentService.page(pageno, limit, dq, sort, dir)
+//            log.debug("="*13+"page.data[0].parentDepartment = "+page.data(0).parentDepartment+"="*13)
             Ok(Json.generate(Map("result" -> 0,
               "success" -> true,
               "message" -> "",
@@ -154,7 +162,7 @@ object Department extends Controller {
               "start" -> page.pageno,
               "limit" -> page.pagesize))).as(JSON)
           } catch {
-            case e =>
+            case e:Exception =>
               log.error(e.toString, e.fillInStackTrace())
               Ok(Json.generate(Map("result" -> -1,
                 "success" -> false,
@@ -162,8 +170,7 @@ object Department extends Controller {
                 "data" -> List(),
                 "total" -> 0,
                 "start" -> pageno,
-                "limit" -> limit,
-                "1" -> "1"
+                "limit" -> limit
               ))).as(JSON)
           }
 
@@ -198,7 +205,7 @@ object Department extends Controller {
               "message" -> "",
               "data" -> nodeList))).as(JSON)
           } catch {
-            case e =>
+            case e:Exception =>
               log.error(e.toString, e.fillInStackTrace())
               Ok(Json.generate(Map("result" -> -1,
                 "success" -> false,

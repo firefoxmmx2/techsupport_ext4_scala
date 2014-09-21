@@ -1,14 +1,17 @@
 package models
 
 import org.joda.time.DateTime
-import org.squeryl.annotations.Column
+import org.squeryl.annotations._
 import org.squeryl.{KeyedEntity, Schema}
 import CommonTypeMode._
 import org.squeryl.dsl.{CompositeKey2, CompositeKey}
 
 object SystemManage extends Schema {
   val departments = table[Department]("t_department")
-  on(departments)(d => declare(d.id is(autoIncremented("departid"), primaryKey)))
+  on(departments)(d => declare(d.id is(autoIncremented("departid"), primaryKey)
+  ))
+//  val parentDepartmentToSubDepartments = oneToManyRelation(departments, departments)
+//    .via((pd, d) => d.parentDepartid === pd.id)
   val users = table[User]("t_user")
   on(users)(u => declare(u.id is(autoIncremented("userid"), primaryKey)))
   val roles = table[Role]("t_role")
@@ -48,7 +51,7 @@ case class Department(
                        departname: String,
                        departlevel: Int,
                        departfullcode: String,
-                       parentDepartid: Long,
+                       parentDepartid: Option[Long]=None,
                        nodeOrder: Int = 0,
                        isLeaf: String = "Y",
                        departsimplepin: Option[String] = None,
@@ -56,7 +59,8 @@ case class Department(
                        departbrevitycode: Option[String] = None,
                        @Column("departid")
                        id: Option[Long]) extends KeyedEntity[Option[Long]] {
-
+  override def toString = s"id=$id,departcode=$departcode,departname=$departname," +
+    s"departlevel=$departlevel,departfullcode=$departfullcode,parentDepartid=$parentDepartid}"
 }
 
 case class DepartmentQueryCondition(
@@ -102,6 +106,9 @@ case class User(
                  email: Option[String],
                  @Column("USERID")
                  id: Option[Long]) extends KeyedEntity[Option[Long]] {
+  override def toString: String = s"{id:$id,departid=$departid,useraccount=$useraccount," +
+    s"username=$username,password=$password,idnum=$idnum," +
+    s"mobilePhone=$mobilePhone,...}"
 }
 
 case class UserQueryCondition(
@@ -307,7 +314,7 @@ case class DictItem(
                      @Column("APPEND_VALUE")
                      appendValue: Option[String] = None,
                      @Column("SUPER_ITEM_ID")
-                     superItemId: Option[Long]=None,
+                     superItemId: Option[Long] = None,
                      @Column("SIB_ORDER")
                      sibOrder: Int = 0,
                      @Column("LEAF_FLAG")
