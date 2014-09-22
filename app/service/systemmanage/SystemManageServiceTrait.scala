@@ -19,6 +19,19 @@ trait DepartmentServiceComponent {
   val departmentService: DepartmentService
 
   trait DepartmentService extends BaseService[Department, Long, DepartmentQueryCondition] {
+    /**
+     * 机构代码重复验证
+     * @param departcode
+     * @return
+     */
+    def checkDepartcodeAvailable(departcode:String):Boolean
+
+    /**
+     * 获取制定上级机构id下的最大序号
+     * @param parentDepartid
+     * @return
+     */
+    def maxDepartmentOrder(parentDepartid:Long):Int
   }
 
 }

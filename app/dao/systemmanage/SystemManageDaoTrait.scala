@@ -19,6 +19,7 @@ trait DepartmentDaoComponent {
   val departmentDao: DepartmentDao
 
   trait DepartmentDao extends BaseDao[Department, Long, DepartmentQueryCondition] {
+    def maxDepartmentOrder(parentdepartid:Long):Int
   }
 
 }

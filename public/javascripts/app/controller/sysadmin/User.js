@@ -161,9 +161,6 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                 //用户帐号加上不可重复验证
                 initComponent: function (t) {
                     t.textValid = false;
-                    t.validator = function (value) {
-                        return t.textValid;
-                    }
                 },
                 'change': function (textfield, newValue, oldValue) {
                     Ext.Ajax.request({
@@ -177,13 +174,19 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                                 this.textValid = true;
                             }
                             else {
-                                this.markInvalid(res.message);
-                                this.textValid = false;
+                                this.textValid = res.message;
+                                this.markInvalid(this.textValid);
                                 this.focus();
                             }
                         },
                         failure: function (response) {
-                            Ext.Msg.alert("错误",'账户重复验证发生错误');
+                            if(response.status==200){
+                                var res=Ext.decode(response.responseText);
+                                this.textValid = res.message;
+                                this.markInvalid(this.textValid);
+                            }
+                            else
+                                Ext.Msg.alert("错误",'账户重复验证发生错误');
                             this.focus();
                         }
                     });

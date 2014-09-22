@@ -19,18 +19,20 @@ object Test {
   }
 
 
-  val parser=new ExprParser
-  val result=parser.parseAll(parser.expr,"3-4*5")
-  if(result.successful) println(result.get)
+//  val parser=new ExprParser
+//  val result=parser.parseAll(parser.expr,"3-4*5")
+//  if(result.successful) println(result.get)
+//
+////  hexDigits[(bt & 0xf0) >> 4]
+//
+//  def isDivisibleBy(k:Int):Int=>Boolean={
+//        println("evaluating isDivisibleBy")
+//    i=>i%k==0
+//  }
+//  val isEven:Int=>Boolean = i => i%2==0
+//  isDivisibleBy(2)(11)
+//  List(1,2,3,4,5,6,7,8,9,10).filter(isDivisibleBy(2))
 
-//  hexDigits[(bt & 0xf0) >> 4]
-
-  def isDivisibleBy(k:Int):Int=>Boolean={
-        println("evaluating isDivisibleBy")
-    i=>i%k==0
-  }
-  val isEven:Int=>Boolean = i => i%2==0
-  isDivisibleBy(2)(11)
-  List(1,2,3,4,5,6,7,8,9,10).filter(isDivisibleBy(2))
-
+  val str=null
+  str==null
 }

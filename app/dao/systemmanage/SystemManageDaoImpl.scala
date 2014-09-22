@@ -21,7 +21,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
   class DepartmentDaoImpl extends DepartmentDao {
     def selectForListQuery(params: DepartmentQueryCondition, sort: String = "nodeOrder", dir: String = "asc") = {
-      println("=" * 13 + "sort = " + sort + "=" * 13)
+//      println("=" * 13 + "sort = " + sort + "=" * 13)
       from(SystemManage.departments)(d =>
         where(d.id === params.id.?
           and d.departcode === params.departcode.?
@@ -111,6 +111,18 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
     def update(m: Department): Unit = SystemManage.departments.update(m)
 
     /**
+     * 获取机构制定上级机构下最大序号
+     * @param parentdepartid 上级机构id
+     * @return
+     */
+    def maxDepartmentOrder(parentdepartid: Long): Int =
+      from(SystemManage.departments)(
+        d=>
+          where(d.parentDepartid === parentdepartid)
+          compute(max(d.nodeOrder))
+      ).single.measures.getOrElse(0)
+
+    /**
      * 插入
      * @param m 实体
 
@@ -156,7 +168,7 @@ trait UserDaoComponentImpl extends UserDaoComponent {
       if (page.total == 0)
         page
       else {
-        Logger.debug("=" * 13 + " user dao page " + "[page.start]=[" + page.start + "],[page.limit]=[" + page.limit + "]" + "=" * 13)
+//        Logger.debug("=" * 13 + " user dao page " + "[page.start]=[" + page.start + "],[page.limit]=[" + page.limit + "]" + "=" * 13)
         Logger.debug("=" * 13 + selectForPage(params, sort, dir).page(page.start, page.limit).statement + "=" * 13)
         val datas = selectForPage(params, sort, dir).page(page.start, page.limit).toList
         page.copy(data = datas)

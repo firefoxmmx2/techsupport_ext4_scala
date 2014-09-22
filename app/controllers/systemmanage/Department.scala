@@ -44,7 +44,7 @@ object Department extends Controller {
 
   def add = Action {
     implicit request =>
-      addForm.bindFromRequest.fold(hasErrors= form => {
+      addForm.bindFromRequest.fold(hasErrors = form => {
         BadRequest(form.errorsAsJson)
       }, department => {
         try {
@@ -85,7 +85,7 @@ object Department extends Controller {
 
   def update(id: Long) = Action {
     implicit request =>
-      updateForm.bindFromRequest().fold(hasErrors=form => {
+      updateForm.bindFromRequest().fold(hasErrors = form => {
         BadRequest(form.errorsAsJson)
       }, department => {
         try {
@@ -94,7 +94,7 @@ object Department extends Controller {
             "success" -> true,
             "message" -> "修改成功"))).as(JSON)
         } catch {
-          case e:Exception =>
+          case e: Exception =>
             log.error(e.toString, e.fillInStackTrace())
             Ok(Json.generate(Map("result" -> -1,
               "success" -> false,
@@ -110,15 +110,15 @@ object Department extends Controller {
    */
   def get(id: Long) = Action {
     try {
-      log.debug("="*13+"获取单一机构..."+"="*13)
-      log.debug("="*13+"id = "+id+"="*13)
+      log.debug("=" * 13 + "获取单一机构..." + "=" * 13)
+      log.debug("=" * 13 + "id = " + id + "=" * 13)
       val d = departmentService.getById(id)
       Ok(Json.generate(Map("result" -> 0,
         "success" -> true,
         "message" -> "",
         "data" -> d))).as(JSON)
     } catch {
-      case e:Exception =>
+      case e: Exception =>
         log.error(e.toString, e.fillInStackTrace())
         Ok(Json.generate(Map("result" -> -1,
           "success" -> false,
@@ -148,12 +148,12 @@ object Department extends Controller {
       var limit: Int = req.getQueryString("limit").getOrElse("20").toInt
       var sort = req.getQueryString("sort").getOrElse("nodeOrder")
       var dir = req.getQueryString("dir").getOrElse("asc")
-      listParamForm.bindFromRequest().fold(hasErrors=form =>
+      listParamForm.bindFromRequest().fold(hasErrors = form =>
         BadRequest(form.errorsAsJson),
         dq => {
           try {
             val page = departmentService.page(pageno, limit, dq, sort, dir)
-//            log.debug("="*13+"page.data[0].parentDepartment = "+page.data(0).parentDepartment+"="*13)
+            //            log.debug("="*13+"page.data[0].parentDepartment = "+page.data(0).parentDepartment+"="*13)
             Ok(Json.generate(Map("result" -> 0,
               "success" -> true,
               "message" -> "",
@@ -162,7 +162,7 @@ object Department extends Controller {
               "start" -> page.pageno,
               "limit" -> page.pagesize))).as(JSON)
           } catch {
-            case e:Exception =>
+            case e: Exception =>
               log.error(e.toString, e.fillInStackTrace())
               Ok(Json.generate(Map("result" -> -1,
                 "success" -> false,
@@ -185,8 +185,8 @@ object Department extends Controller {
    */
   def departmentTreeNode = Action {
     implicit request =>
-      listParamForm.bindFromRequest().fold(hasErrors =>
-        BadRequest,
+      listParamForm.bindFromRequest().fold(hasErrors = form =>
+        BadRequest(form.errorsAsJson),
         dq => {
           try {
             val departmentList = departmentService.list(dq)
@@ -197,7 +197,9 @@ object Department extends Controller {
                   "text" -> x.departname,
                   "parentId" -> x.parentDepartid,
                   "leaf" -> leaf,
-                  "departcode" -> x.departcode
+                  "departcode" -> x.departcode,
+                  "departfullcode" -> x.departfullcode,
+                  "departlevel" -> x.departlevel
                 )
             }
             Ok(Json.generate(Map("result" -> 0,
@@ -205,7 +207,7 @@ object Department extends Controller {
               "message" -> "",
               "data" -> nodeList))).as(JSON)
           } catch {
-            case e:Exception =>
+            case e: Exception =>
               log.error(e.toString, e.fillInStackTrace())
               Ok(Json.generate(Map("result" -> -1,
                 "success" -> false,
@@ -214,5 +216,68 @@ object Department extends Controller {
               ))).as(JSON)
           }
         })
+  }
+
+  val checkDepartcodeAvailableForm = Form(
+    single(
+      "departcode" -> text
+    )
+  )
+
+  /**
+   * 验证机构代码是否可用
+   * @return
+   */
+  def checkDepartcodeAvailable = Action {
+    implicit request =>
+      checkDepartcodeAvailableForm.bindFromRequest.fold(
+        hasErrors = form =>
+          BadRequest(form.errorsAsJson),
+        success = departcode =>
+          try {
+            val result=departmentService.checkDepartcodeAvailable(departcode)
+            Ok(Json.generate(Map("success" -> true,
+              "result" -> 0,
+              "isAvailable" -> result))).as(JSON)
+          }
+          catch {
+            case e: Exception =>
+              log.error("验证机构代码重复发生错误")
+              log.error(e.getMessage, e.fillInStackTrace())
+              Ok(Json.generate(Map("success" -> false,
+                "result" -> -1,
+                "message" -> "验证机构代码重复发生错误")))
+          }
+      )
+  }
+  
+  val maxDepartmentOrderForm=Form(
+    single("parentDepartid"->longNumber)
+  )
+
+  /**
+   * 获取机构最大序号
+   * @return
+   */
+  def maxDepartmentOrder=Action {
+    implicit request=>
+      maxDepartmentOrderForm.bindFromRequest.fold(
+      hasErrors= form =>
+        BadRequest(form.errorsAsJson),
+      success= parentDepartid =>
+        try {
+          Ok(Json.generate(Map("result" -> 0,
+            "success" -> true,
+            "data" -> departmentDao.maxDepartmentOrder(parentDepartid)))).as(JSON)
+        }
+        catch {
+          case e:Exception  =>
+            log.error("获取机构最大序号发生错误")
+            log.error(e.getMessage,e.fillInStackTrace())
+            Ok(Json.generate(Map("result"-> -1,
+            "success"->false,
+            "message"->"获取机构最大序号发生错误"))).as(JSON)
+        }
+      )
   }
 }

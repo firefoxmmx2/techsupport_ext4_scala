@@ -20,7 +20,9 @@ Ext.define('Techsupport.view.sysadmin.user.Add', {
                     },
                     border: false,
                     items: [
-                        {fieldLabel: '帐号', name: 'useraccount', allowBlank: false, blankText: '不能为空'},
+                        {fieldLabel: '帐号', name: 'useraccount', allowBlank: false, blankText: '不能为空', validator: function (value) {
+                            return this.textValid;
+                        }},
                         {fieldLabel: '密码', name: 'password', inputType: 'password',
                             allowBlank: false, blankText: '不能为空',
                             maxLength: 16, maxLengthText: '最长16位', validator: function (value) {
@@ -63,7 +65,7 @@ Ext.define('Techsupport.view.sysadmin.user.Add', {
                             valueField: 'value',
                             value: '1'}
                     ]},
-                {fieldLabel: '用户类别', margin: {left: 10, top: 0, bottom: 0, right: 5}, allowBlank: false,blankText:'不能为空',name: 'userTypeGroup', xtype: 'checkboxgroup', columns: 2, vertical: true, items: [
+                {fieldLabel: '用户类别', margin: {left: 10, top: 0, bottom: 0, right: 5}, allowBlank: false, blankText: '不能为空', name: 'userTypeGroup', xtype: 'checkboxgroup', columns: 2, vertical: true, items: [
 //                    { boxLabel: 'Item 1', name: 'usertype', inputValue: '1' },
 //                    { boxLabel: 'Item 2', name: 'usertype', inputValue: '2', checked: true },
 //                    { boxLabel: 'Item 3', name: 'usertype', inputValue: '3' },

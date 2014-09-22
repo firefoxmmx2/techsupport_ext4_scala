@@ -37,6 +37,29 @@ trait DepartmentServiceComponentImpl extends DepartmentServiceComponent {
     def insert(e: Department): Department = inTransaction {
       departmentDao.insert(e)
     }
+
+    /**
+     * 机构代码重复验证
+     * @param departcode
+     * @return
+     */
+    def checkDepartcodeAvailable(departcode: String): Boolean = inTransaction {
+      if(StringUtils.isEmpty(departcode))
+        throw new RuntimeException("机构代码重复验证的机构代码为空")
+      val resultcode=departmentDao.count(DepartmentQueryCondition(departcode=Some(departcode)))
+      resultcode==0
+    }
+
+    /**
+     * 获取制定上级机构id下的最大序号
+     * @param parentDepartid
+     * @return
+     */
+    def maxDepartmentOrder(parentDepartid: Long): Int = inTransaction {
+      if(parentDepartid==null || parentDepartid == 0)
+        throw new RuntimeException("获取最大序号的上级机构ID为空")
+      departmentDao.maxDepartmentOrder(parentDepartid)
+    }
   }
 
 }
