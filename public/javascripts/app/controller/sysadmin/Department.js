@@ -5,9 +5,9 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
     extend: 'Ext.app.Controller',
     views: [
         "sysadmin.department.List",
-        "sysadmin.department.Manage"
-        /*,
-         "sysadmin.department.Add", "sysadmin.department.Edit"*/
+        "sysadmin.department.Manage",
+        "sysadmin.department.Add",
+        "sysadmin.department.Edit"
     ],
     stores: ['YN', 'Department'],
     refs: [
@@ -28,25 +28,25 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
                     g.getStore().getProxy().setExtraParam('limit', pagesize);
                 },
                 itemdblclick: function (g, record, item, index, e, eOpts) {
-                    var controller=this;
+                    var controller = this;
                     var _window = Ext.create('Techsupport.view.sysadmin.department.Edit');
                     var tree = controller.getDepartmentTree();
                     _window.query('form:first').map(function (f) {
                         if (tree.cdata.departid && tree.cdata.departid != 0) {
                             Ext.Ajax.request({
-                                url:'/api/departments/'+record.data.parentDepartid,
+                                url: '/api/departments/' + record.data.parentDepartid,
                                 success: function (action, options) {
-                                    var res=Ext.decode(action.responseText);
-                                    if(res.result==0){
+                                    var res = Ext.decode(action.responseText);
+                                    if (res.result == 0) {
                                         record.data.parentDepartname = res.data.departname;
                                         f.getForm().loadRecord(record)
                                     }
-                                    else{
-                                        Ext.Msg.alert("提示",res.message);
+                                    else {
+                                        Ext.Msg.alert("提示", res.message);
                                     }
                                 },
                                 failure: function (action, options) {
-                                    Ext.Msg.alert("错误","获取单一机构发生错误");
+                                    Ext.Msg.alert("错误", "获取单一机构发生错误");
                                 }
                             });
 
@@ -115,10 +115,10 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
                         _window.query('form:first').map(function (f) {
                             if (tree.cdata.departid && tree.cdata.departid != 0) {
                                 Ext.Ajax.request({
-                                    url:'/api/departments/'+ r.data.parentDepartid,
+                                    url: '/api/departments/' + r.data.parentDepartid,
                                     success: function (action, options) {
-                                        var res=Ext.decode(action.responseText);
-                                        if(res.result==0){
+                                        var res = Ext.decode(action.responseText);
+                                        if (res.result == 0) {
                                             r.data.parentDepartname = res.data.departname;
                                             f.getForm().loadRecord(r)
                                         }
@@ -135,26 +135,25 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
 
                 }
             },
-            'departmentedit button[action=enter]':{
+            'departmentedit button[action=enter]': {
                 //修改按钮
                 click: function (button, evt) {
-                    var _window=button.findParentByType('window');
-                    var store=this.getDepartmentStore();
-                    var form=_window.query('form')[0];
-                    this.modifyDeparment(form,store, function (batch, option) {
+                    var _window = button.findParentByType('window');
+                    var store = this.getDepartmentStore();
+                    var form = _window.query('form')[0];
+                    this.modifyDeparment(form, store, function (batch, option) {
                         store.commitChanges();
                     }, function (batch, option) {
                         store.rejectChanges();
                     });
                 }
             },
-            'departmentedit button[action=cancel]':{
+            'departmentedit button[action=cancel]': {
                 //修改关闭
                 click: function (button, evt) {
                     button.findParentByType('window').close();
                 }
-            }
-            ,
+            },
             'departmentadd button[action=enter]': {
                 //确认添加
                 click: function (button, evt) {
@@ -220,15 +219,15 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
             });
         }
     },
-    modifyDeparment: function (form,store,success,failure) {
+    modifyDeparment: function (form, store, success, failure) {
         //机构修改
-        if(form.getForm().isValid()){
-            var params=form.getForm().getValues();
-            store.
-            store.sync({
-                success:success,
-                failure:failure
-            });
+        if (form.getForm().isValid()) {
+            var params = form.getForm().getValues();
+            store.loadRecord(form.getForm().getRecord());
+                store.sync({
+                    success: success,
+                    failure: failure
+                });
         }
     },
     upDepartment: function (grid) {

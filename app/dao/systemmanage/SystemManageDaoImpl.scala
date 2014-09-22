@@ -20,42 +20,22 @@ import models.CommonTypeMode._
 trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
   class DepartmentDaoImpl extends DepartmentDao {
-    def selectForListQuery(params: DepartmentQueryCondition, sort: String = "departid", dir: String = "asc") =
+    def selectForListQuery(params: DepartmentQueryCondition, sort: String = "nodeOrder", dir: String = "asc") = {
+      println("=" * 13 + "sort = " + sort + "=" * 13)
       from(SystemManage.departments)(d =>
-      where(d.id === params.id.?
-        and d.departcode === params.departcode.?
-        and (d.departname like params.departname.?)
-        and (d.departfullcode like params.departfullcode.?)
-        and d.departlevel === params.departlevel.?
-        and d.parentDepartid === params.parentDepartid.?)
-        select (d)
-        orderBy (if (sort == "departid") if (dir == "asc") d.id asc else d.id desc else d.id asc)
-    )
-//        join(SystemManage.departments,SystemManage.departments.leftOuter)((d,pd) =>
-//                where(d.id === params.id.?
-//                  and d.departcode === params.departcode.?
-//                  and (d.departname like params.departname.?)
-//                  and (d.departfullcode like params.departfullcode.?)
-//                  and d.departlevel === params.departlevel.?
-//                  and d.parentDepartid === params.parentDepartid.?)
-////                select(d.copy(parentDepartment = pd))
-//                  select (d,pd)
-//              on(d.parentDepartid ===  pd.map(_.id).get)
-//        )
+        where(d.id === params.id.?
+          and d.departcode === params.departcode.?
+          and (d.departname like params.departname.?)
+          and (d.departfullcode like params.departfullcode.?)
+          and d.departlevel === params.departlevel.?
+          and d.parentDepartid === params.parentDepartid.?)
+          select (d)
+          orderBy (if (sort == "nodeOrder") if (dir == "asc") d.nodeOrder asc else d.nodeOrder desc else d.nodeOrder asc)
+      )
 
-    def selectForListQueryTest(params: DepartmentQueryCondition, sort: String = "departid", dir: String = "asc") =
-            join(SystemManage.departments,SystemManage.departments.leftOuter)((d,pd) =>
-                    where(d.id === params.id.?
-                      and d.departcode === params.departcode.?
-                      and (d.departname like params.departname.?)
-                      and (d.departfullcode like params.departfullcode.?)
-                      and d.departlevel === params.departlevel.?
-                      and d.parentDepartid === params.parentDepartid.?)
-    //                select(d.copy(parentDepartment = pd))
-                      select (d,pd)
-                      orderBy (if (sort == "departid") if (dir == "asc") d.id asc else d.id desc else d.id asc)
-                  on(d.parentDepartid ===  pd.map(_.id).get)
-            )
+    }
+
+
     /**
      * 分页查询
      * @param pageno 页码
@@ -66,14 +46,14 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return 分页结果
      */
-    def page(pageno: Int, pagesize: Int, params: DepartmentQueryCondition, sort: String = "departid", dir: String = "asc"): Page[Department] = {
+    def page(pageno: Int, pagesize: Int, params: DepartmentQueryCondition, sort: String = "nodeOrder", dir: String = "asc"): Page[Department] = {
       val page = new Page[Department](pageno, pagesize, count(params))
       if (page.total == 0)
         page
       else {
-        println("="*13+selectForListQueryTest(params, sort, dir).page(page.start, page.limit).statement+"="*13)
+//        println("=" * 13 + selectForListQueryTest(params, sort, dir).page(page.start, page.limit).statement + "=" * 13)
         val datas = selectForListQuery(params, sort, dir).page(page.start, page.limit).toList
-//        page
+        //        page
         page.copy(data = datas)
       }
     }
@@ -101,9 +81,9 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): Department = from(SystemManage.departments) (  d =>
+    def getById(id: Long): Department = from(SystemManage.departments)(d =>
       where(d.id === id)
-        select(d)
+        select (d)
     ).single
 
     /**
@@ -246,9 +226,9 @@ trait UserDaoComponentImpl extends UserDaoComponent {
      * @return
      */
     def maxUserOrder(departid: Long): Int = from(SystemManage.users)(
-      u=>
+      u =>
         where(u.departid === departid)
-        compute(max(u.userorder))
+          compute (max(u.userorder))
     ).single.measures.getOrElse(0)
   }
 
@@ -481,7 +461,7 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
             and m.parentmenucode === parentmenucode
             and m.systemcode === systemcode.?)
             select (m)
-        orderBy(m.nodeorder asc)
+            orderBy (m.nodeorder asc)
       ).toList
     }
 
@@ -905,7 +885,7 @@ trait DictItemDaoComponentImpl extends DictItemDaoComponent {
               and params.factValue.? === di.factValue
               and params.appendValue.? === di.appendValue
               and (di.displayName like params.displayName.?)
-//              and params.displayFlag === di.displayFlag
+            //              and params.displayFlag === di.displayFlag
           )
             select (di)
       )

@@ -146,8 +146,8 @@ object Department extends Controller {
     implicit req =>
       var pageno: Int = req.getQueryString("page").getOrElse("1").toInt
       var limit: Int = req.getQueryString("limit").getOrElse("20").toInt
-      var sort = req.getQueryString("sort").getOrElse("")
-      var dir = req.getQueryString("dir").getOrElse("")
+      var sort = req.getQueryString("sort").getOrElse("nodeOrder")
+      var dir = req.getQueryString("dir").getOrElse("asc")
       listParamForm.bindFromRequest().fold(hasErrors=form =>
         BadRequest(form.errorsAsJson),
         dq => {
