@@ -20,7 +20,7 @@ POST          /api/departments/checkDepartcodeAvailable        controllers.syste
 GET           /api/departments/departmentTreeNode              controllers.systemmanage.Department.departmentTreeNode
 POST          /api/departments                                 controllers.systemmanage.Department.add
 DELETE        /api/departments/:id                             controllers.systemmanage.Department.remove(id:Long)
-POST          /api/departments/:id                             controllers.systemmanage.Department.update(id:Long)
+PUT           /api/departments/:id                             controllers.systemmanage.Department.update(id:Long)
 GET           /api/departments/:id                             controllers.systemmanage.Department.get(id:Long)
 GET           /api/departments                                 controllers.systemmanage.Department.list
 

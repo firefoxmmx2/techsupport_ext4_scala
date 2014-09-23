@@ -16,7 +16,8 @@ Ext.define('Techsupport.model.Department', {
         {name: 'departsimplepin', type: 'string'},
         {name: 'departallpin', type: 'string'},
         {name: 'departbrevitycode', type: 'string'},
-        {name: 'parentDepartname', type: 'string'}
+        {name: 'parentDepartname', type: 'string'},
+        {name: 'parentDepartfullcode', type: 'string'}
     ]/*,
      validations: [
      {field: 'departcode', type: 'length', min: 1, max: 12},
