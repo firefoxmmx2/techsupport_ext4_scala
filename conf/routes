@@ -16,6 +16,7 @@ GET           /api/users/:id                                   controllers.syste
 GET           /api/users                                       controllers.systemmanage.User.list
 
 #机构
+POST          /api/departments/maxDepartmentOrder              controllers.systemmanage.Department.maxDepartmentOrder
 POST          /api/departments/checkDepartcodeAvailable        controllers.systemmanage.Department.checkDepartcodeAvailable
 GET           /api/departments/departmentTreeNode              controllers.systemmanage.Department.departmentTreeNode
 POST          /api/departments                                 controllers.systemmanage.Department.add

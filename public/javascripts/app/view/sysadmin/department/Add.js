@@ -8,9 +8,13 @@ Ext.define('Techsupport.view.sysadmin.department.Add', {
     initComponent: function () {
         this.callParent(arguments);
         this.query('form panel').map(function (p) {
-            p.add({fieldLabel: '机构代码', name: 'departcode', allowBlank: false, blankText: '机构代码不能为空', vtype: 'alphanum', validator: function (value) {
-                    return this.textValid;
-                }},
+            p.add({fieldLabel: '机构代码', name: 'departcode', allowBlank: false,
+                    blankText: '机构代码不能为空', vtype: 'alphanum',
+                    validator: function (value) {
+                        return this.textValid;
+                    },
+                    textValid: true
+                },
                 {fieldLabel: '机构名称', name: 'departname', allowBlank: false, blankText: '机构名称不能为空'},
                 {fieldLabel: '机构级别', name: 'departlevel', allowBlank: false, blankText: '机构级别不能为空', vtype: 'number'},
                 {fieldLabel: '机构全码', name: 'departfullcode', allowBlank: false, blankText: '机构全码不能为空', readOnly: true, vtype: 'alphanum'},

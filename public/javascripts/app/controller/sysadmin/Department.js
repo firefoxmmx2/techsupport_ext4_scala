@@ -10,7 +10,7 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
         "sysadmin.department.Edit"
     ],
     stores: ['YN', 'Department'],
-    models:['Department'],
+    models:['Department','DepartmentTree'],
     refs: [
         {ref: 'departmentTree', selector: 'departmentManage departmenttree'},
         {ref: 'queryForm', selector: 'departmentManage panel buttongroup[dock=top] form'}
@@ -38,6 +38,9 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
                                 if (res.result == 0) {
                                     record.data.parentDepartname = res.data.departname;
                                     record.data.parentDepartfullcode=res.data.departfullcode;
+                                    f.query('textfield[name=departcode]').map(function (field) {
+                                        field.originalValue = record.data.departcode;
+                                    });
                                     f.getForm().loadRecord(record);
                                 }
                                 else {
@@ -61,12 +64,6 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
                     var _window = Ext.create('Techsupport.view.sysadmin.department.Add', {name: 'departmentAddWindow'});
                     var tree = this.getDepartmentTree();
                     _window.query('form:first').map(function (f) {
-//                        f.getForm().setValues({
-//                            parentDepartid: tree.cdata.departid,
-//                            parentDepartname: tree.cdata.departname,
-//                            departfullcode: tree.cdata.departfullcode ? tree.cdata.departfullcode : '',
-//                            departlevel: tree.cdata.departlevel + 1
-//                        });
                         var record=controller.getDepartmentModel().create({
                             parentDepartid: tree.cdata.departid,
                             parentDepartname: tree.cdata.departname,
@@ -120,7 +117,11 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
                                     if (res.result == 0) {
                                         r.data.parentDepartname = res.data.departname;
                                         r.data.parentDepartfullcode = res.data.departfullcode;
+                                        f.query('textfield[name=departcode]').map(function (field) {
+                                            field.originalValue = r.data.departcode;
+                                        });
                                         f.getForm().loadRecord(r);
+
                                     }
                                 }
                             });
@@ -159,9 +160,6 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
             },
             'departmentadd textfield[name=departcode]': {
                 //机构代码重复验证
-                initComponent: function (t) {
-                    t.textValid = false;
-                },
                 change: function (field, newValue, oldValue) {
                     //机构全码补全联动
                     var panel=field.findParentByType('panel');
@@ -173,36 +171,66 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
                     );
 
                     //机构代码重复验证
-                    Ext.Ajax.request({
-                        url: '/api/departments/checkDepartcodeAvailable',
-                        params: {'departcode': newValue},
-                        scope: field,
-                        success: function (response) {
-                            var res = Ext.decode(response.responseText);
-                            if (res.result == 0 && res.isAvailable) {
-                                this.clearInvalid();
-                                this.textValid = true;
-                            }
-                            else {
-                                this.textValid = '该机构代码已被使用';
-                                this.markInvalid(this.textValid);
+                    if(newValue != field.originalValue){
+                        Ext.Ajax.request({
+                            url: '/api/departments/checkDepartcodeAvailable',
+                            params: {'departcode': newValue},
+                            scope: field,
+                            success: function (response) {
+                                var res = Ext.decode(response.responseText);
+                                if (res.result == 0 && res.isAvailable) {
+                                    this.clearInvalid();
+                                    this.textValid = true;
+                                }
+                                else {
+                                    this.textValid = '该机构代码已被使用';
+                                    this.markInvalid(this.textValid);
+                                    this.focus();
+                                }
+                            },
+                            failure: function (response) {
+                                if(response.status == 200){
+                                    var res=Ext.decode(response.responseText);
+                                    this.textValid = res.message;
+                                    this.markInvalid(this.textValid);
+                                }
+                                else{
+                                    Ext.Msg.alert("错误",'机构代码重复验证发生错误');
+                                }
                                 this.focus();
                             }
+                        });
+                    }
+                    else{
+                        field.clearInvalid();
+                        field.textValid = true;
+                    }
+                }
+            },
+            'departmentadd[name=departmentAddWindow] textfield[name=nodeOrder]':{
+                render: function (field) {
+                    var tree=this.getDepartmentTree();
+                    Ext.Ajax.request({
+                        url:"/api/departments/maxDepartmentOrder",
+                        params:{parentDepartid:tree.cdata.departid},
+                        success: function (response) {
+                            var res=Ext.decode(response.responseText);
+                            if(res.result == 0) {
+                                field.setValue(res.data + 1);
+                            }
+                            else
+                                Ext.Msg.alert('错误',res.message);
                         },
                         failure: function (response) {
                             if(response.status == 200){
-                                var res=Ext.decode(response.responseText);
-                                this.textValid = res.message;
-                                this.markInvalid(this.textValid);
+                                var res=Ext.decode(res.responseText);
+                                Ext.Msg.alert('错误',res.message);
                             }
-                            else{
-                                Ext.Msg.alert("错误",'机构代码重复验证发生错误');
-                            }
-                            this.focus();
+                            else
+                                Ext.Msg.alert('错误','获取最大机构排序号发生致命错误');
                         }
                     });
                 }
-
             }
         });
     },
@@ -244,6 +272,9 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
                 success: function (form, action) {
                     if (action.result.result == 0) {
                         controller.queryDepartment(controller);
+                        // TODO 获取视图刷新树节点
+                        controller.getDepartmentTree().getView().collapse();
+
                         window.close();
                     }
                 },

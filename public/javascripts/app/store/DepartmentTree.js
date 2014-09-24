@@ -3,8 +3,7 @@
  */
 Ext.define('Techsupport.store.DepartmentTree', {
     extend: 'Ext.data.TreeStore',
-    fields: ['id', 'leaf', 'text', 'parentId'],
-    idProperty: 'id',
+    model:'Techsupport.model.DepartmentTree',
     root: {
         id: '0',
         text: '根节点',

@@ -268,7 +268,7 @@ object Department extends Controller {
         try {
           Ok(Json.generate(Map("result" -> 0,
             "success" -> true,
-            "data" -> departmentDao.maxDepartmentOrder(parentDepartid)))).as(JSON)
+            "data" -> departmentService.maxDepartmentOrder(parentDepartid)))).as(JSON)
         }
         catch {
           case e:Exception  =>
