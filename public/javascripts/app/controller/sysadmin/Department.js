@@ -274,7 +274,6 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
                         controller.queryDepartment(controller);
                         // TODO 获取视图刷新树节点
                         controller.getDepartmentTree().getView().collapse();
-
                         window.close();
                     }
                 },
