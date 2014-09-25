@@ -10,7 +10,7 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
         "sysadmin.department.Edit"
     ],
     stores: ['YN', 'Department'],
-    models:['Department','DepartmentTree'],
+    models: ['Department', 'DepartmentTree'],
     refs: [
         {ref: 'departmentTree', selector: 'departmentManage departmenttree'},
         {ref: 'queryForm', selector: 'departmentManage panel buttongroup[dock=top] form'}
@@ -37,7 +37,7 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
                                 var res = Ext.decode(action.responseText);
                                 if (res.result == 0) {
                                     record.data.parentDepartname = res.data.departname;
-                                    record.data.parentDepartfullcode=res.data.departfullcode;
+                                    record.data.parentDepartfullcode = res.data.departfullcode;
                                     f.query('textfield[name=departcode]').map(function (field) {
                                         field.originalValue = record.data.departcode;
                                     });
@@ -60,11 +60,11 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
             'departmentManage button[action=add]': {
                 //添加按钮
                 click: function (button, evt) {
-                    var controller=this;
+                    var controller = this;
                     var _window = Ext.create('Techsupport.view.sysadmin.department.Add', {name: 'departmentAddWindow'});
                     var tree = this.getDepartmentTree();
                     _window.query('form:first').map(function (f) {
-                        var record=controller.getDepartmentModel().create({
+                        var record = controller.getDepartmentModel().create({
                             parentDepartid: tree.cdata.departid,
                             parentDepartname: tree.cdata.departname,
                             parentDepartfullcode: tree.cdata.departfullcode,
@@ -138,7 +138,8 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
                     var _window = button.findParentByType('window');
                     var store = this.getDepartmentStore();
                     var form = _window.query('form')[0];
-                    this.modifyDeparment(form, store, function (batch, option) {
+                    var tree = this.getDepartmentTree();
+                    this.modifyDeparment(form, store, tree, function (batch, option) {
                         store.commitChanges();
                         _window.close();
                     }, function (batch, option) {
@@ -162,16 +163,16 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
                 //机构代码重复验证
                 change: function (field, newValue, oldValue) {
                     //机构全码补全联动
-                    var panel=field.findParentByType('panel');
+                    var panel = field.findParentByType('panel');
                     panel.query('textfield[name=departfullcode]').map(
                         function (f) {
-                            var record=f.findParentByType('form').getForm().getRecord();
+                            var record = f.findParentByType('form').getForm().getRecord();
                             f.setValue(record.data.parentDepartfullcode + (newValue ? newValue + "." : ''));
                         }
                     );
 
                     //机构代码重复验证
-                    if(newValue != field.originalValue){
+                    if (newValue != field.originalValue) {
                         Ext.Ajax.request({
                             url: '/api/departments/checkDepartcodeAvailable',
                             params: {'departcode': newValue},
@@ -189,45 +190,45 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
                                 }
                             },
                             failure: function (response) {
-                                if(response.status == 200){
-                                    var res=Ext.decode(response.responseText);
+                                if (response.status == 200) {
+                                    var res = Ext.decode(response.responseText);
                                     this.textValid = res.message;
                                     this.markInvalid(this.textValid);
                                 }
-                                else{
-                                    Ext.Msg.alert("错误",'机构代码重复验证发生错误');
+                                else {
+                                    Ext.Msg.alert("错误", '机构代码重复验证发生错误');
                                 }
                                 this.focus();
                             }
                         });
                     }
-                    else{
+                    else {
                         field.clearInvalid();
                         field.textValid = true;
                     }
                 }
             },
-            'departmentadd[name=departmentAddWindow] textfield[name=nodeOrder]':{
+            'departmentadd[name=departmentAddWindow] textfield[name=nodeOrder]': {
                 render: function (field) {
-                    var tree=this.getDepartmentTree();
+                    var tree = this.getDepartmentTree();
                     Ext.Ajax.request({
-                        url:"/api/departments/maxDepartmentOrder",
-                        params:{parentDepartid:tree.cdata.departid},
+                        url: "/api/departments/maxDepartmentOrder",
+                        params: {parentDepartid: tree.cdata.departid},
                         success: function (response) {
-                            var res=Ext.decode(response.responseText);
-                            if(res.result == 0) {
+                            var res = Ext.decode(response.responseText);
+                            if (res.result == 0) {
                                 field.setValue(res.data + 1);
                             }
                             else
-                                Ext.Msg.alert('错误',res.message);
+                                Ext.Msg.alert('错误', res.message);
                         },
                         failure: function (response) {
-                            if(response.status == 200){
-                                var res=Ext.decode(res.responseText);
-                                Ext.Msg.alert('错误',res.message);
+                            if (response.status == 200) {
+                                var res = Ext.decode(res.responseText);
+                                Ext.Msg.alert('错误', res.message);
                             }
                             else
-                                Ext.Msg.alert('错误','获取最大机构排序号发生致命错误');
+                                Ext.Msg.alert('错误', '获取最大机构排序号发生致命错误');
                         }
                     });
                 }
@@ -252,6 +253,8 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
             store.sync({
                 success: function (batch, options) {
                     store.commitChanges();
+                    var tree = controller.getDepartmentTree();
+                    tree.refresh(tree.getSelectionModel().getSelection()[0].data.id);
                     if (store.getTotalCount() > store.pageSize)
                         controller.queryDepartment(controller);
                 },
@@ -272,8 +275,9 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
                 success: function (form, action) {
                     if (action.result.result == 0) {
                         controller.queryDepartment(controller);
-                        // TODO 获取视图刷新树节点
-                        controller.getDepartmentTree().getView().collapse();
+                        //  获取视图刷新树节点
+                        var tree = controller.getDepartmentTree();
+                        tree.refresh(tree.getSelectionModel().getSelection()[0].data.id);
                         window.close();
                     }
                 },
@@ -288,23 +292,28 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
             });
         }
     },
-    modifyDeparment: function (form, store, success, failure) {
+    modifyDeparment: function (form, store, tree, success, failure) {
         //机构修改
         if (form.getForm().isValid()) {
             var record = form.getForm().updateRecord();
             var extraParams = store.getProxy().extraParams;
-            store.getProxy().extraParams={};
+            store.getProxy().extraParams = {};
             store.sync({
                 success: success,
                 failure: failure
             });
-            store.getProxy().extraprams=extraParams;
+            store.getProxy().extraprams = extraParams;
+           tree.refresh(tree.getSelectionModel().getSelection()[0].data.id);
         }
     },
     upDepartment: function (grid) {
-        //机构上移
+        // TODO 机构上移
+        var selection = grid.getSelectionModel().getSelection().map(function (s) {
+
+        });
+
     },
     downDepartment: function (grid) {
-        //机构下移
+        // TODO 机构下移
     }
 });

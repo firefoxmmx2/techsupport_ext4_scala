@@ -16,8 +16,16 @@ Ext.define('Techsupport.controller.sysadmin.DepartmentTree', {
                     tree.cdata.departlevel = n.raw.departlevel;
                     tree.cdata.departfullcode = n.raw.departfullcode;
                 },
-                render: function (t) {
-                    t.cdata = {departid: 0, departcode: "", departname: "", departfullcode: '', departlevel: 1};
+                render: function (tree) {
+                    tree.cdata = {departid: 0, departcode: "", departname: "", departfullcode: '', departlevel: 1};
+
+                    tree.refresh= function (nodeId) {
+                        //刷新
+                        var node=this.getStore().getNodeById(nodeId);
+                        this.getStore().load({
+                            node:node
+                        });
+                    };
                 },
                 afterrender: function (t, opts) {
                     t.getRootNode().expand();
@@ -51,13 +59,7 @@ Ext.define('Techsupport.controller.sysadmin.DepartmentTree', {
                         items: [
                             {text: '刷新', handler: function () {
                                 var tree = view.ownerCt;
-                                var selectedNode=tree.getSelectionModel().selected.items[0];
-                                tree.getStore().load({
-                                    node: tree.getRootNode(),
-                                    callback: function () {
-                                        tree.expandPath(selectedNode.getPath("id"),"id");
-                                    }
-                                });
+                                tree.refresh(record.data.id);
                             }}
                         ]
                     });
