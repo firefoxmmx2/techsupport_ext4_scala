@@ -14,6 +14,8 @@ Ext.define('Techsupport.model.User', {
         {name: 'userType', type: 'string'},
         {name: 'jzlbdm', type: 'string'},
         {name: 'jzlbmc', type: 'string'},
-        {name: 'email', type: 'string'}
+        {name: 'email', type: 'string'},
+        {name:'departname',type:'string'},
+        {name:'password2',type:'string'}
     ]
 })

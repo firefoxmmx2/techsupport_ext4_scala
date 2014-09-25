@@ -1,3 +1,6 @@
+/**
+ * 机构管理
+ */
 Ext.define('Techsupport.view.sysadmin.department.Manage', {
     extend: 'Techsupport.view.base.BaseManageWithDepartmentTree',
     alias: 'widget.departmentManage',

@@ -1,5 +1,5 @@
 /**
- * Created by hooxin on 14-5-23.
+ * 用户管理
  */
 Ext.define('Techsupport.view.sysadmin.user.Manage', {
     extend: 'Techsupport.view.base.BaseManageWithDepartmentTree',

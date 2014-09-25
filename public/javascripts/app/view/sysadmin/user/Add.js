@@ -47,8 +47,12 @@ Ext.define('Techsupport.view.sysadmin.user.Add', {
                                         res = true;
                                     else
                                         res = "前后输入密码不匹配";
+                                    if(res){
+                                        p.clearInvalid();
+                                    }
                                 }
                             });
+
                             return res;
                         }},
                         {fieldLabel: '用户名称', name: 'username', allowBlank: false, blankText: '不能为空'},
