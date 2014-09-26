@@ -9,7 +9,7 @@ import models.UserQueryCondition
 import com.codahale.jerkson.Json
 
 /**
- * Created by hooxin on 14-2-10.
+ * 用户管理
  */
 object User extends Controller {
   var pageno = 1
@@ -20,8 +20,8 @@ object User extends Controller {
     mapping(
       "departid" -> longNumber,
       "useraccount" -> text,
-      "password" -> text,
       "username" -> text,
+      "password" -> text,
       "idnum" -> optional(text),
       "mobilePhone" -> optional(text),
       "userorder" -> number,
@@ -36,6 +36,7 @@ object User extends Controller {
 
   def add = Action {
     implicit request =>
+      log.debug("="*13+"request.body = "+request.body+"="*13)
       userForm.bindFromRequest().fold(
         hasErrors = form => {
           log.debug("=" * 13 + "nihao" + "=" * 13)
@@ -149,9 +150,10 @@ object User extends Controller {
 
   def update(id: Long) = Action {
     implicit request =>
+      log.debug("="*13+"request.body"+request.body+"="*13)
       userForm.bindFromRequest().fold(
-        hasError => {
-          BadRequest
+        form => {
+          BadRequest(form.errorsAsJson)
         },
         user => {
           try {

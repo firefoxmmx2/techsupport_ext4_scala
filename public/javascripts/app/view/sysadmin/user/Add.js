@@ -20,11 +20,11 @@ Ext.define('Techsupport.view.sysadmin.user.Add', {
                     },
                     border: false,
                     items: [
-                        {fieldLabel: '帐号', name: 'useraccount', allowBlank: false, blankText: '不能为空', validator: function (value) {
+                        {fieldLabel: '用户帐号', name: 'useraccount', allowBlank: false, blankText: '用户帐号不能为空', validator: function (value) {
                             return this.textValid;
                         }},
                         {fieldLabel: '密码', name: 'password', inputType: 'password',
-                            allowBlank: false, blankText: '不能为空',
+                            allowBlank: false, blankText: '密码不能为空',
                             maxLength: 16, maxLengthText: '最长16位', validator: function (value) {
                             var res = true;
                             this.findParentByType('panel').query('textfield[name=password2]').map(function (p) {
@@ -38,7 +38,7 @@ Ext.define('Techsupport.view.sysadmin.user.Add', {
                             return res;
                         }},
                         {fieldLabel: '重复密码', name: 'password2', inputType: 'password',
-                            inputType: 'password', allowBlank: false, blankText: '不能为空',
+                            inputType: 'password', allowBlank: false, blankText: '重复密码不能为空',
                             maxLength: 16, maxLengthText: '最长16位', validator: function (value) {
                             var res = true;
                             this.findParentByType('panel').query('textfield[name=password]').map(function (p) {
@@ -55,21 +55,21 @@ Ext.define('Techsupport.view.sysadmin.user.Add', {
 
                             return res;
                         }},
-                        {fieldLabel: '用户名称', name: 'username', allowBlank: false, blankText: '不能为空'},
+                        {fieldLabel: '用户名称', name: 'username', allowBlank: false, blankText: '用户名称不能为空'},
                         {fieldLabel: '身份证', name: 'idnum'},
-                        {fieldLabel: '邮箱', name: 'email'},
-                        {fieldLabel: '手机', name: 'mobilePhone'},
+                        {fieldLabel: '邮箱', name: 'email',vtype:'email'},
+                        {fieldLabel: '手机', name: 'mobilePhone',vtype:'number'},
                         {fieldLabel: '序号', name: 'userorder', value: '1'},
-                        {fieldLabel: '所属机构', name: 'departname', allowBlank: false, blankText: '不能为空', readOnly: true},
-                        {fieldLabel: '所属机构id', name: 'departid', allowBlank: false, blankText: '不能为空', hidden: true},
-                        {fieldLabel: '是否可用', name: 'isValid', allowBlank: false, blankText: '不能为空', hidden: true, xtype: 'combobox',
+                        {fieldLabel: '所属机构', name: 'departname', allowBlank: false, blankText: '所属机构不能为空', readOnly: true},
+                        {fieldLabel: '所属机构id', name: 'departid', allowBlank: false, blankText: '所属机构id不能为空', hidden: true},
+                        {fieldLabel: '是否可用', name: 'isValid', allowBlank: false, blankText: '是否可用不能为空', hidden: true, xtype: 'combobox',
                             store: 'OneZero',
                             queryMode: 'local',
                             displayField: 'text',
                             valueField: 'value',
                             value: '1'}
                     ]},
-                {fieldLabel: '用户类别', margin: {left: 10, top: 0, bottom: 0, right: 5}, allowBlank: false, blankText: '不能为空', name: 'userTypeGroup', xtype: 'checkboxgroup', columns: 2, vertical: true, items: [
+                {fieldLabel: '用户类别', margin: {left: 10, top: 0, bottom: 0, right: 5}, allowBlank: false, blankText: '用户类别不能为空', name: 'userTypeGroup', xtype: 'checkboxgroup', columns: 2, vertical: true, items: [
 //                    { boxLabel: 'Item 1', name: 'usertype', inputValue: '1' },
 //                    { boxLabel: 'Item 2', name: 'usertype', inputValue: '2', checked: true },
 //                    { boxLabel: 'Item 3', name: 'usertype', inputValue: '3' },

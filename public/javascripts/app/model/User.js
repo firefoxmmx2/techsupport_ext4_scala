@@ -10,7 +10,7 @@ Ext.define('Techsupport.model.User', {
         {name: 'departid', type: 'int'},
         {name: 'mobilePhone', type: 'string'},
         {name: 'userorder', type: 'int'},
-        {name: 'isVaild', type: 'string'},
+        {name: 'isValid', type: 'string'},
         {name: 'userType', type: 'string'},
         {name: 'jzlbdm', type: 'string'},
         {name: 'jzlbmc', type: 'string'},
@@ -18,4 +18,4 @@ Ext.define('Techsupport.model.User', {
         {name:'departname',type:'string'},
         {name:'password2',type:'string'}
     ]
-})
+});

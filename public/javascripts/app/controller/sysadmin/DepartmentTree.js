@@ -1,9 +1,10 @@
 /**
- * Created by hooxin on 14-9-18.
+ * 机构树控制器
  */
 Ext.define('Techsupport.controller.sysadmin.DepartmentTree', {
     extend: 'Ext.app.Controller',
     stores: ['DepartmentTree'],
+    models:['DepartmentTree'],
     views: ['sysadmin.department.DepartmentTree'],
     init: function () {
         this.control({
