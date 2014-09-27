@@ -1,7 +1,7 @@
 /**
  * Created by hooxin on 14-9-18.
  */
-Ext.define('Techsupport.view.base.BaseManageWithDepartmentTree',{
+Ext.define('BaseManage',{
     extend: 'Ext.panel.Panel',
     layout: {
         type: 'border',
@@ -10,7 +10,9 @@ Ext.define('Techsupport.view.base.BaseManageWithDepartmentTree',{
     },
     border: false,
     items: [
-        {xtype: 'departmenttree', region: 'west', width: '20%', split: true},
+        {xtype: 'panel', region: 'west', width: '20%', split: true,items:[
+            //fit west part
+        ]},
         {xtype: 'panel', region: 'center', border: false, layout: 'fit', items: [
             //fit main content
         ],

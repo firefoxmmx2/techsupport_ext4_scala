@@ -1,5 +1,5 @@
 /**
- * Created by hooxin on 14-4-1.
+ * 角色
  */
 Ext.define("Techsupport.model.Role", {
     extend: "Ext.data.Model",
@@ -13,4 +13,4 @@ Ext.define("Techsupport.model.Role", {
         {name: "jzlbmc", type: "string"},
         {name: "departid", type: "int"}
     ]
-})
+});

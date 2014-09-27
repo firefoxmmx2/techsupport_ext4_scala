@@ -2,17 +2,18 @@
  * 用户管理
  */
 Ext.define('Techsupport.view.sysadmin.user.Manage', {
-    extend: 'Techsupport.view.base.BaseManageWithDepartmentTree',
+    extend: 'Techsupport.view.base.BaseManage',
     alias: 'widget.usermanage',
     initComponent: function () {
         this.callParent(arguments);
 
+        this.query('panel[region=west]').map(function (p) {
+            p.add({xtype:'departmenttree'});
+        });
         this.query('panel[region=center]').map(function (p) {
-            p.removeAll();
             p.add({xtype: 'userlist'});
         });
         this.query('form').map(function (f) {
-            f.removeAll();
             f.add([
                 {xtype: 'textfield', name: 'useraccount', fieldLabel: '帐号'},
                 {xtype: 'textfield', name: "username", fieldLabel: '用户姓名'},
@@ -26,7 +27,7 @@ Ext.define('Techsupport.view.sysadmin.user.Manage', {
                     editable: false
                 },
                 {xtype: 'hidden', name: 'departid', fieldLabel: '机构ID'}
-            ])
+            ]) ;
         });
     }
 });
