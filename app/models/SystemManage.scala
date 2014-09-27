@@ -1,10 +1,10 @@
 package models
 
+import models.CommonTypeMode._
 import org.joda.time.DateTime
 import org.squeryl.annotations._
+import org.squeryl.dsl.CompositeKey2
 import org.squeryl.{KeyedEntity, Schema}
-import CommonTypeMode._
-import org.squeryl.dsl.{CompositeKey2, CompositeKey}
 
 object SystemManage extends Schema {
   val departments = table[Department]("t_department")
