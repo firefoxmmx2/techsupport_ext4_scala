@@ -6,6 +6,7 @@ Ext.define('Techsupport.view.sysadmin.user.Add', {
     title: '新增用户',
     width: 630,
     alias: 'widget.useradd',
+    closeAction:'destroy',
     bodyPadding: 2,
     items: [
         {xtype: 'form',

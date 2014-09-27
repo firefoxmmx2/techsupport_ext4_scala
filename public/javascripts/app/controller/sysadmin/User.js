@@ -35,7 +35,7 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                 },
                 itemdblclick: function (g, record, item, index, e, eOpts) {
                     //打开更新窗口
-                    this.toModifyUser(g,this.getView('sysadmin.user.Edit'));
+                    this.toModifyUser(g, this.getView('sysadmin.user.Edit'));
                 }
             },
             'usermanage button[action=add]': {
@@ -64,8 +64,9 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                 click: function (button, evt) {
                     //修改按钮
                     var grid = button.findParentByType('usermanage').query('userlist')[0];
-                    var editView=this.getView("sysadmin.user.Edit");
-                    this.toModifyUser(grid,editView);
+                    var editView = this.getView("sysadmin.user.Edit");
+                    var dictItemStore = this.getDictItemStore();
+                    this.toModifyUser(grid, editView, dictItemStore);
                 }
             },
             'usermanage button[action=remove]': {
@@ -79,6 +80,37 @@ Ext.define('Techsupport.controller.sysadmin.User', {
 //                查询按钮
                 click: function () {
                     this.queryUsers(this);
+                }
+            },
+            'useradd': {
+                afterrender: function (w) {
+                    var record = w.record;
+                    if (record) {
+                        var form = w.query('form:first')[0];
+                        var store = this.getDictItemStore();
+                        Ext.Ajax.request({
+                            url: '/api/departments/' + record.data.departid,
+                            success: function (response) {
+                                var res = Ext.decode(response.responseText);
+                                if (res.result == 0) {
+                                    record.data.departname = res.data.departname;
+                                    record.data.password2 = record.data.password;
+                                    form.query('textfield[name=useraccount]').map(function (field) {
+                                        field.originalValue = record.data.useraccount;
+                                    });
+                                    record.data.userType = Ext.isString(record.data.userType) ? record.data.userType.split(',') : record.data.userType;
+                                    form.loadRecord(record);
+                                }
+                                else {
+                                    Ext.Msg.alert('提示', res.message);
+                                }
+                            },
+                            failure: function (response) {
+                                Ext.Msg.alert("错误", "获取机构信息发生错误");
+                            }
+                        });
+
+                    }
                 }
             },
             'useradd button[action=cancel]': {
@@ -96,13 +128,16 @@ Ext.define('Techsupport.controller.sysadmin.User', {
             },
             'useradd checkboxgroup': {
                 render: function (cg) {
-                    var store = this.getDictItemStore();
-                    store.removeAll();
+                    var record = cg.findParentByType('window').record;
+                    var store = Ext.create('Techsupport.store.DictItem');
                     store.on('load', function (s, records, successful, eOpts) {
                         if (successful) {
                             records.forEach(function (r) {
-                                cg.add({boxLabel: r.raw.displayName, name: 'userType', inputValue: r.raw.factValue});
+                                cg.add({boxLabel: r.raw.displayName, name: 'userType', inputValue: r.raw.factValue,
+                                    uncheckedValue: '0'});
                             });
+                            if (!record) //当窗口不存在更新记录的时候,再进行复选框内容初始化
+                                cg.setValue({userType: record.data.userType});
                         }
                     });
                     store.load({
@@ -172,12 +207,12 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                     }
                 }
             },
-            'useredit[name=modifyUserWindow] button[action=enter]':{
-                   click: function (button, evt) {
-                       var _window=button.findParentByType('window');
-                       var form=_window.query('form')[0];
-                       this.modifyUser(form,this.getUserStore(),_window);
-                   }
+            'useredit[name=modifyUserWindow] button[action=enter]': {
+                click: function (button, evt) {
+                    var _window = button.findParentByType('window');
+                    var form = _window.query('form')[0];
+                    this.modifyUser(form, this.getUserStore(), _window);
+                }
             }
         });
     },
@@ -218,12 +253,12 @@ Ext.define('Techsupport.controller.sysadmin.User', {
 
         });
     },
-    modifyUser: function (form,store,window) {
+    modifyUser: function (form, store, window) {
         // 更新用户
-        if(form.getForm().isValid()){
+        if (form.getForm().isValid()) {
             form.getForm().updateRecord();
-            var extraParams=store.getProxy().extraParams;
-            store.getProxy().extraParams={};
+            var extraParams = store.getProxy().extraParams;
+            store.getProxy().extraParams = {};
             store.sync({
                 success: function (batch, option) {
                     store.commitChanges();
@@ -233,7 +268,7 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                     store.rejectChanges();
                 }
             });
-            store.getProxy().extraprams=extraParams;
+            store.getProxy().extraprams = extraParams;
         }
 
     },
@@ -256,32 +291,11 @@ Ext.define('Techsupport.controller.sysadmin.User', {
         else
             Ext.Msg.alert("提示", "请选择需要删除的数据");
     },
-    toModifyUser: function (grid,editView) {
+    toModifyUser: function (grid, editView, dictItemStore) {
 
         var selection = grid.getSelectionModel().getSelection().map(function (record) {
-            var window = editView.create({name:'modifyUserWindow'});
+            var window = editView.create({name: 'modifyUserWindow', record: record});
             var form = window.query('form:first')[0];
-
-            Ext.Ajax.request({
-                url:'/api/departments/'+record.data.departid,
-                success: function (response) {
-                    var res=Ext.decode(response.responseText);
-                    if(res.result==0){
-                        record.data.departname=res.data.departname;
-                        record.data.password2=record.data.password;
-                        form.query('textfield[name=useraccount]').map(function (field) {
-                            field.originalValue=record.data.useraccount;
-                        });
-                        form.loadRecord(record);
-                    }
-                    else{
-                        Ext.Msg.alert('提示',res.message);
-                    }
-                },
-                failure: function (response) {
-                    Ext.Msg.alert("错误","获取机构信息发生错误");
-                }
-            });
 
             window.show();
         });
