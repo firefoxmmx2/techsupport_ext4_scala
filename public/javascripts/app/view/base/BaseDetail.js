@@ -27,4 +27,4 @@ Ext.define('Techsupport.view.base.BaseDetail',{
         {xtype: 'button', text: '确定', action: 'enter'},
         {xtype: 'button', text: '取消', action: 'cancel'}
     ]
-})
+});
