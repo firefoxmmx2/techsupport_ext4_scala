@@ -13,6 +13,7 @@ Ext.define('Techsupport.medel.Menu',{
         {name:'menufullcode',type:'string'},
         {name:'nodeorder',type:'int'},
         {name:'isleaf',type:'string'},
-        {name:'systemcode',type:'string'}
+        {name:'systemcode',type:'string'},
+        {name:'parentMenufullcode',type:'string'}
     ]
 });
