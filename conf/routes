@@ -28,9 +28,9 @@ GET           /api/departments                                 controllers.syste
 #菜单
 GET           /api/menus/userMenuNode                          controllers.systemmanage.Menu.userMenuNode
 POST          /api/menus                                       controllers.systemmanage.Menu.add
-DELETE        /api/menus/:id                                   controllers.systemmanage.Menu.remove(id:Long)
-PUT           /api/menus/:id                                   controllers.systemmanage.Menu.update(id:Long)
-GET           /api/menus/:id                                   controllers.systemmanage.Menu.get(id:Long)
+DELETE        /api/menus/:id                                   controllers.systemmanage.Menu.remove(id:string)
+PUT           /api/menus/:id                                   controllers.systemmanage.Menu.update(id:string)
+GET           /api/menus/:id                                   controllers.systemmanage.Menu.get(id:string)
 GET           /api/menus                                       controllers.systemmanage.Menu.list
 #角色
 POST          /api/roles                                       controllers.systemmanage.Role.add

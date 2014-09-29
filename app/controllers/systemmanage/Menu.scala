@@ -11,18 +11,153 @@ import com.codahale.jerkson.Json
 import play.api.Logger
 
 /**
- * Created by hooxin on 14-2-10.
+ * 菜单管理
  */
 object Menu extends Controller {
-  def add = TODO
+  val log = Logger.logger
 
-  def remove(id: Long) = TODO
+  /**
+   * 添加菜单
+   * @return
+   */
+  def add = Action {
+    implicit request =>
+      menuForm.bindFromRequest.fold(hasErrors =
+        form =>
+          BadRequest(form.errorsAsJson),
+        success =
+          menu => {
+            try {
+              val inserted = menuService.insert(menu)
+              Ok(Json.generate(Map("success" -> true,
+                "result" -> 0,
+                "data" -> inserted,
+                "message" -> "添加成功"))).as(JSON)
+            }
+            catch {
+              case e: Exception =>
+                log.error(e.getMessage, e.fillInStackTrace())
+                Ok(Json.generate(Map("success" -> false,
+                  "result" -> -1,
+                  "message" -> "菜单添加发生错误"))).as(JSON)
+            }
+          }
+      )
+  }
 
-  def update(id: Long) = TODO
+  /**
+   * 删除菜单
+   * @param id
+   * @return
+   */
+  def remove(id: String) = Action {
+    try {
+      menuService.deleteById(id)
+      Ok(Json.generate(Map("result" -> 0,
+        "success" -> true))).as(JSON)
+    }
+    catch {
+      case e: Exception =>
+        log.error(e.getMessage, e.fillInStackTrace())
+        Ok(Json.generate(Map("result" -> -1,
+          "success" -> false,
+          "message" -> "删除菜单发生错误"))).as(JSON)
+    }
+  }
 
-  def get(id: Long) = TODO
+  /**
+   * 修改菜单
+   * @param id
+   * @return
+   */
+  def update(id: String) = Action {
+    implicit request =>
+      menuForm.bindFromRequest.fold(
+        hasErrors =
+          form =>
+            BadRequest(form.errorsAsJson),
+        success =
+          menu => {
+            try {
+              menuService.update(menu)
+              Ok(Json.generate(Map("result" -> 0,
+                "success" -> true))).as(JSON)
+            }
+            catch {
+              case e: Exception =>
+                log.error(e.getMessage, e.fillInStackTrace())
+                Ok(Json.generate(Map("result" -> -1,
+                  "success" -> false,
+                  "message" -> "修改菜单法身错误"))).as(JSON)
+            }
+          }
+      )
+  }
 
-  def list = TODO
+  /**
+   * 获取单个菜单
+   * @param id
+   * @return
+   */
+  def get(id: String) = Action {
+    implicit request =>
+      try {
+        val menu = menuService.getById(id)
+        if (menu == null) {
+          Ok(Json.generate(Map("result" -> 1,
+            "success" -> false,
+            "message" -> s"该字典代码为 $id 的菜单不存在"))).as(JSON)
+        }
+        else {
+          Ok(Json.generate(Map("result" -> 0,
+            "success" -> true,
+            "message" -> "获取菜单成功"))).as(JSON)
+        }
+      }
+      catch {
+        case e: Exception =>
+          log.error(e.getMessage, e.fillInStackTrace())
+          Ok(Json.generate(Map("success" -> false,
+            "result" -> -1,
+            "message" -> "获取菜单发生错误"))).as(JSON)
+      }
+  }
+
+  /**
+   * 获取菜单列表
+   * @return
+   */
+  def list = Action {
+    implicit request =>
+      val pageno: Int = request.getQueryString("page").getOrElse("1").toInt
+      val limit: Int = request.getQueryString("limit").getOrElse("20").toInt
+      val sort = request.getQueryString("sort").getOrElse("nodeorder")
+      val dir = request.getQueryString("dir").getOrElse("asc")
+      menuQueryForm.bindFromRequest.fold(
+        hasErrors =
+          form =>
+            BadRequest(form.errorsAsJson),
+        success =
+          menuQueryCondition => {
+            try {
+              val page = menuService.page(pageno, limit, menuQueryCondition, sort, dir)
+              Ok(Json.generate(Map("success" -> true,
+                "result" -> 0,
+                "data" -> page.data,
+                "total" -> page.total,
+                "page" -> page.pageno,
+                "limit" -> page.pagesize))).as(JSON)
+            }
+            catch {
+              case e:Exception =>
+                log.error(e.getMessage,e.fillInStackTrace())
+                Ok(Json.generate(Map("success"->false,
+                "result"-> -1,
+                "message"->"获取菜单列表发生错误"))).as(JSON)
+            }
+          }
+      )
+  }
 
   val menuForm = Form(mapping("id" -> text,
     "menuname" -> text,

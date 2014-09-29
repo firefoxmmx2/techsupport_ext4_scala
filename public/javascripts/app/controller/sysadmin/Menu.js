@@ -10,7 +10,7 @@ Ext.define('Techsupport.controller.Menu', {
     refs: [
         {ref: 'queryForm', selector: 'menumanage form'},
         {ref: 'menuTree', selector: 'menumanage menutree'},
-        {ref: 'menuListGrid', selector: 'menulist'}
+        {ref: 'menuListGrid', selector: 'menumanage menulist'}
     ],
     init: function () {
         this.toEditMenu = function (record) { //初始化编辑窗口
@@ -52,6 +52,27 @@ Ext.define('Techsupport.controller.Menu', {
             params.parentmenucode = this.getMenuTree().cdata.menucode;
             Ext.apply(store.getProxy().extraParams, params);
             store.load();
+        };
+
+        this.removeMenu= function () { //删除菜单
+            var grid=this.getMenuListGrid();
+            var store=this.getMenuStore();
+            var selection=grid.getSelectionModel().getSelection().map(function (record) {
+                store.remove(record);
+            });
+            if(selection>0){
+                store.sync({
+                    success: function (batch, options) {
+                        store.commitChanges();
+                        if(store.getProxy().extraParams.limit < store.getTotal()){
+                            this.queryMenu();
+                        }
+                    },
+                    failure: function (batch, options) {
+                        store.rejectChanges();
+                    }
+                });
+            }
         };
 
         this.control({
@@ -135,6 +156,11 @@ Ext.define('Techsupport.controller.Menu', {
             'menumanage button[action=add]': { //添加按钮
                 click: function () {
                     this.toEditMenu();
+                }
+            },
+            'menumange button[action=remove]':{ //删除按钮
+                click:function(){
+                      this.removeMenu();
                 }
             }
         });
