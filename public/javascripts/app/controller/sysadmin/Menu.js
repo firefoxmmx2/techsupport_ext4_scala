@@ -1,11 +1,14 @@
 /**
  * 菜单控制器
  */
-Ext.define('Techsupport.controller.Menu', {
+Ext.define('Techsupport.controller.sysadmin.Menu', {
     extend: 'Ext.app.Controller',
     views: ['sysadmin.menu.List',
-        'sysadmin.menu.Detail'],
-    stores: ['MenuTree', 'Menu'],
+        'sysadmin.menu.Detail',
+//        'sysadmin.menu.MenuTree',
+//        'sysadmin.menu.Manage'
+    ],
+    stores: [ 'Menu'],
     models: ['Menu'],
     refs: [
         {ref: 'queryForm', selector: 'menumanage form'},
@@ -95,8 +98,7 @@ Ext.define('Techsupport.controller.Menu', {
                 change: function (field, newValue, oldValue) {
                     if (newValue != field.originalValue) { //菜单代码重复验证
                         Ext.Ajax.request({
-                            url: '/api/menus/checkMenucodeAvaliable',
-                            params: {menucode: newValue},
+                            url: '/api/menus/checkMenucodeAvaliable/'+newValue,
                             scope: idField,
                             success: function (response) {
                                 var res = Ext.decode(response.responseText);

@@ -1,7 +1,7 @@
 /**
  * 菜单管理
  */
-Ext.define('Techsupport.view.menu.Manage', {
+Ext.define('Techsupport.view.sysadmin.menu.Manage', {
     extend: 'Techsupport.view.base.BaseManage',
     initComponent: function () {
         this.callParent(arguments);

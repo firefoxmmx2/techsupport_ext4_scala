@@ -26,11 +26,12 @@ GET           /api/departments/:id                             controllers.syste
 GET           /api/departments                                 controllers.systemmanage.Department.list
 
 #菜单
+GET           /api/menus/checkMenucodeAvaliable/:id            controllers.systemmanage.Menu.checkMenucodeAvaliable(id:String)
 GET           /api/menus/userMenuNode                          controllers.systemmanage.Menu.userMenuNode
 POST          /api/menus                                       controllers.systemmanage.Menu.add
-DELETE        /api/menus/:id                                   controllers.systemmanage.Menu.remove(id:string)
-PUT           /api/menus/:id                                   controllers.systemmanage.Menu.update(id:string)
-GET           /api/menus/:id                                   controllers.systemmanage.Menu.get(id:string)
+DELETE        /api/menus/:id                                   controllers.systemmanage.Menu.remove(id:String)
+PUT           /api/menus/:id                                   controllers.systemmanage.Menu.update(id:String)
+GET           /api/menus/:id                                   controllers.systemmanage.Menu.get(id:String)
 GET           /api/menus                                       controllers.systemmanage.Menu.list
 #角色
 POST          /api/roles                                       controllers.systemmanage.Role.add

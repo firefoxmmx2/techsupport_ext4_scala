@@ -1,7 +1,7 @@
 /**
  * 菜单详情
  */
-Ext.define('Techsupport.view.menu.Detail', {
+Ext.define('Techsupport.view.sysadmin.menu.Detail', {
     extend: 'Techsupport.view.base.BaseDetail',
     alias: 'wigdet.menudetail',
     initComponent: function () {

@@ -4,7 +4,7 @@
 Ext.define('Techsupport.controller.sysadmin.MenuTree',{
     extend:'Ext.app.Controller',
     stores:['MenuTree'],
-    views:['MenuTree'],
+    views:['sysadmin.menu.MenuTree'],
     models:['Menu'],
     refs:[],
     init: function () {

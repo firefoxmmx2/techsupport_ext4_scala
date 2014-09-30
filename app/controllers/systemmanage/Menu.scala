@@ -219,4 +219,27 @@ object Menu extends Controller {
       )
   }
 
+  /**
+   * 菜单代码可用性验证
+   * @param id 菜单代码
+   * @return
+   */
+  def checkMenucodeAvaliable(id:String) = Action{
+    implicit request=>
+      try {
+        val result = menuService.checkMenucodeAvaliable(id)
+        Ok(Json.generate(Map("success"->true,
+        "result"->0,
+        "isAvaliable"->result))).as(JSON)
+      }
+      catch {
+        case e:Exception =>
+           log.error(e.getMessage,e.fillInStackTrace())
+           Ok(Json.generate(Map("success"->false,
+           "result"-> -1,
+           "message"->"菜单代码可用性验证发生错误"))).as(JSON)
+      }
+
+  }
+
 }

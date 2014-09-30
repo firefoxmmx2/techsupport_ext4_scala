@@ -464,6 +464,13 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
   class MenuDaoImpl extends MenuDao {
 
 
+    /**
+     * 验证菜单代码重复
+     * @param menucode
+     * @return
+     */
+    def checkMenucodeRepeat(menucode: String): Boolean = selectForPage(MenuQueryCondition(id=Some(menucode))).Count > 0
+
     def getUserMenus(userid: Long, parentmenucode: String = "0", systemcode: Option[String] = None): List[Menu] = {
       from(SystemManage.menus, SystemManage.userRoles, SystemManage.roleMenus)(
         (m, ur, rm) =>

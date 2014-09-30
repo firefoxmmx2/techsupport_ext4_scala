@@ -2,7 +2,7 @@
  * 菜单树
  */
 Ext.define('Techsupport.view.sysadmin.menu.MenuTree',{
-    extend:'treepanel',
+    extend:'Ext.tree.Panel',
     store:'Menu',
     border:true,
     alias:'widget.menutree'

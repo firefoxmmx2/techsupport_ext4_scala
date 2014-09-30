@@ -60,6 +60,13 @@ trait MenuDaoComponent {
 
   trait MenuDao extends BaseDao[Menu, String, MenuQueryCondition] {
     def getUserMenus(userid: Long, parentmenucode: String = "0", systemcode: Option[String] = None): List[Menu]
+
+    /**
+     * 验证菜单代码重复
+     * @param menucode
+     * @return
+     */
+    def checkMenucodeRepeat(menucode:String):Boolean
   }
 
   val menuDao: MenuDao

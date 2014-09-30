@@ -1,7 +1,7 @@
 /**
  * Created by hooxin on 14-9-18.
  */
-Ext.define('BaseManage',{
+Ext.define('Techsupport.view.base.BaseManage',{
     extend: 'Ext.panel.Panel',
     layout: {
         type: 'border',

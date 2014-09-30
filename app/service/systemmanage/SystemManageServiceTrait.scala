@@ -73,7 +73,15 @@ trait UserServiceComponent {
  */
 trait SystemServiceComponent {
 
+  /**
+   * 系统服务
+   */
   trait SystemService extends BaseService[System, String, SystemQueryCondition] {
+    /**
+     * 获取用户系统
+     * @param userid
+     * @return
+     */
     def getUserSystems(userid: Long): List[System]
   }
 
@@ -98,7 +106,21 @@ trait RoleServiceComponent {
 trait MenuServiceComponent {
 
   trait MenuService extends BaseService[Menu, String, MenuQueryCondition] {
+    /**
+     * 获取用户菜单
+     * @param userid 用户id
+     * @param parentmenucode 上级菜单代码
+     * @param systemcode 系统代码
+     * @return 菜单列表
+     */
     def getUserMenus(userid: Long, parentmenucode: String = "0", systemcode: Option[String] = None): List[Menu]
+
+    /**
+     * 菜单代码可用性验证
+     * @param menucode 菜单代码
+     * @return
+     */
+    def checkMenucodeAvaliable(menucode:String):Boolean
   }
 
   val menuService: MenuService

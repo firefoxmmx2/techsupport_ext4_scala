@@ -8,6 +8,7 @@ Ext.application({
         "sysadmin.DepartmentTree",
         "sysadmin.User",
         "sysadmin.Department",
+        'sysadmin.MenuTree',
         'sysadmin.Menu'
     ],
     refs: [

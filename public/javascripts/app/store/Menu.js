@@ -14,4 +14,4 @@ Ext.define('Techsupport.store.Menu', {
             totalProperty: 'total'
         }
     }
-})
+});
