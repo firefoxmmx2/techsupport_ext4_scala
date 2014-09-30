@@ -5,8 +5,8 @@ Ext.define('Techsupport.controller.sysadmin.Menu', {
     extend: 'Ext.app.Controller',
     views: ['sysadmin.menu.List',
         'sysadmin.menu.Detail',
-//        'sysadmin.menu.MenuTree',
-//        'sysadmin.menu.Manage'
+        'sysadmin.menu.MenuTree',
+        'sysadmin.menu.Manage'
     ],
     stores: [ 'Menu'],
     models: ['Menu'],
@@ -52,6 +52,7 @@ Ext.define('Techsupport.controller.sysadmin.Menu', {
         this.queryMenu = function () { //查询菜单
             var form = this.getQueryForm();
             var params = form.getForm().getValues();
+            var store=this.getMenuStore();
             params.parentmenucode = this.getMenuTree().cdata.menucode;
             Ext.apply(store.getProxy().extraParams, params);
             store.load();

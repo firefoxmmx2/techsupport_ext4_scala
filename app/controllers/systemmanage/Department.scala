@@ -144,10 +144,10 @@ object Department extends Controller {
 
   def list = Action {
     implicit req =>
-      var pageno: Int = req.getQueryString("page").getOrElse("1").toInt
-      var limit: Int = req.getQueryString("limit").getOrElse("20").toInt
-      var sort = req.getQueryString("sort").getOrElse("nodeOrder")
-      var dir = req.getQueryString("dir").getOrElse("asc")
+      val pageno: Int = req.getQueryString("page").getOrElse("1").toInt
+      val limit: Int = req.getQueryString("limit").getOrElse("20").toInt
+      val sort = req.getQueryString("sort").getOrElse("nodeOrder").toLowerCase
+      val dir = req.getQueryString("dir").getOrElse("asc").toLowerCase
       listParamForm.bindFromRequest().fold(hasErrors = form =>
         BadRequest(form.errorsAsJson),
         dq => {

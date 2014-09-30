@@ -13,5 +13,18 @@ Ext.define("Techsupport.store.User", {
             totalProperty: 'total',
             successProperty: 'success'
         }
-    }
-})
+    },
+    listeners:{
+        beforeload: function (store, oper, options) {
+            if(store.sorters && store.sorters.getCount()){
+                var sorter = store.sorters.getAt(0);
+                var obj={};
+                obj[store.getProxy().sortParam]=sorter.property;
+                obj[store.getProxy().directionParam]=sorter.direction;
+                Ext.apply(store.getProxy().extraParams, obj);
+            }
+        }
+    },
+    remoteSort:true,
+    sorters:['userorder']
+});

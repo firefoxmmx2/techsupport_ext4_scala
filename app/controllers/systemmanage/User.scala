@@ -97,7 +97,8 @@ object User extends Controller {
     implicit request =>
       val pageno: Int = request.getQueryString("page").getOrElse("1").toInt
       val limit = request.getQueryString("limit").getOrElse("20").toInt
-
+      var sort=request.getQueryString("sort").getOrElse("id").toLowerCase
+      var dir=request.getQueryString("dir").getOrElse("asc").toLowerCase
       log.debug("=" * 13 + request.getQueryString("useraccount") + "=" * 13)
       log.debug("=" * 13 + " pageno = " + pageno + " ,limit = " + limit + "=" * 13)
       userQueryForm.bindFromRequest().fold(
@@ -107,7 +108,7 @@ object User extends Controller {
         uq => {
           try {
             log.debug("=" * 13 + " uq = " + uq + "=" * 13)
-            val page = userService.page(pageno, limit, uq, "", "")
+            val page = userService.page(pageno, limit, uq, sort, dir)
             Ok(Json.generate(Map("result" -> 0,
               "success" -> true,
               "message" -> "",

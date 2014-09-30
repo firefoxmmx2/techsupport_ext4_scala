@@ -5,7 +5,7 @@ Ext.define('Techsupport.controller.sysadmin.MenuTree',{
     extend:'Ext.app.Controller',
     stores:['MenuTree'],
     views:['sysadmin.menu.MenuTree'],
-    models:['Menu'],
+    models:['MenuTree'],
     refs:[],
     init: function () {
 
@@ -36,10 +36,10 @@ Ext.define('Techsupport.controller.sysadmin.MenuTree',{
                 beforeload: function (store, operation, opts) {
                     var tree = store.getRootNode().getOwnerTree();
                     if (!tree.cdata.menucode) {
-                        tree.cdata.menucode = tree.getRootNode().id;
-                        tree.cdata.menuname = tree.getRootNode().menuname;
-                        tree.cdata.menulevel = tree.getRootNode().menulevel;
-                        tree.cdata.menufullcode = tree.getRootNode().menufullcode;
+                        tree.cdata.menucode = tree.getRootNode().raw.id;
+                        tree.cdata.menuname = tree.getRootNode().raw.menuname;
+                        tree.cdata.menulevel = tree.getRootNode().raw.menulevel;
+                        tree.cdata.menufullcode = tree.getRootNode().raw.menufullcode;
                     }
                     store.getProxy().setExtraParam("parentmenucode", tree.cdata.menucode);
                 },

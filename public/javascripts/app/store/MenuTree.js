@@ -3,7 +3,7 @@
  */
 Ext.define('Techsupport.store.MenuTree', {
     extend: 'Ext.data.TreeStore',
-    model: 'Techsupport.model.Menu',
+    model: 'Techsupport.model.MenuTree',
     root: {
         id: 0,
         text: '根节点',
@@ -16,7 +16,7 @@ Ext.define('Techsupport.store.MenuTree', {
     proxy: {
         type: 'ajax',
         method: 'GET',
-        url: '/api/menus',
+        url: '/api/menus/treeNodes',
         reader: {
             type: 'json',
             root: 'data',

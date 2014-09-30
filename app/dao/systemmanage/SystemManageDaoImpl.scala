@@ -20,20 +20,75 @@ import models.CommonTypeMode._
 trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
   class DepartmentDaoImpl extends DepartmentDao {
-    def selectForListQuery(params: DepartmentQueryCondition, sort: String = "nodeOrder", dir: String = "asc") = {
-//      println("=" * 13 + "sort = " + sort + "=" * 13)
-      from(SystemManage.departments)(d =>
-        where(d.id === params.id.?
-          and d.departcode === params.departcode.?
-          and (d.departname like params.departname.?)
-          and (d.departfullcode like params.departfullcode.?)
-          and d.departlevel === params.departlevel.?
-          and d.parentDepartid === params.parentDepartid.?)
-          select (d)
-          orderBy (if (sort == "nodeOrder") if (dir == "asc") d.nodeOrder asc else d.nodeOrder desc else d.nodeOrder asc)
+    def selectForListQuery(params: DepartmentQueryCondition, sort: String = "nodeOrder", dir: String = "asc") =
+      from(SystemManage.departments)(
+        d =>
+          where(d.id === params.id.?
+            and d.departcode === params.departcode.?
+            and (d.departname like params.departname.?)
+            and (d.departfullcode like params.departfullcode.?)
+            and d.departlevel === params.departlevel.?
+            and d.parentDepartid === params.parentDepartid.?)
+            select (d)
+            orderBy {
+            if (sort == "nodeOrder")
+              if (dir == "asc")
+                d.nodeOrder asc
+              else
+                d.nodeOrder desc
+            else if (sort == "departcode")
+              if (dir == "asc")
+                d.departcode asc
+              else
+                d.departcode desc
+            else if (sort == "departcode")
+              if (dir == "asc")
+                d.departcode asc
+              else
+                d.departcode desc
+            else if (sort == "departlevel")
+              if (dir == "asc")
+                d.departlevel asc
+              else
+                d.departlevel desc
+            else if (sort == "departfullcode")
+              if (dir == "asc")
+                d.departfullcode asc
+              else
+                d.departfullcode desc
+            else if (sort == "parentDepartid")
+              if (dir == "asc")
+                d.parentDepartid asc
+              else
+                d.parentDepartid desc
+            else if (sort == "isLeaf")
+              if (dir == "asc")
+                d.isLeaf asc
+              else
+                d.isLeaf desc
+            else if (sort == "departsimplepin")
+              if (dir == "asc")
+                d.departsimplepin asc
+              else
+                d.departsimplepin desc
+            else if (sort == "departallpin")
+              if (dir == "asc")
+                d.departallpin asc
+              else
+                d.departallpin desc
+            else if (sort == "departbrevitycode")
+              if (dir == "asc")
+                d.departbrevitycode asc
+              else
+                d.departbrevitycode desc
+            else if (sort == "id")
+              if (dir == "asc")
+                d.id asc
+              else
+                d.id desc
+            else d.nodeOrder asc
+          }
       )
-
-    }
 
 
     /**
@@ -51,7 +106,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
       if (page.total == 0)
         page
       else {
-//        println("=" * 13 + selectForListQueryTest(params, sort, dir).page(page.start, page.limit).statement + "=" * 13)
+        //        println("=" * 13 + selectForListQueryTest(params, sort, dir).page(page.start, page.limit).statement + "=" * 13)
         val datas = selectForListQuery(params, sort, dir).page(page.start, page.limit).toList
         //        page
         page.copy(data = datas)
@@ -117,9 +172,9 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
      */
     def maxDepartmentOrder(parentdepartid: Long): Int =
       from(SystemManage.departments)(
-        d=>
+        d =>
           where(d.parentDepartid === parentdepartid)
-          compute(max(d.nodeOrder))
+            compute (max(d.nodeOrder))
       ).single.measures.getOrElse(0)
 
     /**
@@ -136,7 +191,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 trait UserDaoComponentImpl extends UserDaoComponent {
 
   class UserDaoImpl extends UserDao {
-    def selectForPage(params: UserQueryCondition, sort: String = "userid", dir: String = "asc") = {
+    def selectForPage(params: UserQueryCondition, sort: String = "id", dir: String = "asc") = {
       from(SystemManage.users)(
         u => where(
           u.id === params.id.?
@@ -149,6 +204,65 @@ trait UserDaoComponentImpl extends UserDaoComponent {
             and u.userorder === params.userorder.?
             and u.password === params.password.?)
           select (u)
+          orderBy {
+          if (sort == "id")
+            if (dir == "asc")
+              u.id asc
+            else
+              u.id desc
+          else if (sort == "departid")
+            if (dir == "asc")
+              u.departid asc
+            else
+              u.departid desc
+          else if (sort == "useraccount")
+            if (dir == "asc")
+              u.useraccount asc
+            else
+              u.useraccount desc
+          else if (sort == "username")
+            if (dir == "asc")
+              u.username asc
+            else
+              u.username desc
+          else if (sort == "password")
+            if (dir == "asc")
+              u.password asc
+            else
+              u.password desc
+          else if (sort == "idnum")
+            if (dir == "asc")
+              u.idnum asc
+            else
+              u.idnum desc
+          else if (sort == "mobilePhone")
+            if (dir == "asc")
+              u.mobilePhone asc
+            else
+              u.mobilePhone desc
+          else if (sort == "userorder")
+            if (dir == "asc")
+              u.userorder asc
+            else
+              u.userorder desc
+          else if (sort == "isValid")
+            if (dir == "asc")
+              u.isValid asc
+            else
+              u.isValid desc
+          else if (sort == "userType")
+            if (dir == "asc")
+              u.userType asc
+            else
+              u.userType desc
+          else if (sort == "email")
+            if (dir == "asc")
+              u.email asc
+            else
+              u.email desc
+          else
+            u.id asc
+        }
       )
     }
 
@@ -168,7 +282,7 @@ trait UserDaoComponentImpl extends UserDaoComponent {
       if (page.total == 0)
         page
       else {
-//        Logger.debug("=" * 13 + " user dao page " + "[page.start]=[" + page.start + "],[page.limit]=[" + page.limit + "]" + "=" * 13)
+        //        Logger.debug("=" * 13 + " user dao page " + "[page.start]=[" + page.start + "],[page.limit]=[" + page.limit + "]" + "=" * 13)
         Logger.debug("=" * 13 + selectForPage(params, sort, dir).page(page.start, page.limit).statement + "=" * 13)
         val datas = selectForPage(params, sort, dir).page(page.start, page.limit).toList
         page.copy(data = datas)
@@ -266,7 +380,7 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
 
 
     def selectForPage(params: SystemQueryCondition, sort: String = "systemcode", dir: String = "asc") = {
-      from(SystemManage.systems) {
+      from(SystemManage.systems)(
         s =>
           where(
             s.id === params.id.?
@@ -274,10 +388,48 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
               and s.parentsystemcode === params.parentsystemcode.?
               and (s.systemname like params.systemname.?)
               and (s.fullcode like params.fullcode.?)
-              and s.systemdefine === params.systemdefine.?
-          )
-          select(s)
-      }
+              and s.systemdefine === params.systemdefine.?)
+            select (s)
+            orderBy {
+            if (sort == "id")
+              if (dir == "asc")
+                s.id asc
+              else
+                s.id desc
+            else if (sort == "systemname")
+              if (dir == "asc")
+                s.systemname asc
+              else
+                s.systemname desc
+            else if (sort == "fullcode")
+              if (dir == "asc")
+                s.fullcode asc
+              else
+                s.fullcode desc
+            else if (sort == "systemdefine")
+              if (dir == "asc")
+                s.systemdefine asc
+              else
+                s.systemdefine desc
+            else if (sort == "parentsystemcode")
+              if (dir == "asc")
+                s.parentsystemcode asc
+              else
+                s.parentsystemcode desc
+            else if (sort == "nodeorder")
+              if (dir == "asc")
+                s.nodeorder asc
+              else
+                s.nodeorder desc
+            else if (sort == "isleaf")
+              if (dir == "asc")
+                s.isleaf asc
+              else
+                s.isleaf desc
+            else
+              s.id asc
+          }
+      )
     }
 
     /**
@@ -378,6 +530,21 @@ trait RoleDaoComponentImpl extends RoleDaoComponent {
                 r.id asc
               else
                 r.id desc
+            else if (sort == "departid")
+              if (dir == "asc")
+                r.departid asc
+              else
+                r.departid desc
+            else if (sort == "rolename")
+              if (dir == "asc")
+                r.rolename asc
+              else
+                r.rolename desc
+            else if (sort == "roleType")
+              if (dir == "asc")
+                r.roleType asc
+              else
+                r.roleType desc
             else r.id.asc
           })
     }
@@ -469,7 +636,7 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
      * @param menucode
      * @return
      */
-    def checkMenucodeRepeat(menucode: String): Boolean = selectForPage(MenuQueryCondition(id=Some(menucode))).Count > 0
+    def checkMenucodeRepeat(menucode: String): Boolean = selectForPage(MenuQueryCondition(id = Some(menucode))).Count > 0
 
     def getUserMenus(userid: Long, parentmenucode: String = "0", systemcode: Option[String] = None): List[Menu] = {
       from(SystemManage.menus, SystemManage.userRoles, SystemManage.roleMenus)(
@@ -503,6 +670,41 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
               m.id asc
             else
               m.id desc
+          else if (sort == "nodeorder")
+            if (dir == "asc")
+              m.nodeorder asc
+            else
+              m.nodeorder desc
+          else if (sort == "menuname")
+            if (dir == "asc")
+              m.menuname asc
+            else
+              m.menuname desc
+          else if (sort == "funcentry")
+            if (dir == "asc")
+              m.funcentry asc
+            else
+              m.funcentry desc
+          else if (sort == "menufullcode")
+            if (dir == "asc")
+              m.menufullcode asc
+            else
+              m.menufullcode desc
+          else if (sort == "isleaf")
+            if (dir == "asc")
+              m.isleaf asc
+            else
+              m.isleaf desc
+          else if (sort == "systemcode")
+            if (dir == "asc")
+              m.systemcode asc
+            else
+              m.systemcode desc
+          else if (sort == "menulevel")
+            if (dir == "asc")
+              m.menulevel asc
+            else
+              m.menulevel desc
           else
             m.id asc
         })
@@ -601,6 +803,16 @@ trait GlobalParamDaoComponentImpl extends GlobalParamDaoComponent {
                 g.id asc
               else
                 g.id desc
+            else if (sort == "globalparname")
+              if (dir == "asc")
+                g.globalparname asc
+              else
+                g.globalparname desc
+            else if (sort == "globalparvalue")
+              if (dir == "asc")
+                g.globalparvalue asc
+              else
+                g.globalparvalue desc
             else g.id asc
           })
 
@@ -907,6 +1119,41 @@ trait DictItemDaoComponentImpl extends DictItemDaoComponent {
             //              and params.displayFlag === di.displayFlag
           )
             select (di)
+            orderBy {
+            if (sort == "id")
+              if (dir == "asc")
+                di.id asc
+              else
+                di.id desc
+            else if (sort == "dictcode")
+              if (dir == "asc")
+                di.dictcode asc
+              else
+                di.dictcode desc
+            else if (sort == "factValue")
+              if (dir == "asc")
+                di.factValue asc
+              else
+                di.factValue desc
+            else if (sort == "appendValue")
+              if (dir == "asc")
+                di.appendValue asc
+              else
+                di.appendValue desc
+            else if (sort == "displayName")
+              if (dir == "asc")
+                di.displayName asc
+              else
+                di.displayName desc
+            else if (sort == "sibOrder")
+              if (dir == "asc")
+                di.sibOrder asc
+              else
+                di.sibOrder desc
+            else
+              di.id asc
+          }
+
       )
     }
 

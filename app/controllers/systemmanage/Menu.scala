@@ -131,8 +131,8 @@ object Menu extends Controller {
     implicit request =>
       val pageno: Int = request.getQueryString("page").getOrElse("1").toInt
       val limit: Int = request.getQueryString("limit").getOrElse("20").toInt
-      val sort = request.getQueryString("sort").getOrElse("nodeorder")
-      val dir = request.getQueryString("dir").getOrElse("asc")
+      val sort = request.getQueryString("sort").getOrElse("nodeorder").toLowerCase
+      val dir = request.getQueryString("dir").getOrElse("asc").toLowerCase
       menuQueryForm.bindFromRequest.fold(
         hasErrors =
           form =>
@@ -149,11 +149,11 @@ object Menu extends Controller {
                 "limit" -> page.pagesize))).as(JSON)
             }
             catch {
-              case e:Exception =>
-                log.error(e.getMessage,e.fillInStackTrace())
-                Ok(Json.generate(Map("success"->false,
-                "result"-> -1,
-                "message"->"获取菜单列表发生错误"))).as(JSON)
+              case e: Exception =>
+                log.error(e.getMessage, e.fillInStackTrace())
+                Ok(Json.generate(Map("success" -> false,
+                  "result" -> -1,
+                  "message" -> "获取菜单列表发生错误"))).as(JSON)
             }
           }
       )
@@ -224,22 +224,63 @@ object Menu extends Controller {
    * @param id 菜单代码
    * @return
    */
-  def checkMenucodeAvaliable(id:String) = Action{
-    implicit request=>
+  def checkMenucodeAvaliable(id: String) = Action {
+    implicit request =>
       try {
         val result = menuService.checkMenucodeAvaliable(id)
-        Ok(Json.generate(Map("success"->true,
-        "result"->0,
-        "isAvaliable"->result))).as(JSON)
+        Ok(Json.generate(Map("success" -> true,
+          "result" -> 0,
+          "isAvaliable" -> result))).as(JSON)
       }
       catch {
-        case e:Exception =>
-           log.error(e.getMessage,e.fillInStackTrace())
-           Ok(Json.generate(Map("success"->false,
-           "result"-> -1,
-           "message"->"菜单代码可用性验证发生错误"))).as(JSON)
+        case e: Exception =>
+          log.error(e.getMessage, e.fillInStackTrace())
+          Ok(Json.generate(Map("success" -> false,
+            "result" -> -1,
+            "message" -> "菜单代码可用性验证发生错误"))).as(JSON)
       }
 
   }
 
+  /**
+   * 菜单树节点
+   * @return
+   */
+  def treeNodes = Action {
+    implicit request =>
+      menuQueryForm.bindFromRequest.fold(
+        hasErrors =
+          form =>
+            BadRequest(form.errorsAsJson),
+        success =
+          menuQueryCondition => {
+            try {
+              val menus = menuService.list(menuQueryCondition)
+              val treeNodes = menus.map {
+                m =>
+                  val leaf = if (m.isleaf == "Y") true else false
+                  Map("id" -> m.id,
+                    "text" -> m.menuname,
+                    "parentId" -> m.parentmenucode,
+                    "leaf" -> leaf,
+                    "menuname" -> m.menuname,
+                    "menufullcode" -> m.menufullcode,
+                    "systemcode" -> m.systemcode)
+              }
+              Ok(Json.generate(Map("success" -> true,
+                "result" -> 0,
+                "message" -> "操作成功",
+                "data" -> treeNodes)))
+            }
+            catch {
+              case e: Exception =>
+                log.error("获取菜单树节点发生错误")
+                log.error(e.getMessage, e.fillInStackTrace())
+                Ok(Json.generate(Map("success" -> false,
+                  "result" -> -1,
+                  "message" -> "获取菜单树节点发生错误")))
+            }
+          }
+      )
+  }
 }
