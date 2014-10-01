@@ -235,6 +235,15 @@ trait MenuServiceComponentImpl extends MenuServiceComponent {
     def checkMenucodeAvaliable(menucode: String): Boolean = inTransaction(
       !menuDao.checkMenucodeRepeat(menucode)
     )
+
+    /**
+     * 获取制定父菜单id的当前最大序列
+     * @param parentId 父菜单id
+     * @return
+     */
+    def maxMenuOrder(parentId: String): Int = inTransaction {
+      menuDao.maxOrder(parentId)
+    }
   }
 
 }

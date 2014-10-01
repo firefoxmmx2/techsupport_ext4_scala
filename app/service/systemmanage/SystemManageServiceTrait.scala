@@ -121,6 +121,13 @@ trait MenuServiceComponent {
      * @return
      */
     def checkMenucodeAvaliable(menucode:String):Boolean
+
+    /**
+     * 获取制定父菜单id的当前最大序列
+     * @param parentId 父菜单id
+     * @return
+     */
+    def maxMenuOrder(parentId:String):Int
   }
 
   val menuService: MenuService

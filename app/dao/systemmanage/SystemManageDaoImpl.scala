@@ -632,6 +632,18 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
 
 
     /**
+     * 获取指定父菜单id当前的最大序列
+     * @param parentId 父菜单id
+     * @return
+     */
+    def maxOrder(parentId: String): Int =
+      from(SystemManage.menus)(
+        m=>
+          where(m.parentmenucode===parentId)
+          compute(max(m.nodeorder))
+      ).single.measures.getOrElse(0)
+
+    /**
      * 验证菜单代码重复
      * @param menucode
      * @return

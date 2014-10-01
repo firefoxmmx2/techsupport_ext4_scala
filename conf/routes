@@ -26,6 +26,7 @@ GET           /api/departments/:id                             controllers.syste
 GET           /api/departments                                 controllers.systemmanage.Department.list
 
 #菜单
+GET           /api/menus/maxMenuOrder/:parentId                controllers.systemmanage.Menu.maxMenuOrder(parentId:String)
 GET           /api/menus/treeNodes                             controllers.systemmanage.Menu.treeNodes
 GET           /api/menus/checkMenucodeAvaliable/:id            controllers.systemmanage.Menu.checkMenucodeAvaliable(id:String)
 GET           /api/menus/userMenuNode                          controllers.systemmanage.Menu.userMenuNode

@@ -5,7 +5,7 @@ Ext.define('Techsupport.store.YN', {
     extend: 'Ext.data.Store',
     fields: ['value', 'text'],
     data: [
-        {value:null,text:'  '},
+        {value: '', text: '&nbsp;'},
         {value: 'Y', text: '是'},
         {value: 'N', text: '否'}
     ]

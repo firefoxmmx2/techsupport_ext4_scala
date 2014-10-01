@@ -111,6 +111,7 @@ object Menu extends Controller {
         else {
           Ok(Json.generate(Map("result" -> 0,
             "success" -> true,
+            "data" -> menu,
             "message" -> "获取菜单成功"))).as(JSON)
         }
       }
@@ -265,7 +266,8 @@ object Menu extends Controller {
                     "leaf" -> leaf,
                     "menuname" -> m.menuname,
                     "menufullcode" -> m.menufullcode,
-                    "systemcode" -> m.systemcode)
+                    "systemcode" -> m.systemcode,
+                    "menulevel" -> m.menulevel)
               }
               Ok(Json.generate(Map("success" -> true,
                 "result" -> 0,
@@ -282,5 +284,26 @@ object Menu extends Controller {
             }
           }
       )
+  }
+
+  /**
+   * 获取最大序列号
+   * @return
+   */
+  def maxMenuOrder(parentId: String) = Action {
+    try {
+      val result = menuService.maxMenuOrder(parentId)
+      Ok(Json.generate(Map("result" -> 0,
+        "success" -> true,
+        "data" -> result))).as(JSON)
+    }
+    catch {
+      case e: Exception =>
+        log.error("获取菜单最大序列发生错误")
+        log.error(e.getMessage, e.fillInStackTrace())
+        Ok(Json.generate(Map("result" -> -1,
+          "success" -> false,
+          "message" -> "获取菜单最大序列发生错误"))).as(JSON)
+    }
   }
 }

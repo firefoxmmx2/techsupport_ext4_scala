@@ -1,12 +1,12 @@
 /**
  * 菜单树控制器
  */
-Ext.define('Techsupport.controller.sysadmin.MenuTree',{
-    extend:'Ext.app.Controller',
-    stores:['MenuTree'],
-    views:['sysadmin.menu.MenuTree'],
-    models:['MenuTree'],
-    refs:[],
+Ext.define('Techsupport.controller.sysadmin.MenuTree', {
+    extend: 'Ext.app.Controller',
+    stores: ['MenuTree'],
+    views: ['sysadmin.menu.MenuTree'],
+    models: ['MenuTree'],
+    refs: [],
     init: function () {
 
         this.control({
@@ -17,16 +17,16 @@ Ext.define('Techsupport.controller.sysadmin.MenuTree',{
                     tree.cdata.menuname = n.raw.menuname;
                     tree.cdata.menulevel = n.raw.menulevel;
                     tree.cdata.systemcode = n.raw.systemcode;
-                    tree.cdata.menufullcode= n.raw.menufullcode;
+                    tree.cdata.menufullcode = n.raw.menufullcode;
                 },
                 render: function (tree) {
-                    tree.cdata = {menucode: 0, menuname: "", systemcode: '', menulevel: 0,menufullcode:''};
+                    tree.cdata = {menucode: 0, menuname: "", systemcode: '', menulevel: 0, menufullcode: ''};
 
-                    tree.refresh= function (nodeId) {
+                    tree.refresh = function (nodeId) {
                         //刷新
-                        var node=this.getStore().getNodeById(nodeId);
+                        var node = this.getStore().getNodeById(nodeId);
                         this.getStore().load({
-                            node:node
+                            node: node
                         });
                     };
                 },
@@ -40,6 +40,7 @@ Ext.define('Techsupport.controller.sysadmin.MenuTree',{
                         tree.cdata.menuname = tree.getRootNode().raw.menuname;
                         tree.cdata.menulevel = tree.getRootNode().raw.menulevel;
                         tree.cdata.menufullcode = tree.getRootNode().raw.menufullcode;
+                        tree.cdata.systemcode = tree.getRootNode().raw.systemcode
                     }
                     store.getProxy().setExtraParam("parentmenucode", tree.cdata.menucode);
                 },
@@ -49,6 +50,7 @@ Ext.define('Techsupport.controller.sysadmin.MenuTree',{
                     tree.cdata.menuname = record.raw.text;
                     tree.cdata.menulevel = record.raw.menulevel;
                     tree.cdata.menufullcode = record.raw.menufullcode;
+                    tree.cdata.systemcode = record.raw.systemcode;
                 },
                 itemcontextmenu: function (view, record, item, index, e, eOpts) {
                     //右键菜单

@@ -17,64 +17,119 @@ Ext.define('Techsupport.controller.sysadmin.Menu', {
     ],
     init: function () {
         this.toEditMenu = function (record) { //初始化编辑窗口
-            var editWindow = this.getView('sysadmin.menu.Detail').create();
-            var form = editWindow.down('form');
-            if (!record) {
+            var title = '';
+            var config = {};
+
+            if (record) {
+                title = '菜单修改[' + record.data.menuname + ']';
+                config.title = title;
+                config.name = "modifyMenuWindow";
+            }
+            else {
                 var tree = this.getMenuTree();
                 record = this.getMenuModel().create({
                     parentmenucode: tree.cdata.menucode,
-                    menulevel: tree.cdata.menulevel+1,
+                    menulevel: tree.cdata.menulevel + 1,
                     isleaf: 'Y',
-                    systemcode: tree.cdata.systemcode
+                    systemcode: tree.cdata.systemcode,
+                    parentMenufullcode: tree.cdata.menufullcode
+                });
+
+                title = '菜单新增[上级菜单:' + tree.cdata.menuname + ']';
+                config.title = title;
+                config.name = "addMenuWindow";
+            }
+            var editWindow = this.getView('sysadmin.menu.Detail').create(config);
+            var form = editWindow.down('form');
+            form.down('textfield[name=id]').originalValue = record.data.id;
+            if (record.data.id) {
+                Ext.Ajax.request({
+                    url: '/api/menus/' + record.data.id,
+                    success: function (response) {
+                        var res = Ext.decode(response.responseText);
+                        if (res.data) {
+                            record.data.parentMenufullcode = res.data.menufullcode;
+                            form.getForm().getRecord().set('parentMenufullcode', res.data.menufullcode);
+                        }
+                    }
                 });
             }
             form.getForm().loadRecord(record);
-
+            editWindow.show();
         };
-        this.saveMenu = function (form, store,queryFunc) { //保存菜单
-            var controller=this;
+        this.saveMenu = function (form, store, queryFunc) { //保存菜单
+            var controller = this;
             if (form.getForm().isValid()) {
                 var window = form.up('window');
-                form.getForm().updateRecord();
-                store.sync({
-                    success: function (batch, options) {
-                        store.commitChanges();
-//                        queryFunc();
-                        this.queryMenu();
-                        window.close();
-                    },
-                    failure: function (batch, options) {
-                        store.rejectChanges();
-                    }
-                });
+                if (form.up('window[name=addMenuWindow]')) {
+                    var record = this.getMenuModel().create(
+                        form.getForm().getValues()
+                    );
+                    store.add(record);
+                    form.getForm().submit({
+                        url: '/api/menus',
+                        method: 'post',
+                        params: form.getForm().getValues(),
+                        waitMsg: '添加中...',
+                        success: function (form, action) {
+                            this.queryMenu();
+                            window.close();
+                        },
+                        failure: function (form, action) {
+                            if (action.response.status == 200)
+                                Ext.Msg.alert('错误', action.result.message);
+                            else
+                                Ext.Msg.alert('错误', '添加菜单发生致命错误');
+                        },
+                        scope: this
+                    });
+                }
+                else {
+                    form.getForm().updateRecord();
+                    var extraParams=store.getProxy().extraParams;
+                    store.getProxy().extraParams={};
+                    store.sync({
+                        success: function (batch, options) {
+                            store.commitChanges();
+                            this.queryMenu();
+                            window.close();
+                        },
+                        failure: function (batch, options) {
+                            store.rejectChanges();
+                        },
+                        scope: this
+                    });
+                    store.getProxy().extraParams=extraParams;
+                }
             }
         };
         this.queryMenu = function () { //查询菜单
             var form = this.getQueryForm();
             var params = form.getForm().getValues();
-            var store=this.getMenuStore();
+            var store = this.getMenuStore();
             params.parentmenucode = this.getMenuTree().cdata.menucode;
             Ext.apply(store.getProxy().extraParams, params);
             store.load();
         };
 
-        this.removeMenu= function () { //删除菜单
-            var grid=this.getMenuListGrid();
-            var store=this.getMenuStore();
-            var selection=grid.getSelectionModel().getSelection().map(function (record) {
+        this.removeMenu = function () { //删除菜单
+            var grid = this.getMenuListGrid();
+            var store = this.getMenuStore();
+            var selection = grid.getSelectionModel().getSelection().map(function (record) {
                 store.remove(record);
             });
-            if(selection>0){
+            if (selection.length > 0) {
                 store.sync({
                     success: function (batch, options) {
                         store.commitChanges();
-                        if(store.getProxy().extraParams.limit < store.getTotal()){
+                        if (store.getProxy().extraParams.limit < store.getTotalCount()) {
                             this.queryMenu();
                         }
                     },
                     failure: function (batch, options) {
                         store.rejectChanges();
-                    }
+                    },
+                    scope: this
                 });
             }
         };
@@ -95,15 +150,15 @@ Ext.define('Techsupport.controller.sysadmin.Menu', {
                     this.toEditMenu(record);
                 }
             },
-            'menudtail textfield[name=id]': {
+            'menudetail textfield[name=id]': {
                 change: function (field, newValue, oldValue) {
-                    if (newValue != field.originalValue) { //菜单代码重复验证
+                    if (newValue && newValue != field.originalValue) { //菜单代码重复验证
                         Ext.Ajax.request({
-                            url: '/api/menus/checkMenucodeAvaliable/'+newValue,
-                            scope: idField,
+                            url: '/api/menus/checkMenucodeAvaliable/' + newValue,
+                            scope: field,
                             success: function (response) {
                                 var res = Ext.decode(response.responseText);
-                                if (res.result == 0) {
+                                if (res.isAvaliable && res.result == 0) {
                                     this.clearInvalid();
                                     this.textValid = true;
                                 }
@@ -119,8 +174,8 @@ Ext.define('Techsupport.controller.sysadmin.Menu', {
                         });
                     }
                     else {
-                        this.textValid = true;
-                        this.clearInvalid();
+                        field.textValid = true;
+                        field.clearInvalid();
                     }
 
                     //自动补全菜单全码
@@ -131,13 +186,33 @@ Ext.define('Techsupport.controller.sysadmin.Menu', {
                     });
                 }
             },
+            'menudetail[name=addMenuWindow] textfield[name=nodeorder]': { //新增菜单时候初始化序列
+                render: function (field) {
+                    var parentId = field.up('form').getForm().getRecord().data.parentmenucode;
+                    Ext.Ajax.request({
+                        url: '/api/menus/maxMenuOrder/' + parentId,
+                        success: function (response) {
+                            var res = Ext.decode(response.responseText);
+                            field.setValue(res.data + 1);
+                        },
+                        failure: function (response) {
+                            if (response.state == 200) {
+                                var res = Ext.decode(response.responseText);
+                                Ext.Msg.alert('错误', res.message);
+                            }
+                            else
+                                Ext.Msg.alert('错误', '获取父菜单为' + parentId + '的当前最大序列发生致命错误');
+                        }
+                    });
+                }
+            },
             'menudetail button[action=enter]': { //确认按钮
                 click: function (button, evt) {
                     var form = button.up('window').down('form');
                     this.saveMenu(form, this.getMenuStore());
                 }
             },
-            'menudetail button[action=canel]': { //取消按钮
+            'menudetail button[action=cancel]': { //取消按钮
                 click: function (button, evt) {
                     button.up('window').close();
                 }
@@ -161,9 +236,9 @@ Ext.define('Techsupport.controller.sysadmin.Menu', {
                     this.toEditMenu();
                 }
             },
-            'menumange button[action=remove]':{ //删除按钮
-                click:function(){
-                      this.removeMenu();
+            'menumanage button[action=remove]': { //删除按钮
+                click: function () {
+                    this.removeMenu();
                 }
             }
         });

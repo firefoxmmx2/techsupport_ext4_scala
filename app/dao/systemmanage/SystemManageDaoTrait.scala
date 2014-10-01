@@ -67,6 +67,13 @@ trait MenuDaoComponent {
      * @return
      */
     def checkMenucodeRepeat(menucode:String):Boolean
+
+    /**
+     * 获取指定父菜单id当前的最大序列
+     * @param parentId 父菜单id
+     * @return
+     */
+    def maxOrder(parentId:String):Int
   }
 
   val menuDao: MenuDao
