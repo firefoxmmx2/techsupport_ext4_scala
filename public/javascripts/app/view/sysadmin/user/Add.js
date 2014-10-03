@@ -6,7 +6,7 @@ Ext.define('Techsupport.view.sysadmin.user.Add', {
     title: '新增用户',
     width: 630,
     alias: 'widget.useradd',
-    closeAction:'destroy',
+    closeAction: 'destroy',
     bodyPadding: 2,
     items: [
         {xtype: 'form',
@@ -48,7 +48,7 @@ Ext.define('Techsupport.view.sysadmin.user.Add', {
                                         res = true;
                                     else
                                         res = "前后输入密码不匹配";
-                                    if(res){
+                                    if (res) {
                                         p.clearInvalid();
                                     }
                                 }
@@ -58,8 +58,8 @@ Ext.define('Techsupport.view.sysadmin.user.Add', {
                         }},
                         {fieldLabel: '用户名称', name: 'username', allowBlank: false, blankText: '用户名称不能为空'},
                         {fieldLabel: '身份证', name: 'idnum'},
-                        {fieldLabel: '邮箱', name: 'email',vtype:'email'},
-                        {fieldLabel: '手机', name: 'mobilePhone',vtype:'number'},
+                        {fieldLabel: '邮箱', name: 'email', vtype: 'email'},
+                        {fieldLabel: '手机', name: 'mobilePhone', vtype: 'number'},
                         {fieldLabel: '序号', name: 'userorder', value: '1'},
                         {fieldLabel: '所属机构', name: 'departname', allowBlank: false, blankText: '所属机构不能为空', readOnly: true},
                         {fieldLabel: '所属机构id', name: 'departid', allowBlank: false, blankText: '所属机构id不能为空', hidden: true},

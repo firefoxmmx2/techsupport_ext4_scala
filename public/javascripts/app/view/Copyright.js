@@ -3,7 +3,7 @@
  */
 Ext.define("Techsupport.view.Copyright", {
     extend: 'Ext.panel.Panel',
-    layout:'fit',
+    layout: 'fit',
     alias: 'widget.copyright',
     items: [
         {html: '底部版权声明'}

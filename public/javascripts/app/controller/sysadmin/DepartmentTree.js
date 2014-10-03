@@ -4,7 +4,7 @@
 Ext.define('Techsupport.controller.sysadmin.DepartmentTree', {
     extend: 'Ext.app.Controller',
     stores: ['DepartmentTree'],
-    models:['DepartmentTree'],
+    models: ['DepartmentTree'],
     views: ['sysadmin.department.DepartmentTree'],
     init: function () {
         this.control({
@@ -20,11 +20,11 @@ Ext.define('Techsupport.controller.sysadmin.DepartmentTree', {
                 render: function (tree) {
                     tree.cdata = {departid: 0, departcode: "", departname: "", departfullcode: '', departlevel: 1};
 
-                    tree.refresh= function (nodeId) {
+                    tree.refresh = function (nodeId) {
                         //刷新
-                        var node=this.getStore().getNodeById(nodeId);
+                        var node = this.getStore().getNodeById(nodeId);
                         this.getStore().load({
-                            node:node
+                            node: node
                         });
                     };
                 },

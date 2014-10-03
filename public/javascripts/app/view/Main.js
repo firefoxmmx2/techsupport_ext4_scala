@@ -18,7 +18,7 @@ Ext.define('Techsupport.view.Main', {
             {
                 title: '首页',
                 html: 'Free-standing tab panel',
-                layout:'fit',
+                layout: 'fit',
                 closable: false
             }
         ] },

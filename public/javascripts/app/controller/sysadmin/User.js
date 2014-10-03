@@ -256,8 +256,8 @@ Ext.define('Techsupport.controller.sysadmin.User', {
     modifyUser: function (form, store, window) {
         // 更新用户
         if (form.getForm().isValid()) {
-            var record=form.getForm().getRecord();
-            record.data.userType=record.data.userType.filter(function (v) {
+            var record = form.getForm().getRecord();
+            record.data.userType = record.data.userType.filter(function (v) {
                 return v;
             });
             form.getForm().updateRecord();

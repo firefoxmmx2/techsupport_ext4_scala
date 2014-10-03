@@ -303,7 +303,7 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
                 failure: failure
             });
             store.getProxy().extraprams = extraParams;
-           tree.refresh(tree.getSelectionModel().getSelection()[0].data.id);
+            tree.refresh(tree.getSelectionModel().getSelection()[0].data.id);
         }
     },
     upDepartment: function (grid) {

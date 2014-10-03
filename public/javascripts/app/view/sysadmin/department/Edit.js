@@ -1,16 +1,16 @@
 /**
  * Created by hooxin on 14-9-17.
  */
-Ext.define('Techsupport.view.sysadmin.department.Edit',{
+Ext.define('Techsupport.view.sysadmin.department.Edit', {
 //    extend:'Techsupport.view.base.BaseDetail',
-    extend:'Techsupport.view.sysadmin.department.Add',
-    alias:'widget.departmentedit',
-    title:'机构修改',
+    extend: 'Techsupport.view.sysadmin.department.Add',
+    alias: 'widget.departmentedit',
+    title: '机构修改',
     initComponent: function () {
         this.callParent(arguments);
         this.query('form panel').map(function (p) {
             p.insert(0, {
-                xtype: 'textfield', name: 'id', fieldLabel: '用户ID', allowBlank: false, blankText: '用户ID不能为空',readOnly:true
+                xtype: 'textfield', name: 'id', fieldLabel: '用户ID', allowBlank: false, blankText: '用户ID不能为空', readOnly: true
             });
 //            p.add({fieldLabel: '机构代码', name: 'departcode', allowBlank: false, blankText: '机构代码不能为空',vtype:'alphanum'},
 //            {fieldLabel: '机构名称', name: 'departname', allowBlank: false, blankText: '机构名称不能为空'},

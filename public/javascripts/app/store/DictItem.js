@@ -13,18 +13,18 @@ Ext.define('Techsupport.store.DictItem', {
             successProperty: 'success',
             totalProperty: 'total'
         },
-        listeners:{
+        listeners: {
             beforeload: function (store, operation, eOpts) {
-                if(store.sorters && store.sorters.getCount()){
-                    var sorter=store.sorters.getAt(0);
-                    var obj={};
-                    obj[store.getProxy().sortParam]=sorter.property;
-                    obj[store.getProxy().directionParam]=sorter.direction;
-                    Ext.apply(store.getProxy().extraParams,obj);
+                if (store.sorters && store.sorters.getCount()) {
+                    var sorter = store.sorters.getAt(0);
+                    var obj = {};
+                    obj[store.getProxy().sortParam] = sorter.property;
+                    obj[store.getProxy().directionParam] = sorter.direction;
+                    Ext.apply(store.getProxy().extraParams, obj);
                 }
             }
         }
     },
-    remoteSort:true,
-    sorters:['sibOrder']
+    remoteSort: true,
+    sorters: ['sibOrder']
 });

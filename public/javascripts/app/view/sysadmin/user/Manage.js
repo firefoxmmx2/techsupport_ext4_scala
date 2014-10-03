@@ -8,7 +8,7 @@ Ext.define('Techsupport.view.sysadmin.user.Manage', {
         this.callParent(arguments);
 
         this.query('panel[region=west]').map(function (p) {
-            p.add({xtype:'departmenttree'});
+            p.add({xtype: 'departmenttree'});
         });
         this.query('panel[region=center]').map(function (p) {
             p.add({xtype: 'userlist'});
@@ -27,7 +27,7 @@ Ext.define('Techsupport.view.sysadmin.user.Manage', {
                     editable: false
                 },
                 {xtype: 'hidden', name: 'departid', fieldLabel: '机构ID'}
-            ]) ;
+            ]);
         });
     }
 });

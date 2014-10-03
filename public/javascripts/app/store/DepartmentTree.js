@@ -3,13 +3,13 @@
  */
 Ext.define('Techsupport.store.DepartmentTree', {
     extend: 'Ext.data.TreeStore',
-    model:'Techsupport.model.DepartmentTree',
+    model: 'Techsupport.model.DepartmentTree',
     root: {
         id: '0',
         text: '根节点',
         departcode: '',
-        departfullcode:'',
-        departlevel:1,
+        departfullcode: '',
+        departlevel: 1,
         expanded: false
     },
     proxy: {

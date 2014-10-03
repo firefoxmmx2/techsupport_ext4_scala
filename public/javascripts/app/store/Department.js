@@ -6,25 +6,25 @@ Ext.define("Techsupport.store.Department", {
     model: "Techsupport.model.Department",
     proxy: {
         type: "rest",
-        url:'/api/departments',
+        url: '/api/departments',
         reader: {
             type: "json",
             root: "data",
-            successProperty:"success",
-            totalProperty:'total'
+            successProperty: "success",
+            totalProperty: 'total'
         }
     },
     listeners: {
         beforeload: function (store, operation, eOpts) {
             if (store.sorters && store.sorters.getCount()) {
                 var sorter = store.sorters.getAt(0);
-                var obj={};
-                obj[store.getProxy().sortParam]=sorter.property;
-                obj[store.getProxy().directionParam]=sorter.direction;
+                var obj = {};
+                obj[store.getProxy().sortParam] = sorter.property;
+                obj[store.getProxy().directionParam] = sorter.direction;
                 Ext.apply(store.getProxy().extraParams, obj);
             }
         }
     },
-    remoteSort:true,
-    sorters:['nodeOrder']
+    remoteSort: true,
+    sorters: ['nodeOrder']
 });

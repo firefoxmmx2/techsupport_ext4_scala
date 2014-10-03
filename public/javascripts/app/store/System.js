@@ -17,17 +17,17 @@ Ext.define("Techsupport.store.System", {
             successProperty: 'success'
         }
     },
-    listeners:{
+    listeners: {
         beforeload: function (store, oper, options) {
-            if(store.sorters && store.sorters.getCount()){
+            if (store.sorters && store.sorters.getCount()) {
                 var sorter = store.sorters.getAt(0);
-                var obj={};
-                obj[store.getProxy().sortParam]=sorter.property;
-                obj[store.getProxy().directionParam]=sorter.direction;
+                var obj = {};
+                obj[store.getProxy().sortParam] = sorter.property;
+                obj[store.getProxy().directionParam] = sorter.direction;
                 Ext.apply(store.getProxy().extraParams, obj);
             }
         }
     },
-    remoteSort:true,
-    sorters:['nodeorder']
+    remoteSort: true,
+    sorters: ['nodeorder']
 });

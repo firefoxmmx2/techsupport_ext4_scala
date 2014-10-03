@@ -4,7 +4,7 @@
 Ext.define('Techsupport.view.sysadmin.menu.List', {
     extend: 'Ext.grid.Panel',
     store: 'Menu',
-    alias:'widget.menulist',
+    alias: 'widget.menulist',
     selType: 'checkboxmodel',
     selModel: {
         flex: 0,

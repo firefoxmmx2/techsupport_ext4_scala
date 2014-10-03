@@ -3,7 +3,7 @@
  */
 Ext.define('Techsupport.view.sysadmin.department.DepartmentTree', {
     extend: 'Ext.tree.Panel',
-    store:'DepartmentTree',
+    store: 'DepartmentTree',
     border: false,
     alias: 'widget.departmenttree'
 });

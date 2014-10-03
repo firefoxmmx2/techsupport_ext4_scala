@@ -86,8 +86,8 @@ Ext.define('Techsupport.controller.sysadmin.Menu', {
                 }
                 else {
                     form.getForm().updateRecord();
-                    var extraParams=store.getProxy().extraParams;
-                    store.getProxy().extraParams={};
+                    var extraParams = store.getProxy().extraParams;
+                    store.getProxy().extraParams = {};
                     store.sync({
                         success: function (batch, options) {
                             store.commitChanges();
@@ -99,7 +99,7 @@ Ext.define('Techsupport.controller.sysadmin.Menu', {
                         },
                         scope: this
                     });
-                    store.getProxy().extraParams=extraParams;
+                    store.getProxy().extraParams = extraParams;
                 }
             }
         };

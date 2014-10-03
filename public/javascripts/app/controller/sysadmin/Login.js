@@ -44,7 +44,7 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
             form.submit({
                 url: url,
                 params: form.getForm().getValues(),
-                waitMsg:'正在登录中...',
+                waitMsg: '正在登录中...',
                 success: function (form, action) {
                     var res = action.result;
                     if (res.result == 0) {
@@ -56,9 +56,9 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
                     else
                         Ext.Msg.alert("提示", "登录失败");
                 },
-                failure: function (form,action) {
-                    var res=action.result;
-                    Ext.Msg.alert("错误","错误代码:"+res.result+"; "+res.message);
+                failure: function (form, action) {
+                    var res = action.result;
+                    Ext.Msg.alert("错误", "错误代码:" + res.result + "; " + res.message);
                 }
             })
         }
@@ -94,7 +94,7 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
                 if (res.result == 0) {
                     me.authCode = res.authCode;
                     me.userInfo = res.userInfo;
-                    if(func){
+                    if (func) {
                         func();
                     }
                 }
