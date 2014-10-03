@@ -365,6 +365,25 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
 
   class SystemDaoImpl extends SystemDao {
 
+    /**
+     * 验证系统代码是否重复
+     * @return
+     */
+    def checkSystemcodeRepeat(systemcode: String): Boolean = from(SystemManage.systems)(
+      s=>
+        where(s.id===systemcode)
+        select(s.id)
+    ).Count > 0
+
+    /**
+     * 最大序列
+     * @return
+     */
+    def maxOrder: Int = from(SystemManage.systems)(
+      s=>
+        compute(max(s.nodeorder))
+    ).single.measures.getOrElse(0)
+
     def getUserSystem(userid: Long): List[System] = {
       from(SystemManage.systems, SystemManage.userRoles, SystemManage.roleMenus, SystemManage.menus)(
         (s, ur, rm, m) =>

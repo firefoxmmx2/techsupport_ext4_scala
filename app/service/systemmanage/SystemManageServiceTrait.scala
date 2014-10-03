@@ -24,14 +24,14 @@ trait DepartmentServiceComponent {
      * @param departcode
      * @return
      */
-    def checkDepartcodeAvailable(departcode:String):Boolean
+    def checkDepartcodeAvailable(departcode: String): Boolean
 
     /**
      * 获取制定上级机构id下的最大序号
      * @param parentDepartid
      * @return
      */
-    def maxDepartmentOrder(parentDepartid:Long):Int
+    def maxDepartmentOrder(parentDepartid: Long): Int
   }
 
 }
@@ -56,14 +56,14 @@ trait UserServiceComponent {
      * @param departid 机构ID
      * @return
      */
-    def getMaxUserOrder(departid:Long):Int
+    def getMaxUserOrder(departid: Long): Int
 
     /**
      * 检查用户帐号是否重复
-      * @param useraccount
+     * @param useraccount
      * @return
      */
-    def checkUseraccountAvailable(useraccount:String):Boolean
+    def checkUseraccountAvailable(useraccount: String): Boolean
   }
 
 }
@@ -83,6 +83,18 @@ trait SystemServiceComponent {
      * @return
      */
     def getUserSystems(userid: Long): List[System]
+
+    /**
+     * 获取最大系统序列
+     * @return
+     */
+    def maxSystemOrder: Int
+
+    /**
+     * 系统代码可用性验证
+     * @return
+     */
+    def checkSystemcodeAvaliable(systemcode:String):Boolean
   }
 
   val systemService: SystemService
@@ -120,14 +132,14 @@ trait MenuServiceComponent {
      * @param menucode 菜单代码
      * @return
      */
-    def checkMenucodeAvaliable(menucode:String):Boolean
+    def checkMenucodeAvaliable(menucode: String): Boolean
 
     /**
      * 获取制定父菜单id的当前最大序列
      * @param parentId 父菜单id
      * @return
      */
-    def maxMenuOrder(parentId:String):Int
+    def maxMenuOrder(parentId: String): Int
   }
 
   val menuService: MenuService

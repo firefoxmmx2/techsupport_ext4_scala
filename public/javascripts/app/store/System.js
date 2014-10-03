@@ -4,7 +4,7 @@
 /**
  * 系统存储
  */
-Ext.define("Techsupport.store.SystemStore", {
+Ext.define("Techsupport.store.System", {
     extend: "Ext.data.Store",
     model: "Techsupport.model.System",
     proxy: {

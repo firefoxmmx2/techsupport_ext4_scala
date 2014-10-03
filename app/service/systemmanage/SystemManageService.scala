@@ -313,6 +313,24 @@ trait SystemServiceComponentImpl extends SystemServiceComponent {
    * 系统服务
    */
   class SystemServiceImpl extends SystemService {
+
+
+    /**
+     * 系统代码可用性验证
+     * @return
+     */
+    def checkSystemcodeAvaliable(systemcode: String): Boolean = inTransaction {
+      !systemDao.checkSystemcodeRepeat(systemcode)
+    }
+
+    /**
+     * 获取最大系统序列
+     * @return
+     */
+    def maxSystemOrder: Int = inTransaction {
+      systemDao.maxOrder
+    }
+
     /**
      * 获取用户系统
      * @param userid

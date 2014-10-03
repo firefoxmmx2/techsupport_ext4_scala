@@ -12,6 +12,7 @@ Ext.define("Techsupport.model.System", {
         {name: "parentsystemcode", type: "string"},
         {name: "nodeorder", type: "int"},
         {name: "isleaf", type: "string"},
-        {name: "fullcode", type: "string"}
+        {name: "fullcode", type: "string"},
+        {name: "parentFullcode", type: "string"}
     ]
 });

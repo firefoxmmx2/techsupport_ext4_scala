@@ -89,7 +89,41 @@ object System extends Controller {
       }
   }
 
-  def list = TODO
+  /**
+   * 获取系统列表
+   * @return
+   */
+  def list = Action {
+    implicit request =>
+      val pageno = request.getQueryString("page").getOrElse("1").toInt
+      val pagesize = request.getQueryString("limit").getOrElse("20").toInt
+      val sort = request.getQueryString("sort").getOrElse("nodeorder")
+      val dir = request.getQueryString("dir").getOrElse("asc").toLowerCase
+
+      systemQueryForm.bindFromRequest.fold(
+        hasErrors =
+          form =>
+            BadRequest(form.errorsAsJson),
+        success =
+          systemQuery => {
+            try {
+              val page = systemService.page(pageno, pagesize, systemQuery, sort, dir)
+              Ok(Json.generate(Map("success" -> true,
+                "result" -> 0,
+                "data" -> page.data,
+                "message" -> ""))).as(JSON)
+            }
+            catch {
+              case e: Exception =>
+                log.error("获取系统列表发生错误")
+                log.error(e.getMessage, e.fillInStackTrace())
+                Ok(Json.generate(Map("success" -> false,
+                  "result" -> -1,
+                  "message" -> "获取系统列表发生错误"))).as(JSON)
+            }
+          }
+      )
+  }
 
   val systemQueryForm = Form(
     mapping(
@@ -130,5 +164,51 @@ object System extends Controller {
           }
         }
       )
+  }
+
+  /**
+   * 最大系统序列
+   * @return
+   */
+  def maxSystemOrder = Action {
+    implicit request =>
+      try {
+        val result = systemService.maxSystemOrder
+        Ok(Json.generate(Map("success" -> true,
+          "result" -> 0,
+          "data" -> result))).as(JSON)
+      }
+      catch {
+        case e: Exception =>
+          log.error("获取最大系统序列发生错误")
+          log.error(e.getMessage, e.fillInStackTrace())
+          Ok(Json.generate(Map("success" -> false,
+            "result" -> -1,
+            "message" -> "获取最大系统序列发生错误"))).as(JSON)
+      }
+  }
+
+  /**
+   * 系统代码可用性验证
+   * @param systemcode
+   * @return
+   */
+  def checkSystemcodeAvaliable(systemcode: String) = Action {
+    implicit request =>
+      try {
+        val result = systemService.checkSystemcodeAvaliable(systemcode)
+        Ok(Json.generate(Map("success" -> true,
+          "result" -> 0,
+          "isAvaliable" -> result))).as(JSON)
+      }
+      catch {
+        case e: Exception =>
+          log.error("系统代码可用性验证发生错误")
+          log.error(e.getMessage, e.fillInStackTrace())
+          Ok(Json.generate(Map("success" -> false,
+            "result" -> -1,
+            "message" -> "系统代码可用性验证发生错误"))).as(JSON)
+      }
+
   }
 }

@@ -9,7 +9,8 @@ Ext.application({
         "sysadmin.User",
         "sysadmin.Department",
         'sysadmin.MenuTree',
-        'sysadmin.Menu'
+        'sysadmin.Menu',
+        'sysadmin.System'
     ],
     refs: [
         {ref: 'viewport', selector: 'viewport'}

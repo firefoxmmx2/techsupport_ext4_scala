@@ -48,7 +48,24 @@ trait SystemDaoComponent {
   val systemDao: SystemDao
 
   trait SystemDao extends BaseDao[System, String, SystemQueryCondition] {
+    /**
+     * 获取用户所使用的系统
+     * @param userid
+     * @return
+     */
     def getUserSystem(userid: Long): List[System]
+
+    /**
+     * 最大序列
+     * @return
+     */
+    def maxOrder:Int
+
+    /**
+     * 验证系统代码是否重复
+     * @return
+     */
+    def checkSystemcodeRepeat(systemcode:String):Boolean
   }
 
 }
