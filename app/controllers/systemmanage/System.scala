@@ -28,6 +28,10 @@ object System extends Controller {
     )(models.System.apply)(models.System.unapply)
   )
 
+  /**
+   * 系统新增
+   * @return
+   */
   def add = Action {
     implicit request =>
       systemForm.bindFromRequest().fold(
@@ -37,39 +41,75 @@ object System extends Controller {
             val insertedSystem = systemService.insert(system)
             Ok(Json.generate(Map("result" -> 0,
               "success" -> true,
-              "message" -> "添加成功",
+              "message" -> "添加完毕",
               "inserted" -> insertedSystem)))
           }
           catch {
             case e: Exception =>
+              log.error("系统新增发生错误")
               log.error(e.toString, e.fillInStackTrace())
               Ok(Json.generate(Map("result" -> -1,
                 "success" -> false,
-                "message" -> "添加错误")))
+                "message" -> "系统新增发生错误")))
           }
 
         }
       )
   }
 
+  /**
+   * 系统删除
+   * @param id
+   * @return
+   */
   def remove(id: String) = Action {
     implicit request =>
       try {
         systemService.deleteById(id)
         Ok(Json.generate(Map("result" -> 0,
           "success" -> true,
-          "message" -> "删除成功")))
+          "message" -> "删除完毕")))
       }
       catch {
         case e: Exception =>
+          log.error("系统删除发生错误")
           log.error(e.toString, e.fillInStackTrace())
           Ok(Json.generate(Map("result" -> -1,
             "success" -> false,
-            "message" -> "删除发生错误")))
+            "message" -> "系统删除发生错误")))
       }
   }
 
-  def update(id: String) = TODO
+  /**
+   * 修改系统
+   * @param id
+   * @return
+   */
+  def update(id: String) = Action {
+    implicit request =>
+      systemForm.bindFromRequest.fold(
+        hasErrors =
+          form =>
+            BadRequest(form.errorsAsJson),
+        success =
+          system => {
+            try {
+              systemService.update(system)
+              Ok(Json.generate(Map("success" -> true,
+                "result" -> 0,
+                "message" -> "更新完毕"))).as(JSON)
+            }
+            catch {
+              case e: Exception =>
+                log.error("系统修改发生错误")
+                log.error(e.getMessage, e.fillInStackTrace())
+                Ok(Json.generate(Map("success" -> false,
+                  "result" -> -1,
+                  "message" -> "系统修改发生错误"))).as(JSON)
+            }
+          }
+      )
+  }
 
   def get(id: String) = Action {
     implicit request =>

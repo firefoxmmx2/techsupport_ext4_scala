@@ -182,9 +182,17 @@ Ext.define('Techsupport.controller.sysadmin.System', {
 
                 }
             },
+            'systemdetail form textfield':{ //为详情页面里面所有文本字段添加回车事件触发保存动作
+                'specialkey': function (field, evt, option) {
+                    if(evt.getKey() == evt.ENTER){
+                        var form=field.up('form')
+                        this.saveSystem(form,this.getSystemStore())
+                    }
+                }
+            },
             'systemdetail button[action=enter]': {//新增或者修改确认
                 click: function (button, evt) {
-                    this.saveSystem(button.up('form'), this.getSystemStore())
+                    this.saveSystem(button.up('window').down('form'), this.getSystemStore())
                 }
             },
             'systemdetail button[action=cancel]': {//取消按钮 关闭打开的当前窗口
@@ -229,6 +237,13 @@ Ext.define('Techsupport.controller.sysadmin.System', {
                     // 系统全码自动补全
                     var form = field.up('form')
                     form.down('textfield[name=fullcode]').setValue(form.getForm().getRecord().data.parentFullcode + (newValue ? newValue + '.' : ''))
+                }
+            },
+            'systemmanage form:first textfield':{
+                specialkey: function (field, evt, options) {
+                    if(evt.getKey()==evt.ENTER){
+                        this.querySystem()
+                    }
                 }
             }
         })

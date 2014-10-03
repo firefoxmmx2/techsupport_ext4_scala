@@ -9,6 +9,8 @@ import models.User
 import models.System
 import play.api.Logger
 
+import scala.Option
+
 /**
  * Created by hooxin on 14-2-14.
  */
@@ -362,6 +364,7 @@ trait UserDaoComponentImpl extends UserDaoComponent {
 
 
 trait SystemDaoComponentImpl extends SystemDaoComponent {
+  val log = Logger.logger
 
   class SystemDaoImpl extends SystemDao {
 
@@ -370,9 +373,9 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
      * @return
      */
     def checkSystemcodeRepeat(systemcode: String): Boolean = from(SystemManage.systems)(
-      s=>
-        where(s.id===systemcode)
-        select(s.id)
+      s =>
+        where(s.id === systemcode)
+          select (s.id)
     ).Count > 0
 
     /**
@@ -380,7 +383,7 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
      * @return
      */
     def maxOrder: Int = from(SystemManage.systems)(
-      s=>
+      s =>
         compute(max(s.nodeorder))
     ).single.measures.getOrElse(0)
 
@@ -399,15 +402,24 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
 
 
     def selectForPage(params: SystemQueryCondition, sort: String = "systemcode", dir: String = "asc") = {
+      val systemnameLikeOpt = params.systemname match {
+        case Some(x) => Some("%" + x + "%")
+        case _ => None
+      }
+      log.debug("="*13+"systemnameLikeOpt = "+systemnameLikeOpt+"="*13)
+      val systemDeineOpt = params.systemdefine match {
+        case Some(x) => Some("%" + x + "%")
+        case _ => None
+      }
       from(SystemManage.systems)(
         s =>
           where(
             s.id === params.id.?
               and s.isleaf === params.isleaf.?
               and s.parentsystemcode === params.parentsystemcode.?
-              and (s.systemname like params.systemname.?)
+              and (s.systemname like systemnameLikeOpt.?)
               and (s.fullcode like params.fullcode.?)
-              and s.systemdefine === params.systemdefine.?)
+              and (s.systemdefine like systemDeineOpt.?))
             select (s)
             orderBy {
             if (sort == "id")
@@ -462,12 +474,14 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
      * @return 分页结果
      */
     def page(pageno: Int, pagesize: Int, params: SystemQueryCondition, sort: String, dir: String): Page[System] = {
+      log.debug("=" * 13 + "系统列表查询" + "=" * 13)
       val page = Page[System](pageno, pagesize, count(params))
+      log.debug("=" * 13 + "page sql is " + selectForPage(params, sort, dir).page(page.start, page.limit).statement + "=" * 13)
       if (page.total == 0)
         page
       else {
-        val datas = selectForPage(params, sort, dir).page(page.start, page.limit).toList
-        page.copy(data = datas)
+        val data = selectForPage(params, sort, dir).page(page.start, page.limit).toList
+        page.copy(data = data)
       }
     }
 
@@ -657,9 +671,9 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
      */
     def maxOrder(parentId: String): Int =
       from(SystemManage.menus)(
-        m=>
-          where(m.parentmenucode===parentId)
-          compute(max(m.nodeorder))
+        m =>
+          where(m.parentmenucode === parentId)
+            compute (max(m.nodeorder))
       ).single.measures.getOrElse(0)
 
     /**
