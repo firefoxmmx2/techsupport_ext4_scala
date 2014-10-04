@@ -73,6 +73,7 @@ Ext.define('Techsupport.controller.sysadmin.Menu', {
                         waitMsg: '添加中...',
                         success: function (form, action) {
                             this.queryMenu();
+                            this.getMenuTree().refresh(this.getMenuTree().getSelectionModel().getSelection()[0].data.id)
                             window.close();
                         },
                         failure: function (form, action) {
@@ -92,6 +93,7 @@ Ext.define('Techsupport.controller.sysadmin.Menu', {
                         success: function (batch, options) {
                             store.commitChanges();
                             this.queryMenu();
+                            this.getMenuTree().refresh(this.getMenuTree().getSelectionModel().getSelection()[0].data.id)
                             window.close();
                         },
                         failure: function (batch, options) {
@@ -148,6 +150,13 @@ Ext.define('Techsupport.controller.sysadmin.Menu', {
                 },
                 itemdblclick: function (g, record, item, index, e, eOpts) {
                     this.toEditMenu(record);
+                }
+            },
+            'menudetail form textfield':{
+                specialkey: function (field, evt, option) {
+                    if(evt.getKey()===evt.ENTER){
+                        this.saveMenu(field.up('form'),this.getMenuStore())
+                    }
                 }
             },
             'menudetail textfield[name=id]': {
