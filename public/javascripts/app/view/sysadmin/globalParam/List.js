@@ -1,6 +1,9 @@
 /**
  * Created by hooxin on 14-10-5.
  */
+/**
+ * 全局参数列表
+ */
 Ext.define('Techsupport.view.sysadmin.globalParam.List',{
     extend:'Techsupport.view.base.BaseList',
     store:'GlobalParam',

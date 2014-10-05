@@ -14,6 +14,6 @@ Ext.define('Techsupport.view.sysadmin.globalParam.Manage', {
             {xtype: 'textfield', fieldLabel: '参数代码', name: 'id'},
             {xtype: 'textfield', fieldLabel: '参数名称', name: 'globalparname'}
         ])
-        this.down('panel[region=center]').add({xtype:'globalParamList'})
+        this.down('panel[region=center]').add({xtype: 'globalParamList'})
     }
 })
