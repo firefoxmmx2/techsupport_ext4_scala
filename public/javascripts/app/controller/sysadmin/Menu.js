@@ -117,7 +117,7 @@ Ext.define('Techsupport.controller.sysadmin.Menu', {
         this.removeMenu = function () { //删除菜单
             var grid = this.getMenuListGrid();
             var store = this.getMenuStore();
-            var selection = grid.getSelectionModel().getSelection().map(function (record) {
+            var selection = Ext.Array.map(grid.getSelectionModel().getSelection(), function (record) {
                 store.remove(record);
             });
             if (selection.length > 0) {
@@ -152,10 +152,10 @@ Ext.define('Techsupport.controller.sysadmin.Menu', {
                     this.toEditMenu(record);
                 }
             },
-            'menudetail form textfield':{
+            'menudetail form textfield': {
                 specialkey: function (field, evt, option) {
-                    if(evt.getKey()===evt.ENTER){
-                        this.saveMenu(field.up('form'),this.getMenuStore())
+                    if (evt.getKey() === evt.ENTER) {
+                        this.saveMenu(field.up('form'), this.getMenuStore())
                     }
                 }
             },
@@ -189,10 +189,9 @@ Ext.define('Techsupport.controller.sysadmin.Menu', {
 
                     //自动补全菜单全码
                     var form = field.findParentByType('form')
-                    form.query('textfield[name=menufullcode]').map(function (fullcodeField) {
-                        var record = form.getRecord();
-                        fullcodeField.setValue(record.data.parentMenufullcode + (newValue ? newValue + '.' : newValue));
-                    });
+                    var fullcodeField = form.down('textfield[name=menufullcode]')
+                    var record = form.getRecord();
+                    fullcodeField.setValue(record.data.parentMenufullcode + (newValue ? newValue + '.' : newValue));
                 }
             },
             'menudetail[name=addMenuWindow] textfield[name=nodeorder]': { //新增菜单时候初始化序列
@@ -235,7 +234,7 @@ Ext.define('Techsupport.controller.sysadmin.Menu', {
                 click: function (button, evt) {
                     var controller = this;
                     var grid = this.getMenuListGrid();
-                    var selection = grid.getSelectionModel().getSelection().map(function (record) {
+                    var selection = Ext.Array.map(grid.getSelectionModel().getSelection(),function (record) {
                         controller.toEditMenu(record);
                     });
                 }

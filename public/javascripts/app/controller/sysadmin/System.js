@@ -102,7 +102,7 @@ Ext.define('Techsupport.controller.sysadmin.System', {
         }
         this.removeSystem = function (grid) {//删除选择的系统
             var store = grid.getStore()
-            var selection = grid.getSelectionModel().getSelection().map(function (record) {
+            var selection = Ext.Array.map(grid.getSelectionModel().getSelection(),function (record) {
                 store.remove(record)
                 return record
             })
@@ -166,7 +166,7 @@ Ext.define('Techsupport.controller.sysadmin.System', {
             'systemmanage button[action=modify]': {
                 click: function (button, evt) {
                     var controller = this
-                    var selection = this.getSystemListGrid().getSelectionModel().getSelection().map(function (record) {
+                    var selection = Ext.Array.map(this.getSystemListGrid().getSelectionModel().getSelection(),function (record) {
                         controller.toEditSystem(record)
                         return record
                     })

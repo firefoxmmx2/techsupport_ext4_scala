@@ -44,20 +44,19 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                     var controller = this;
                     var _departmentTree = this.getDepartmentTree();
                     var _window = Ext.create('Techsupport.view.sysadmin.user.Add', {name: 'userAddWindow'});
-                    _window.query('form:first').map(function (f) {
-                        if (_departmentTree.cdata.departid && _departmentTree.cdata.departid != 0) {
-                            var record = controller.getUserModel().create({
-                                departid: _departmentTree.cdata.departid,
-                                departname: _departmentTree.cdata.departname
-                            });
-                            f.getForm().loadRecord(record);
-                            _window.title += "[" + _departmentTree.cdata.departname + "]";
-                            _window.show();
-                        }
-                        else {
-                            Ext.Msg.alert('提示', '请选择机构');
-                        }
-                    });
+                    var f = _window.down('form:first')
+                    if (_departmentTree.cdata.departid && _departmentTree.cdata.departid != 0) {
+                        var record = controller.getUserModel().create({
+                            departid: _departmentTree.cdata.departid,
+                            departname: _departmentTree.cdata.departname
+                        });
+                        f.getForm().loadRecord(record);
+                        _window.title += "[" + _departmentTree.cdata.departname + "]";
+                        _window.show();
+                    }
+                    else {
+                        Ext.Msg.alert('提示', '请选择机构');
+                    }
                 }
             },
             'usermanage button[action=modify]': {
@@ -95,9 +94,8 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                                 if (res.result == 0) {
                                     record.data.departname = res.data.departname;
                                     record.data.password2 = record.data.password;
-                                    form.query('textfield[name=useraccount]').map(function (field) {
-                                        field.originalValue = record.data.useraccount;
-                                    });
+                                    var field = form.down('textfield[name=useraccount]')
+                                    field.originalValue = record.data.useraccount;
                                     record.data.userType = Ext.isString(record.data.userType) ? record.data.userType.split(',') : record.data.userType;
                                     form.loadRecord(record);
                                 }
@@ -225,33 +223,32 @@ Ext.define('Techsupport.controller.sysadmin.User', {
     },
     addUser: function (controller, window) {
         //添加用户
-        window.query('form:first').map(function (form) {
-            if (form.getForm().isValid()) {
-                form.submit({
-                    url: "/api/users",
-                    method: 'POST',
-                    params: form.getForm().getValues(),
-                    waitMsg: '正在添加用户...',
-                    success: function (form, action) {
-                        //成功
-                        if (action.result.result == 0) {
-                            controller.queryUsers(controller);
-                            window.close();
-                        }
-                    },
-                    failure: function (form, action) {
-                        //失败
-                        if (action.response.status == 200)
-                            Ext.Msg.alert("错误", "错误代码:" + action.result.result + ";" + action.result.message);
-                        else if (action.response.status == 400)
-                            Ext.Msg.alert("错误", "错误的请求");
-                        else if (action.response.status == 500)
-                            Ext.Msg.alert("错误", "服务器发生错误");
+        var form = window.down('form:first')
+        if (form.getForm().isValid()) {
+            form.submit({
+                url: "/api/users",
+                method: 'POST',
+                params: form.getForm().getValues(),
+                waitMsg: '正在添加用户...',
+                success: function (form, action) {
+                    //成功
+                    if (action.result.result == 0) {
+                        controller.queryUsers(controller);
+                        window.close();
                     }
-                });
-            }
+                },
+                failure: function (form, action) {
+                    //失败
+                    if (action.response.status == 200)
+                        Ext.Msg.alert("错误", "错误代码:" + action.result.result + ";" + action.result.message);
+                    else if (action.response.status == 400)
+                        Ext.Msg.alert("错误", "错误的请求");
+                    else if (action.response.status == 500)
+                        Ext.Msg.alert("错误", "服务器发生错误");
+                }
+            });
+        }
 
-        });
     },
     modifyUser: function (form, store, window) {
         // 更新用户
@@ -297,7 +294,7 @@ Ext.define('Techsupport.controller.sysadmin.User', {
     },
     toModifyUser: function (grid, editView, dictItemStore) {
 
-        var selection = grid.getSelectionModel().getSelection().map(function (record) {
+        var selection = Ext.Array.map(grid.getSelectionModel().getSelection(), function (record) {
             var window = editView.create({name: 'modifyUserWindow', record: record});
             var form = window.query('form:first')[0];
 
