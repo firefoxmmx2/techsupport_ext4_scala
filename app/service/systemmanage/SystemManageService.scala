@@ -94,7 +94,7 @@ trait DepartmentServiceComponentImpl extends DepartmentServiceComponent {
      * @return
      */
     def maxDepartmentOrder(parentDepartid: Long): Int = inTransaction {
-      if (parentDepartid == null || parentDepartid == 0)
+      if (parentDepartid == null)
         throw new RuntimeException("获取最大序号的上级机构ID为空")
       departmentDao.maxDepartmentOrder(parentDepartid)
     }

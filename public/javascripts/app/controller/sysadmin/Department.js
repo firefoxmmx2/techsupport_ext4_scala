@@ -36,8 +36,12 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
                         success: function (action, options) {
                             var res = Ext.decode(action.responseText);
                             if (res.result == 0) {
+                                if(!res.data){
+                                    res.data={departname:'根节点',departfullcode:'',id:0}
+                                }
                                 record.data.parentDepartname = res.data.departname;
                                 record.data.parentDepartfullcode = res.data.departfullcode;
+                                record.data.parentDepartid = res.data.id
                                 var field = f.down('textfield[name=departcode]')
                                 field.originalValue = record.data.departcode;
                                 f.getForm().loadRecord(record);
@@ -111,8 +115,12 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
                             success: function (action, options) {
                                 var res = Ext.decode(action.responseText);
                                 if (res.result == 0) {
-                                    r.data.parentDepartname = res.data.departname;
-                                    r.data.parentDepartfullcode = res.data.departfullcode;
+                                    if(!res.data){
+                                        res.data={departname:'根节点',departfullcode:'',id:0}
+                                    }
+                                    record.data.parentDepartname = res.data.departname;
+                                    record.data.parentDepartfullcode = res.data.departfullcode;
+                                    record.data.parentDepartid = res.data.id
                                     var field = f.down('textfield[name=departcode]')
                                     field.originalValue = r.data.departcode;
                                     f.getForm().loadRecord(r);

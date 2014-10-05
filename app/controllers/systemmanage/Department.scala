@@ -118,11 +118,17 @@ object Department extends Controller {
         "message" -> "",
         "data" -> d))).as(JSON)
     } catch {
+      case e: java.util.NoSuchElementException=>
+        Ok(Json.generate(Map("result" -> 0,
+          "success" -> true,
+          "message" -> "",
+          "data" -> ""))).as(JSON)
+
       case e: Exception =>
         log.error(e.toString, e.fillInStackTrace())
         Ok(Json.generate(Map("result" -> -1,
           "success" -> false,
-          "message" -> "获取单一机构"))).as(JSON)
+          "message" -> "获取单一机构错误"))).as(JSON)
     }
   }
 

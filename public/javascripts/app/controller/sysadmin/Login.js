@@ -23,13 +23,14 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
             },
             'login > form': {
                 afterrender: function (gp) {
-                    var controller=this;
-                    gp.query('textfield').map(function (el) {
+                    var controller = this;
+                    Ext.Array.map(gp.query('textfield'), function (el) {
                         el.on('specialkey', function (o, e) {
                             if (e.ENTER == e.getKey()) {
                                 this.login();
                             }
                         }, controller);
+                        return el
                     })
                 }
             }
