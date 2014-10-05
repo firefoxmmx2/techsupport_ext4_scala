@@ -28,31 +28,29 @@ Ext.define('Techsupport.view.sysadmin.user.Add', {
                             allowBlank: false, blankText: '密码不能为空',
                             maxLength: 16, maxLengthText: '最长16位', validator: function (value) {
                             var res = true;
-                            this.findParentByType('panel').query('textfield[name=password2]').map(function (p) {
-                                if (value) {
-                                    if (value == p.getValue())
-                                        res = true;
-                                    else
-                                        res = "前后输入密码不匹配";
-                                }
-                            });
+                            var p = this.findParentByType('panel').down('textfield[name=password2]')
+                            if (value) {
+                                if (value == p.getValue())
+                                    res = true;
+                                else
+                                    res = "前后输入密码不匹配";
+                            }
                             return res;
                         }},
                         {fieldLabel: '重复密码', name: 'password2', inputType: 'password',
                             inputType: 'password', allowBlank: false, blankText: '重复密码不能为空',
                             maxLength: 16, maxLengthText: '最长16位', validator: function (value) {
                             var res = true;
-                            this.findParentByType('panel').query('textfield[name=password]').map(function (p) {
-                                if (value) {
-                                    if (value == p.getValue())
-                                        res = true;
-                                    else
-                                        res = "前后输入密码不匹配";
-                                    if (res) {
-                                        p.clearInvalid();
-                                    }
+                            var p = this.findParentByType('panel').down('textfield[name=password]')
+                            if (value) {
+                                if (value == p.getValue())
+                                    res = true;
+                                else
+                                    res = "前后输入密码不匹配";
+                                if (res) {
+                                    p.clearInvalid();
                                 }
-                            });
+                            }
 
                             return res;
                         }},

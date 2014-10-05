@@ -17,12 +17,8 @@ Ext.define('Techsupport.view.base.BaseList',{
             pageSize: 10,
             listeners: {
                 afterrender: function (p, eOpts) {
-                    p.query('button:last').map(function (b) {
-                        p.remove(b);
-                    });
-                    p.query('tbseparator:last').map(function (s) {
-                        p.remove(s);
-                    })
+                    p.remove(p.down('button:last'))
+                    p.remove(p.down('tbseparator:last'))
                 }
             }
         }

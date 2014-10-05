@@ -5,6 +5,10 @@ Ext.define('Techsupport.controller.sysadmin.SystemMenu', {
     extend: 'Ext.app.Controller',
     views: ['sysadmin.SystemMenu'],
     stores: ['UserSystemNode'],
+    refs: [
+        {ref: 'viewport', selector: 'viewport'},
+        {ref:'tabPanel',selector:'panel>tabpanel'}
+    ],
     init: function () {
         var systemStore = this.getUserSystemNodeStore();
         this.control({
@@ -25,20 +29,22 @@ Ext.define('Techsupport.controller.sysadmin.SystemMenu', {
                                                     this.currentMenucode = record.raw.id;
                                                     this.currentSystemcode = record.raw.systemcode;
 //                                                    打开对应组件内容在tab容器里
-                                                    if (record.raw.id != "0")
-                                                        me.getApplication().getViewport().query('panel > tabpanel').map(function (tp) {
-                                                            if (record.raw.funcentry && record.raw.funcentry.length > 3 &&
-                                                                record.raw.funcentry.indexOf(".jsp") == -1
-                                                                && record.raw.funcentry.indexOf(".action") == -1) {
-//                                                                alert(record.raw.funcentry);
-                                                                tp.add({id: record.raw.id, title: record.raw.text, layout: 'fit', items: [
-                                                                    {xtype: record.raw.funcentry}
-                                                                ]});
-                                                            }
+                                                    if (record.raw.id != "0") {
+                                                        var tp = this.getTabPanel()
+                                                        if (record.raw.funcentry && record.raw.funcentry.length > 3 &&
+                                                            record.raw.funcentry.indexOf(".jsp") == -1
+                                                            && record.raw.funcentry.indexOf(".action") == -1
+                                                            && !tp.down('tab[itemId=' + record.raw.id + ']')) {
+                                                            tp.add({itemId: record.raw.id, title: record.raw.text, layout: 'fit', items: [
+                                                                {xtype: record.raw.funcentry}
+                                                            ]});
+                                                        }
 
-                                                            tp.setActiveTab(record.raw.id);
-                                                        });
-                                                }
+                                                        tp.setActiveTab(record.raw.id);
+
+                                                    }
+                                                },
+                                                scope: me
                                             },
                                             beforeload: {
                                                 fn: function (store, operation, eOpts) {
