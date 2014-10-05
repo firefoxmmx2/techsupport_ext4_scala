@@ -1,17 +1,13 @@
 /**
  * Created by hooxin on 14-5-8.
  */
+/**
+ * 用户列表
+ */
 Ext.define('Techsupport.view.sysadmin.user.List', {
-    extend: 'Ext.grid.Panel',
+    extend: 'Techsupport.view.base.BaseList',
     alias: 'widget.userlist',
     store: 'User',
-    selType: 'checkboxmodel',
-    selModel: {
-        flex: 0,
-        showHeaderCheckbox: true,
-        width: 16
-    },
-    loadMask: true,
     columns: {
         items: [
             {text: 'ID', dataIndex: 'id', sortable: false, flex: 1},
@@ -27,22 +23,5 @@ Ext.define('Techsupport.view.sysadmin.user.List', {
         ],
         defaults: {
         }
-    },
-    dockedItems: [
-        {xtype: 'pagingtoolbar',
-            store: 'User',
-            dock: 'bottom',
-            pageSize: 10,
-            listeners: {
-                afterrender: function (p, eOpts) {
-                    p.query('button:last').map(function (b) {
-                        p.remove(b);
-                    });
-                    p.query('tbseparator:last').map(function (s) {
-                        p.remove(s);
-                    })
-                }
-            }
-        }
-    ]
+    }
 });

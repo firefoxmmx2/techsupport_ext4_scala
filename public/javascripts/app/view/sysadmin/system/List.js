@@ -5,15 +5,9 @@
  * 系统数据列表
  */
 Ext.define('Techsupport.view.sysadmin.system.List', {
-    extend: 'Ext.grid.Panel',
+    extend: 'Techsupport.view.base.BaseList',
     alias: 'widget.systemlist',
     store: 'System',
-    selType: 'checkboxmodel',
-    selModel: {
-        flex: 0,
-        showHeaderCheckbox: true,
-        width: 16
-    },
     columns: {
         items: [
             {text: '系统代码', dataIndex: 'id', flex: 1},
@@ -26,22 +20,5 @@ Ext.define('Techsupport.view.sysadmin.system.List', {
             }},
             {text: '系统全码', dataIndex: 'fullcode', flex: 1}
         ]
-    },
-    dockedItems: [
-        {xtype: 'pagingtoolbar',
-            store: 'Menu',
-            dock: 'bottom',
-            pageSize: 10,
-            listeners: {
-                afterrender: function (p, eOpts) {
-                    p.query('button:last').map(function (b) {
-                        p.remove(b);
-                    });
-                    p.query('tbseparator:last').map(function (s) {
-                        p.remove(s);
-                    })
-                }
-            }
-        }
-    ]
+    }
 });
