@@ -4,12 +4,13 @@
 /**
  * 全局参数列表
  */
-Ext.define('Techsupport.view.sysadmin.globalParam.List',{
-    extend:'Techsupport.view.base.BaseList',
-    store:'GlobalParam',
-    columns:[
-        {name:'id',dataIndex:'id',flex:1},
-        {name:'globalparname',dataIndex:'globalparname',flex:1},
-        {name:'globalparvalue',dataIndex:'globalparvalue',flex:1}
+Ext.define('Techsupport.view.sysadmin.globalParam.List', {
+    extend: 'Techsupport.view.base.BaseList',
+    store: 'GlobalParam',
+    alias:'widget.globalParamList',
+    columns: [
+        {text: '全局参数代码', dataIndex: 'id', flex: 1},
+        {text: '全局参数名称', dataIndex: 'globalparname', flex: 1},
+        {text: '全局参数值', dataIndex: 'globalparvalue', flex: 1}
     ]
 })

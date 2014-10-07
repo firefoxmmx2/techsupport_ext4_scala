@@ -150,7 +150,14 @@ trait MenuServiceComponent {
  */
 trait GlobalParamServiceComponent {
 
-  trait GlobalParamService extends BaseService[GlobalParam, String, GlobalParamQueryCondition]
+  trait GlobalParamService extends BaseService[GlobalParam, String, GlobalParamQueryCondition]{
+    /**
+     * 全局参数代码可用性验证
+     * @param id
+     * @return
+     */
+    def checkGlobalParamAvaliable(id:String):Boolean
+  }
 
   val globalParamService: GlobalParamService
 }

@@ -112,7 +112,7 @@ object GlobalParam extends Controller {
    * 全局参数修改
    * @return
    */
-  def update(id:String) = Action {
+  def update(id: String) = Action {
     implicit request =>
       globalParamForm.bindFromRequest.fold(
         hasErrors =
@@ -186,6 +186,33 @@ object GlobalParam extends Controller {
             "success" -> false,
             "result" -> -1,
             "message" -> "全局参数获取单个发生错误"
+          ))).as(JSON)
+      }
+  }
+
+  /**
+   * 全局参数代码可用性验证
+   * @param id
+   * @return
+   */
+  def checkGlobalParamAvaliable(id: String) = Action {
+    implicit request =>
+      try {
+        val result = globalParamService.checkGlobalParamAvaliable(id)
+        Ok(Json.generate(Map(
+          "success" -> true,
+          "result" -> 0,
+          "isAvaliable" -> result
+        ))).as(JSON)
+      }
+      catch {
+        case e: Exception =>
+          log.error("全局参数代码可用性验证发生错误")
+          log.error(e.getMessage, e.fillInStackTrace())
+          Ok(Json.generate(Map(
+            "success" -> false,
+            "result" -> -1,
+            "message" -> "全局参数代码可用性验证发生错误"
           ))).as(JSON)
       }
   }

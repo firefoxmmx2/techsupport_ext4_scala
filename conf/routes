@@ -63,6 +63,7 @@ GET           /heartCheck                                              controlle
 POST          /logout                                                  controllers.systemmanage.Login.logout
 
 #全局参数
+GET           /api/globalParams/checkGlobalParamLAvaliable/:id         controllers.systemmanage.GlobalParam.checkGlobalParamAvaliable(id:String)
 GET           /api/globalParams                                        controllers.systemmanage.GlobalParam.list
 GET           /api/globalParams/:id                                    controllers.systemmanage.GlobalParam.get(id:String)
 POST          /api/globalParams                                        controllers.systemmanage.GlobalParam.add

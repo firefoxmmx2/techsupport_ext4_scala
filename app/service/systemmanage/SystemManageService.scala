@@ -113,6 +113,16 @@ trait GlobalParamServiceComponentImpl extends GlobalParamServiceComponent {
    * 全局参数服务
    */
   class GlobalParamServiceImpl extends GlobalParamService {
+
+    /**
+     * 全局参数代码可用性验证
+     * @param id
+     * @return
+     */
+    def checkGlobalParamAvaliable(id: String): Boolean = inTransaction {
+      !globalParamDao.checkGlobalParamRepeat(id)
+    }
+
     /**
      * 获取单个通过id
      * @param id

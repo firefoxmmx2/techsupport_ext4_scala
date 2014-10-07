@@ -406,7 +406,7 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
         case Some(x) => Some("%" + x + "%")
         case _ => None
       }
-      log.debug("="*13+"systemnameLikeOpt = "+systemnameLikeOpt+"="*13)
+      log.debug("=" * 13 + "systemnameLikeOpt = " + systemnameLikeOpt + "=" * 13)
       val systemDeineOpt = params.systemdefine match {
         case Some(x) => Some("%" + x + "%")
         case _ => None
@@ -934,6 +934,18 @@ trait GlobalParamDaoComponentImpl extends GlobalParamDaoComponent {
      * @return 插入后的实体
      */
     def insert(m: GlobalParam): GlobalParam = SystemManage.globalParams.insert(m)
+
+    /**
+     * 全局参数代码重复性验证
+     * @param globalParamCode
+     * @return
+     */
+    def checkGlobalParamRepeat(globalParamCode: String): Boolean =
+      from(SystemManage.globalParams)(
+        g =>
+          where(g.id === globalParamCode)
+        select(g.id)
+      ).Count > 0
   }
 
 }

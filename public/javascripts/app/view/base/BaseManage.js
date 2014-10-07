@@ -28,7 +28,12 @@ Ext.define('Techsupport.view.base.BaseManage', {
                     '-',
                     {xtype: 'button', text: '下移', action: 'down'}
                 ]},
-                {xtype: 'buttongroup', dock: 'top', items: [
+                {xtype: 'buttongroup', dock: 'top',
+                    layout: {
+                        type: 'hbox',
+                        align: 'center',
+                        defaultMargins: 5
+                    }, items: [
                     {xtype: 'form', layout: 'column', defaults: {margin: {top: 2, bottom: 2, left: 0, right: 20}}, border: false, items: [
                         // fit query condition
 

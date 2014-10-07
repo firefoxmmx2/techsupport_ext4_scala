@@ -10,7 +10,8 @@ Ext.application({
         "sysadmin.Department",
         'sysadmin.MenuTree',
         'sysadmin.Menu',
-        'sysadmin.System'
+        'sysadmin.System',
+        'sysadmin.GlobalParam'
     ],
     autoCreateViewport: true,
     refs: [

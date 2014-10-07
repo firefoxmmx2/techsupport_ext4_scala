@@ -220,6 +220,8 @@ Ext.define('Techsupport.controller.sysadmin.System', {
                             },
                             failure: function (response) {
                                 if (response.state == 200) {
+                                    this.textValid = '该系统代码不可用'
+                                    this.markInvalid(this.textValid)
                                     var res = Ext.decode(response.responseText)
                                     Ext.Msg.alert("错误", res.message)
                                 }

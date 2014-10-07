@@ -8,8 +8,8 @@ Ext.define('Techsupport.controller.sysadmin.GlobalParam', {
     models: ['GlobalParam'],
     refs: [
         {ref: 'queryForm', selector: 'globalParamManage form:first'},
-        {ref:'saveForm',selector:"globalParamDetail form:first"},
-        {ref:'globalParamListGrid',selector:'globalParamManage globalParamList'}
+        {ref: 'saveForm', selector: "globalParamDetail form:first"},
+        {ref: 'globalParamListGrid', selector: 'globalParamManage globalParamList'}
     ],
     init: function () {
         this.control({
@@ -20,8 +20,8 @@ Ext.define('Techsupport.controller.sysadmin.GlobalParam', {
             },
             'globalParamDetail button[action=enter]': {
 //               确认按钮
-                click: function (button) {
-                    this.saveGlobalParam(this.getSaveForm(),this.getGlobalParamStore())
+                click: function () {
+                    this.saveGlobalParam(this.getSaveForm(), this.getGlobalParamStore())
                 }
             },
             'globalParamDetail button[action=cancel]': {
@@ -32,14 +32,14 @@ Ext.define('Techsupport.controller.sysadmin.GlobalParam', {
             },
             'globalParamManage button[action=add]': {
 //               添加按钮
-                click: function (button) {
+                click: function () {
                     this.toEditGlobalParam()
                 }
             },
             'globalParamManage button[action=modify]': {
 //               修改按钮
                 click: function (button) {
-                    var grid=button.up('globalParamList')
+                    var grid = button.up('globalParamList')
                     Ext.Array.map(grid.getSelectionModel().getSelection(), function (record) {
                         this.toEditGlobalParam(record)
                         return record
@@ -64,6 +64,49 @@ Ext.define('Techsupport.controller.sysadmin.GlobalParam', {
                 click: function (button, evt) {
                     this.queryGlobalParam()
                 }
+            },
+            'globalParamDetail textfield[name=id]': {
+//                全局参数代码
+                change: function (field, newValue, oldValue) {
+                    if (newValue && newValue != field.originalValue ) {
+//                        全局参数代码验证
+                        Ext.Ajax.request({
+                            url: '/api/globalParams/checkGlobalParamLAvaliable/' + newValue,
+                            success: function (response) {
+                                var res = Ext.decode(response.responseText)
+                                if (res.isAvaliable) {
+                                    this.clearInvalid()
+                                    this.textValid = true
+                                }
+                                else {
+                                    this.textValid = '该全局参数代码不可用'
+                                    this.markInvalid(this.textValid)
+                                }
+                            },
+                            failure: function (response) {
+                                if (response.state == 200) {
+                                    this.textValid = '该全局参数代码不可用'
+                                    this.markInvalid(this.textValid)
+                                    var res = Ext.decode(response.responseText)
+                                    Ext.Msg.alert("错误", res.message)
+                                }
+                                else
+                                    Ext.Msg.alert('错误', '全局参数代码可用验证服务器端发生错误')
+                            },
+                            scope: field
+                        })
+
+                    }
+                    else {
+                        field.textValid = true
+                        field.clearInvalid()
+                    }
+                }
+            },
+            'globalParamDetail[name=modifyGlobalParamWindow] textfield[name=id]':{
+                render: function (field) {
+                    field.setReadOnly(true)
+                }
             }
         })
 
@@ -77,7 +120,7 @@ Ext.define('Techsupport.controller.sysadmin.GlobalParam', {
                         params: form.getForm().getValues(),
                         success: function (form, action) {
                             if (action.result.result == 0) {
-                                this.querySystem()
+                                this.queryGlobalParam()
                                 window.close()
                             }
                         },
@@ -114,7 +157,7 @@ Ext.define('Techsupport.controller.sysadmin.GlobalParam', {
         this.toEditGlobalParam = function (record) {
             var config = {}
             if (record) {
-                config.title = '全局参数修改[' + record.data.systemname + ']'
+                config.title = '全局参数修改[' + record.data.globalparname + ']'
                 config.name = 'modifyGlobalParamWindow'
             }
             else {
@@ -133,6 +176,7 @@ Ext.define('Techsupport.controller.sysadmin.GlobalParam', {
             window.show()
 
         }
+
         this.queryGlobalParam = function () {
 //            查询
             var form = this.getQueryForm()

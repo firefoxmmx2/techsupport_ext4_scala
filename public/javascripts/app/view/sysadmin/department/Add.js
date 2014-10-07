@@ -12,7 +12,7 @@ Ext.define('Techsupport.view.sysadmin.department.Add', {
                 validator: function (value) {
                     return this.textValid;
                 },
-                textValid: true
+                textValid: false
             },
             {fieldLabel: '机构名称', name: 'departname', allowBlank: false, blankText: '机构名称不能为空'},
             {fieldLabel: '机构级别', name: 'departlevel', allowBlank: false, blankText: '机构级别不能为空', vtype: 'number'},

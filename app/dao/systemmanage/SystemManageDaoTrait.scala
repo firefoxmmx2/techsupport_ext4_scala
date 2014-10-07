@@ -19,7 +19,7 @@ trait DepartmentDaoComponent {
   val departmentDao: DepartmentDao
 
   trait DepartmentDao extends BaseDao[Department, Long, DepartmentQueryCondition] {
-    def maxDepartmentOrder(parentdepartid:Long):Int
+    def maxDepartmentOrder(parentdepartid: Long): Int
   }
 
 }
@@ -30,13 +30,13 @@ trait DepartmentDaoComponent {
 trait UserDaoComponent {
   val userDao: UserDao
 
-  trait UserDao extends BaseDao[User, Long, UserQueryCondition]{
+  trait UserDao extends BaseDao[User, Long, UserQueryCondition] {
     /**
      * 获取指定机构上最大的用户序列
      * @param departid
      * @return
      */
-    def maxUserOrder(departid:Long):Int
+    def maxUserOrder(departid: Long): Int
   }
 
 }
@@ -59,13 +59,13 @@ trait SystemDaoComponent {
      * 最大序列
      * @return
      */
-    def maxOrder:Int
+    def maxOrder: Int
 
     /**
      * 验证系统代码是否重复
      * @return
      */
-    def checkSystemcodeRepeat(systemcode:String):Boolean
+    def checkSystemcodeRepeat(systemcode: String): Boolean
   }
 
 }
@@ -83,14 +83,14 @@ trait MenuDaoComponent {
      * @param menucode
      * @return
      */
-    def checkMenucodeRepeat(menucode:String):Boolean
+    def checkMenucodeRepeat(menucode: String): Boolean
 
     /**
      * 获取指定父菜单id当前的最大序列
      * @param parentId 父菜单id
      * @return
      */
-    def maxOrder(parentId:String):Int
+    def maxOrder(parentId: String): Int
   }
 
   val menuDao: MenuDao
@@ -111,7 +111,14 @@ trait RoleDaoComponent {
  */
 trait GlobalParamDaoComponent {
 
-  trait GlobalParamDao extends BaseDao[GlobalParam, String, GlobalParamQueryCondition]
+  trait GlobalParamDao extends BaseDao[GlobalParam, String, GlobalParamQueryCondition] {
+    /**
+     * 全局参数代码重复性验证
+     * @param globalParamCode
+     * @return
+     */
+    def checkGlobalParamRepeat(globalParamCode: String):Boolean
+  }
 
   val globalParamDao: GlobalParamDao
 }
