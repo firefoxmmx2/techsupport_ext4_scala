@@ -6,7 +6,14 @@ Ext.define('Techsupport.view.Main', {
     layout: 'border',
     alias: 'widget.main',
     items: [
-        { xtype: 'systemMenuAccordion', region: 'west', width: '20%'},
+        { xtype: 'systemMenuAccordion',
+            region: 'west',
+            width: '20%',
+            split: true,
+            title: '导航栏',
+            collapsible: true,
+            animCollapse: true
+        },
         { xtype: 'theader', region: 'north'},
         { xtype: 'tabpanel', layout: 'fit',
             region: 'center', activeTab: 0, defaults: {

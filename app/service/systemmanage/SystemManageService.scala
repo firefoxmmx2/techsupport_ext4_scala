@@ -466,7 +466,7 @@ trait UserServiceComponentImpl extends UserServiceComponent {
      * @return
      */
     def getMaxUserOrder(departid: Long): Int = inTransaction {
-      require(departid != 0l)
+      require(departid != null)
       userDao.maxUserOrder(departid)
     }
 
