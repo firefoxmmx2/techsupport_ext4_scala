@@ -13,7 +13,10 @@ Ext.define('Techsupport.view.sysadmin.user.List', {
             {text: 'ID', dataIndex: 'id', sortable: false, flex: 1},
             {text: '帐号', dataIndex: 'useraccount', sortable: false, flex: 1},
             {text: '姓名', dataIndex: 'username', sortable: false, flex: 1},
-            {text: '密码', dataIndex: 'password', sortable: false, flex: 1},
+            {text: '密码', dataIndex: 'password', sortable: false, flex: 1,
+                renderer: function (value, metaData, record) {
+                    return "******"
+                }},
             {text: '身份证', dataIndex: 'idnum', sortable: false, flex: 1},
             {text: '移动电话', dataIndex: 'mobilePhone', sortable: false, flex: 1},
             {text: '序号', dataIndex: 'userorder', sortable: false, flex: 1},
