@@ -6,7 +6,8 @@ Ext.define('Techsupport.controller.Main', {
     views: ['sysadmin.SystemMenu', 'Main', 'Copyright', 'THeader'],
     stores: ['UserMenuNode'],
     refs: [
-        {ref: 'viewport', selector: 'viewport'}
+        {ref: 'viewport', selector: 'viewport'},
+        {ref: 'systemMenuAccordion', selector: 'main systemMenuAccordion'}
     ],
     init: function () {
 //        身份验证
@@ -20,6 +21,21 @@ Ext.define('Techsupport.controller.Main', {
                         return false;
                     }
                     return true;
+                }
+            },
+            'main systemMenuAccordion': {
+                afterlayout: function (p, layout, options) {
+                    Ext.query('div[id*=placeholder_hd]', p.dom)
+                },
+                collapse: function (p, opts) {
+                    var el = Ext.select('div[id*=placeholder_hd]', p.dom)
+                    if (el) {
+                        var onMouseOver = function () {
+                            Ext.query('div[id*=placeholder]', p.dom)[2].click()
+                        }
+                        el.un('mouseover', onMouseOver)
+                        el.on('mouseover', onMouseOver)
+                    }
                 }
             }
         });
