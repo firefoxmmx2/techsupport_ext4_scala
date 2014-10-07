@@ -17,7 +17,10 @@ Ext.define('Techsupport.view.sysadmin.user.List', {
             {text: '身份证', dataIndex: 'idnum', sortable: false, flex: 1},
             {text: '移动电话', dataIndex: 'mobilePhone', sortable: false, flex: 1},
             {text: '序号', dataIndex: 'userorder', sortable: false, flex: 1},
-            {text: '是否有效', dataIndex: 'isVaild', sortable: false, flex: 1},
+            {text: '是否有效', dataIndex: 'isValid', sortable: false, flex: 1,
+                renderer: function (value, metaData, record) {
+                    return record.data.isValid == "1" ? "是" : "否"
+                }},
             {text: '用户类别', dataIndex: 'userType', sortable: false, flex: 1},
             {text: '邮箱', dataIndex: 'email', sortable: false, flex: 1}
         ],
