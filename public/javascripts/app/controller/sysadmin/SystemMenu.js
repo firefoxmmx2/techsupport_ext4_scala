@@ -23,6 +23,7 @@ Ext.define('Techsupport.controller.sysadmin.SystemMenu', {
                                     {xtype: 'treepanel',
                                         store: userMenuNodeStore,
                                         border: false,
+                                        useArrows: true,
                                         listeners: {
                                             itemclick: {
                                                 fn: function (view, record, item, index, e, eOpts) {
@@ -34,7 +35,7 @@ Ext.define('Techsupport.controller.sysadmin.SystemMenu', {
                                                         if (record.raw.funcentry && record.raw.funcentry.length > 3 &&
                                                             record.raw.funcentry.indexOf(".jsp") == -1
                                                             && record.raw.funcentry.indexOf(".action") == -1
-                                                            && tp.query('panel[itemId=' + record.raw.id + ']').length==0) {
+                                                            && tp.query('panel[itemId=' + record.raw.id + ']').length == 0) {
                                                             tp.add({id: record.raw.id, itemId: record.raw.id, title: record.raw.text, layout: 'fit', items: [
                                                                 {xtype: record.raw.funcentry}
                                                             ]});
