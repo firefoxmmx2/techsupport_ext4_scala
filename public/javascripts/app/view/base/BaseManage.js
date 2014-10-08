@@ -28,18 +28,19 @@ Ext.define('Techsupport.view.base.BaseManage', {
                     '-',
                     {xtype: 'button', text: '下移', action: 'down', iconCls: 'icon-down'}
                 ]},
-                {xtype: 'buttongroup', dock: 'top',
+                {xtype: 'panel', dock: 'top',
                     layout: {
                         type: 'hbox',
                         align: 'center',
                         defaultMargins: 5
-                    }, items: [
-                    {xtype: 'form', layout: 'column', defaults: {margin: {top: 2, bottom: 2, left: 0, right: 20}}, border: false, items: [
-                        // fit query condition
+                    },
+                    items: [
+                        {xtype: 'form', width: '80%', layout: 'column', defaults: {margin: {top: 2, bottom: 2, left: 0, right: 20}}, border: false, items: [
+                            // fit query condition
 
-                    ]},
-                    {xtype: 'button', text: '查询', action: 'query', margin: {top: 2, bottom: 2}, iconCls: 'icon-query'}
-                ]}
+                        ]},
+                        {xtype: 'button', text: '查询', action: 'query', margin: {top: 2, bottom: 2}, iconCls: 'icon-query'}
+                    ]}
             ]}
     ]
 });
