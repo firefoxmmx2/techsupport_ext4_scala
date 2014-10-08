@@ -10,7 +10,7 @@ Ext.define('Techsupport.view.sysadmin.globalParam.Manage', {
     initComponent: function () {
         this.items = this.superclass.items[1]
         this.callParent(arguments)
-        this.down('buttongroup>form').add([
+        this.down('form').add([
             {xtype: 'textfield', fieldLabel: '参数代码', name: 'id'},
             {xtype: 'textfield', fieldLabel: '参数名称', name: 'globalparname'}
         ])

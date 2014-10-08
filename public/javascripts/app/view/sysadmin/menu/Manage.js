@@ -8,7 +8,7 @@ Ext.define('Techsupport.view.sysadmin.menu.Manage', {
         this.callParent(arguments);
         this.down('panel[region=west]').add({xtype: 'menutree'});
         this.down('panel[region=center]').add({xtype: 'menulist'});
-        this.down('buttongroup>form').add([
+        this.down('form').add([
             {xtype: 'textfield', fieldLabel: '菜单代码', name: 'id'},
             {xtype: 'textfield', fieldLabel: '菜单名称', name: 'menuname'},
             {xtype: 'textfield', fieldLabel: '菜单内容', name: 'funcentry'},

@@ -11,7 +11,7 @@ Ext.define('Techsupport.view.sysadmin.system.Manage', {
         this.items = [this.superclass.items[1]]
         this.callParent(arguments);
 //        this.down('panel[region=west]').remove();
-        this.down('buttongroup>form').add([
+        this.down('form').add([
             {xtype: 'textfield', fieldLabel: '系统代码', name: 'id'},
             {xtype: 'textfield', fieldLabel: '系统名称', name: 'systemname'},
             {xtype: 'textfield', fieldLabel: '系统描述', name: 'systemdefine'}
