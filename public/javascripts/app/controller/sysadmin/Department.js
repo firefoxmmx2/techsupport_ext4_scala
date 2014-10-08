@@ -13,7 +13,7 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
     models: ['Department', 'DepartmentTree'],
     refs: [
         {ref: 'departmentTree', selector: 'departmentManage departmenttree'},
-        {ref: 'queryForm', selector: 'departmentManage panel buttongroup[dock=top] form'}
+        {ref: 'queryForm', selector: 'departmentManage panel form'}
     ],
     init: function () {
         this.control({

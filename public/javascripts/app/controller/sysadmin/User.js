@@ -17,7 +17,7 @@ Ext.define('Techsupport.controller.sysadmin.User', {
         'User'
     ],
     refs: [
-        {ref: 'queryForm', selector: 'usermanage panel buttongroup[dock=top] form'},
+        {ref: 'queryForm', selector: 'usermanage panel form'},
         {ref: 'departmentTree', selector: 'usermanage departmenttree'}
     ],
     init: function () {
