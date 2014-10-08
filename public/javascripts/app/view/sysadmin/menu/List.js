@@ -19,5 +19,10 @@ Ext.define('Techsupport.view.sysadmin.menu.List', {
             }},
             {text: '系统代码', dataIndex: 'systemcode', flex: 1}
         ]
+    },
+    initComponent: function () {
+        Ext.apply(this.dockedItems,this.superclass.dockedItems)
+        this.dockedItems[0].store="Menu"
+        this.callParent(arguments)
     }
 });

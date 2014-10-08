@@ -21,5 +21,10 @@ Ext.define('Techsupport.view.sysadmin.department.List', {
             {text: '机构全拼', dataIndex: 'departallpin', flex: 1},
             {text: '机构省级代码', dataIndex: 'departbrevitycode', flex: 1}
         ]
+    },
+    initComponent: function () {
+        Ext.apply(this.dockedItems,this.superclass.dockedItems)
+        this.dockedItems[0].store="Department"
+        this.callParent(arguments)
     }
 });

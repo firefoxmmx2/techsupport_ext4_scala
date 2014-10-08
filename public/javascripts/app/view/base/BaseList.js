@@ -12,7 +12,6 @@ Ext.define('Techsupport.view.base.BaseList', {
     loadMask: true,
     dockedItems: [
         {xtype: 'pagingtoolbar',
-            store: 'Menu',
             dock: 'bottom',
             pageSize: 10,
             listeners: {
