@@ -1316,22 +1316,22 @@ trait DictDaoComponentImpl extends DictDaoComponent {
                 d.id asc
               else
                 d.id desc
-            if (sort == "dictcode")
+            else if (sort == "dictcode")
               if (dir == "asc")
                 d.dictcode asc
               else
                 d.dictcode desc
-            if (sort == "dictname")
+            else if (sort == "dictname")
               if (dir == "asc")
                 d.dictname asc
               else
                 d.dictname desc
-            if (sort == "superDictcode")
+            else if (sort == "superDictcode")
               if (dir == "asc")
                 d.superDictcode asc
               else
                 d.superDictcode desc
-            if (sort == "createTime")
+            else if (sort == "createTime")
               if (dir == "asc")
                 d.createTime asc
               else
@@ -1372,7 +1372,7 @@ trait DictDaoComponentImpl extends DictDaoComponent {
 
      * @return
      */
-    def delete(m: Dict): Unit = SystemManage.dicts.delete(m)
+    def delete(m: Dict): Unit = SystemManage.dicts.delete(m.id)
 
     /**
      * 通过主键删除

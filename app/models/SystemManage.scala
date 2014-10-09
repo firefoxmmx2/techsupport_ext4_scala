@@ -288,7 +288,7 @@ case class DictQueryCondition(id: Option[Long] = None,
                               dictcode: Option[String] = None,
                               dictname: Option[String] = None,
                               superDictcode: Option[String] = None,
-                              createTime: Option[DateTime] = None)
+                              createTime: Option[DateTime] = None) extends QueryCondition
 
 /**
  * 字典项
