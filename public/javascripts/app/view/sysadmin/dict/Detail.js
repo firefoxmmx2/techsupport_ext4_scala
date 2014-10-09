@@ -29,8 +29,8 @@ Ext.define('Techsupport.view.sysadmin.dict.Detail', {
                 store: {
                     fields: ['text', 'value'],
                     data: [
-                        {text: '维护', value: '0'},
-                        {text: '停止维护', value: '1'}
+                        {text: '维护', value: 0},
+                        {text: '停止维护', value: 1}
                     ]
                 },
                 textField: 'text',
