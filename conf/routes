@@ -70,3 +70,10 @@ GET           /api/globalParams/:id                                    controlle
 POST          /api/globalParams                                        controllers.systemmanage.GlobalParam.add
 DELETE        /api/globalParams/:id                                    controllers.systemmanage.GlobalParam.remove(id:String)
 PUT           /api/globalParams/:id                                    controllers.systemmanage.GlobalParam.update(id:String)
+
+#字典
+GET           /api/dicts                                               controllers.systemmanage.Dict.list
+POST          /api/dicts                                               controllers.systemmanage.Dict.add
+DELETE        /api/dicts/:id                                           controllers.systemmanage.Dict.remove(id:Long)
+PUT           /api/dicts/:id                                           controllers.systemmanage.Dict.update(id:Long)
+GET           /api/dicts/:id                                           controllers.systemmanage.Dict.get(id:Long)
