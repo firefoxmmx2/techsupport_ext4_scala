@@ -6,6 +6,7 @@
  */
 Ext.define('Techsupport.view.sysadmin.dict.Manage', {
     extend: 'Techsupport.view.base.BaseManage',
+    alias: 'widget.dictManage',
     initComponent: function () {
         this.items = this.superclass.items[1]
         this.callParent(arguments)

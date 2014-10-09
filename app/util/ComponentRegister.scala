@@ -19,7 +19,9 @@ with RoleDaoComponentImpl
 with SystemDaoComponentImpl
 with SystemServiceComponentImpl
 with DictItemDaoComponentImpl
-with DictItemServiceComponentImpl{
+with DictItemServiceComponentImpl
+with DictDaoComponentImpl
+with DictServiceComponentImpl{
 
   val departmentService: DepartmentService = new DepartmentServiceImpl
   val departmentDao: DepartmentDao = new DepartmentDaoImpl
@@ -35,4 +37,6 @@ with DictItemServiceComponentImpl{
   val menuDao: ComponentRegister.MenuDao = new MenuDaoImpl
   val dictItemDao: ComponentRegister.DictItemDao = new DictItemDaoImpl
   val dictItemService: ComponentRegister.DictItemService = new DictItemServiceImpl
+  val dictDao: ComponentRegister.DictDao = new DictDaoImpl
+  val dictService: ComponentRegister.DictService = new DictServiceImpl
 }

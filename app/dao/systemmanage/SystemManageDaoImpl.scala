@@ -944,7 +944,7 @@ trait GlobalParamDaoComponentImpl extends GlobalParamDaoComponent {
       from(SystemManage.globalParams)(
         g =>
           where(g.id === globalParamCode)
-        select(g.id)
+            select (g.id)
       ).Count > 0
   }
 
@@ -1288,6 +1288,145 @@ trait DictItemDaoComponentImpl extends DictItemDaoComponent {
      */
     def getById(id: Long): DictItem = SystemManage.dictItems.where(di =>
       di.id === id).single
+  }
+
+}
+
+trait DictDaoComponentImpl extends DictDaoComponent {
+
+  class DictDaoImpl extends DictDao {
+    def selectForPage(params: DictQueryCondition, sort: String = "sibOrder", dir: String = "asc") = {
+      val dictnameLike = params.dictname match {
+        case Some(x) => Some("%" + x + "%")
+        case _ => None
+      }
+      from(SystemManage.dicts)(
+        d =>
+          where(
+            d.id === params.id.? and
+              d.dictcode === params.dictcode.?
+              and (d.dictname like dictnameLike.?)
+              and d.superDictcode === params.superDictcode.? and
+              d.createTime === params.createTime.?
+          )
+            select (d)
+            orderBy {
+            if (sort == "id")
+              if (dir == "asc")
+                d.id asc
+              else
+                d.id desc
+            if (sort == "dictcode")
+              if (dir == "asc")
+                d.dictcode asc
+              else
+                d.dictcode desc
+            if (sort == "dictname")
+              if (dir == "asc")
+                d.dictname asc
+              else
+                d.dictname desc
+            if (sort == "superDictcode")
+              if (dir == "asc")
+                d.superDictcode asc
+              else
+                d.superDictcode desc
+            if (sort == "createTime")
+              if (dir == "asc")
+                d.createTime asc
+              else
+                d.createTime desc
+            else
+              d.sibOrder asc
+          }
+      )
+    }
+
+    /**
+     * 插入
+     * @param m 实体
+
+     * @return 插入后的实体
+     */
+    def insert(m: Dict): Dict = SystemManage.dicts.insert(m)
+
+    /**
+     * 分页总数查询
+     * @param params 分页查询条件
+
+     * @return 结果数
+     */
+    def count(params: DictQueryCondition): Int = selectForPage(params).Count.toInt
+
+    /**
+     * 修改
+     * @param m 实体
+
+     * @return
+     */
+    def update(m: Dict): Unit = SystemManage.dicts.update(m)
+
+    /**
+     * 删除
+     * @param m 实体
+
+     * @return
+     */
+    def delete(m: Dict): Unit = SystemManage.dicts.delete(m)
+
+    /**
+     * 通过主键删除
+     * @param id 主键
+
+     * @return
+     */
+    def deleteById(id: Long): Unit = SystemManage.dicts.deleteWhere(d => d.id === id)
+
+    /**
+     * 分页查询
+     * @param pageno 页码
+     * @param pagesize 每页显示数
+     * @param params 分页查询条件
+     * @param sort 排序字段
+     * @param dir 升降序
+
+     * @return 分页结果
+     */
+    def page(pageno: Int, pagesize: Int, params: DictQueryCondition, sort: String, dir: String): Page[Dict] = {
+      val page = Page[Dict](pageno, pagesize, count(params))
+      if (page.total == 0)
+        page
+      else
+        page.copy(data = selectForPage(params, sort, dir).page(page.start, page.limit).toList)
+    }
+
+    /**
+     * 非分页查询
+     * @param params 查询条件
+
+     * @return 结果列表
+     */
+    def list(params: DictQueryCondition): List[Dict] = selectForPage(params).toList
+
+    /**
+     * 通过主键获取单个实体
+     * @param id 主键
+
+     * @return 实体
+     */
+    def getById(id: Long): Dict = SystemManage.dicts.where(d => d.id === id).single
+
+    /**
+     * 验证字典代码是否重复
+     * @param dictcode
+     * @return
+     */
+    def checkDictcodeRepeat(dictcode: String): Boolean =
+      from(SystemManage.dicts)(
+        d =>
+          where(d.dictcode === dictcode)
+            select (d.id)
+      ).Count.toInt > 0
   }
 
 }

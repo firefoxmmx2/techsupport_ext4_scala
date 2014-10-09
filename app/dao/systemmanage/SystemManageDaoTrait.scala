@@ -154,5 +154,21 @@ trait DictItemDaoComponent {
   val dictItemDao: DictItemDao
 }
 
+/**
+ * 字典数据访问声明
+ */
+trait DictDaoComponent{
+  trait DictDao extends BaseDao[Dict,Long,DictQueryCondition]{
+    /**
+     * 验证字典代码是否重复
+     * @param dictcode
+     * @return
+     */
+    def checkDictcodeRepeat(dictcode:String):Boolean
+  }
+
+  val dictDao:DictDao
+}
+
 
 

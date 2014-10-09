@@ -47,7 +47,7 @@ object DictItem extends Controller {
       }, success = {
         form =>
           try {
-            val pager = dictItemService.page(pageno, limit, form,sort,dir)
+            val pager = dictItemService.page(pageno, limit, form, sort, dir)
             Ok(Json.generate(Map("result" -> 0,
               "success" -> true,
               "message" -> "字典项查询成功",
@@ -58,7 +58,7 @@ object DictItem extends Controller {
           }
           catch {
             case e: Exception =>
-              log.error(e.getMessage,e.fillInStackTrace().toString)
+              log.error(e.getMessage, e.fillInStackTrace().toString)
               Ok(Json.generate(Map("result" -> -1,
                 "success" -> false,
                 "message" -> "字典项列表查询失败",
@@ -191,5 +191,57 @@ object DictItem extends Controller {
           "success" -> false,
           "message" -> "获取单个字典项发生错误"))).as(JSON)
     }
+  }
+
+  /**
+   * 获取字典异步树节点
+   * @return
+   */
+  def treenode = Action {
+    implicit request =>
+      dictItemQueryForm.bindFromRequest.fold(
+        hasErrors =
+          form =>
+            BadRequest(form.errorsAsJson),
+        success =
+          dq => {
+            try {
+              val list = dictItemService.list(dq).map(di => {
+                val leaf = di.isleaf match {
+                  case "Y" => true
+                  case _ => false
+                }
+                Map(
+                  "dictcode" -> di.dictcode,
+                  "displayName" -> di.displayName,
+                  "factValue" -> di.factValue,
+                  "appendValue" -> di.appendValue,
+                  "superItemId" -> di.superItemId,
+                  "sibOrder" -> di.sibOrder,
+                  "isleaf" -> di.isleaf,
+                  "displayFlag" -> di.displayFlag,
+                  "isValid" -> di.isValid,
+                  "itemSimplePin" -> di.itemSimplePin,
+                  "itemAllPin" -> di.itemAllPin,
+                  "id" -> di.id,
+                  "leaf" -> leaf,
+                  "parentId" -> di.superItemId,
+                  "text" -> di.displayName
+                )
+              })
+              Ok(Json.generate(Map("success" -> true,
+                "data" -> list,
+                "result" -> 0))).as(JSON)
+            }
+            catch {
+              case e: Exception =>
+                log.error("获取字典项树形结构发生错误")
+                log.error(e.getMessage, e.fillInStackTrace())
+                Ok(Json.generate(Map("success" -> false,
+                  "result" -> -1,
+                  "message" -> "获取字典项树形结构发生错误"))).as(JSON)
+            }
+          }
+      )
   }
 }

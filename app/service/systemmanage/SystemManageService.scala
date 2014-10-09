@@ -553,3 +553,59 @@ trait DictItemServiceComponentImpl extends DictItemServiceComponent {
 
 }
 
+/**
+ * 字典服务组件
+ */
+trait DictServiceComponentImpl extends DictServiceComponent {
+  self: DictDaoComponent=>
+
+  class DictServiceImpl extends DictService {
+    /**
+     * 验证字典代码是否可用
+     * @param dictcode
+     * @return
+     */
+    def checkDictcodeAvaliable(dictcode: String): Boolean = inTransaction{
+      if(StringUtils.isEmpty(dictcode))
+        throw new RuntimeException("字典代码为空")
+      !dictDao.checkDictcodeRepeat(dictcode)
+    }
+
+    def update(e: Dict): Unit = inTransaction{
+      dictDao.update(e)
+    }
+
+    def insert(e: Dict): Dict = inTransaction{
+      dictDao.insert(e)
+    }
+
+    def deleteById(id: Long): Unit = inTransaction{
+      if(id==null)
+        throw new RuntimeException("字典ID为空")
+      dictDao.deleteById(id)
+    }
+
+    def page(pageno: Int, pagesize: Int, params: DictQueryCondition, sort: String="sibOrder", dir: String="asc"): Page[Dict] = inTransaction {
+      if(pageno==null || pageno == 0)
+        throw new RuntimeException("页数不能为空")
+      if(pagesize==null || pagesize == 0)
+        throw new RuntimeException("每页显示数不能为空")
+      if(StringUtils.isEmpty(sort))
+        throw new RuntimeException("排序列不能为空")
+      if(StringUtils.isEmpty(dir))
+        throw new RuntimeException("排序类型不能为空")
+       dictDao.page(pageno,pagesize,params,sort,dir)
+    }
+
+    def list(params: DictQueryCondition): List[Dict] = inTransaction {
+      dictDao.list(params)
+    }
+
+    def getById(id: Long): Dict = inTransaction{
+      if(id==null)
+        throw new RuntimeException("获取指定id字典,字典id为空")
+      dictDao.getById(id)
+    }
+  }
+
+}

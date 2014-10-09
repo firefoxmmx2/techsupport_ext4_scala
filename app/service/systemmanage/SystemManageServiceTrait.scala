@@ -8,6 +8,7 @@ import models.Department
 import models.System
 import models.User
 import models.Role
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Created by hooxin on 14-3-10.
@@ -94,7 +95,7 @@ trait SystemServiceComponent {
      * 系统代码可用性验证
      * @return
      */
-    def checkSystemcodeAvaliable(systemcode:String):Boolean
+    def checkSystemcodeAvaliable(systemcode: String): Boolean
   }
 
   val systemService: SystemService
@@ -150,13 +151,13 @@ trait MenuServiceComponent {
  */
 trait GlobalParamServiceComponent {
 
-  trait GlobalParamService extends BaseService[GlobalParam, String, GlobalParamQueryCondition]{
+  trait GlobalParamService extends BaseService[GlobalParam, String, GlobalParamQueryCondition] {
     /**
      * 全局参数代码可用性验证
      * @param id
      * @return
      */
-    def checkGlobalParamAvaliable(id:String):Boolean
+    def checkGlobalParamAvaliable(id: String): Boolean
   }
 
   val globalParamService: GlobalParamService
@@ -172,3 +173,19 @@ trait DictItemServiceComponent {
   val dictItemService: DictItemService
 }
 
+/**
+ * 字典服务组件声明
+ */
+trait DictServiceComponent {
+
+  trait DictService extends BaseService[Dict, Long, DictQueryCondition] {
+    /**
+     * 验证字典代码是否可用
+     * @param dictcode
+     * @return
+     */
+    def checkDictcodeAvaliable(dictcode: String): Boolean
+  }
+
+  val dictService: DictService
+}

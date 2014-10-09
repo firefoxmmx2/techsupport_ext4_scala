@@ -51,6 +51,7 @@ PUT           /api/systems/:id                                         controlle
 GET           /api/systems/:id                                         controllers.systemmanage.System.get(id:String)
 GET           /api/systems                                             controllers.systemmanage.System.list
 #字典项
+GET           /api/dictitems/treenode                                  controllers.systemmanage.DictItem.treenode
 GET           /api/dictitems                                           controllers.systemmanage.DictItem.list
 POST          /api/dictitems                                           controllers.systemmanage.DictItem.add
 DELETE        /api/dictitems/:id                                       controllers.systemmanage.DictItem.remove(id:Long)
