@@ -17,7 +17,9 @@ Ext.define("Techsupport.model.Dict", {
         {name: "dictAllPin", type: "string"},
         {name: "dictItemTableName", type: "string"},
         {name: "dictVersion", type: "string"},
-        {name: "createTime", type: "string"}
+        {name: "createTime", type: "date", convert: function (v, record) {
+            return new Date(v.millis)
+        }}
 
     ]
 })
