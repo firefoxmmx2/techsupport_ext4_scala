@@ -6,7 +6,7 @@
  */
 Ext.define('Techsupport.controller.sysadmin.Dict', {
     extend: 'Ext.app.Controller',
-    stores: ['Dict', 'DictItem'],
+    stores: ['Dict', 'DictItem', 'DictItemTree'],
     views: ['sysadmin.dict.Manage', 'sysadmin.dict.List', 'sysadmin.dict.Detail'],
     models: ['Dict', 'DictItem'],
     refs: [
@@ -51,6 +51,11 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
                 click: function (button, evt) {
 
                 }
+            },
+            'dictDetail dictItemSimplePanel': {//字典项简单列表
+            },
+            'dictDetail dictItemTreeList': { //字典项树形列表
+
             }
         })
 
@@ -73,14 +78,14 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
                 Ext.Ajax.request({
                     url: '/api/dicts/maxDictOrder',
                     success: function (response) {
-                        var res=Ext.decode(response.responseText)
-                        if(Ext.isNumber(res.data)){
-                            record.data.sibOrder=res.data + 1
+                        var res = Ext.decode(response.responseText)
+                        if (Ext.isNumber(res.data)) {
+                            record.data.sibOrder = res.data + 1
                             form.getForm().loadRecord(record)
                         }
                     },
                     failure: function (response) {
-                       Ext.Msg.alert("错误","获取字典最大序列发生错误")
+                        Ext.Msg.alert("错误", "获取字典最大序列发生错误")
                     },
                     scope: this
                 })

@@ -51,82 +51,8 @@ Ext.define('Techsupport.view.sysadmin.dict.Detail', {
                 vtype: 'number'},
             {xtype: 'textfield', name: 'createTime', fieldLabel: '创建时间',
                 readOnly: true, editable: false},
-            {
-                xtype: 'panel',
-                border: false,
-                name: 'typeSimplePanel',
-                items: [
-                    {
-                        xtype: 'grid',
-                        border: false,
-                        store: 'DictItem',
-                        selType: 'checkboxmodel',
-                        selModel: {
-                            flex: 0,
-                            showHeaderCheckbox: true,
-                            width: 16
-                        },
-                        loadMask: true,
-                        dockedItems: [
-                            {
-                                xtype: 'pagingtoolbar',
-                                store: 'DictItem',
-                                dock: 'bottom',
-                                pageSize: 10,
-                                listeners: {
-                                    afterrender: function (p, eOpts) {
-                                        p.remove(p.down('button:last'))
-                                        p.remove(p.down('tbseparator:last'))
-                                    }
-                                }
-                            }
-                        ],
-                        listeners: {
-                            render: function (g) {
-                                g.getStore().removeAll()
-                            },
-                            afterlayout: function (g, layout, opts) {
-                                var headerHeight = g.headerCt.down('[id*=gridcolumn]').getHeight();
-                                var pagesize = Math.round(g.getHeight() / headerHeight);
-                                g.getStore().pageSize = pagesize;
-                                g.getStore().trailingBufferZone = pagesize;
-                                g.getStore().getProxy().setExtraParam('limit', pagesize);
-                            }
-                        }
-                    }
-                ]
-            },
-            {
-                xtype: 'panel',
-                border: false,
-                name: 'typeTreePanel',
-                items: [
-                    {
-                        xtype: 'treepanel',
-                        selType: 'checkboxmodel',
-                        selModel: {
-                            flex: 0,
-                            showHeaderCheckbox: true,
-                            width: 16
-                        },
-                        loadMask: true,
-                        useArrows: true,
-                        rootVisible: false,
-                        store: 'DictItemTree',
-                        animate: true,
-                        columns: [
-                            { xtype: 'treecolumn', text: '显示值', dataIndex: 'displayName' },
-                            {text: '实际值', dataIndex: 'factValue', flex: 1 },
-                            {text: '附加值', dataIndex: 'appendValue', flex: 1 },
-                            {text: '序列', dataIndex: 'sibOrder', flex: 1 },
-                            {text: '显示标志', dataIndex: 'displayFlag', flex: 1},
-                            {text: '是否可用', dataIndex: 'isValid', flex: 1},
-                            {text: '简拼', dataIndex: 'itemSimplePin', flex: 1},
-                            {text: '全拼', dataIndex: 'itemAllPin', flex: 1}
-                        ]
-                    }
-                ]
-            }
+            {xtype:'dictItemSimplePanel'},
+            {xtype:'dictItemTreeList'}
         ])
     }
 })
