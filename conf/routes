@@ -72,6 +72,7 @@ DELETE        /api/globalParams/:id                                    controlle
 PUT           /api/globalParams/:id                                    controllers.systemmanage.GlobalParam.update(id:String)
 
 #字典
+GET           /api/dicts/maxDictOrder                                  controllers.systemmanage.Dict.maxDictOrder
 GET           /api/dicts                                               controllers.systemmanage.Dict.list
 POST          /api/dicts                                               controllers.systemmanage.Dict.add
 DELETE        /api/dicts/:id                                           controllers.systemmanage.Dict.remove(id:Long)

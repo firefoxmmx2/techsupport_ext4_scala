@@ -185,6 +185,12 @@ trait DictServiceComponent {
      * @return
      */
     def checkDictcodeAvaliable(dictcode: String): Boolean
+
+    /**
+     * 获取最大的字典序列
+     * @return
+     */
+    def maxDictOrder:Int
   }
 
   val dictService: DictService

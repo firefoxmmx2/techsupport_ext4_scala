@@ -188,4 +188,27 @@ object Dict extends Controller {
           "message" -> "获取指定ID的字典发生错误"))).as(JSON)
     }
   }
+
+  /**
+   * 获取最大的序号(不分级)
+   * @return
+   */
+  def maxDictOrder = Action {
+    implicit request =>
+      try {
+        val result = dictService.maxDictOrder
+        Ok(Json.generate(Map("success" -> true,
+          "result" -> 0,
+          "data" -> result,
+          "message" -> "获取最大序号成功"))).as(JSON)
+      }
+      catch {
+        case e: Exception =>
+          log.error("获取最大的序号(不分级)")
+          log.error(e.getMessage, e.fillInStackTrace())
+          Ok(Json.generate(Map("success" -> false,
+            "result" -> -1,
+            "message" -> "获取最大的序号(不分级)"))).as(JSON)
+      }
+  }
 }

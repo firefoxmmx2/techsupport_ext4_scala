@@ -1427,6 +1427,15 @@ trait DictDaoComponentImpl extends DictDaoComponent {
           where(d.dictcode === dictcode)
             select (d.id)
       ).Count.toInt > 0
+
+    /**
+     * 获取最大序号(不分级)
+     * @return
+     */
+    def maxOrder: Int = from(SystemManage.dicts)(
+      d=>
+        compute(max(d.sibOrder))
+    ).single.measures.getOrElse(0)
   }
 
 }

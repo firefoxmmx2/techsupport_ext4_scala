@@ -26,13 +26,7 @@ Ext.define('Techsupport.view.sysadmin.dict.Detail', {
             {xtype: 'combobox', name: 'maintFlag', fieldLabel: '维护标志',
                 allowBlank: false,
                 blankText: '维护标志不能为空',
-                store: {
-                    fields: ['text', 'value'],
-                    data: [
-                        {text: '维护', value: 0},
-                        {text: '停止维护', value: 1}
-                    ]
-                },
+                store: 'DictMaintFlag',
                 textField: 'text',
                 valueField: 'value',
                 triggerAction: 'all',
@@ -42,13 +36,7 @@ Ext.define('Techsupport.view.sysadmin.dict.Detail', {
             {xtype: 'combobox', name: 'dictType', fieldLabel: '字典类型',
                 allowBlank: false,
                 blankText: '字典类型不能为空',
-                store: {
-                    fields: ['text', 'value'],
-                    data: [
-                        {text: '简单', value: '01'},
-                        {text: '树形', value: '02'}
-                    ]
-                },
+                store: 'DictType',
                 textField: 'text',
                 valueField: 'value',
                 triggerAction: 'all',

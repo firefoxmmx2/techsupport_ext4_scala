@@ -165,6 +165,12 @@ trait DictDaoComponent{
      * @return
      */
     def checkDictcodeRepeat(dictcode:String):Boolean
+
+    /**
+     * 获取最大序号(不分级)
+     * @return
+     */
+    def maxOrder:Int
   }
 
   val dictDao:DictDao
