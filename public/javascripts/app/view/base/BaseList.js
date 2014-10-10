@@ -33,5 +33,10 @@ Ext.define('Techsupport.view.base.BaseList', {
             g.getStore().trailingBufferZone = pagesize;
             g.getStore().getProxy().setExtraParam('limit', pagesize);
         }
+    },
+    initComponent: function () {
+        Ext.apply(this.dockedItems, this.superclass.dockedItems)
+        this.dockedItems[0].store = this.store
+        this.callParent(arguments)
     }
 })

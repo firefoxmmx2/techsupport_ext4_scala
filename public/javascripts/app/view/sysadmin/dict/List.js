@@ -8,11 +8,6 @@ Ext.define('Techsupport.view.sysadmin.dict.List', {
     extend: 'Techsupport.view.base.BaseList',
     alias: 'widget.dictList',
     store:'Dict',
-    initComponent: function () {
-        Ext.apply(this.dockedItems, this.superclass.dockedItems)
-        this.dockedItems[0].store = this.store
-        this.callParent(arguments)
-    },
     columns: [
         {text: '字典ID', dataIndex: 'id', flex: 1},
         {text: '字典代码', dataIndex: 'dictcode', flex: 1},

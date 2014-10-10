@@ -20,10 +20,5 @@ Ext.define('Techsupport.view.sysadmin.system.List', {
             }},
             {text: '系统全码', dataIndex: 'fullcode', flex: 1}
         ]
-    },
-    initComponent: function () {
-        Ext.apply(this.dockedItems,this.superclass.dockedItems)
-        this.dockedItems[0].store="System"
-        this.callParent(arguments)
     }
 });

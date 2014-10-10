@@ -29,10 +29,5 @@ Ext.define('Techsupport.view.sysadmin.user.List', {
         ],
         defaults: {
         }
-    },
-    initComponent: function () {
-        Ext.apply(this.dockedItems,this.superclass.dockedItems)
-        this.dockedItems[0].store="User"
-        this.callParent(arguments)
     }
 });
