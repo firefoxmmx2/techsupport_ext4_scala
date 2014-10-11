@@ -37,10 +37,11 @@ object DictItem extends Controller {
       log.debug("=" * 13 + " 开始字典项列表查询... " + "=" * 13)
       val pageno = request.getQueryString("page").getOrElse("1").toInt
       val limit = request.getQueryString("limit").getOrElse("20").toInt
-      val sort = request.getQueryString("sort").getOrElse("id").toLowerCase
+      val sort = request.getQueryString("sort").getOrElse("id")
       val dir = request.getQueryString("dir").getOrElse("asc").toLowerCase
       log.debug("=" * 13 + s" pageno = $pageno,limit = $limit " + "=" * 13)
-      // todo 字典项列表查询内容
+      log.debug("=" * 13 + s" sort = $sort,dir = $dir " + "=" * 13)
+      //  字典项列表查询内容
       dictItemQueryForm.bindFromRequest.fold(hasErrors = {
         form =>
           BadRequest

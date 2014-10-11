@@ -134,16 +134,6 @@ Ext.define('Techsupport.controller.sysadmin.System', {
 
         this.control({//控制器注入
             'systemlist': {
-                render: function (g) {
-                    g.getStore().removeAll()
-                },
-                afterlayout: function (g, layout, opts) {
-                    var headerHeight = g.headerCt.down('[id*=gridcolumn]').getHeight();
-                    var pagesize = Math.round(g.getHeight() / headerHeight);
-                    g.getStore().pageSize = pagesize;
-                    g.getStore().trailingBufferZone = pagesize;
-                    g.getStore().getProxy().setExtraParam('limit', pagesize);
-                },
                 itemdblclick: function (g, record, item, index, e, eOpts) {
                     this.toEditSystem(record)
                 }

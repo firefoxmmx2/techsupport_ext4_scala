@@ -11,10 +11,10 @@ Ext.define("Techsupport.model.DictItem", {
         {name: "factValue", type: "string"},
         {name: "appendValue", type: "string"},
         {name: "superItemId", type: "int"},
-        {name: "sibOrder", type: "int"},
-        {name: "isleaf", type: "string"},
-        {name: "displayFlag", type: "string"},
-        {name: "isValid", type: "string"},
+        {name: "sibOrder", type: "int", defaultValue: 0},
+        {name: "isleaf", type: "string", defaultValue: 'Y'},
+        {name: "displayFlag", type: "string", defaultValue: '1'},
+        {name: "isValid", type: "string", defaultValue: '1'},
         {name: "itemSimplePin", type: "string"},
         {name: "itemAllPin", type: "string"}
     ]

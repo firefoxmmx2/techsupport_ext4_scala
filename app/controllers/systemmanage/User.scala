@@ -36,7 +36,7 @@ object User extends Controller {
 
   def add = Action {
     implicit request =>
-      log.debug("="*13+"request.body = "+request.body+"="*13)
+      log.debug("=" * 13 + "request.body = " + request.body + "=" * 13)
       userForm.bindFromRequest().fold(
         hasErrors = form => {
           log.debug("=" * 13 + "nihao" + "=" * 13)
@@ -97,8 +97,8 @@ object User extends Controller {
     implicit request =>
       val pageno: Int = request.getQueryString("page").getOrElse("1").toInt
       val limit = request.getQueryString("limit").getOrElse("20").toInt
-      var sort=request.getQueryString("sort").getOrElse("id").toLowerCase
-      var dir=request.getQueryString("dir").getOrElse("asc").toLowerCase
+      var sort = request.getQueryString("sort").getOrElse("id").toLowerCase
+      var dir = request.getQueryString("dir").getOrElse("asc").toLowerCase
       log.debug("=" * 13 + request.getQueryString("useraccount") + "=" * 13)
       log.debug("=" * 13 + " pageno = " + pageno + " ,limit = " + limit + "=" * 13)
       userQueryForm.bindFromRequest().fold(
@@ -151,7 +151,7 @@ object User extends Controller {
 
   def update(id: Long) = Action {
     implicit request =>
-      log.debug("="*13+"request.body"+request.body+"="*13)
+      log.debug("=" * 13 + "request.body" + request.body + "=" * 13)
       userForm.bindFromRequest().fold(
         form => {
           BadRequest(form.errorsAsJson)
@@ -198,11 +198,12 @@ object User extends Controller {
       }
   }
 
-  val checkUserAccountAvailableForm=Form(
-      single(
-        "useraccount"->text
-      )
+  val checkUserAccountAvailableForm = Form(
+    single(
+      "useraccount" -> text
+    )
   )
+
   /**
    * 检查用户帐号可用
    * @return
@@ -210,32 +211,32 @@ object User extends Controller {
   def checkUseraccountAvailable = Action {
     implicit request =>
       log.debug("=" * 13 + "账户重复验证" + "=" * 13)
-      checkUserAccountAvailableForm.bindFromRequest().fold(hasErrors=
-        form =>{
-              BadRequest(form.errorsAsJson)
+      checkUserAccountAvailableForm.bindFromRequest().fold(hasErrors =
+        form => {
+          BadRequest(form.errorsAsJson)
         },
-      success=
-        useraccount =>
-          try {
-            // 验证重复账户
-            val isAvailable = userService.checkUseraccountAvailable(useraccount)
-            if (isAvailable)
-              Ok(Json.generate(Map("result" -> 0,
-                "success" -> true,
-                "message" -> "该账户可用"))).as(JSON)
-            else
-              Ok(Json.generate(Map("result" -> 1,
-                "success" -> true,
-                "message" -> "该账户不可用"))).as(JSON)
-          }
-          catch {
-            case e: Exception =>
-              log.error("检查用户帐号是否可用发生错误")
-              log.error(e.getMessage, e.fillInStackTrace().toString)
-              Ok(Json.generate(Map("result" -> -1,
-                "success" -> false,
-                "message" -> "检查用户帐号是否可用发生错误"))).as(JSON)
-          }
+        success =
+          useraccount =>
+            try {
+              // 验证重复账户
+              val isAvailable = userService.checkUseraccountAvailable(useraccount)
+              if (isAvailable)
+                Ok(Json.generate(Map("result" -> 0,
+                  "success" -> true,
+                  "message" -> "该账户可用"))).as(JSON)
+              else
+                Ok(Json.generate(Map("result" -> 1,
+                  "success" -> true,
+                  "message" -> "该账户不可用"))).as(JSON)
+            }
+            catch {
+              case e: Exception =>
+                log.error("检查用户帐号是否可用发生错误")
+                log.error(e.getMessage, e.fillInStackTrace().toString)
+                Ok(Json.generate(Map("result" -> -1,
+                  "success" -> false,
+                  "message" -> "检查用户帐号是否可用发生错误"))).as(JSON)
+            }
       )
 
   }

@@ -211,4 +211,28 @@ object Dict extends Controller {
             "message" -> "获取最大的序号(不分级)"))).as(JSON)
       }
   }
+
+  /**
+   * 验证字典代码可用性
+   * @param id 字典代码
+   * @return
+   */
+  def checkDictCodeAvaliable(id: String) = Action {
+    implicit request =>
+      try {
+        val result = dictService.checkDictcodeAvaliable(id)
+        Ok(Json.generate(Map("success" -> true,
+          "result" -> 0,
+          "isAvaliable" -> result,
+          "message" -> "字典代码可用性验证访问成功"))).as(JSON)
+      }
+      catch {
+        case e: Exception =>
+          log.error("验证字典代码可用性发生错误")
+          log.error(e.getMessage, e.fillInStackTrace())
+          Ok(Json.generate(Map("success" -> false,
+            "result" -> -1,
+            "message" -> "验证字典代码可用性发生错误"))).as(JSON)
+      }
+  }
 }

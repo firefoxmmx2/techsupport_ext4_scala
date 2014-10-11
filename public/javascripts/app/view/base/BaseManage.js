@@ -19,13 +19,10 @@ Ext.define('Techsupport.view.base.BaseManage', {
             dockedItems: [
                 {xtype: 'toolbar', dock: 'top', ui: 'footer', items: [
                     {text: '添加', xtype: 'button', action: 'add', iconCls: 'icon-add'} ,
-                    '-',
                     {xtype: 'button', text: '修改', action: 'modify', iconCls: 'icon-modify'},
-                    '-',
                     {xtype: 'button', text: '删除', action: 'remove', iconCls: 'icon-delete'},
                     '-',
                     {xtype: 'button', text: '上移', action: 'up', iconCls: 'icon-up'},
-                    '-',
                     {xtype: 'button', text: '下移', action: 'down', iconCls: 'icon-down'}
                 ]},
                 {xtype: 'panel', dock: 'top',

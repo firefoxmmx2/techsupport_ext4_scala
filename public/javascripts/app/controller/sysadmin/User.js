@@ -23,16 +23,6 @@ Ext.define('Techsupport.controller.sysadmin.User', {
     init: function () {
         this.control({
             'userlist': {
-                afterlayout: function (g, layout, opts) {
-                    var headerHeight = g.headerCt.down('[id*=gridcolumn]').getHeight();
-                    var pagesize = Math.round(g.getHeight() / headerHeight);
-                    g.getStore().pageSize = pagesize;
-                    g.getStore().trailingBufferZone = pagesize;
-                    g.getStore().getProxy().setExtraParam('limit', pagesize);
-                },
-                render: function (g) {
-                    g.getStore().removeAll();
-                },
                 itemdblclick: function (g, record, item, index, e, eOpts) {
                     //打开更新窗口
                     this.toModifyUser(g, this.getView('sysadmin.user.Edit'));

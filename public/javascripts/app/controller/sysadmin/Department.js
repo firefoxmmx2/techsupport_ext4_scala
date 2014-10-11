@@ -18,16 +18,6 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
     init: function () {
         this.control({
             'departmentlist': {
-                render: function (g) {
-                    g.getStore().removeAll();
-                },
-                afterlayout: function (g, layout, opts) {
-                    var headerHeight = g.headerCt.down('[id*=gridcolumn]').getHeight();
-                    var pagesize = Math.round(g.getHeight() / headerHeight);
-                    g.getStore().pageSize = pagesize;
-                    g.getStore().trailingBufferZone = pagesize;
-                    g.getStore().getProxy().setExtraParam('limit', pagesize);
-                },
                 itemdblclick: function (g, record, item, index, e, eOpts) {
                     var _window = Ext.create('Techsupport.view.sysadmin.department.Edit', {name: 'departmentEditWindow'});
                     var f = _window.down('form:first')

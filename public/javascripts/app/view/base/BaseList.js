@@ -27,8 +27,12 @@ Ext.define('Techsupport.view.base.BaseList', {
             g.getStore().removeAll()
         },
         afterlayout: function (g, layout, opts) {
-            var headerHeight = g.headerCt.down('[id*=gridcolumn]').getHeight();
-            var pagesize = Math.round(g.getHeight() / headerHeight);
+            var headerHeight=g.headerCt.down('[id*=gridcolumn]').getHeight() - 4
+            var pagesize = Math.ceil(
+                    (g.getHeight()
+                - g.down('pagingtoolbar').getHeight()
+                - g.headerCt.down('[id*=gridcolumn]').getHeight())
+                    / headerHeight) -1;
             g.getStore().pageSize = pagesize;
             g.getStore().trailingBufferZone = pagesize;
             g.getStore().getProxy().setExtraParam('limit', pagesize);

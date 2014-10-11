@@ -2,7 +2,7 @@
  * Created by hooxin on 14-10-9.
  */
 Ext.define('Techsupport.store.DictItemTree', {
-    extend: 'Ext.tree.Store',
+    extend: 'Ext.data.TreeStore',
     model: 'Techsupport.model.DictItem',
     root: {
         text: '根节点',

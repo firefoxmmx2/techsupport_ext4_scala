@@ -138,16 +138,6 @@ Ext.define('Techsupport.controller.sysadmin.Menu', {
 
         this.control({
             'menulist': { //菜单列表
-                render: function (g) {
-                    g.getStore().removeAll();
-                },
-                afterlayout: function (g, layout, opts) {
-                    var headerHeight = g.headerCt.down('[id*=gridcolumn]').getHeight();
-                    var pagesize = Math.round(g.getHeight() / headerHeight);
-                    g.getStore().pageSize = pagesize;
-                    g.getStore().trailingBufferZone = pagesize;
-                    g.getStore().getProxy().setExtraParam('limit', pagesize);
-                },
                 itemdblclick: function (g, record, item, index, e, eOpts) {
                     this.toEditMenu(record);
                 }
