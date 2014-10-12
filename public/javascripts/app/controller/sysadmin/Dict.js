@@ -11,7 +11,10 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
         'DictItem',
         'DictItemTree',
         'DictMaintFlag',
-        'DictType'
+        'DictType',
+        'DictItemDisplayFlag',
+        'YN',
+        'OneZero'
     ],
     views: [
         'sysadmin.dict.Manage',
@@ -50,12 +53,18 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
             },
             'dictManage button[action=modify]': {
                 click: function (button, evt) {
-
+                    //修改按钮
+                    var selection = Ext.Array.map(button.up('dictManage').down('dictList').getSelectionModel().getSelection(),
+                        function (record) {
+                            this.toEditDict(record)
+                            return record
+                        }, this)
                 }
             },
             'dictManage button[action=remove]': {
                 click: function (button, evt) {
-
+                    //删除按钮
+                    this.removeDict(button.up('dictManage').down('dictList'))
                 }
             },
             'dictManage button[action=up]': {
@@ -74,23 +83,34 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
                     p.down('pagingtoolbar').add([
                         '->',
                         {xtype: 'button', text: '添加', action: 'add'},
-                        {xtype: 'button', text: '修改', action: 'modify'},
                         {xtype: 'button', text: '删除', action: 'remove'}
                     ])
-                    p.down('button[action=add]').on('click', function (button) {
-                        var _window=this.getView('sysadmin.dictItem.Detail').create({
-                            title:'新增字典项'
-                        })
-                        _window.show()
-                        p.getStore().add(this.getDictItemModel().create({
-                            dictcode: p.up('panel').down('textfield[name=dictcode]').getValue()
-                        }))
-                    },this)
+                    p.down('button[action=add]').on('click', function (button) { //字典项添加按钮
+                        var dictFrom = p.up('window').down('form:first')
+                        if (dictFrom.getForm().isValid()) {
+                            this.toEditDictItem(null, p)
+                        }
+
+                    }, this)
+                    p.down('button[action=remove]').on('click', function (button) {//字典项删除按钮
+                        this.removeDictItem(p)
+                    }, this)
                 }
             },
             'dictDetail dictItemTreeList': { //字典项树形列表
                 afterrender: function (p) {
                     p.setHeight(p.up('window').getHeight() * 2)
+                }
+            },
+            'dictDetail button[action=enter]': { //保存或者修改
+                click: function (button) {
+                    var _window = button.up('window')
+                    if (_window.name == "addDictWindow") {
+                        this.addDict(_window.down('form'), this.getDictStore())
+                    }
+                    else if (_window.name == 'modifyDictWindow') {
+                        this.updateDict(_window.down('form'), this.getDictStore())
+                    }
                 }
             },
             'dictDetail button[action=cancel]': {//点击取消按钮关闭窗口
@@ -129,7 +149,65 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
                 }
             }
         })
+        this.removeDictItem = function (p) {
+            var selection = Ext.Array.map(p.getSelectionModel().getSelection(), function (record) {
+                return record
+            })
+            var store = p.getStore()
+            store.remove(record)
+        }
+        this.toEditDictItem = function (record, p) {
+            //打开窗口
+            var config = {}
+            if (record) {
+                config.title = "字典项修改"
+                config.name = "modifyDictItemWindow"
+            }
+            else {
+                config.title = "字典项新增"
+                config.name = "addDictItemWindow"
+            }
 
+            var _window = this.getView('sysadmin.dictItem.Detail').create(config)
+            _window.show()
+            var form = _window.down('form')
+            var dictCodeField = form.down('textfield[name=dictcode]').setReadOnly(true)
+            //确定按钮
+            _window.down('button[action=enter]').on('click', function (button) {
+                if (form.getForm().isValid()) {
+                    form.getForm().updateRecord()
+                    if (record) {
+                        _window.close()
+                    }
+                    else {
+                        p.getStore().add(form.getForm().getRecord())
+                        var _record = this.getDictItemModel().create({
+                            superItemId: 0,
+                            dictcode: dictWindow.down('textfield[name=dictcode]').getValue()
+                        })
+                        form.getForm().loadRecord(_record)
+                    }
+
+                }
+            }, this)
+            //取消按钮关闭窗口
+            _window.down('button[action=cancel]').on('click', function (button) {
+                button.up('window').close()
+            }, this)
+            var dictWindow = p.up('window')
+            if (!record) {
+                var _record = this.getDictItemModel().create({
+                    superItemId: 0,
+                    dictcode: dictWindow.down('textfield[name=dictcode]').getValue()
+                })
+                form.getForm().loadRecord(_record)
+            }
+            else {
+                form.getForm().loadRecord(record)
+            }
+
+
+        }
         this.toEditDict = function (record) {
             //打开修改窗口
             var config = {width: 800}
@@ -183,12 +261,110 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
             }
 
         }
+        this.addDict = function (form, store) {
+            //新增字典
+            if (form.getForm().isValid()) {
+                form.getForm().updateRecord()
+                var record = form.getForm().getRecord()
+                store.add(record)
+                var extraParams = store.getProxy().extraParams
+                store.getProxy().extraParams = {}
+                store.sync({
+                    success: function (batch, options) {
+                        store.commitChanges()
+                        this.queryDict()
+                        var _window = form.up('window')
+                        var dictItemListGrid = _window.down('dictItemSimpleList')
+                        var dictItemStore = dictItemListGrid.getStore()
+                        var dictItemStoreExtraParams = dictItemStore.getProxy().extraParams
+                        dictItemStore.getProxy().extraParams = {}
+                        dictItemStore.sync({
+                            success: function (batch, options) {
+                                dictItemStore.commitChanges()
+                            },
+                            failure: function (batch, options) {
+                                dictItemStore.rejectChanges()
+                            },
+                            scope: this
+                        })
+                        dictItemStore.getProxy().extraParams = dictItemStoreExtraParams
+                        _window.close()
+
+                    },
+                    failure: function (batch, options) {
+                        store.rejectChanges()
+                    },
+                    scope: this
+                })
+                store.getProxy().extraParams = extraParams
+            }
+        }
+        this.updateDict = function (form, store) {
+            //修改字典
+            if (form.getForm().isValid()) {
+                form.getForm().updateRecord()
+                var extraParams = store.getProxy().extraParams
+                store.getProxy().extraParams = {}
+                store.sync({
+                    success: function (batch, options) {
+                        store.commitChanges()
+                        this.queryDict()
+                        var _window = form.up('window')
+                        var dictItemListGrid = _window.down('dictItemSimpleList')
+                        var dictItemStore = dictItemListGrid.getStore()
+                        var dictItemStoreExtraParams = dictItemStore.getProxy().extraParams
+                        dictItemStore.getProxy().extraParams = {}
+                        dictItemStore.sync({
+                            success: function (batch, options) {
+                                dictItemStore.commitChanges()
+                            },
+                            failure: function (batch, options) {
+                                dictItemStore.rejectChanges()
+                            },
+                            scope: this
+                        })
+                        dictItemStore.getProxy().extraParams = dictItemStoreExtraParams
+                        _window.close()
+
+                    },
+                    failure: function (batch, options) {
+                        store.rejectChanges()
+                    },
+                    scope: this
+                })
+                store.getProxy().extraParams = extraParams
+            }
+        }
         this.queryDict = function () {
             //查询
             var form = this.getQueryForm()
             var store = this.getDictStore()
             Ext.apply(store.getProxy().extraParams, form.getForm().getValues())
             store.load()
+        }
+        this.removeDict = function (grid) {
+            var store = grid.getStore()
+            var selection = Ext.Array.map(grid.getSelectionModel().getSelection(), function (record) {
+                store.remove(record)
+                return record
+            }, this)
+            if (selection.length > 0) {
+                var extraparams = store.getProxy().extraParams
+                store.getProxy().extraParams = {}
+                store.sync({
+                    success: function (batch, options) {
+                        store.commitChanges()
+                        if (store.getProxy().pageSize > store.getTotalCount()) {
+                            this.queryDict()
+                        }
+                    },
+                    failure: function (batch, options) {
+                        store.rejectChanges()
+                    },
+                    scope: this
+                })
+                store.getProxy().extraParams = extraparams
+            }
         }
     }
 })

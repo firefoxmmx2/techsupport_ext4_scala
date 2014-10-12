@@ -6,7 +6,7 @@ Ext.define("Techsupport.store.Dict", {
     model: 'Techsupport.model.Dict',
     proxy: {
         type: 'rest',
-        url: '/api/dicts',
+        url:'/api/dicts',
         reader: {
             type: 'json',
             totalProperty: 'total',

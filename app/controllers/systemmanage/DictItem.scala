@@ -96,7 +96,7 @@ object DictItem extends Controller {
    * 添加字典项
    * @return
    */
-  def add = Action {
+  def add(id:Long) = Action {
     implicit request =>
       dictItemAddForm.bindFromRequest().fold(hasErrors = {
         form =>

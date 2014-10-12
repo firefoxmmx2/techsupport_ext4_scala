@@ -14,11 +14,12 @@ Ext.define('Techsupport.view.sysadmin.dictItem.Detail', {
                 margin: {left: 5, top: 0, bottom: 5, right: 5}
             }
         })
-        Ext.apply(this.down('form>panel').defaults, {columnWidth: .33, anchor: '100%', labelWidth:'50%'})
+        Ext.apply(this.down('form>panel').defaults, {columnWidth: .33, anchor: '100%', labelWidth: '50%'})
         this.down('form>panel').add([
             {xtype: 'textfield',
                 name: 'id',
-                fieldLabel: 'ID'
+                fieldLabel: 'ID',
+                hidden: true
             },
             {xtype: 'textfield',
                 name: 'dictcode',
@@ -45,7 +46,8 @@ Ext.define('Techsupport.view.sysadmin.dictItem.Detail', {
             },
             {xtype: 'textfield',
                 name: 'superItemId',
-                fieldLabel: '上级ID'
+                fieldLabel: '上级ID',
+                hidden: true
             },
             {xtype: 'textfield',
                 name: 'sibOrder',
@@ -53,19 +55,41 @@ Ext.define('Techsupport.view.sysadmin.dictItem.Detail', {
                 allowBlank: false,
                 blankText: '序号不能为空'
             },
-            {xtype: 'textfield',
+            {xtype: 'combobox',
+                store: 'YN',
+                displayField: 'text',
+                valueField: 'value',
+                triggerAction: 'all',
+                editable: false,
+                emptyText: '请选择',
+                queryMode: 'local',
                 name: 'isleaf',
                 fieldLabel: '子节点',
                 allowBlank: false,
-                blankText: '子节点不能为空'
+                blankText: '子节点不能为空',
+                hidden: true
             },
-            {xtype: 'textfield',
+            {xtype: 'combobox',
+                store: 'DictItemDisplayFlag',
+                displayField: 'text',
+                valueField: 'value',
+                triggerAction: 'all',
+                editable: false,
+                emptyText: '请选择',
+                queryMode: 'local',
                 name: 'displayFlag',
                 fieldLabel: '显示标志',
                 allowBlank: false,
                 blankText: '显示标志不能为空'
             },
-            {xtype: 'textfield',
+            {xtype: 'combobox',
+                store: 'OneZero',
+                displayField: 'text',
+                valueField: 'value',
+                triggerAction: 'all',
+                editable: false,
+                emptyText: '请选择',
+                queryMode: 'local',
                 name: 'isValid',
                 fieldLabel: '是否可用',
                 allowBlank: false,

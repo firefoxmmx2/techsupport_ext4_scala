@@ -36,6 +36,7 @@ Ext.define('Techsupport.view.sysadmin.dict.Detail', {
                             validator: function (v) {
                                 return this.textValid
                             }
+
                         },
                         {xtype: 'textfield', name: 'dictname', fieldLabel: '字典名称',
                             allowBlank: false,
@@ -73,7 +74,7 @@ Ext.define('Techsupport.view.sysadmin.dict.Detail', {
                         {xtype: 'datefield', name: 'createTime', fieldLabel: '创建时间',
                             editable: false,
                             readOnly: true,
-                            format: 'Y-m-d'
+                            format: 'Y-m-d H:i:s'
                         }
                     ]
                 },

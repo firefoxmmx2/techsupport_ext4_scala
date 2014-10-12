@@ -1,5 +1,6 @@
 package controllers.systemmanage
 
+import org.joda.time.DateTime
 import play.api.mvc._
 import play.api.data.Forms._
 import play.api.data.Form
@@ -79,7 +80,7 @@ object Dict extends Controller {
       "dictAllPin" -> optional(text),
       "dictItemTableName" -> optional(text),
       "dictVersion" -> optional(text),
-      "createTime" -> optional(jodaDate),
+      "createTime" -> default(optional(jodaDate),Some(new DateTime())),
       "id" -> optional(longNumber)
     )(models.Dict.apply)(models.Dict.unapply)
   )
@@ -88,12 +89,14 @@ object Dict extends Controller {
    * 新增字典
    * @return
    */
-  def add = Action {
+  def add(id:Long) = Action {
     implicit request =>
       dictForm.bindFromRequest.fold(
         hasErrors =
-          form =>
-            BadRequest(form.errorsAsJson),
+          form =>{
+            log.debug("="*13+form.get+"="*13)
+            BadRequest(form.errorsAsJson)
+          },
         success =
           dict => {
             try {

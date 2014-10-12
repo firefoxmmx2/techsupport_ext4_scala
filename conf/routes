@@ -53,7 +53,8 @@ GET           /api/systems                                             controlle
 #字典项
 GET           /api/dictitems/treenode                                  controllers.systemmanage.DictItem.treenode
 GET           /api/dictitems                                           controllers.systemmanage.DictItem.list
-POST          /api/dictitems                                           controllers.systemmanage.DictItem.add
+GET           /api/dictitems/:id                                       controllers.systemmanage.DictItem.get(id:Long)
+POST          /api/dictitems/:id                                       controllers.systemmanage.DictItem.add(id:Long)
 DELETE        /api/dictitems/:id                                       controllers.systemmanage.DictItem.remove(id:Long)
 PUT           /api/dictitems/:id                                       controllers.systemmanage.DictItem.update(id:Long)
 
@@ -75,7 +76,7 @@ PUT           /api/globalParams/:id                                    controlle
 GET           /api/dicts/checkDictCodeAvaliable/:id                    controllers.systemmanage.Dict.checkDictCodeAvaliable(id:String)
 GET           /api/dicts/maxDictOrder                                  controllers.systemmanage.Dict.maxDictOrder
 GET           /api/dicts                                               controllers.systemmanage.Dict.list
-POST          /api/dicts                                               controllers.systemmanage.Dict.add
+POST          /api/dicts/:id                                           controllers.systemmanage.Dict.add(id:Long)
 DELETE        /api/dicts/:id                                           controllers.systemmanage.Dict.remove(id:Long)
 PUT           /api/dicts/:id                                           controllers.systemmanage.Dict.update(id:Long)
 GET           /api/dicts/:id                                           controllers.systemmanage.Dict.get(id:Long)
