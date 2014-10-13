@@ -557,7 +557,7 @@ trait DictItemServiceComponentImpl extends DictItemServiceComponent {
  * 字典服务组件
  */
 trait DictServiceComponentImpl extends DictServiceComponent {
-  self: DictDaoComponent =>
+  self: DictDaoComponent with DictItemDaoComponent =>
 
   class DictServiceImpl extends DictService {
     /**
@@ -582,6 +582,8 @@ trait DictServiceComponentImpl extends DictServiceComponent {
     def deleteById(id: Long): Unit = inTransaction {
       if (id == null)
         throw new RuntimeException("字典ID为空")
+      dictItemDao.list(DictItemQueryCondition(dictcode = Some(dictDao.getById(id).dictcode)))
+        .foreach( di => dictItemDao.deleteById(di.id.get))
       dictDao.deleteById(id)
     }
 

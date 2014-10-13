@@ -205,8 +205,13 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
             else {
                 form.getForm().loadRecord(record)
             }
-
-
+            //快捷输入回车确定
+            Ext.Array.each(form.query('textfield'), function (field) {
+                field.on('specialKey', function (field,evt) {
+                    if(evt.getKey() == evt.ENTER)
+                        _window.down('button[action=enter]').fireEvent('click')
+                })
+            })
         }
         this.toEditDict = function (record) {
             //打开修改窗口
