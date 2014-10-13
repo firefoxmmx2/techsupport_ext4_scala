@@ -150,11 +150,11 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
             }
         })
         this.removeDictItem = function (p) {
+            var store = p.getStore()
             var selection = Ext.Array.map(p.getSelectionModel().getSelection(), function (record) {
+                store.remove(record)
                 return record
             })
-            var store = p.getStore()
-            store.remove(record)
         }
         this.toEditDictItem = function (record, p) {
             //打开窗口
@@ -303,36 +303,57 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
             //修改字典
             if (form.getForm().isValid()) {
                 form.getForm().updateRecord()
-                var extraParams = store.getProxy().extraParams
-                store.getProxy().extraParams = {}
-                store.sync({
-                    success: function (batch, options) {
-                        store.commitChanges()
-                        this.queryDict()
-                        var _window = form.up('window')
-                        var dictItemListGrid = _window.down('dictItemSimpleList')
-                        var dictItemStore = dictItemListGrid.getStore()
-                        var dictItemStoreExtraParams = dictItemStore.getProxy().extraParams
-                        dictItemStore.getProxy().extraParams = {}
-                        dictItemStore.sync({
-                            success: function (batch, options) {
-                                dictItemStore.commitChanges()
-                            },
-                            failure: function (batch, options) {
-                                dictItemStore.rejectChanges()
-                            },
-                            scope: this
-                        })
-                        dictItemStore.getProxy().extraParams = dictItemStoreExtraParams
-                        _window.close()
+                if (store.getUpdatedRecords().length > 0) {
+                    var extraParams = store.getProxy().extraParams
+                    store.getProxy().extraParams = {}
+                    store.sync({
+                        success: function (batch, options) {
+                            store.commitChanges()
+                            this.queryDict()
+                            var _window = form.up('window')
+                            var dictItemListGrid = _window.down('dictItemSimpleList')
+                            var dictItemStore = dictItemListGrid.getStore()
+                            var dictItemStoreExtraParams = dictItemStore.getProxy().extraParams
+                            dictItemStore.getProxy().extraParams = {}
+                            dictItemStore.sync({
+                                success: function (batch, options) {
+                                    dictItemStore.commitChanges()
+                                },
+                                failure: function (batch, options) {
+                                    dictItemStore.rejectChanges()
+                                },
+                                scope: this
+                            })
+                            dictItemStore.getProxy().extraParams = dictItemStoreExtraParams
+                            _window.close()
 
-                    },
-                    failure: function (batch, options) {
-                        store.rejectChanges()
-                    },
-                    scope: this
-                })
-                store.getProxy().extraParams = extraParams
+                        },
+                        failure: function (batch, options) {
+                            store.rejectChanges()
+                        },
+                        scope: this
+                    })
+                    store.getProxy().extraParams = extraParams
+                }
+                else {
+                    var _window = form.up('window')
+                    var dictItemListGrid = _window.down('dictItemSimpleList')
+                    var dictItemStore = dictItemListGrid.getStore()
+                    var dictItemStoreExtraParams = dictItemStore.getProxy().extraParams
+                    dictItemStore.getProxy().extraParams = {}
+                    dictItemStore.sync({
+                        success: function (batch, options) {
+                            dictItemStore.commitChanges()
+                        },
+                        failure: function (batch, options) {
+                            dictItemStore.rejectChanges()
+                        },
+                        scope: this
+                    })
+                    dictItemStore.getProxy().extraParams = dictItemStoreExtraParams
+                    _window.close()
+                }
+
             }
         }
         this.queryDict = function () {

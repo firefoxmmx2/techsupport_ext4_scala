@@ -17,10 +17,12 @@ Ext.define("Techsupport.model.Dict", {
         {name: "dictAllPin", type: "string"},
         {name: "dictItemTableName", type: "string"},
         {name: "dictVersion", type: "string", defaultValue: '1'},
-        {name: "createTime", type: "string", convert: function (v, record) {
-            if(v)
+        {name: "createTime", type: "date",dateFormat:'Y-m-d H:i:s', convert: function (v, record) {
+            if (v instanceof Date)
+                return v
+            else if (v)
                 return new Date(v.millis)
-            return ''
+            return v
         }}
 
     ]

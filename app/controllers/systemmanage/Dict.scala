@@ -80,7 +80,7 @@ object Dict extends Controller {
       "dictAllPin" -> optional(text),
       "dictItemTableName" -> optional(text),
       "dictVersion" -> optional(text),
-      "createTime" -> default(optional(jodaDate),Some(new DateTime())),
+      "createTime" -> default(optional(jodaDate("yyyy-MM-dd HH:mm:ss")),Some(new DateTime())),
       "id" -> optional(longNumber)
     )(models.Dict.apply)(models.Dict.unapply)
   )

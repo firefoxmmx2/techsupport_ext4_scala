@@ -24,7 +24,6 @@ Ext.define('Techsupport.view.sysadmin.dict.Detail', {
                         margin: {top: 2, bottom: 2, right: 20, left: 0},
                         columnWidth: 0.33,
                         anchor: '100%'
-//                labelWidth:'10%'
                     },
                     items: [
                         {xtype: 'textfield', name: 'id', fieldLabel: '字典ID', readOnly: true, hidden: true},

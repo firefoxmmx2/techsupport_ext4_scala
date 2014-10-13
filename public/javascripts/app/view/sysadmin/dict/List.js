@@ -44,6 +44,9 @@ Ext.define('Techsupport.view.sysadmin.dict.List', {
         {text: '字典简拼', dataIndex: 'dictSimplePin', flex: 1},
         {text: '字典全拼', dataIndex: 'dictAllPin', flex: 1},
         {text: '字典版本', dataIndex: 'dictVersion', flex: 1},
-        {text: '创建时间', dataIndex: 'createTime', flex: 1, xtype: 'datecolumn', format: 'Y-m-d H:i:s'}
+        {text: '创建时间', dataIndex: 'createTime', flex: 1,
+            xtype: 'datecolumn',
+            format: 'Y-m-d H:i:s'
+        }
     ]
 })
