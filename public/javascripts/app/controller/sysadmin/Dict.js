@@ -80,6 +80,9 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
             'dictDetail dictItemSimpleList': {//字典项简单列表
                 afterrender: function (p) {
                     p.setHeight(p.up('window').getHeight() * 1.5 + p.down('pagingtoolbar').getHeight())
+                    p.on('itemdblclick', function (grid, record) {
+                        this.toEditDictItem(record,grid)
+                    },this)
                     p.down('pagingtoolbar').add([
                         '->',
                         {xtype: 'button', text: '添加', action: 'add'},
