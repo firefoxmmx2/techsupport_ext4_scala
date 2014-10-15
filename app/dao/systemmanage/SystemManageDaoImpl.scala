@@ -1288,6 +1288,21 @@ trait DictItemDaoComponentImpl extends DictItemDaoComponent {
      */
     def getById(id: Long): DictItem = SystemManage.dictItems.where(di =>
       di.id === id).single
+
+    /**
+     * 获取指定ID下的最大序列
+     * @param dictcode
+     * @param id
+     * @return
+     */
+    def maxOrder(dictcode: String, id: Long): Int = from(SystemManage.dictItems)(
+      di =>
+        where(
+          di.superItemId === id
+            and di.dictcode === dictcode
+        )
+          compute (max(di.sibOrder))
+    ).single.measures.getOrElse(0)
   }
 
 }
@@ -1433,7 +1448,7 @@ trait DictDaoComponentImpl extends DictDaoComponent {
      * @return
      */
     def maxOrder: Int = from(SystemManage.dicts)(
-      d=>
+      d =>
         compute(max(d.sibOrder))
     ).single.measures.getOrElse(0)
   }

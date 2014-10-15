@@ -168,7 +168,15 @@ trait GlobalParamServiceComponent {
  */
 trait DictItemServiceComponent {
 
-  trait DictItemService extends BaseService[DictItem, Long, DictItemQueryCondition]
+  trait DictItemService extends BaseService[DictItem, Long, DictItemQueryCondition] {
+    /**
+     * 获取指定id下的最大序列
+     * @param dictcode
+     * @param id
+     * @return
+     */
+    def maxDictItemOrder(dictcode:String,id: Long):Int
+  }
 
   val dictItemService: DictItemService
 }
@@ -190,7 +198,7 @@ trait DictServiceComponent {
      * 获取最大的字典序列
      * @return
      */
-    def maxDictOrder:Int
+    def maxDictOrder: Int
   }
 
   val dictService: DictService

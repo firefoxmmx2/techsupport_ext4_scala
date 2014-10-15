@@ -549,6 +549,20 @@ trait DictItemServiceComponentImpl extends DictItemServiceComponent {
      * @return
      */
     def list(params: DictItemQueryCondition): List[DictItem] = inTransaction(dictItemDao.list(params))
+
+    /**
+     * 获取指定id下的最大序列
+     * @param dictcode
+     * @param id
+     * @return
+     */
+    def maxDictItemOrder(dictcode: String, id: Long): Int = inTransaction {
+      if (StringUtils.isEmpty(dictcode))
+        throw new RuntimeException("获取最大序列的dictcode不能为空")
+      if (id == null)
+        throw new RuntimeException("获取最大序列的id不能为空")
+      dictItemDao.maxOrder(dictcode, id)
+    }
   }
 
 }
@@ -583,7 +597,7 @@ trait DictServiceComponentImpl extends DictServiceComponent {
       if (id == null)
         throw new RuntimeException("字典ID为空")
       dictItemDao.list(DictItemQueryCondition(dictcode = Some(dictDao.getById(id).dictcode)))
-        .foreach( di => dictItemDao.deleteById(di.id.get))
+        .foreach(di => dictItemDao.deleteById(di.id.get))
       dictDao.deleteById(id)
     }
 

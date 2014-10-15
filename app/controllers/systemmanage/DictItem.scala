@@ -96,7 +96,7 @@ object DictItem extends Controller {
    * 添加字典项
    * @return
    */
-  def add(id:Long) = Action {
+  def add(id: Long) = Action {
     implicit request =>
       dictItemAddForm.bindFromRequest().fold(hasErrors = {
         form =>
@@ -244,5 +244,31 @@ object DictItem extends Controller {
             }
           }
       )
+  }
+
+  /**
+   * 获取指定ID下的最大序列
+   * @param id
+   * @return
+   */
+  def maxDictItemOrder(dictcode:String,id: Long) = Action {
+    implicit request =>
+      try {
+        val maxOrder = dictItemService.maxDictItemOrder(dictcode,id)
+        Ok(Json.generate(Map("success" -> true,
+          "result" -> 0,
+          "data" -> maxOrder,
+          "message" -> "获取最大序列成功"))).as(JSON)
+      }
+      catch {
+        case e: Exception =>
+          log.error("获取最大序列发生错误")
+          log.error(e.getMessage)
+          log.debug(e.getMessage, e.fillInStackTrace())
+          Ok(Json.generate(Map("success" -> false,
+            "result" -> -1,
+            "message" -> "获取最大序列发生错误"))) as (JSON)
+      }
+
   }
 }

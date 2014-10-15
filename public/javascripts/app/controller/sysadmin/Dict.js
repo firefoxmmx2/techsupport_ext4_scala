@@ -81,8 +81,8 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
                 afterrender: function (p) {
                     p.setHeight(p.up('window').getHeight() * 1.5 + p.down('pagingtoolbar').getHeight())
                     p.on('itemdblclick', function (grid, record) {
-                        this.toEditDictItem(record,grid)
-                    },this)
+                        this.toEditDictItem(record, grid)
+                    }, this)
                     p.down('pagingtoolbar').add([
                         '->',
                         {xtype: 'button', text: '添加', action: 'add'},
@@ -172,7 +172,7 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
             }
 
             var _window = this.getView('sysadmin.dictItem.Detail').create(config)
-            _window.show()
+
             var form = _window.down('form')
             var dictCodeField = form.down('textfield[name=dictcode]').setReadOnly(true)
             //确定按钮
@@ -186,7 +186,8 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
                         p.getStore().add(form.getForm().getRecord())
                         var _record = this.getDictItemModel().create({
                             superItemId: 0,
-                            dictcode: dictWindow.down('textfield[name=dictcode]').getValue()
+                            dictcode: dictWindow.down('textfield[name=dictcode]').getValue(),
+                            sibOrder: p.getStore().max('sibOrder')+1
                         })
                         form.getForm().loadRecord(_record)
                     }
@@ -198,10 +199,11 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
                 button.up('window').close()
             }, this)
             var dictWindow = p.up('window')
+            var dictWindowDictcodeField = dictWindow.down('textfield[name=dictcode]')
             if (!record) {
                 var _record = this.getDictItemModel().create({
                     superItemId: 0,
-                    dictcode: dictWindow.down('textfield[name=dictcode]').getValue()
+                    dictcode: dictWindowDictcodeField.getValue()
                 })
                 form.getForm().loadRecord(_record)
             }
@@ -210,11 +212,34 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
             }
             //快捷输入回车确定
             Ext.Array.each(form.query('textfield'), function (field) {
-                field.on('specialKey', function (field,evt) {
-                    if(evt.getKey() == evt.ENTER)
+                field.on('specialKey', function (field, evt) {
+                    if (evt.getKey() == evt.ENTER)
                         _window.down('button[action=enter]').fireEvent('click')
                 })
             })
+
+            //自动生成序列
+            form.down('textfield[name=sibOrder]').on('render', function (field) {
+                if (!record) {
+                    Ext.Ajax.request({
+                        url: '/api/dictitems/maxDictItemOrder/' + dictWindowDictcodeField.getValue() + '/0',
+                        success: function (response) {
+                            var res = Ext.decode(response.responseText)
+                            if (Ext.isNumber(res.data)) {
+                                field.setValue(1 + res.data)
+                            }
+                        },
+                        failure: function (response) {
+                            if(response.state == 200){
+                                var res=Ext.decode(response.responseText)
+                                Ext.Msg.alert('错误',res.message)
+                            }
+                            console.error("错误:获取最大字典项序列发生错误")
+                        }
+                    })
+                }
+            })
+            _window.show()
         }
         this.toEditDict = function (record) {
             //打开修改窗口

@@ -117,7 +117,7 @@ trait GlobalParamDaoComponent {
      * @param globalParamCode
      * @return
      */
-    def checkGlobalParamRepeat(globalParamCode: String):Boolean
+    def checkGlobalParamRepeat(globalParamCode: String): Boolean
   }
 
   val globalParamDao: GlobalParamDao
@@ -149,7 +149,15 @@ trait RoleMenuDaoComponent {
  */
 trait DictItemDaoComponent {
 
-  trait DictItemDao extends BaseDao[DictItem, Long, DictItemQueryCondition]
+  trait DictItemDao extends BaseDao[DictItem, Long, DictItemQueryCondition] {
+    /**
+     * 获取指定ID下的最大序列
+     * @param dictcode
+     * @param id
+     * @return
+     */
+    def maxOrder(dictcode:String,id:Long):Int
+  }
 
   val dictItemDao: DictItemDao
 }
@@ -157,23 +165,24 @@ trait DictItemDaoComponent {
 /**
  * 字典数据访问声明
  */
-trait DictDaoComponent{
-  trait DictDao extends BaseDao[Dict,Long,DictQueryCondition]{
+trait DictDaoComponent {
+
+  trait DictDao extends BaseDao[Dict, Long, DictQueryCondition] {
     /**
      * 验证字典代码是否重复
      * @param dictcode
      * @return
      */
-    def checkDictcodeRepeat(dictcode:String):Boolean
+    def checkDictcodeRepeat(dictcode: String): Boolean
 
     /**
      * 获取最大序号(不分级)
      * @return
      */
-    def maxOrder:Int
+    def maxOrder: Int
   }
 
-  val dictDao:DictDao
+  val dictDao: DictDao
 }
 
 
