@@ -77,16 +77,8 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
 
                 }
             },
-            'dictDetail': {
-                afterrender: function (p) {
-                    setTimeout(function () {
-                        p.center()
-                    },5)
-                }
-            },
             'dictDetail dictItemSimpleList': {//字典项简单列表
                 afterrender: function (p) {
-                    p.setHeight(p.up('window').getHeight() * 1.5 + p.down('pagingtoolbar').getHeight())
                     p.on('itemdblclick', function (grid, record) {
                         this.toEditDictItem(record, grid)
                     }, this)
@@ -109,7 +101,6 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
             },
             'dictDetail dictItemTreeList': { //字典项树形列表
                 afterrender: function (p) {
-                    p.setHeight(p.up('window').getHeight() * 2)
                 }
             },
             'dictDetail button[action=enter]': { //保存或者修改
