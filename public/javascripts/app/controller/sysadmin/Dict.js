@@ -77,6 +77,13 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
 
                 }
             },
+            'dictDetail': {
+                afterrender: function (p) {
+                    setTimeout(function () {
+                        p.center()
+                    },5)
+                }
+            },
             'dictDetail dictItemSimpleList': {//字典项简单列表
                 afterrender: function (p) {
                     p.setHeight(p.up('window').getHeight() * 1.5 + p.down('pagingtoolbar').getHeight())
@@ -187,7 +194,7 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
                         var _record = this.getDictItemModel().create({
                             superItemId: 0,
                             dictcode: dictWindow.down('textfield[name=dictcode]').getValue(),
-                            sibOrder: p.getStore().max('sibOrder')+1
+                            sibOrder: p.getStore().max('sibOrder') + 1
                         })
                         form.getForm().loadRecord(_record)
                     }
@@ -230,9 +237,9 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
                             }
                         },
                         failure: function (response) {
-                            if(response.state == 200){
-                                var res=Ext.decode(response.responseText)
-                                Ext.Msg.alert('错误',res.message)
+                            if (response.state == 200) {
+                                var res = Ext.decode(response.responseText)
+                                Ext.Msg.alert('错误', res.message)
                             }
                             console.error("错误:获取最大字典项序列发生错误")
                         }
