@@ -16,7 +16,6 @@ Ext.define('Techsupport.view.sysadmin.dictItem.DictItemTreeList', {
     loadMask: true,
     useArrows: true,
     rootVisible: false,
-    store: 'DictItemTree',
     animate: true,
     columns: [
         { xtype: 'treecolumn', text: '显示值', dataIndex: 'displayName' },
@@ -27,5 +26,9 @@ Ext.define('Techsupport.view.sysadmin.dictItem.DictItemTreeList', {
         {text: '是否可用', dataIndex: 'isValid', flex: 1},
         {text: '简拼', dataIndex: 'itemSimplePin', flex: 1},
         {text: '全拼', dataIndex: 'itemAllPin', flex: 1}
-    ]
+    ],
+    initComponent: function () {
+        this.store = Ext.create('Techsupport.store.DictItemTree',{autoLoad:false})
+        this.callParent(arguments)
+    }
 })

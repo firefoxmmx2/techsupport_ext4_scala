@@ -6,7 +6,7 @@
  */
 Ext.define('Techsupport.view.sysadmin.dict.Detail', {
     extend: 'Techsupport.view.base.BaseDetail',
-    height:530,
+    height: 530,
     alias: 'widget.dictDetail',
     initComponent: function () {
         Ext.apply(this.items, this.superclass.items)
@@ -91,7 +91,7 @@ Ext.define('Techsupport.view.sysadmin.dict.Detail', {
                     },
                     items: [
                         {xtype: 'dictItemSimpleList', hidden: true, height: 300},
-                        {xtype: 'dictItemTreeList', hidden: true}
+                        {xtype: 'dictItemTreeList', hidden: true, height: 300}
                     ]
                 }
             ]

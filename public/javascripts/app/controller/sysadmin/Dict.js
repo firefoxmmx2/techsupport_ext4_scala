@@ -148,6 +148,19 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
                         field.clearInvalid()
                     }
                 }
+            },
+            'dictDetail textfield[name=dictType]': {//字典类型
+                change: function (field, newValue, oldValue) {
+                    var _window = field.up('window')
+                    if (newValue == "01") {
+                        _window.down('dictItemSimpleList').show()
+                        _window.down('dictItemTreeList').hide()
+                    }
+                    else if (newValue == "02") {
+                        _window.down('dictItemSimpleList').hide()
+                        _window.down('dictItemTreeList').show()
+                    }
+                }
             }
         })
         this.removeDictItem = function (p) {
@@ -249,13 +262,22 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
             else {
                 config.title = "字典新增"
                 config.name = "addDictWindow"
-                record = this.getDictModel().create()
             }
 
             var _window = this.getView("sysadmin.dict.Detail").create(config)
             var form = _window.down('form')
             _window.show()
-            if (config.name == "addDictWindow") {
+            if(record){
+                var simpleStore = form.down('dictItemSimpleList').getStore()
+                var dictItemTreeList=form.down('dictItemTreeList')
+                var treeStore = dictItemTreeList.getStore()
+                Ext.apply(simpleStore.getProxy().extraParams, {dictcode: record.data.dictcode})
+                simpleStore.load()
+                Ext.apply(treeStore.getProxy().extraParams, {dictcode: record.data.dictcode})
+                dictItemTreeList.getRootNode().expand()
+            }
+            else{
+                record = this.getDictModel().create()
                 Ext.Ajax.request({
                     url: '/api/dicts/maxDictOrder',
                     success: function (response) {
@@ -273,24 +295,6 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
             }
             form.down('textfield[name=dictcode]').originalValue = record.data.dictcode
             form.getForm().loadRecord(record)
-            var dictTypeField = form.down('textfield[name=dictType]')
-
-            if (dictTypeField.getValue() == '01') {
-                var dictItemSimplePanel = form.down('dictItemSimpleList')
-                dictItemSimplePanel.show()
-                var store = dictItemSimplePanel.getStore()
-                if (record.data.dictcode) {
-                    Ext.apply(store.getProxy().extraParams, {dictcode: record.data.dictcode})
-                    store.load()
-                }
-
-            }
-            else if (dictTypeField.getValue() == '02') {
-                var dictItemTreePanel = form.down('dictItemTreeList')
-                var store = dictItemTreePanel.getStore()
-
-            }
-
         }
         this.addDict = function (form, store) {
             //新增字典

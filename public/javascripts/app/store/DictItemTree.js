@@ -6,7 +6,7 @@ Ext.define('Techsupport.store.DictItemTree', {
     model: 'Techsupport.model.DictItem',
     root: {
         text: '根节点',
-        id: '0',
+        id: '0'
     },
     proxy: {
         type: 'ajax',
