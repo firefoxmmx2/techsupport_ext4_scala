@@ -15,7 +15,7 @@ Ext.define('Techsupport.view.sysadmin.dictItem.DictItemTreeList', {
     },
     loadMask: true,
     useArrows: true,
-    rootVisible: false,
+    rootVisible: true,
     animate: true,
     columns: [
         { xtype: 'treecolumn', text: '显示值', dataIndex: 'displayName' },

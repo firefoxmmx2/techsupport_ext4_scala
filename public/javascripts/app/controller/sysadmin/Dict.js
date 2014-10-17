@@ -101,6 +101,25 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
             },
             'dictDetail dictItemTreeList': { //字典项树形列表
                 afterrender: function (p) {
+                    //双击打开字典项详情编辑
+                    p.on('itemdblick', function (grid, record) {
+                        this.toEditDictItem(record, grid)
+                    }, this)
+                    p.getDockedItems().add({
+                        xtype: 'toolbar',
+                        items: [
+                            {xtype: 'button', text: '添加', action: 'add'},
+                            {xtype: 'button', text: '删除', action: 'remove'}
+                        ]
+                    })
+                    p.down('button[action=add]').on('click', function (button) {
+                        var dictForm= p.up('window').down('form:first')
+                        if(dictForm.getForm().isValid)
+                            this.toEditDictItem(null,p)
+                    },this)
+                    p.down('button[action=remove]').on('click', function (button ) {
+                         this.removeDictItem(p)
+                    },this)
                 }
             },
             'dictDetail button[action=enter]': { //保存或者修改
@@ -185,12 +204,14 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
             var _window = this.getView('sysadmin.dictItem.Detail').create(config)
 
             var form = _window.down('form')
-            var dictCodeField = form.down('textfield[name=dictcode]').setReadOnly(true)
+            form.down('textfield[name=dictcode]').setReadOnly(true)
             //确定按钮
             _window.down('button[action=enter]').on('click', function (button) {
                 if (form.getForm().isValid()) {
                     form.getForm().updateRecord()
                     if (record) {
+                        if(p.xtype=="dictItemTreeList"){
+                        }
                         _window.close()
                     }
                     else {
@@ -267,16 +288,16 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
             var _window = this.getView("sysadmin.dict.Detail").create(config)
             var form = _window.down('form')
             _window.show()
-            if(record){
+            if (record) {
                 var simpleStore = form.down('dictItemSimpleList').getStore()
-                var dictItemTreeList=form.down('dictItemTreeList')
+                var dictItemTreeList = form.down('dictItemTreeList')
                 var treeStore = dictItemTreeList.getStore()
                 Ext.apply(simpleStore.getProxy().extraParams, {dictcode: record.data.dictcode})
                 simpleStore.load()
                 Ext.apply(treeStore.getProxy().extraParams, {dictcode: record.data.dictcode})
                 dictItemTreeList.getRootNode().expand()
             }
-            else{
+            else {
                 record = this.getDictModel().create()
                 Ext.Ajax.request({
                     url: '/api/dicts/maxDictOrder',
