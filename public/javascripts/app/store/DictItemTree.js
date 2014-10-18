@@ -5,11 +5,11 @@ Ext.define('Techsupport.store.DictItemTree', {
     extend: 'Ext.data.TreeStore',
     model: 'Techsupport.model.DictItem',
     root: {
-        text: '根节点',
+        displayName: '根',
         id: '0'
     },
     proxy: {
-        type: 'ajax',
+        type: 'rest',
         url: '/api/dictitems/treenode',
         reader: {
             type: 'json',

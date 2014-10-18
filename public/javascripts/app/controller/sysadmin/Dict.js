@@ -105,21 +105,44 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
                     p.on('itemdblick', function (grid, record) {
                         this.toEditDictItem(record, grid)
                     }, this)
-                    p.getDockedItems().add({
+                    p.addDocked({
                         xtype: 'toolbar',
+                        dock: 'top',
                         items: [
                             {xtype: 'button', text: '添加', action: 'add'},
                             {xtype: 'button', text: '删除', action: 'remove'}
                         ]
                     })
                     p.down('button[action=add]').on('click', function (button) {
-                        var dictForm= p.up('window').down('form:first')
-                        if(dictForm.getForm().isValid)
-                            this.toEditDictItem(null,p)
-                    },this)
-                    p.down('button[action=remove]').on('click', function (button ) {
-                         this.removeDictItem(p)
-                    },this)
+                        var dictForm = p.up('window').down('form:first')
+                        if (dictForm.getForm().isValid())
+                            this.toEditDictItem(null, p)
+                    }, this)
+                    p.down('button[action=remove]').on('click', function (button) {
+                        this.removeDictItem(p)
+                    }, this)
+                },
+                itemclick: function (v, record, item, index, e, eOpts) {
+                    var tree = v.ownerCt;
+                },
+                render: function (tree) {
+                    tree.cdata = {id: 0, dictcode: "", displayName: "", superItemId: '', factValue: 1}
+                    tree.refresh = function (nodeId) {
+                        //刷新
+                        var node = this.getStore().getNodeById(nodeId);
+                        this.getStore().load({
+                            node: node
+                        });
+                    };
+
+                },
+                beforeload: function (store, operation, opts) {
+                    var tree = store.getRootNode().getOwnerTree();
+                    store.getProxy().setExtraParam("superItemId", tree.getSelectionModel().getSelection()[0].data.id);
+                },
+                beforeitemexpand: function (n, opts) {
+                    var tree = n.getOwnerTree();
+                    tree.getSelectionModel().select(n)
                 }
             },
             'dictDetail button[action=enter]': { //保存或者修改
@@ -185,7 +208,22 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
         this.removeDictItem = function (p) {
             var store = p.getStore()
             var selection = Ext.Array.map(p.getSelectionModel().getSelection(), function (record) {
-                store.remove(record)
+                if (p.xtype == "dictItemSimpleList")
+                    store.remove(record)
+                else {
+                    var store = p.getView().getStore()
+                    Ext.Ajax.request({
+                        url: '/api/dictitems/' + record.data.id,
+                        method: 'DELETE',
+                        params: record.data,
+                        success: function (response) {
+                            store.remove(record)
+                        },
+                        failure: function (response) {
+                            Ext.Msg.alert('错误', '删除字典项发生错误')
+                        }
+                    })
+                }
                 return record
             })
         }
@@ -210,20 +248,40 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
                 if (form.getForm().isValid()) {
                     form.getForm().updateRecord()
                     if (record) {
-                        if(p.xtype=="dictItemTreeList"){
+                        if (p.xtype == "dictItemTreeList") {
+                            p.refresh(p.getSelectionModel().getSelection()[0].data.id)
                         }
                         _window.close()
                     }
                     else {
-                        p.getStore().add(form.getForm().getRecord())
-                        var _record = this.getDictItemModel().create({
-                            superItemId: 0,
-                            dictcode: dictWindow.down('textfield[name=dictcode]').getValue(),
-                            sibOrder: p.getStore().max('sibOrder') + 1
-                        })
-                        form.getForm().loadRecord(_record)
+                        if (p.xtype == "dictItemTreeList") {
+                            form.getForm().submit({
+                                url: '/api/dictitems/0',
+                                success: function (form, action) {
+                                    var node = p.getStore().getNodeById(p.getSelectionModel().getSelection().length > 0 ? p.getSelectionModel().getSelection()[0].data.id : 0)
+                                    node.leaf = false
+                                    node.data.leaf = false
+                                    p.refresh(p.getSelectionModel().getSelection().length > 0 ? p.getSelectionModel().getSelection()[0].data.id : 0)
+                                    _window.close()
+                                },
+                                failure: function (form, action) {
+                                    if (action.response.status == 200) {
+                                        Ext.Msg.alert("错误", action.result.message)
+                                    }
+                                    Ext.Msg.alert('错误', '字典项新增发生错误')
+                                }
+                            })
+                        }
+                        else {
+                            p.getStore().add(form.getForm().getRecord())
+                            var _record = this.getDictItemModel().create({
+                                superItemId: 0,
+                                dictcode: dictWindow.down('textfield[name=dictcode]').getValue(),
+                                sibOrder: p.getStore().max('sibOrder') + 1
+                            })
+                            form.getForm().loadRecord(_record)
+                        }
                     }
-
                 }
             }, this)
             //取消按钮关闭窗口
@@ -234,7 +292,7 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
             var dictWindowDictcodeField = dictWindow.down('textfield[name=dictcode]')
             if (!record) {
                 var _record = this.getDictItemModel().create({
-                    superItemId: 0,
+                    superItemId: p.getSelectionModel().getSelection().length > 0 ? p.getSelectionModel().getSelection()[0].data.id : 0,
                     dictcode: dictWindowDictcodeField.getValue()
                 })
                 form.getForm().loadRecord(_record)
@@ -254,7 +312,7 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
             form.down('textfield[name=sibOrder]').on('render', function (field) {
                 if (!record) {
                     Ext.Ajax.request({
-                        url: '/api/dictitems/maxDictItemOrder/' + dictWindowDictcodeField.getValue() + '/0',
+                        url: '/api/dictitems/maxDictItemOrder/' + dictWindowDictcodeField.getValue() + '/'+form.down('textfield[name=superItemId]').getValue(),
                         success: function (response) {
                             var res = Ext.decode(response.responseText)
                             if (Ext.isNumber(res.data)) {
@@ -407,6 +465,20 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
                         scope: this
                     })
                     dictItemStore.getProxy().extraParams = dictItemStoreExtraParams
+//                    var dictItemTreeGrid=_window.down('dictItemTreeList')
+//                    var dictItemTreeStore=dictItemTreeGrid.getView().getStore()
+//                    var dictItemExtraParams=dictItemTreeStore.getProxy().extraParams
+//                    dictItemTreeStore.getProxy().extraParams={}
+//                    dictItemTreeStore.sync({
+//                        success: function (batch, options) {
+//                            dictItemTreeStore.commitChanges()
+//                        },
+//                        failure: function (batch, options) {
+//                            dictItemTreeStore.rejectChanges()
+//                        },
+//                        scope: this
+//                    })
+//                    dictItemTreeStore.getProxy().extraParams=dictItemExtraParams
                     _window.close()
                 }
 

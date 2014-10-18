@@ -9,7 +9,8 @@ Ext.define('Techsupport.view.sysadmin.dict.Detail', {
     height: 530,
     alias: 'widget.dictDetail',
     initComponent: function () {
-        Ext.apply(this.items, this.superclass.items)
+//        Ext.apply(this.items, this.superclass.items)
+        this.items=Ext.clone(this.superclass.items)
         this.items[0].items = []
         this.callParent(arguments)
 

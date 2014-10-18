@@ -23,7 +23,7 @@ object DictItem extends Controller {
       "factValue" -> optional(text),
       "appendValue" -> optional(text),
       "superItemId" -> optional(longNumber),
-      "displayFlag" -> optional(boolean)
+      "displayFlag" -> optional(number)
     )
       (DictItemQueryCondition.apply)(DictItemQueryCondition.unapply)
   )
@@ -198,7 +198,7 @@ object DictItem extends Controller {
    * 获取字典异步树节点
    * @return
    */
-  def treenode = Action {
+  def treenode(id: Long) = Action {
     implicit request =>
       dictItemQueryForm.bindFromRequest.fold(
         hasErrors =
@@ -246,15 +246,21 @@ object DictItem extends Controller {
       )
   }
 
+  def addNode(id: Long) = add(id)
+
+  def updateNode(id: Long) = update(id)
+
+  def delNode(id: Long) = remove(id)
+
   /**
    * 获取指定ID下的最大序列
    * @param id
    * @return
    */
-  def maxDictItemOrder(dictcode:String,id: Long) = Action {
+  def maxDictItemOrder(dictcode: String, id: Long) = Action {
     implicit request =>
       try {
-        val maxOrder = dictItemService.maxDictItemOrder(dictcode,id)
+        val maxOrder = dictItemService.maxDictItemOrder(dictcode, id)
         Ok(Json.generate(Map("success" -> true,
           "result" -> 0,
           "data" -> maxOrder,

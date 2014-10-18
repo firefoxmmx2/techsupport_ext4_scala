@@ -337,7 +337,7 @@ case class DictItemQueryCondition(id: Option[Long] = None,
                                   factValue: Option[String] = None,
                                   appendValue: Option[String] = None,
                                   superItemId: Option[Long] = None,
-                                  displayFlag: Option[Boolean] = None) extends QueryCondition
+                                  displayFlag: Option[Int] = None) extends QueryCondition
 
 /**
  * 版本

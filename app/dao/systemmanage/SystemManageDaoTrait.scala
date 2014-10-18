@@ -157,6 +157,13 @@ trait DictItemDaoComponent {
      * @return
      */
     def maxOrder(dictcode:String,id:Long):Int
+
+    /**
+     * 吃否有子字典项
+      * @param id
+     * @return
+     */
+    def hasChildren(id:Long):Boolean
   }
 
   val dictItemDao: DictItemDao

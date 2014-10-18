@@ -1172,8 +1172,10 @@ trait DictItemDaoComponentImpl extends DictItemDaoComponent {
               and di.dictcode === params.dictcode.?
               and params.factValue.? === di.factValue
               and params.appendValue.? === di.appendValue
+              and di.superItemId === params.superItemId.?
+              and di.appendValue === params.appendValue.?
+              and di.displayFlag === params.displayFlag.?
               and (di.displayName like params.displayName.?)
-            //              and params.displayFlag === di.displayFlag
           )
             select (di)
             orderBy {
@@ -1278,7 +1280,10 @@ trait DictItemDaoComponentImpl extends DictItemDaoComponent {
 
      * @return 结果列表
      */
-    def list(params: DictItemQueryCondition): List[DictItem] = selectForPage(params).toList
+    def list(params: DictItemQueryCondition): List[DictItem] = {
+      Logger.debug("=" * 13 + " 字典项非分页查询语句=" + selectForPage(params).statement + "=" * 13)
+      selectForPage(params).toList
+    }
 
     /**
      * 通过主键获取单个实体
@@ -1287,7 +1292,29 @@ trait DictItemDaoComponentImpl extends DictItemDaoComponent {
      * @return 实体
      */
     def getById(id: Long): DictItem = SystemManage.dictItems.where(di =>
-      di.id === id).single
+      di.id === id).singleOption.getOrElse(null)
+
+    /**
+     * 吃否有子字典项
+     * @param id
+     * @return
+     */
+    def hasChildren(id: Long): Boolean = {
+      Logger.debug("=" * 13 + "hasChildren sql = " + from(SystemManage.dictItems)(
+        di =>
+          where(
+            di.superItemId === id
+          )
+            select (di.id)
+      ).Count.statement + "=" * 13)
+      from(SystemManage.dictItems)(
+        di =>
+          where(
+            di.superItemId === id
+          )
+            select (di.id)
+      ).Count > 0
+    }
 
     /**
      * 获取指定ID下的最大序列
@@ -1429,7 +1456,7 @@ trait DictDaoComponentImpl extends DictDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): Dict = SystemManage.dicts.where(d => d.id === id).single
+    def getById(id: Long): Dict = SystemManage.dicts.where(d => d.id === id).singleOption.get
 
     /**
      * 验证字典代码是否重复

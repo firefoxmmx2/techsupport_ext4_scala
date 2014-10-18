@@ -510,7 +510,13 @@ trait DictItemServiceComponentImpl extends DictItemServiceComponent {
      * @param e
      * @return
      */
-    def insert(e: DictItem): DictItem = inTransaction(dictItemDao.insert(e))
+    def insert(e: DictItem): DictItem = inTransaction {
+      val inserted = dictItemDao.insert(e)
+      val parent = dictItemDao.getById(inserted.superItemId.get)
+      if (parent != null)
+        dictItemDao.update(parent.copy(isleaf = "N"))
+      inserted
+    }
 
     /**
      * 修改
@@ -522,7 +528,22 @@ trait DictItemServiceComponentImpl extends DictItemServiceComponent {
      * 删除通过id
      * @param id
      */
-    def deleteById(id: Long): Unit = inTransaction(dictItemDao.deleteById(id))
+    def deleteById(id: Long): Unit = inTransaction {
+      val children = list(DictItemQueryCondition(superItemId = Some(id)))
+      children.foreach {
+        child =>
+          dictItemDao.deleteById(child.id.get)
+      }
+
+
+      val thisDictItem = dictItemDao.getById(id)
+      dictItemDao.deleteById(id)
+
+      val parent = dictItemDao.getById(thisDictItem.superItemId.get)
+      if (parent != null && parent.isleaf == "N" && !dictItemDao.hasChildren(parent.id.get)) {
+        dictItemDao.update(parent.copy(isleaf = "Y"))
+      }
+    }
 
     /**
      * 获取列表分页
