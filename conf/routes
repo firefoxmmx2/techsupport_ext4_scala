@@ -53,9 +53,6 @@ GET           /api/systems                                             controlle
 #字典项
 GET           /api/dictitems/maxDictItemOrder/:dictcode/:id            controllers.systemmanage.DictItem.maxDictItemOrder(dictcode:String,id:Long)
 GET           /api/dictitems/treenode/:id                              controllers.systemmanage.DictItem.treenode(id:Long)
-POST          /api/dictitems/treenode/:id                              controllers.systemmanage.DictItem.addNode(id:Long)
-PUT           /api/dictitems/treenode/:id                              controllers.systemmanage.DictItem.updateNode(id:Long)
-DELETE        /api/dictitems/treenode/:id controllers.systemmanage.DictItem.delNode(id:Long)
 GET           /api/dictitems                                           controllers.systemmanage.DictItem.list
 GET           /api/dictitems/:id                                       controllers.systemmanage.DictItem.get(id:Long)
 POST          /api/dictitems/:id                                       controllers.systemmanage.DictItem.add(id:Long)

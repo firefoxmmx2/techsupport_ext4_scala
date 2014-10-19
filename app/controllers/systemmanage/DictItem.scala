@@ -246,12 +246,6 @@ object DictItem extends Controller {
       )
   }
 
-  def addNode(id: Long) = add(id)
-
-  def updateNode(id: Long) = update(id)
-
-  def delNode(id: Long) = remove(id)
-
   /**
    * 获取指定ID下的最大序列
    * @param id
