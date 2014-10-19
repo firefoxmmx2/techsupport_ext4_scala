@@ -12,7 +12,8 @@ Ext.application({
         'sysadmin.Menu',
         'sysadmin.System',
         'sysadmin.GlobalParam',
-        'sysadmin.Dict'
+        'sysadmin.Dict',
+        'sysadmin.DictItem'
     ],
     autoCreateViewport: true,
     refs: [

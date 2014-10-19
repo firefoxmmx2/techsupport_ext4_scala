@@ -10,7 +10,7 @@ Ext.define('Techsupport.view.base.BaseManage', {
     },
     border: false,
     items: [
-        {xtype: 'panel', region: 'west', width: '20%', split: true, items: [
+        {xtype: 'panel', region: 'west', width: '20%', layout: 'fit', split: true, items: [
             //fit west part
         ]},
         {xtype: 'panel', region: 'center', border: false, layout: 'fit', items: [

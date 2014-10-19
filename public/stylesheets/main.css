@@ -1,5 +1,16 @@
+.icon-add
+.icon-delete
+.icon-grid
+.icon-reset
+.icon-save
+.icon-user
+.icon-user-add {
+    background: #f3f2e2 url(/assets/images/smalls.jpg) no-repeat;
+}
+
 .icon-user {
-    background-image: url(/assets/images/user.png) !important;
+    /*background-image: url(/assets/images/user.png) !important;*/
+    background-position: 0% 0%;
 }
 
 .icon-user-add {
@@ -19,7 +30,9 @@
 }
 
 .icon-add {
+    /*background: #f3f2e2 url(/assets/images/smalls.jpg) no-repeat;*/
     background-image: url(/assets/images/add.png) !important;
+    /*background-position: 0% 5% !important;*/
 }
 
 .icon-delete {
