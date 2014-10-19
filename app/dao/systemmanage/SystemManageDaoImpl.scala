@@ -1300,13 +1300,13 @@ trait DictItemDaoComponentImpl extends DictItemDaoComponent {
      * @return
      */
     def hasChildren(id: Long): Boolean = {
-      Logger.debug("=" * 13 + "hasChildren sql = " + from(SystemManage.dictItems)(
-        di =>
-          where(
-            di.superItemId === id
-          )
-            select (di.id)
-      ).Count.statement + "=" * 13)
+//      Logger.debug("=" * 13 + "hasChildren sql = " + from(SystemManage.dictItems)(
+//        di =>
+//          where(
+//            di.superItemId === id
+//          )
+//            select (di.id)
+//      ).Count.statement + "=" * 13)
       from(SystemManage.dictItems)(
         di =>
           where(

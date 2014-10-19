@@ -116,7 +116,9 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
                     p.down('button[action=add]').on('click', function (button) {
                         var dictForm = p.up('window').down('form:first')
                         if (dictForm.getForm().isValid())
-                            this.toEditDictItem(null, p)
+                            if(p.getSelectionModel().getSelection().length==0)
+                                p.getSelectionModel().select(p.getStore().getNodeById(0))
+                                this.toEditDictItem(null, p)
                     }, this)
                     p.down('button[action=remove]').on('click', function (button) {
                         this.removeDictItem(p)
@@ -211,13 +213,20 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
                 if (p.xtype == "dictItemSimpleList")
                     store.remove(record)
                 else {
-                    var store = p.getView().getStore()
                     Ext.Ajax.request({
                         url: '/api/dictitems/' + record.data.id,
                         method: 'DELETE',
                         params: record.data,
                         success: function (response) {
-                            store.remove(record)
+                            var parentNode = store.getNodeById(record.data.superItemId)
+                            var node = store.getNodeById(record.data.id)
+                            if (parentNode.childNodes.length==1) {
+                                p.getSelectionModel().select(parentNode)
+                                p.refresh(parentNode.data.id)
+                            }
+                            else{
+                                parentNode.removeChild(node)
+                            }
                         },
                         failure: function (response) {
                             Ext.Msg.alert('错误', '删除字典项发生错误')
@@ -312,7 +321,7 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
             form.down('textfield[name=sibOrder]').on('render', function (field) {
                 if (!record) {
                     Ext.Ajax.request({
-                        url: '/api/dictitems/maxDictItemOrder/' + dictWindowDictcodeField.getValue() + '/'+form.down('textfield[name=superItemId]').getValue(),
+                        url: '/api/dictitems/maxDictItemOrder/' + dictWindowDictcodeField.getValue() + '/' + form.down('textfield[name=superItemId]').getValue(),
                         success: function (response) {
                             var res = Ext.decode(response.responseText)
                             if (Ext.isNumber(res.data)) {

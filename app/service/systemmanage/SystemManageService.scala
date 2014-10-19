@@ -4,6 +4,7 @@ import models._
 import dao.systemmanage._
 import models.Department
 import models.Menu
+import play.api.Logger
 import util.Page
 import models.Role
 import org.apache.commons.lang3.StringUtils
@@ -540,6 +541,9 @@ trait DictItemServiceComponentImpl extends DictItemServiceComponent {
       dictItemDao.deleteById(id)
 
       val parent = dictItemDao.getById(thisDictItem.superItemId.get)
+
+//      Logger.debug("=" * 13 + "parent.isleaf == \"N\" is " + (parent.isleaf == "N") + "=" * 13)
+//      Logger.debug("=" * 13 + "dictItemDao.hasChildren(parent.id.get) is" + dictItemDao.hasChildren(parent.id.get) + "=" * 13)
       if (parent != null && parent.isleaf == "N" && !dictItemDao.hasChildren(parent.id.get)) {
         dictItemDao.update(parent.copy(isleaf = "Y"))
       }
