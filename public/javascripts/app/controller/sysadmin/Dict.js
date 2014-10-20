@@ -151,10 +151,10 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
                 click: function (button) {
                     var _window = button.up('window')
                     if (_window.name == "addDictWindow") {
-                        this.addDict(_window.down('form'), this.getDictStore())
+                        this.addDict(_window.down('form'), this.getDictListGrid().getStore())
                     }
                     else if (_window.name == 'modifyDictWindow') {
-                        this.updateDict(_window.down('form'), this.getDictStore())
+                        this.updateDict(_window.down('form'), this.getDictListGrid().getStore())
                     }
                 }
             },
@@ -496,7 +496,7 @@ Ext.define('Techsupport.controller.sysadmin.Dict', {
         this.queryDict = function () {
             //查询
             var form = this.getQueryForm()
-            var store = this.getDictStore()
+            var store = this.getDictListGrid().getStore()
             Ext.apply(store.getProxy().extraParams, form.getForm().getValues())
             store.load()
         }
