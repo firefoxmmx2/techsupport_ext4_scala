@@ -1175,7 +1175,10 @@ trait DictItemDaoComponentImpl extends DictItemDaoComponent {
               and di.superItemId === params.superItemId.?
               and di.appendValue === params.appendValue.?
               and di.displayFlag === params.displayFlag.?
-              and (di.displayName like params.displayName.?)
+              and (di.displayName like params.displayName.?
+              and (di.factValue === params.queryfield.?
+              or di.displayName === params.queryfield.?
+              or di.dictcode === params.queryfield.?))
           )
             select (di)
             orderBy {
@@ -1300,13 +1303,13 @@ trait DictItemDaoComponentImpl extends DictItemDaoComponent {
      * @return
      */
     def hasChildren(id: Long): Boolean = {
-//      Logger.debug("=" * 13 + "hasChildren sql = " + from(SystemManage.dictItems)(
-//        di =>
-//          where(
-//            di.superItemId === id
-//          )
-//            select (di.id)
-//      ).Count.statement + "=" * 13)
+      //      Logger.debug("=" * 13 + "hasChildren sql = " + from(SystemManage.dictItems)(
+      //        di =>
+      //          where(
+      //            di.superItemId === id
+      //          )
+      //            select (di.id)
+      //      ).Count.statement + "=" * 13)
       from(SystemManage.dictItems)(
         di =>
           where(
@@ -1348,8 +1351,13 @@ trait DictDaoComponentImpl extends DictDaoComponent {
             d.id === params.id.? and
               d.dictcode === params.dictcode.?
               and (d.dictname like dictnameLike.?)
-              and d.superDictcode === params.superDictcode.? and
-              d.createTime === params.createTime.?
+              and d.superDictcode === params.superDictcode.?
+              and d.createTime === params.createTime.?
+              and (d.dictcode === params.queryfield.?
+              or d.dictname === params.queryfield.?
+              or d.dictAllPin === params.queryfield.?
+              or d.dictSimplePin === params.queryfield.?
+              )
           )
             select (d)
             orderBy {

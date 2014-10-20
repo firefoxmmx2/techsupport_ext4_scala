@@ -18,6 +18,7 @@ import play.api.Logger
  */
 object Dict extends Controller {
   val log = Logger.logger
+
   //查询form
   val dictQueryForm = Form(
     mapping(
@@ -25,7 +26,8 @@ object Dict extends Controller {
       "dictcode" -> optional(text),
       "dictname" -> optional(text),
       "superDictcode" -> optional(text),
-      "createTime" -> optional(jodaDate)
+      "createTime" -> optional(jodaDate),
+      "queryfield" -> optional(text)
     )(DictQueryCondition.apply)(DictQueryCondition.unapply)
   )
 
@@ -80,7 +82,7 @@ object Dict extends Controller {
       "dictAllPin" -> optional(text),
       "dictItemTableName" -> optional(text),
       "dictVersion" -> optional(text),
-      "createTime" -> default(optional(jodaDate("yyyy-MM-dd HH:mm:ss")),Some(new DateTime())),
+      "createTime" -> default(optional(jodaDate("yyyy-MM-dd HH:mm:ss")), Some(new DateTime())),
       "id" -> optional(longNumber)
     )(models.Dict.apply)(models.Dict.unapply)
   )
@@ -89,12 +91,12 @@ object Dict extends Controller {
    * 新增字典
    * @return
    */
-  def add(id:Long) = Action {
+  def add(id: Long) = Action {
     implicit request =>
       dictForm.bindFromRequest.fold(
         hasErrors =
-          form =>{
-            log.debug("="*13+form.get+"="*13)
+          form => {
+            log.debug("=" * 13 + form.get + "=" * 13)
             BadRequest(form.errorsAsJson)
           },
         success =

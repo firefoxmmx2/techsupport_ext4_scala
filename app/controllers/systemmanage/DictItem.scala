@@ -23,7 +23,8 @@ object DictItem extends Controller {
       "factValue" -> optional(text),
       "appendValue" -> optional(text),
       "superItemId" -> optional(longNumber),
-      "displayFlag" -> optional(number)
+      "displayFlag" -> optional(number),
+      "queryfield"->optional(text)
     )
       (DictItemQueryCondition.apply)(DictItemQueryCondition.unapply)
   )

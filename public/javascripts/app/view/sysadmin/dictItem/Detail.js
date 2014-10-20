@@ -26,7 +26,8 @@ Ext.define('Techsupport.view.sysadmin.dictItem.Detail', {
                 fieldLabel: '字典代码',
                 allowBlank: false,
                 blankText: '字典代码不能为空',
-                vtype: 'alphanum'
+                vtype: 'alphanum',
+                readOnly:true
             },
             {xtype: 'textfield',
                 name: 'displayName',
@@ -53,7 +54,8 @@ Ext.define('Techsupport.view.sysadmin.dictItem.Detail', {
                 name: 'sibOrder',
                 fieldLabel: '序号',
                 allowBlank: false,
-                blankText: '序号不能为空'
+                blankText: '序号不能为空',
+                vtype:'number'
             },
             {xtype: 'combobox',
                 store: 'YN',

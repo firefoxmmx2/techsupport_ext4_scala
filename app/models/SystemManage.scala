@@ -10,8 +10,8 @@ object SystemManage extends Schema {
   val departments = table[Department]("t_department")
   on(departments)(d => declare(d.id is(autoIncremented("departid"), primaryKey)
   ))
-//  val parentDepartmentToSubDepartments = oneToManyRelation(departments, departments)
-//    .via((pd, d) => d.parentDepartid === pd.id)
+  //  val parentDepartmentToSubDepartments = oneToManyRelation(departments, departments)
+  //    .via((pd, d) => d.parentDepartid === pd.id)
   val users = table[User]("t_user")
   on(users)(u => declare(u.id is(autoIncremented("userid"), primaryKey)))
   val roles = table[Role]("t_role")
@@ -51,7 +51,7 @@ case class Department(
                        departname: String,
                        departlevel: Int,
                        departfullcode: String,
-                       parentDepartid: Option[Long]=None,
+                       parentDepartid: Option[Long] = None,
                        nodeOrder: Int = 0,
                        isLeaf: String = "Y",
                        departsimplepin: Option[String] = None,
@@ -288,7 +288,8 @@ case class DictQueryCondition(id: Option[Long] = None,
                               dictcode: Option[String] = None,
                               dictname: Option[String] = None,
                               superDictcode: Option[String] = None,
-                              createTime: Option[DateTime] = None) extends QueryCondition
+                              createTime: Option[DateTime] = None,
+                              queryfield: Option[String] = None) extends QueryCondition
 
 /**
  * 字典项
@@ -337,7 +338,8 @@ case class DictItemQueryCondition(id: Option[Long] = None,
                                   factValue: Option[String] = None,
                                   appendValue: Option[String] = None,
                                   superItemId: Option[Long] = None,
-                                  displayFlag: Option[Int] = None) extends QueryCondition
+                                  displayFlag: Option[Int] = None,
+                                  queryfield: Option[String] = None) extends QueryCondition
 
 /**
  * 版本
