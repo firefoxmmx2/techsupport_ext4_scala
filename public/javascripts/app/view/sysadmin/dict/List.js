@@ -7,7 +7,6 @@
 Ext.define('Techsupport.view.sysadmin.dict.List', {
     extend: 'Techsupport.view.base.BaseList',
     alias: 'widget.dictList',
-    store: 'Dict',
     columns: [
         {text: '字典ID', dataIndex: 'id', flex: 1},
         {text: '字典代码', dataIndex: 'dictcode', flex: 1},
@@ -48,5 +47,9 @@ Ext.define('Techsupport.view.sysadmin.dict.List', {
             xtype: 'datecolumn',
             format: 'Y-m-d H:i:s'
         }
-    ]
+    ],
+    initComponent: function () {
+        this.store = Ext.create('Techsupport.store.Dict')
+        this.callParent(arguments)
+    }
 })
