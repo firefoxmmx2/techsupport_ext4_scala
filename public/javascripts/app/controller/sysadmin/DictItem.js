@@ -76,8 +76,7 @@ Ext.define('Techsupport.controller.sysadmin.DictItem', {
                 },
                 beforeload: function (store, operation, opts) {
                     var tree = store.getRootNode().getOwnerTree();
-                    store.getProxy().setExtraParam("superItemId", tree.getSelectionModel().getSelection().length > 0 ?
-                        tree.getSelectionModel().getSelection()[0].data.id : 0);
+                    store.getProxy().setExtraParam("superItemId", tree.cdata && tree.cdata.id ? tree.cdata.id : 0);
                 },
                 beforeitemexpand: function (n, opts) {
                     var tree = n.getOwnerTree();
@@ -85,6 +84,11 @@ Ext.define('Techsupport.controller.sysadmin.DictItem', {
                 },
                 itemdblclick: function (t, record, item, index, e, eOpts) { //双击打开修改界面
                     this.toModifyDictItem(record)
+                },
+                selectionchange: function (t, selecteds, eOpts) {
+                    if (selecteds.length > 0) {
+                        t.cdata = selecteds[selecteds.length - 1]
+                    }
                 }
             },
             'dictItemManage button[action=add]': { //管理界面添加按钮
