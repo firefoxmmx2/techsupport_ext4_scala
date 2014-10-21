@@ -26,7 +26,7 @@ Ext.define('Techsupport.view.sysadmin.user.Add', {
                         }},
                         {fieldLabel: '密码', name: 'password', inputType: 'password',
                             allowBlank: false, blankText: '密码不能为空',
-                            maxLength: 16, maxLengthText: '最长16位', validator: function (value) {
+                            validator: function (value) {
                             var res = true;
                             var p = this.findParentByType('panel').down('textfield[name=password2]')
                             if (value) {
@@ -39,7 +39,7 @@ Ext.define('Techsupport.view.sysadmin.user.Add', {
                         }},
                         {fieldLabel: '重复密码', name: 'password2', inputType: 'password',
                             inputType: 'password', allowBlank: false, blankText: '重复密码不能为空',
-                            maxLength: 16, maxLengthText: '最长16位', validator: function (value) {
+                            validator: function (value) {
                             var res = true;
                             var p = this.findParentByType('panel').down('textfield[name=password]')
                             if (value) {
