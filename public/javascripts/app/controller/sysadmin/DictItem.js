@@ -76,8 +76,8 @@ Ext.define('Techsupport.controller.sysadmin.DictItem', {
                 },
                 beforeload: function (store, operation, opts) {
                     var tree = store.getRootNode().getOwnerTree();
-                    if (tree.getSelectionModel().getSelection().length > 0)
-                        store.getProxy().setExtraParam("superItemId", tree.getSelectionModel().getSelection()[0].data.id);
+                    store.getProxy().setExtraParam("superItemId", tree.getSelectionModel().getSelection().length > 0 ?
+                        tree.getSelectionModel().getSelection()[0].data.id : 0);
                 },
                 beforeitemexpand: function (n, opts) {
                     var tree = n.getOwnerTree();
