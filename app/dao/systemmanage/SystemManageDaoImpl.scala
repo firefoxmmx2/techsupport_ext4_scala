@@ -1489,3 +1489,116 @@ trait DictDaoComponentImpl extends DictDaoComponent {
   }
 
 }
+
+/**
+ * 登录日志dao组件实现
+ */
+trait LoginLogDaoComponentImpl extends LoginLogDaoComponent {
+
+  /**
+   * 登录日志dao
+   */
+  class LoginLogDaoImpl extends LoginLogDao {
+    def selectForPage(params: LoginLogQueryCondition, sort: String = "logintiime", dir: String = "desc") = {
+      val loginUnitNameLike = params.loginunitname match {
+        case Some(x) => Some("%" + x + "%")
+        case _ => None
+      }
+      from(SystemManage.loginLogs)(
+        l =>
+          where(
+            l.id === params.id.?
+              and l.loginip === params.loginip.?
+              and l.loginmac === params.loginip.?
+              and l.logintiime >= params.logintiimeStart.?
+              and l.logintiime <= params.logintiimeEnd.?
+              and l.quittime >= params.quittimeStart.?
+              and l.quittime <= params.quittimeEnd.?
+              and l.loginuserid === params.loginuserid.?
+              and l.useraccount === params.useraccount.?
+              and l.username === params.username.?
+              and l.loginunitcode === params.loginunitcode.?
+              and (l.loginunitname like loginUnitNameLike.?)
+          )
+            select (l)
+      )
+    }
+
+
+    /**
+     * 插入
+     * @param m 实体
+
+     * @return 插入后的实体
+     */
+    def insert(m: LoginLog): LoginLog = SystemManage.loginLogs.insert(m)
+
+    /**
+     * 分页总数查询
+     * @param params 分页查询条件
+
+     * @return 结果数
+     */
+    def count(params: LoginLogQueryCondition): Int = selectForPage(params).Count.toInt
+
+    /**
+     * 修改
+     * @param m 实体
+
+     * @return
+     */
+    def update(m: LoginLog): Unit = SystemManage.loginLogs.update(m)
+
+    /**
+     * 删除
+     * @param m 实体
+
+     * @return
+     */
+    def delete(m: LoginLog): Unit = SystemManage.loginLogs.delete(m.id)
+
+    /**
+     * 通过主键删除
+     * @param id 主键
+
+     * @return
+     */
+    def deleteById(id: Long): Unit = SystemManage.loginLogs.deleteWhere(l => l.id === id)
+
+    /**
+     * 分页查询
+     * @param pageno 页码
+     * @param pagesize 每页显示数
+     * @param params 分页查询条件
+     * @param sort 排序字段
+     * @param dir 升降序
+
+     * @return 分页结果
+     */
+    def page(pageno: Int, pagesize: Int, params: LoginLogQueryCondition, sort: String, dir: String): Page[LoginLog] = {
+      val page=Page[LoginLog](pageno,pagesize,count(params))
+      if(page.total==0)
+        page
+      else{
+        page.copy(data=selectForPage(params,sort,dir).page(page.start,page.limit).toList)
+      }
+    }
+
+    /**
+     * 非分页查询
+     * @param params 查询条件
+
+     * @return 结果列表
+     */
+    def list(params: LoginLogQueryCondition): List[LoginLog] = selectForPage(params).toList
+
+    /**
+     * 通过主键获取单个实体
+     * @param id 主键
+
+     * @return 实体
+     */
+    def getById(id: Long): LoginLog = SystemManage.loginLogs.where(l=>l.id === id).singleOption.get
+  }
+
+}

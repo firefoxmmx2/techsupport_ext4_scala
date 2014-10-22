@@ -175,7 +175,7 @@ trait DictItemServiceComponent {
      * @param id
      * @return
      */
-    def maxDictItemOrder(dictcode:String,id: Long):Int
+    def maxDictItemOrder(dictcode: String, id: Long): Int
   }
 
   val dictItemService: DictItemService
@@ -202,4 +202,19 @@ trait DictServiceComponent {
   }
 
   val dictService: DictService
+}
+
+/**
+ * 登录日志服务组件
+ */
+trait LoginLogServiceComponent {
+
+  /**
+   * 登录日志服务
+   */
+  trait LoginLogService extends BaseService[LoginLog, Long, LoginLogQueryCondition] {
+
+  }
+
+  val loginLogService: LoginLogService
 }

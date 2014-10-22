@@ -30,6 +30,8 @@ object SystemManage extends Schema {
   on(dictItems)(d => declare(d.id is(autoIncremented("item_id"), primaryKey)))
   val userRoles = table[UserRole]("t_user_role")
   val roleMenus = table[RoleMenu]("t_role_menu")
+  val loginLogs = table[LoginLog]("t_loginlog")
+  on(loginLogs)(l => declare(l.id is(autoIncremented("loginlogid"), primaryKey)))
 }
 
 /**
@@ -384,3 +386,45 @@ case class UserRole(roleid: Long, userid: Long) extends KeyedEntity[CompositeKey
 }
 
 case class UserRoleQueryCondition(roleid: Option[Long], userid: Option[Long]) extends QueryCondition
+
+/**
+ * 登录日志
+ * @param id
+ * @param loginuserid
+ * @param useraccount
+ * @param username
+ * @param loginunitcode
+ * @param loginunitname
+ * @param loginip
+ * @param loginmac
+ * @param logintiime
+ * @param quittime
+ */
+case class LoginLog(
+                     @Column("loginlogid")
+                     id: Option[Long] = None,
+                     loginuserid: Long,
+                     useraccount: String,
+                     username: String,
+                     loginunitcode: String,
+                     loginunitname: String,
+                     loginip: String,
+                     loginmac: Option[String] = None,
+                     logintiime: DateTime,
+                     quittime: Option[DateTime] = None
+                     ) extends KeyedEntity[Option[Long]]
+
+case class LoginLogQueryCondition(
+                                    id: Option[Long] = None,
+                                    loginuserid: Option[Long] = None,
+                                    useraccount: Option[String] = None,
+                                    username: Option[String] = None,
+                                    loginunitcode: Option[String] = None,
+                                    loginunitname: Option[String] = None,
+                                    loginip: Option[String] = None,
+                                    loginmac: Option[String] = None,
+                                    logintiimeStart: Option[DateTime] = None,
+                                    logintiimeEnd: Option[DateTime] = None,
+                                    quittimeStart: Option[DateTime] = None,
+                                    quittimeEnd: Option[DateTime] = None
+                                    ) extends QueryCondition

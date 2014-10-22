@@ -156,14 +156,14 @@ trait DictItemDaoComponent {
      * @param id
      * @return
      */
-    def maxOrder(dictcode:String,id:Long):Int
+    def maxOrder(dictcode: String, id: Long): Int
 
     /**
      * 吃否有子字典项
-      * @param id
+     * @param id
      * @return
      */
-    def hasChildren(id:Long):Boolean
+    def hasChildren(id: Long): Boolean
   }
 
   val dictItemDao: DictItemDao
@@ -190,6 +190,21 @@ trait DictDaoComponent {
   }
 
   val dictDao: DictDao
+}
+
+/**
+ * 登录日志组件
+ */
+trait LoginLogDaoComponent {
+
+  /**
+   * 登录日志dao
+   */
+  trait LoginLogDao extends BaseDao[LoginLog, Long, LoginLogQueryCondition] {
+
+  }
+
+  val loginLogDao: LoginLogDao
 }
 
 
