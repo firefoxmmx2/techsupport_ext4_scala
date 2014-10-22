@@ -55,7 +55,7 @@ Ext.define('Techsupport.view.sysadmin.user.Add', {
                             return res;
                         }},
                         {fieldLabel: '用户名称', name: 'username', allowBlank: false, blankText: '用户名称不能为空'},
-                        {fieldLabel: '身份证', name: 'idnum'},
+                        {fieldLabel: '身份证', name: 'idnum',vtype:'alphanum',maxLength:18,maxLengthText:'身份证号不能超过18位'},
                         {fieldLabel: '邮箱', name: 'email', vtype: 'email'},
                         {fieldLabel: '手机', name: 'mobilePhone', vtype: 'number'},
                         {fieldLabel: '序号', name: 'userorder', value: '1'},
