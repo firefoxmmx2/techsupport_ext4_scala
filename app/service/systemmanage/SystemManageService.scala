@@ -542,8 +542,8 @@ trait DictItemServiceComponentImpl extends DictItemServiceComponent {
 
       val parent = dictItemDao.getById(thisDictItem.superItemId.get)
 
-//      Logger.debug("=" * 13 + "parent.isleaf == \"N\" is " + (parent.isleaf == "N") + "=" * 13)
-//      Logger.debug("=" * 13 + "dictItemDao.hasChildren(parent.id.get) is" + dictItemDao.hasChildren(parent.id.get) + "=" * 13)
+      //      Logger.debug("=" * 13 + "parent.isleaf == \"N\" is " + (parent.isleaf == "N") + "=" * 13)
+      //      Logger.debug("=" * 13 + "dictItemDao.hasChildren(parent.id.get) is" + dictItemDao.hasChildren(parent.id.get) + "=" * 13)
       if (parent != null && parent.isleaf == "N" && !dictItemDao.hasChildren(parent.id.get)) {
         dictItemDao.update(parent.copy(isleaf = "Y"))
       }
@@ -654,6 +654,43 @@ trait DictServiceComponentImpl extends DictServiceComponent {
      */
     def maxDictOrder: Int = inTransaction {
       dictDao.maxOrder
+    }
+  }
+
+}
+
+/**
+ * 登录日志服务组件实现
+ */
+trait LoginLogServiceComponentImpl extends LoginLogServiceComponent {
+  this: LoginLogDaoComponent =>
+  /**
+   * 登录日志服务实现
+   */
+  class LoginLogServiceImpl extends LoginLogService {
+
+    def insert(e: LoginLog): LoginLog = inTransaction {
+      loginLogDao.insert(e)
+    }
+
+    def update(e: LoginLog): Unit = inTransaction {
+      loginLogDao.update(e)
+    }
+
+    def deleteById(id: Long): Unit = inTransaction {
+      loginLogDao.deleteById(id)
+    }
+
+    def page(pageno: Int, pagesize: Int, params: LoginLogQueryCondition, sort: String, dir: String): Page[LoginLog] = inTransaction {
+      loginLogDao.page(pageno, pagesize, params, sort, dir)
+    }
+
+    def getById(id: Long): LoginLog = inTransaction {
+      loginLogDao.getById(id)
+    }
+
+    def list(params: LoginLogQueryCondition): List[LoginLog] = inTransaction {
+      loginLogDao.list(params)
     }
   }
 
