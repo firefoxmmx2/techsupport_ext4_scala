@@ -4,16 +4,16 @@ import play.api.mvc._
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.cache.Cache
-import util.ComponentRegister._
 import com.codahale.jerkson.Json
 import play.api.Play.current
 import java.util.UUID
+import util.ComponentRegister
 
 /**
  * Created by hooxin on 14-3-30.
  */
-object Login extends Controller {
-  val log = play.api.Logger.logger
+object Login extends Controller with ComponentRegister {
+  private val log = play.api.Logger.logger
 
   case class Login(useraccount: String, password: String)
 

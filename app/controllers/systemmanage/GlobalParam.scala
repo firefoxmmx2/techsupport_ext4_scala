@@ -6,16 +6,12 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc.{Action, Controller}
 import util.ComponentRegister
-import util.ComponentRegister.globalParamService
 
-/**
- * Created by hooxin on 14-10-6.
- */
 /**
  * 全局参数
  */
-object GlobalParam extends Controller {
-  val log = Logger.logger
+object GlobalParam extends Controller with ComponentRegister {
+  private val log = Logger.logger
   val globalParamForm = Form(
     mapping(
       "id" -> text,

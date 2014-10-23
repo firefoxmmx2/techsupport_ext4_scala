@@ -3,18 +3,18 @@ package controllers.systemmanage
 import play.api.mvc._
 import play.api.data.Form
 import play.api.data.Forms._
-import util.ComponentRegister._
 import com.codahale.jerkson.Json
 import play.api.Logger
 import models.SystemQueryCondition
 import play.api.cache.Cache
 import play.api.Play.current
+import util.ComponentRegister
 
 /**
- * Created by hooxin on 14-2-10.
+ * 系统管理
  */
-object System extends Controller {
-  val log = Logger.logger
+object System extends Controller with ComponentRegister {
+  private val log = Logger.logger
   val systemForm = Form(
     mapping(
       "id" -> text,

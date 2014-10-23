@@ -1,7 +1,6 @@
 package controllers.systemmanage
 
 import play.api.mvc._
-import util.ComponentRegister._
 import play.api.data._
 import play.api.data.Forms._
 import models.MenuQueryCondition
@@ -9,12 +8,13 @@ import play.api.Play.current
 import play.api.cache.Cache
 import com.codahale.jerkson.Json
 import play.api.Logger
+import util.ComponentRegister
 
 /**
  * 菜单管理
  */
-object Menu extends Controller {
-  val log = Logger.logger
+object Menu extends Controller with ComponentRegister {
+  private val log = Logger.logger
 
   /**
    * 添加菜单

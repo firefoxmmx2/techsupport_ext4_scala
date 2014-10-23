@@ -2,14 +2,13 @@ package controllers.systemmanage
 
 import play.api.Logger
 import play.api.mvc._
-import play.api.data._
-import play.api.data.Forms._
+import util.ComponentRegister
 
 /**
  * 登录日志
  */
-object LoginLog extends Controller {
-  val log = Logger.logger
+object LoginLog extends Controller with ComponentRegister {
+  private val log = Logger.logger
 
   /**
    * 添加登录日志
@@ -23,26 +22,26 @@ object LoginLog extends Controller {
    * @param id
    * @return
    */
-  def update(id:Long)=TODO
+  def update(id: Long) = TODO
 
   /**
    * 删除日至
    * @param id
    * @return
    */
-  def delete(id:Long)=TODO
+  def delete(id: Long) = TODO
 
   /**
    * 获取日志详情
    * @param id
    * @return
    */
-  def get(id:Long)=TODO
+  def get(id: Long) = TODO
 
   /**
    * 获取日志列表
    * @return
    */
-  def list=TODO
+  def list = TODO
 
 }

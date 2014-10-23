@@ -1,15 +1,15 @@
 package controllers.systemmanage
 
 import play.api.mvc._
-import util.ComponentRegister._
 import play.api.data._
 import play.api.data.Forms._
 import play.api.Logger
 import models.DepartmentQueryCondition
 import com.codahale.jerkson.Json
+import util.ComponentRegister
 
-object Department extends Controller {
-  val log = Logger.logger
+object Department extends Controller with ComponentRegister {
+  private val log = Logger.logger
   val addForm = Form(
     mapping(
       "departcode" -> nonEmptyText,
@@ -118,7 +118,7 @@ object Department extends Controller {
         "message" -> "",
         "data" -> d))).as(JSON)
     } catch {
-      case e: java.util.NoSuchElementException=>
+      case e: java.util.NoSuchElementException =>
         Ok(Json.generate(Map("result" -> 0,
           "success" -> true,
           "message" -> "",
@@ -241,7 +241,7 @@ object Department extends Controller {
           BadRequest(form.errorsAsJson),
         success = departcode =>
           try {
-            val result=departmentService.checkDepartcodeAvailable(departcode)
+            val result = departmentService.checkDepartcodeAvailable(departcode)
             Ok(Json.generate(Map("success" -> true,
               "result" -> 0,
               "isAvailable" -> result))).as(JSON)
@@ -256,34 +256,34 @@ object Department extends Controller {
           }
       )
   }
-  
-  val maxDepartmentOrderForm=Form(
-    single("parentDepartid"->longNumber)
+
+  val maxDepartmentOrderForm = Form(
+    single("parentDepartid" -> longNumber)
   )
 
   /**
    * 获取机构最大序号
    * @return
    */
-  def maxDepartmentOrder=Action {
-    implicit request=>
+  def maxDepartmentOrder = Action {
+    implicit request =>
       maxDepartmentOrderForm.bindFromRequest.fold(
-      hasErrors= form =>
-        BadRequest(form.errorsAsJson),
-      success= parentDepartid =>
-        try {
-          Ok(Json.generate(Map("result" -> 0,
-            "success" -> true,
-            "data" -> departmentService.maxDepartmentOrder(parentDepartid)))).as(JSON)
-        }
-        catch {
-          case e:Exception  =>
-            log.error("获取机构最大序号发生错误")
-            log.error(e.getMessage,e.fillInStackTrace())
-            Ok(Json.generate(Map("result"-> -1,
-            "success"->false,
-            "message"->"获取机构最大序号发生错误"))).as(JSON)
-        }
+        hasErrors = form =>
+          BadRequest(form.errorsAsJson),
+        success = parentDepartid =>
+          try {
+            Ok(Json.generate(Map("result" -> 0,
+              "success" -> true,
+              "data" -> departmentService.maxDepartmentOrder(parentDepartid)))).as(JSON)
+          }
+          catch {
+            case e: Exception =>
+              log.error("获取机构最大序号发生错误")
+              log.error(e.getMessage, e.fillInStackTrace())
+              Ok(Json.generate(Map("result" -> -1,
+                "success" -> false,
+                "message" -> "获取机构最大序号发生错误"))).as(JSON)
+          }
       )
   }
 }

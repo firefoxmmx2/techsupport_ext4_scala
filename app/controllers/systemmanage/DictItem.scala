@@ -1,19 +1,19 @@
 package controllers.systemmanage
 
 import com.codahale.jerkson.Json
-import models.{DictItem, DictItemQueryCondition}
+import models.DictItemQueryCondition
 import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc.{Action, Controller}
 import util.ComponentRegister
-import util.ComponentRegister.{dictItemService, departmentService}
+import util.ComponentRegister.departmentService
 
 /**
  * 字典项
  */
-object DictItem extends Controller {
-  val log = Logger.logger
+object DictItem extends Controller with ComponentRegister {
+  private val log = Logger.logger
 
   val dictItemQueryForm = Form(
     mapping(
@@ -24,7 +24,7 @@ object DictItem extends Controller {
       "appendValue" -> optional(text),
       "superItemId" -> optional(longNumber),
       "displayFlag" -> optional(number),
-      "queryfield"->optional(text)
+      "queryfield" -> optional(text)
     )
       (DictItemQueryCondition.apply)(DictItemQueryCondition.unapply)
   )

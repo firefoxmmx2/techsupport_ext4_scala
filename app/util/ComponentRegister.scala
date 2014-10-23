@@ -6,7 +6,7 @@ import service.systemmanage._
 /**
  * Created by hooxin on 14-3-16.
  */
-object ComponentRegister extends DepartmentDaoComponentImpl
+trait ComponentRegister extends DepartmentDaoComponentImpl
 with DepartmentServiceComponentImpl
 with UserDaoComponentImpl
 with UserServiceComponentImpl
@@ -21,22 +21,26 @@ with SystemServiceComponentImpl
 with DictItemDaoComponentImpl
 with DictItemServiceComponentImpl
 with DictDaoComponentImpl
-with DictServiceComponentImpl{
+with DictServiceComponentImpl
+with LoginLogServiceComponentImpl
+with LoginLogDaoComponentImpl {
 
   val departmentService: DepartmentService = new DepartmentServiceImpl
   val departmentDao: DepartmentDao = new DepartmentDaoImpl
-  val globalParamService: ComponentRegister.GlobalParamService = new GlobalParamServiceImpl
-  val menuService: ComponentRegister.MenuService = new MenuSerivceImpl
-  val roleDao: ComponentRegister.RoleDao = new RoleDaoImpl
-  val systemService: ComponentRegister.SystemService = new SystemServiceImpl
-  val roleService: ComponentRegister.RoleService = new RoleServiceImpl
-  val systemDao: ComponentRegister.SystemDao = new SystemDaoImpl
-  val userDao: ComponentRegister.UserDao = new UserDaoImpl
-  val userService: ComponentRegister.UserService = new UserServiceImpl
-  val globalParamDao: ComponentRegister.GlobalParamDao = new GlobalParamDaoImpl
-  val menuDao: ComponentRegister.MenuDao = new MenuDaoImpl
-  val dictItemDao: ComponentRegister.DictItemDao = new DictItemDaoImpl
-  val dictItemService: ComponentRegister.DictItemService = new DictItemServiceImpl
-  val dictDao: ComponentRegister.DictDao = new DictDaoImpl
-  val dictService: ComponentRegister.DictService = new DictServiceImpl
+  val globalParamService: GlobalParamService = new GlobalParamServiceImpl
+  val menuService: MenuService = new MenuSerivceImpl
+  val roleDao: RoleDao = new RoleDaoImpl
+  val systemService: SystemService = new SystemServiceImpl
+  val roleService: RoleService = new RoleServiceImpl
+  val systemDao: SystemDao = new SystemDaoImpl
+  val userDao: UserDao = new UserDaoImpl
+  val userService: UserService = new UserServiceImpl
+  val globalParamDao: GlobalParamDao = new GlobalParamDaoImpl
+  val menuDao: MenuDao = new MenuDaoImpl
+  val dictItemDao: DictItemDao = new DictItemDaoImpl
+  val dictItemService: DictItemService = new DictItemServiceImpl
+  val dictDao: DictDao = new DictDaoImpl
+  val dictService: DictService = new DictServiceImpl
+  val loginLogDao: LoginLogDao = new LoginLogDaoImpl
+  val loginLogService: LoginLogService = new LoginLogServiceImpl
 }

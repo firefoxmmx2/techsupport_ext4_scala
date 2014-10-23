@@ -4,18 +4,18 @@ import play.api.mvc._
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.Logger
-import util.ComponentRegister._
 import models.UserQueryCondition
 import com.codahale.jerkson.Json
+import util.ComponentRegister
 
 /**
  * 用户管理
  */
-object User extends Controller {
+object User extends Controller with ComponentRegister {
   var pageno = 1
   var pagesize = 20;
 
-  val log = Logger.logger
+  private val log = Logger.logger
   val userForm = Form(
     mapping(
       "departid" -> longNumber,

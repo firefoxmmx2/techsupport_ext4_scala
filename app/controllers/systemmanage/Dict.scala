@@ -6,18 +6,14 @@ import play.api.data.Forms._
 import play.api.data.Form
 import models.DictQueryCondition
 import util.ComponentRegister
-import util.ComponentRegister.dictService
 import com.codahale.jerkson.Json
 import play.api.Logger
 
 /**
- * Created by hooxin on 14-10-9.
- */
-/**
  * 字典控制器
  */
-object Dict extends Controller {
-  val log = Logger.logger
+object Dict extends Controller with ComponentRegister {
+  private val log = Logger.logger
 
   //查询form
   val dictQueryForm = Form(
