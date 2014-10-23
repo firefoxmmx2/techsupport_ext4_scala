@@ -364,7 +364,7 @@ trait UserDaoComponentImpl extends UserDaoComponent {
 
 
 trait SystemDaoComponentImpl extends SystemDaoComponent {
-  val log = Logger.logger
+  private val log = Logger.logger
 
   class SystemDaoImpl extends SystemDao {
 

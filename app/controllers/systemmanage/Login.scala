@@ -8,9 +8,10 @@ import com.codahale.jerkson.Json
 import play.api.Play.current
 import java.util.UUID
 import util.ComponentRegister
+import org.joda.time.DateTime
 
 /**
- * Created by hooxin on 14-3-30.
+ * 登录
  */
 object Login extends Controller with ComponentRegister {
   private val log = play.api.Logger.logger
@@ -44,9 +45,20 @@ object Login extends Controller with ComponentRegister {
               "message" -> "帐号或者密码错误")))
           else {
             log.debug("存在指定用户")
+            val loginLog = loginLogService.insert(models.LoginLog(
+              loginuserid = user.id.get,
+              useraccount = user.useraccount,
+              username = user.username,
+              loginunitcode = user.department.departcode,
+              loginunitname = user.department.departname,
+              loginip = request.remoteAddress,
+              loginmac = None,
+              logintiime = new DateTime()
+            ))
             val authCode = UUID.randomUUID().toString
             val userInfoMap = Map("userid" -> user.id.get,
-              "username" -> user.username)
+              "username" -> user.username,
+              "loginlogid" -> loginLog.id.get)
             Cache.set(authCode, userInfoMap)
             Ok(Json.generate(Map("result" -> 0,
               "success" -> true,
@@ -65,6 +77,15 @@ object Login extends Controller with ComponentRegister {
    */
   def logout = Action {
     implicit request =>
+      Cache.get(request.session.get("authCode").getOrElse("")) match {
+        case Some(x: Map[String, Any]) => {
+          val loginLog = loginLogService.getById(x.getOrElse("loginlogid", 0).asInstanceOf[Long])
+          if (loginLog != null) {
+            loginLogService.update(loginLog.copy(quittime = Some(new DateTime())))
+          }
+        }
+      }
+
       Cache.remove(request.session.get("authCode").getOrElse(""))
       Ok(Json.generate(Map("result" -> 0,
         "message" -> "登出成功"))).withNewSession

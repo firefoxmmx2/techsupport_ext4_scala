@@ -7,7 +7,6 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc.{Action, Controller}
 import util.ComponentRegister
-import util.ComponentRegister.departmentService
 
 /**
  * 字典项

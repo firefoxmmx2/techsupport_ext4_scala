@@ -3,7 +3,7 @@ package models
 import models.CommonTypeMode._
 import org.joda.time.DateTime
 import org.squeryl.annotations._
-import org.squeryl.dsl.CompositeKey2
+import org.squeryl.dsl.{ManyToOne, CompositeKey2}
 import org.squeryl.{KeyedEntity, Schema}
 
 object SystemManage extends Schema {
@@ -14,6 +14,9 @@ object SystemManage extends Schema {
   //    .via((pd, d) => d.parentDepartid === pd.id)
   val users = table[User]("t_user")
   on(users)(u => declare(u.id is(autoIncremented("userid"), primaryKey)))
+  val departmentToUsers = oneToManyRelation(departments, users).via(
+    (d, u) => d.id === u.departid
+  )
   val roles = table[Role]("t_role")
   on(roles)(r => declare(r.id is(autoIncremented("roleid"), primaryKey)))
   val systems = table[System]("t_system")
@@ -111,6 +114,10 @@ case class User(
   override def toString: String = s"{id:$id,departid=$departid,useraccount=$useraccount," +
     s"username=$username,password=$password,idnum=$idnum," +
     s"mobilePhone=$mobilePhone,...}"
+
+  lazy val department = inTransaction {
+    SystemManage.departmentToUsers.right(this).single
+  }
 }
 
 case class UserQueryCondition(
@@ -415,16 +422,16 @@ case class LoginLog(
                      ) extends KeyedEntity[Option[Long]]
 
 case class LoginLogQueryCondition(
-                                    id: Option[Long] = None,
-                                    loginuserid: Option[Long] = None,
-                                    useraccount: Option[String] = None,
-                                    username: Option[String] = None,
-                                    loginunitcode: Option[String] = None,
-                                    loginunitname: Option[String] = None,
-                                    loginip: Option[String] = None,
-                                    loginmac: Option[String] = None,
-                                    logintiimeStart: Option[DateTime] = None,
-                                    logintiimeEnd: Option[DateTime] = None,
-                                    quittimeStart: Option[DateTime] = None,
-                                    quittimeEnd: Option[DateTime] = None
-                                    ) extends QueryCondition
+                                   id: Option[Long] = None,
+                                   loginuserid: Option[Long] = None,
+                                   useraccount: Option[String] = None,
+                                   username: Option[String] = None,
+                                   loginunitcode: Option[String] = None,
+                                   loginunitname: Option[String] = None,
+                                   loginip: Option[String] = None,
+                                   loginmac: Option[String] = None,
+                                   logintiimeStart: Option[DateTime] = None,
+                                   logintiimeEnd: Option[DateTime] = None,
+                                   quittimeStart: Option[DateTime] = None,
+                                   quittimeEnd: Option[DateTime] = None
+                                   ) extends QueryCondition
