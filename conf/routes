@@ -81,3 +81,10 @@ POST          /api/dicts/:id                                           controlle
 DELETE        /api/dicts/:id                                           controllers.systemmanage.Dict.remove(id:Long)
 PUT           /api/dicts/:id                                           controllers.systemmanage.Dict.update(id:Long)
 GET           /api/dicts/:id                                           controllers.systemmanage.Dict.get(id:Long)
+
+#登录日志
+GET           /api/loginlogs                                           controllers.systemmanage.LoginLog.list
+POST          /api/loginlogs/:id                                       controllers.systemmanage.LoginLog.add(id:Long)
+DELETE        /api/loginlogs/:id                                       controllers.systemmanage.LoginLog.remove(id:Long)
+PUT           /api/loginlogs/:id                                       controllers.systemmanage.LoginLog.update(id:Long)
+GET           /api/loginlogs/:id                                       controllers.systemmanage.LoginLog.get(id:Long)

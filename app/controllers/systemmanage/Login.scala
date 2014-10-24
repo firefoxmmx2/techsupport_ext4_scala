@@ -7,7 +7,7 @@ import play.api.cache.Cache
 import com.codahale.jerkson.Json
 import play.api.Play.current
 import java.util.UUID
-import util.ComponentRegister
+import util.{Implicits, ComponentRegister}
 import org.joda.time.DateTime
 
 /**
@@ -79,7 +79,7 @@ object Login extends Controller with ComponentRegister {
     implicit request =>
       Cache.get(request.session.get("authCode").getOrElse("")) match {
         case Some(x: Map[String, Any]) => {
-          val loginLog = loginLogService.getById(x.getOrElse("loginlogid", 0).asInstanceOf[Long])
+          val loginLog = loginLogService.getById(x.getOrElseAs("loginlogid", 0L))
           if (loginLog != null) {
             loginLogService.update(loginLog.copy(quittime = Some(new DateTime())))
           }
