@@ -11,6 +11,7 @@ Ext.define("Techsupport.model.Role", {
         {name: "roleType", type: "string"},
         {name: "jzlbdm", type: "string"},
         {name: "jzlbmc", type: "string"},
-        {name: "departid", type: "int"}
+        {name: "departid", type: "int"},
+        {name: "departname", type: 'string'}
     ]
 });
