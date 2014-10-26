@@ -18,10 +18,8 @@ Ext.define('Techsupport.view.sysadmin.loginlog.Detail', {
             {xtype: 'datefield', name: 'logintiime', fieldLabel: '登录时间', readOnly: true},
             {xtype: 'datefield', name: 'quittime', fieldLabel: '注销时间', readOnly: true}
         ])
-        Ext.Array.each(this.query('button'), function (b) {
-            b.remove()
-        }, this)
-        this.down('toolbar[dock=bottom][ui=foot]').add(
+        this.down('toolbar[dock=bottom][ui=footer]').removeAll()
+        this.down('toolbar[dock=bottom][ui=footer]').add(
             {xtype: 'button', text: '关闭', action: 'close'}
         )
     }

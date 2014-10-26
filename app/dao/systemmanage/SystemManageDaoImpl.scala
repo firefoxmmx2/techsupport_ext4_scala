@@ -1521,6 +1521,58 @@ trait LoginLogDaoComponentImpl extends LoginLogDaoComponent {
               and (l.loginunitname like loginUnitNameLike.?)
           )
             select (l)
+            orderBy {
+            if (sort == "id")
+              if (dir == "asc")
+                l.id asc
+              else l.id desc
+            else if (sort == "loginip")
+              if (dir == "asc")
+                l.loginip asc
+              else l.loginip desc
+            else if (sort == "loginmac")
+              if (dir == "asc")
+                l.loginmac asc
+              else l.loginmac desc
+            else if (sort == "logintiime")
+              if (dir == "asc")
+                l.logintiime asc
+              else l.logintiime desc
+            else if (sort == "logintiime")
+              if (dir == "asc")
+                l.logintiime asc
+              else l.logintiime desc
+            else if (sort == "quittime")
+              if (dir == "asc")
+                l.quittime asc
+              else l.quittime desc
+            else if (sort == "quittime")
+              if (dir == "asc")
+                l.quittime asc
+              else l.quittime desc
+            else if (sort == "loginuserid")
+              if (dir == "asc")
+                l.loginuserid asc
+              else l.loginuserid desc
+            else if (sort == "useraccount")
+              if (dir == "asc")
+                l.useraccount asc
+              else l.useraccount desc
+            else if (sort == "username")
+              if (dir == "asc")
+                l.username asc
+              else l.username desc
+            else if (sort == "loginunitcode")
+              if (dir == "asc")
+                l.loginunitcode asc
+              else l.loginunitcode desc
+            else if (sort == "loginunitname")
+              if (dir == "asc")
+                l.loginunitname asc
+              else l.loginunitname desc
+            else
+              l.logintiime desc
+          }
       )
     }
 
@@ -1576,11 +1628,11 @@ trait LoginLogDaoComponentImpl extends LoginLogDaoComponent {
      * @return 分页结果
      */
     def page(pageno: Int, pagesize: Int, params: LoginLogQueryCondition, sort: String, dir: String): Page[LoginLog] = {
-      val page=Page[LoginLog](pageno,pagesize,count(params))
-      if(page.total==0)
+      val page = Page[LoginLog](pageno, pagesize, count(params))
+      if (page.total == 0)
         page
-      else{
-        page.copy(data=selectForPage(params,sort,dir).page(page.start,page.limit).toList)
+      else {
+        page.copy(data = selectForPage(params, sort, dir).page(page.start, page.limit).toList)
       }
     }
 
@@ -1598,7 +1650,7 @@ trait LoginLogDaoComponentImpl extends LoginLogDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): LoginLog = SystemManage.loginLogs.where(l=>l.id === id).singleOption.get
+    def getById(id: Long): LoginLog = SystemManage.loginLogs.where(l => l.id === id).singleOption.get
   }
 
 }
