@@ -263,7 +263,9 @@ trait MenuServiceComponentImpl extends MenuServiceComponent {
  * 角色服务组件实现
  */
 trait RoleServiceComponentImpl extends RoleServiceComponent {
-  this: RoleDaoComponent =>
+  this: RoleDaoComponent
+  with RoleMenuDaoComponent
+  with RoleFuncDaoComponent=>
 
   class RoleServiceImpl extends RoleService {
     /**
@@ -310,6 +312,26 @@ trait RoleServiceComponentImpl extends RoleServiceComponent {
      * @return
      */
     def insert(e: Role): Role = inTransaction(roleDao.insert(e))
+
+    def insert(role: Role, roleMenus: Option[List[RoleMenu]], roleFuncs: Option[List[RoleFunc]]): Unit = inTransaction {
+      val inserted=this.insert(role)
+      roleMenus match {
+        case Some(roleMenus) =>
+          roleMenus.foreach(rm => {
+            roleMenuDao.insert(rm)
+          })
+        case None =>
+      }
+      roleFuncs match {
+        case Some(roleFuncs) =>
+          roleFuncs.foreach(rf=>
+            roleFuncDao.insert(rf)
+          )
+        case None =>
+      }
+      inserted
+    }
+
   }
 
 }
@@ -664,6 +686,7 @@ trait DictServiceComponentImpl extends DictServiceComponent {
  */
 trait LoginLogServiceComponentImpl extends LoginLogServiceComponent {
   this: LoginLogDaoComponent =>
+
   /**
    * 登录日志服务实现
    */

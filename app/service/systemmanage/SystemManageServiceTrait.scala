@@ -107,7 +107,7 @@ trait SystemServiceComponent {
 trait RoleServiceComponent {
 
   trait RoleService extends BaseService[Role, Long, RoleQueryCondition] {
-
+    def insert(role:Role,roleMenus:Option[List[RoleMenu]]=None,roleFuncs:Option[List[RoleFunc]]=None)
   }
 
   val roleService: RoleService

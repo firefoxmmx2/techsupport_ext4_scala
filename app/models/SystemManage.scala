@@ -435,3 +435,25 @@ case class LoginLogQueryCondition(
                                    quittimeStart: Option[DateTime] = None,
                                    quittimeEnd: Option[DateTime] = None
                                    ) extends QueryCondition
+
+/**
+ * 角色功能
+ * @param roleId
+ * @param functionId
+ */
+case class RoleFunc(
+                     roleId: Long,
+                     functionId: Long
+                     ) extends KeyedEntity[CompositeKey2[Long, Long]] {
+  def id = compositeKey(roleId, functionId)
+}
+
+/**
+ * 角色功能查询
+ * @param roleId
+ * @param functionId
+ */
+case class RoleFuncQueryCondition(
+                                   roleId: Option[Long] = None,
+                                   functionId: Option[Long] = None
+                                   ) extends QueryCondition

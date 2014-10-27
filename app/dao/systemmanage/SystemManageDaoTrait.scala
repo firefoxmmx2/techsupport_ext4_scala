@@ -207,5 +207,15 @@ trait LoginLogDaoComponent {
   val loginLogDao: LoginLogDao
 }
 
+/**
+ * 角色功能组件
+ */
+trait RoleFuncDaoComponent {
 
+  /**
+   * 角色功能dao
+   */
+  trait RoleFuncDao extends BaseDao[RoleFunc, (Long, Long), RoleFuncQueryCondition]
 
+  val roleFuncDao: RoleFuncDao
+}

@@ -1,10 +1,10 @@
 package controllers
 
-import util.Implicits
+import util.{ComponentRegister, Implicits}
 
 /**
- * Created by hooxin on 14-10-24.
+ * 包默认
  */
-package object systemmanage extends Implicits{
+package object systemmanage extends Implicits with ComponentRegister{
 
 }

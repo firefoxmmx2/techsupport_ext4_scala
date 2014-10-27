@@ -17,5 +17,13 @@ Ext.define('Techsupport.view.sysadmin.role.Manage',{
             {xtype:'textfield',name:'rolename',fieldLabel:"角色名称"},
             {xtype:'textfield',name:'roleDescription',fieldLabel:"角色描述"}
         ])
+        //添加关联菜单和关联功能
+        this.down("panel[region=center] toolbar[dock=top][ui=footer]")
+            .add([
+                '-',
+                {xtype:'button',text:'关联菜单',action:'relateMenu'},
+                {xtype:'button',text:'关联功能',action:'relateFunction'}
+            ])
+
     }
 })

@@ -6,7 +6,7 @@ import util.ComponentRegister
 /**
  * 角色
  */
-object Role extends Controller with ComponentRegister {
+object Role extends Controller  {
   def add = TODO
 
   def remove(id: Long) = TODO
