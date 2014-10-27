@@ -14,7 +14,8 @@ Ext.application({
         'sysadmin.GlobalParam',
         'sysadmin.Dict',
         'sysadmin.DictItem',
-        "sysadmin.LoginLog"
+        "sysadmin.LoginLog",
+        "sysadmin.Role"
     ],
     autoCreateViewport: true,
     refs: [
