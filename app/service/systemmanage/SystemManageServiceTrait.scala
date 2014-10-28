@@ -9,6 +9,7 @@ import models.System
 import models.User
 import models.Role
 import org.apache.commons.lang3.StringUtils
+import org.apache.xpath.functions.FuncStartsWith
 
 /**
  * Created by hooxin on 14-3-10.
@@ -107,10 +108,30 @@ trait SystemServiceComponent {
 trait RoleServiceComponent {
 
   trait RoleService extends BaseService[Role, Long, RoleQueryCondition] {
-    def insert(role:Role,roleMenus:Option[List[RoleMenu]]=None,roleFuncs:Option[List[RoleFunc]]=None)
+    def insert(role: Role, roleMenus: Option[List[RoleMenu]] = None, roleFuncs: Option[List[RoleFunc]] = None)
   }
 
   val roleService: RoleService
+}
+
+/**
+ * 角色菜单
+ */
+trait RoleMenuServiceComponent {
+
+  trait RoleMenuService extends BaseService[RoleMenu, (String, Long), RoleMenuQueryCondition]
+
+  val roleMenuService: RoleMenuService
+}
+
+/**
+ * 角色功能
+ */
+trait RoleFuncServiceComponent {
+
+  trait RoleFuncService extends BaseService[RoleFunc, (Long, String), RoleFuncQueryCondition]
+
+  val roleFuncService: RoleFuncService
 }
 
 /**
@@ -217,4 +238,17 @@ trait LoginLogServiceComponent {
   }
 
   val loginLogService: LoginLogService
+}
+
+/**
+ * 功能服务组件
+ */
+trait FunctionServiceComponent {
+
+  /**
+   * 功能服务
+   */
+  trait FunctionService extends BaseService[Function, String, FunctionQueryCondition]
+
+  val functionService: FunctionService
 }

@@ -215,7 +215,20 @@ trait RoleFuncDaoComponent {
   /**
    * 角色功能dao
    */
-  trait RoleFuncDao extends BaseDao[RoleFunc, (Long, Long), RoleFuncQueryCondition]
+  trait RoleFuncDao extends BaseDao[RoleFunc, (Long, String), RoleFuncQueryCondition]
 
   val roleFuncDao: RoleFuncDao
+}
+
+/**
+ * 功能组件
+ */
+trait FunctionDaoComponent {
+
+  /**
+   * 功能组件dao
+   */
+  trait FunctionDao extends BaseDao[Function, String, FunctionQueryCondition]
+
+  val functionDao: FunctionDao
 }

@@ -1654,3 +1654,243 @@ trait LoginLogDaoComponentImpl extends LoginLogDaoComponent {
   }
 
 }
+
+trait RoleFuncDaoComponentImpl extends RoleFuncDaoComponent {
+
+  class RoleFuncDaoImpl extends RoleFuncDao {
+    def selectForPage(params: RoleFuncQueryCondition, sort: String = "roleid", dir: String = "asc") = {
+      from(SystemManage.roleFuncs)(
+        rf =>
+          where(
+            rf.roleId === params.roleId.?
+              and rf.functionId === params.functionId.?
+          )
+            select (rf)
+            orderBy {
+            if (sort == "roleId")
+              if (dir == "asc")
+                rf.roleId asc
+              else
+                rf.roleId desc
+            if (sort == "functionId")
+              if (dir == "asc")
+                rf.functionId asc
+              else
+                rf.functionId desc
+            else
+              rf.roleId asc
+          }
+      )
+    }
+
+    /**
+     * 插入
+     * @param m 实体
+
+     * @return 插入后的实体
+     */
+    def insert(m: RoleFunc): RoleFunc = SystemManage.roleFuncs.insert(m)
+
+    /**
+     * 分页总数查询
+     * @param params 分页查询条件
+
+     * @return 结果数
+     */
+    def count(params: RoleFuncQueryCondition): Int = selectForPage(params).Count.toInt
+
+    /**
+     * 修改
+     * @param m 实体
+
+     * @return
+     */
+    def update(m: RoleFunc): Unit = SystemManage.roleFuncs.update(m)
+
+    /**
+     * 删除
+     * @param m 实体
+
+     * @return
+     */
+    def delete(m: RoleFunc): Unit = SystemManage.roleFuncs.delete(m.id)
+
+    /**
+     * 通过主键删除
+     * @param id 主键
+
+     * @return
+     */
+    def deleteById(id: (Long, String)): Unit = SystemManage.roleFuncs.deleteWhere(rf => rf.id === id)
+
+    /**
+     * 分页查询
+     * @param pageno 页码
+     * @param pagesize 每页显示数
+     * @param params 分页查询条件
+     * @param sort 排序字段
+     * @param dir 升降序
+
+     * @return 分页结果
+     */
+    def page(pageno: Int, pagesize: Int, params: RoleFuncQueryCondition, sort: String, dir: String): Page[RoleFunc] = {
+      val pager = Page[RoleFunc](pageno, pagesize, count(params))
+      if (pager.total == 0)
+        pager
+      else
+        pager.copy(data = selectForPage(params, sort, dir).page(pager.start, pager.limit).toList)
+    }
+
+    /**
+     * 非分页查询
+     * @param params 查询条件
+
+     * @return 结果列表
+     */
+    def list(params: RoleFuncQueryCondition): List[RoleFunc] = selectForPage(params).toList
+
+    /**
+     * 通过主键获取单个实体
+     * @param id 主键
+
+     * @return 实体
+     */
+    def getById(id: (Long, String)): RoleFunc = SystemManage.roleFuncs.where(rf => rf.id === id).singleOption.get
+  }
+
+}
+
+/**
+ * 功能组件实现
+ */
+trait FunctionDaoComponentImpl extends FunctionDaoComponent {
+
+  /**
+   * 功能Dao实现
+   */
+  class FunctionDaoImpl extends FunctionDao {
+    def selectForPage(params: FunctionQueryCondition, sort: String = "id", dir: String = "asc") = {
+      from(SystemManage.functions)(
+        f =>
+          where(
+            f.id === params.id.?
+              and f.systemcode === params.systemcode.?
+              and f.funcname === params.funcname.?
+              and f.funcdefine === params.funcdefine.?
+              and f.functype === params.functype.?
+          )
+            select (f)
+            orderBy {
+            if (sort == "id") {
+              if (dir == "asc")
+                f.id asc
+              else
+                f.id desc
+            }
+            else if (sort == "systemcode") {
+              if (dir == "asc")
+                f.systemcode asc
+              else
+                f.systemcode desc
+            }
+            else if (sort == "funcname") {
+              if (dir == "asc")
+                f.funcname asc
+              else
+                f.funcname desc
+            }
+            else if (sort == "funcdefine") {
+              if (dir == "asc")
+                f.funcdefine asc
+              else
+                f.funcdefine desc
+            }
+            else if (sort == "functype") {
+              if (dir == "asc")
+                f.functype asc
+              else
+                f.functype desc
+            }
+            else
+              f.id asc
+          }
+      )
+    }
+
+    /**
+     * 插入
+     * @param m 实体
+
+     * @return 插入后的实体
+     */
+    def insert(m: Function): Function = SystemManage.functions.insert(m)
+
+    /**
+     * 分页总数查询
+     * @param params 分页查询条件
+
+     * @return 结果数
+     */
+    def count(params: FunctionQueryCondition): Int = selectForPage(params).Count.toInt
+
+    /**
+     * 修改
+     * @param m 实体
+
+     * @return
+     */
+    def update(m: Function): Unit = SystemManage.functions.update(m)
+
+    /**
+     * 删除
+     * @param m 实体
+
+     * @return
+     */
+    def delete(m: Function): Unit = SystemManage.functions.delete(m.id)
+
+    /**
+     * 通过主键删除
+     * @param id 主键
+
+     * @return
+     */
+    def deleteById(id: String): Unit = SystemManage.functions.deleteWhere(f=> f.id === id)
+
+    /**
+     * 分页查询
+     * @param pageno 页码
+     * @param pagesize 每页显示数
+     * @param params 分页查询条件
+     * @param sort 排序字段
+     * @param dir 升降序
+
+     * @return 分页结果
+     */
+    def page(pageno: Int, pagesize: Int, params: FunctionQueryCondition, sort: String, dir: String): Page[Function] = {
+      val page=Page[Function](pageno,pagesize,count(params))
+      if(page.total == 0)
+        page
+      else{
+        page.copy(data=selectForPage(params,sort,dir).page(page.start,page.limit).toList)
+      }
+    }
+
+    /**
+     * 非分页查询
+     * @param params 查询条件
+
+     * @return 结果列表
+     */
+    def list(params: FunctionQueryCondition): List[Function] = selectForPage(params).toList
+
+    /**
+     * 通过主键获取单个实体
+     * @param id 主键
+
+     * @return 实体
+     */
+    def getById(id: String): Function = SystemManage.functions.where(f=>f.id === id)
+  }
+
+}

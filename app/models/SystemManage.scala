@@ -35,6 +35,8 @@ object SystemManage extends Schema {
   val roleMenus = table[RoleMenu]("t_role_menu")
   val loginLogs = table[LoginLog]("t_loginlog")
   on(loginLogs)(l => declare(l.id is(autoIncremented("loginlogid"), primaryKey)))
+  val roleFuncs = table[RoleFunc]("t_role_func")
+  val functions = table[Function]("t_function")
 }
 
 /**
@@ -439,13 +441,15 @@ case class LoginLogQueryCondition(
 /**
  * 角色功能
  * @param roleId
- * @param functionId
+ * @param funccode
+ * @param param
  */
 case class RoleFunc(
                      roleId: Long,
-                     functionId: Long
-                     ) extends KeyedEntity[CompositeKey2[Long, Long]] {
-  def id = compositeKey(roleId, functionId)
+                     funccode: String,
+                     param: Option[String] = None
+                     ) extends KeyedEntity[CompositeKey2[Long, String]] {
+  def id = compositeKey(roleId, funccode)
 }
 
 /**
@@ -456,4 +460,28 @@ case class RoleFunc(
 case class RoleFuncQueryCondition(
                                    roleId: Option[Long] = None,
                                    functionId: Option[Long] = None
+                                   ) extends QueryCondition
+
+/**
+ * 功能
+ * @param id
+ * @param systemcode
+ * @param funcname
+ * @param funcdefine
+ * @param functype
+ */
+case class Function(
+                     id: Option[String] = None,
+                     systemcode: String,
+                     funcname: Option[String] = None,
+                     funcdefine: Option[String] = None,
+                     functype: Long = 0
+                     ) extends KeyedEntity[Option[String]]
+
+case class FunctionQueryCondition(
+                                   id: Option[String] = None,
+                                   systemcode: Option[String] = None,
+                                   funcname: Option[String] = None,
+                                   funcdefine: Option[String] = None,
+                                   functype: Option[Long] = None
                                    ) extends QueryCondition

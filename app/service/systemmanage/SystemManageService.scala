@@ -264,8 +264,8 @@ trait MenuServiceComponentImpl extends MenuServiceComponent {
  */
 trait RoleServiceComponentImpl extends RoleServiceComponent {
   this: RoleDaoComponent
-  with RoleMenuDaoComponent
-  with RoleFuncDaoComponent=>
+    with RoleMenuDaoComponent
+    with RoleFuncDaoComponent =>
 
   class RoleServiceImpl extends RoleService {
     /**
@@ -314,7 +314,7 @@ trait RoleServiceComponentImpl extends RoleServiceComponent {
     def insert(e: Role): Role = inTransaction(roleDao.insert(e))
 
     def insert(role: Role, roleMenus: Option[List[RoleMenu]], roleFuncs: Option[List[RoleFunc]]): Unit = inTransaction {
-      val inserted=this.insert(role)
+      val inserted = this.insert(role)
       roleMenus match {
         case Some(roleMenus) =>
           roleMenus.foreach(rm => {
@@ -324,7 +324,7 @@ trait RoleServiceComponentImpl extends RoleServiceComponent {
       }
       roleFuncs match {
         case Some(roleFuncs) =>
-          roleFuncs.foreach(rf=>
+          roleFuncs.foreach(rf =>
             roleFuncDao.insert(rf)
           )
         case None =>
@@ -332,6 +332,80 @@ trait RoleServiceComponentImpl extends RoleServiceComponent {
       inserted
     }
 
+  }
+
+}
+
+/**
+ * 角色菜单
+ */
+trait RoleMenuServiceComponentImpl extends RoleMenuServiceComponent {
+  this: RoleMenuDaoComponent =>
+
+  /**
+   * 角色菜单
+   */
+  class RoleMeneServiceImpl extends RoleMenuService {
+    def insert(e: RoleMenu): RoleMenu = inTransaction {
+      roleMenuDao.insert(e)
+    }
+
+    def update(e: RoleMenu): Unit = inTransaction {
+      roleMenuDao.update(e)
+    }
+
+    def deleteById(id: (String, Long)): Unit = inTransaction {
+      roleMenuDao.deleteById(id)
+    }
+
+    def page(pageno: Int, pagesize: Int, params: RoleMenuQueryCondition, sort: String, dir: String): Page[RoleMenu] = inTransaction {
+      roleMenuDao.page(pageno, pagesize, params, sort, dir)
+    }
+
+    def getById(id: (String, Long)): RoleMenu = inTransaction {
+      roleMenuDao.getById(id)
+    }
+
+    def list(params: RoleMenuQueryCondition): List[RoleMenu] = inTransaction {
+      roleMenuDao.list(params)
+    }
+  }
+
+}
+
+/**
+ * 角色功能
+ */
+trait RoleFuncServiceComponentImpl extends RoleFuncServiceComponent {
+  this: RoleFuncDaoComponent =>
+
+  /**
+   * 角色功能
+   */
+  class RoleFuncServiceImpl extends RoleFuncService {
+    def insert(e: RoleFunc): RoleFunc = inTransaction {
+      roleFuncDao.insert(e)
+    }
+
+    def update(e: RoleFunc): Unit = inTransaction {
+      roleFuncDao.update(e)
+    }
+
+    def deleteById(id: (Long, String)): Unit = inTransaction {
+      roleFuncDao.deleteById(id)
+    }
+
+    def page(pageno: Int, pagesize: Int, params: RoleFuncQueryCondition, sort: String, dir: String): Page[RoleFunc] = inTransaction {
+      roleFuncDao.page(pageno, pagesize, params, sort, dir)
+    }
+
+    def getById(id: (Long, String)): RoleFunc = inTransaction {
+      roleFuncDao.getById(id)
+    }
+
+    def list(params: RoleFuncQueryCondition): List[RoleFunc] = inTransaction {
+      roleFuncDao.list(params)
+    }
   }
 
 }
@@ -714,6 +788,43 @@ trait LoginLogServiceComponentImpl extends LoginLogServiceComponent {
 
     def list(params: LoginLogQueryCondition): List[LoginLog] = inTransaction {
       loginLogDao.list(params)
+    }
+  }
+
+}
+
+/**
+ * 功能服务组件
+ */
+trait FunctionServiceComponentImpl extends FunctionServiceComponent {
+  this: FunctionDaoComponent =>
+
+  /**
+   * 功能服务实现
+   */
+  class FunctionServiceImpl extends FunctionService {
+    def insert(e: Function): Function = inTransaction {
+      functionDao.insert(e)
+    }
+
+    def update(e: Function): Unit = inTransaction {
+      functionDao.update(e)
+    }
+
+    def deleteById(id: String): Unit = inTransaction {
+      functionDao.deleteById(id)
+    }
+
+    def page(pageno: Int, pagesize: Int, params: FunctionQueryCondition, sort: String, dir: String): Page[Function] = inTransaction {
+      functionDao.page(pageno, pagesize, params, sort, dir)
+    }
+
+    def getById(id: String): Function = inTransaction {
+      functionDao.getById(id)
+    }
+
+    def list(params: FunctionQueryCondition): List[Function] = inTransaction {
+      functionDao.list(params)
     }
   }
 
