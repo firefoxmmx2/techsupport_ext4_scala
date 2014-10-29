@@ -1663,7 +1663,7 @@ trait RoleFuncDaoComponentImpl extends RoleFuncDaoComponent {
         rf =>
           where(
             rf.roleId === params.roleId.?
-              and rf.functionId === params.functionId.?
+              and rf.funccode === params.funccode.?
           )
             select (rf)
             orderBy {
@@ -1672,11 +1672,11 @@ trait RoleFuncDaoComponentImpl extends RoleFuncDaoComponent {
                 rf.roleId asc
               else
                 rf.roleId desc
-            if (sort == "functionId")
+           else if (sort == "funccode")
               if (dir == "asc")
-                rf.functionId asc
+                rf.funccode asc
               else
-                rf.functionId desc
+                rf.funccode desc
             else
               rf.roleId asc
           }
@@ -1890,7 +1890,7 @@ trait FunctionDaoComponentImpl extends FunctionDaoComponent {
 
      * @return 实体
      */
-    def getById(id: String): Function = SystemManage.functions.where(f=>f.id === id)
+    def getById(id: String): Function = SystemManage.functions.where(f=>f.id === id).singleOption.get
   }
 
 }

@@ -23,8 +23,20 @@ with DictItemServiceComponentImpl
 with DictDaoComponentImpl
 with DictServiceComponentImpl
 with LoginLogServiceComponentImpl
-with LoginLogDaoComponentImpl {
+with LoginLogDaoComponentImpl
+with FunctionDaoComponentImpl
+with FunctionServiceComponentImpl
+with RoleFuncDaoComponentImpl
+with RoleFuncServiceComponentImpl
+with RoleMenuServiceComponentImpl
+with RoleMenuDaoComponentImpl{
 
+  val functionService: FunctionService = new FunctionServiceImpl
+  val roleFuncService: RoleFuncService = new RoleFuncServiceImpl
+  val functionDao: FunctionDao = new FunctionDaoImpl
+  val roleMenuDao: RoleMenuDao = new RoleMenuDaoImpl
+  val roleMenuService: RoleMenuService = new RoleMeneServiceImpl
+  val roleFuncDao: RoleFuncDao = new RoleFuncDaoImpl
   val departmentService: DepartmentService = new DepartmentServiceImpl
   val departmentDao: DepartmentDao = new DepartmentDaoImpl
   val globalParamService: GlobalParamService = new GlobalParamServiceImpl

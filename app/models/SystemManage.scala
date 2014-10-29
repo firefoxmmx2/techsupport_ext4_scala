@@ -459,7 +459,7 @@ case class RoleFunc(
  */
 case class RoleFuncQueryCondition(
                                    roleId: Option[Long] = None,
-                                   functionId: Option[Long] = None
+                                   funccode: Option[String] = None
                                    ) extends QueryCondition
 
 /**

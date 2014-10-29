@@ -1,15 +1,11 @@
 package service.systemmanage
 
 import models._
-import util.Page
-import dao.systemmanage.DepartmentDaoComponent
 import service.BaseService
 import models.Department
 import models.System
 import models.User
 import models.Role
-import org.apache.commons.lang3.StringUtils
-import org.apache.xpath.functions.FuncStartsWith
 
 /**
  * Created by hooxin on 14-3-10.

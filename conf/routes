@@ -88,3 +88,10 @@ POST          /api/loginlogs/:id                                       controlle
 DELETE        /api/loginlogs/:id                                       controllers.systemmanage.LoginLog.remove(id:Long)
 PUT           /api/loginlogs/:id                                       controllers.systemmanage.LoginLog.update(id:Long)
 GET           /api/loginlogs/:id                                       controllers.systemmanage.LoginLog.get(id:Long)
+
+#功能
+GET           /api/functions                                           controllers.systemmanage.Function.list
+POST          /api/functions/:id                                       controllers.systemmanage.Function.add(id:String)
+DELETE        /api/functions/:id                                       controllers.systemmanage.Function.remove(id:String)
+PUT           /api/functions/:id                                       controllers.systemmanage.Function.update(id:String)
+GET           /api/functions/:id                                       controllers.systemmanage.Function.getById(id:String)
