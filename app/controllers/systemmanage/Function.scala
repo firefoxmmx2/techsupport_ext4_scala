@@ -169,16 +169,16 @@ object Function extends Controller {
               "total" -> page.total,
               "page" -> pageno,
               "limit" -> limit,
-            "message"->"获取功能列表成功"))).as(JSON)
+              "message" -> "获取功能列表成功"))).as(JSON)
           }
           catch {
-            case e:Exception =>
+            case e: Exception =>
               log.error("获取功能列表发生错误")
               log.error(e.getMessage)
-              log.debug(e.getMessage,e.fillInStackTrace())
-              Ok(Json.generate(Map("success"->false,
-              "result"-> -1,
-              "message"->"获取功能列表发生错误"))).as(JSON)
+              log.debug(e.getMessage, e.fillInStackTrace())
+              Ok(Json.generate(Map("success" -> false,
+                "result" -> -1,
+                "message" -> "获取功能列表发生错误"))).as(JSON)
           }
         }
       )
@@ -189,5 +189,11 @@ object Function extends Controller {
    * @param id
    * @return
    */
-  def checkIDAvailable(id: String) = TODO
+  def checkIDAvailable(id: String) = Action {
+
+    Ok(Json.generate(Map("success" -> true,
+      "result" -> 0,
+      "isAvailable" -> true,
+      "message" -> "验证功能代码是否可用"))).as(JSON)
+  }
 }

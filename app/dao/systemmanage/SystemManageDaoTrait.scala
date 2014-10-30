@@ -228,7 +228,13 @@ trait FunctionDaoComponent {
   /**
    * 功能组件dao
    */
-  trait FunctionDao extends BaseDao[Function, String, FunctionQueryCondition]
+  trait FunctionDao extends BaseDao[Function, String, FunctionQueryCondition] {
+    /**
+     * 验证ID是否重复
+     * @param id
+     */
+    def checkIDRepeat(id:String):Boolean
+  }
 
   val functionDao: FunctionDao
 }

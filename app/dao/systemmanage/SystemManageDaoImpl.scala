@@ -1891,6 +1891,16 @@ trait FunctionDaoComponentImpl extends FunctionDaoComponent {
      * @return 实体
      */
     def getById(id: String): Function = SystemManage.functions.where(f=>f.id === id).singleOption.get
+
+    /**
+     * 验证ID是否重复
+     * @param id
+     */
+    def checkIDRepeat(id: String): Boolean = from(SystemManage.functions)(
+      f=>
+        where(f.id === id)
+        select(f.id)
+    ).Count > 0
   }
 
 }
