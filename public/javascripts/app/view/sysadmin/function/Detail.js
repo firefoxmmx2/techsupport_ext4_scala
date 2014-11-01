@@ -3,8 +3,8 @@
  */
 Ext.define('Techsupport.view.sysadmin.function.Detail', {
     extend: 'Techsupport.view.base.BaseDetail',
+    alias: 'widget.functiondetail',
     initComponent: function () {
-        this.alias = "widget.functiondetail"
         this.callParent(arguments)
         this.down('form > panel').add([
             {name: 'id', fieldLabel: '功能代码'},
@@ -19,16 +19,17 @@ Ext.define('Techsupport.view.sysadmin.function.Detail', {
                 valueField: 'value',
                 editable: false,
                 emptyText: '请选择',
-                store: Ext.create('Ext.data.ArrayStore', {
+                store: Ext.create('Ext.data.Store', {
                     fields: ['value', 'text'],
                     data: [
                         {value: '0', text: '管理类型'},
                         {value: '1', text: '普通类型'}
-                    ]
+                    ],
+                    autoLoad: true
                 })
             },
             {xtype: 'textareafield', name: 'funcdefine', fieldLabel: '功能描述',
-                anchor: '100%',
+                columnWidth: 1,
                 grow: true,
                 height: 40
             }

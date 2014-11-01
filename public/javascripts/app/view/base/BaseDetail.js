@@ -15,6 +15,7 @@ Ext.define('Techsupport.view.base.BaseDetail', {
                 layout: 'column',
                 defaults: {
                     xtype: 'textfield',
+                    columnWidth: .5,
                     margin: {left: 5, top: 0, bottom: 5, right: 5}
                 },
                 border: false,

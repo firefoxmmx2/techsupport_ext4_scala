@@ -471,6 +471,7 @@ case class RoleFuncQueryCondition(
  * @param functype
  */
 case class Function(
+                     @Column("funccode")
                      id: Option[String] = None,
                      systemcode: String,
                      funcname: Option[String] = None,

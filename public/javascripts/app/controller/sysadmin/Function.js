@@ -16,8 +16,8 @@ Ext.define('Techsupport.controller.sysadmin.Function', {
     models: ['Function'],
     init: function () {
         this.control({
-            'functionmanage functionlist':{
-                itemdblick: function (self, record) {
+            'functionmanage panel[region=center] functionlist':{
+                itemdblclick: function (self, record) {
                     this.toEditFunction(record)
                 }
             },
@@ -69,7 +69,7 @@ Ext.define('Techsupport.controller.sysadmin.Function', {
             windowConfig.title = "功能新增"
             windowConfig._type="add"
         }
-        var _window = this.getView("sysadmin.view.function.Detail").create(windowConfig)
+        var _window = this.getView("sysadmin.function.Detail").create(windowConfig)
         var form = _window.down('form')
         if (!record) {
             form.loadRecord(this.getFunctionModel().create())

@@ -3,8 +3,8 @@
  */
 Ext.define('Techsupport.view.sysadmin.function.List', {
     extend: 'Techsupport.view.base.BaseList',
+    alias: 'widget.functionlist',
     initComponent: function () {
-        this.alias = "widget.functionlist"
         this.store = "Function"
         this.columns = [
             {dataIndex: 'id', text: '功能代码', flex: 1},
