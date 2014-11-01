@@ -7,9 +7,15 @@ Ext.define('Techsupport.view.sysadmin.function.Detail', {
     initComponent: function () {
         this.callParent(arguments)
         this.down('form > panel').add([
-            {name: 'id', fieldLabel: '功能代码'},
-            {name: 'systemcode', fieldLabel: '系统代码'},
-            {name: 'funcname', fieldLabel: '功能名称'},
+            {name: 'id', fieldLabel: '功能代码', allowBlank: false, blankText: "功能代码不能为空",
+                textValid: true,
+                validator: function (value) {
+                    return this.textValid
+                },
+                vtype: 'alphanum'
+            },
+            {name: 'systemcode', fieldLabel: '系统代码', allowBlank: false, blankText: "系统代码不能为空"},
+            {name: 'funcname', fieldLabel: '功能名称', allowBlank: false, blankText: "功能名称不能为空"},
             {xtype: 'combobox', name: 'functype', fieldLabel: '功能类别',
                 allowBlank: false,
                 blankText: '功能类别不能为空',
@@ -31,7 +37,7 @@ Ext.define('Techsupport.view.sysadmin.function.Detail', {
             {xtype: 'textareafield', name: 'funcdefine', fieldLabel: '功能描述',
                 columnWidth: 1,
                 grow: true,
-                height: 40
+                height: 70
             }
         ])
 

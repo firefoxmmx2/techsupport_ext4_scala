@@ -190,10 +190,21 @@ object Function extends Controller {
    * @return
    */
   def checkIDAvailable(id: String) = Action {
-
-    Ok(Json.generate(Map("success" -> true,
-      "result" -> 0,
-      "isAvailable" -> true,
-      "message" -> "验证功能代码是否可用"))).as(JSON)
+    try {
+      val result = functionService.checkFunccodeAvailable(id)
+      Ok(Json.generate(Map("success" -> true,
+        "result" -> 0,
+        "isAvailable" -> result,
+        "message" -> "验证功能代码是否可用成功"))).as(JSON)
+    }
+    catch {
+      case e: Exception =>
+        log.error("验证功能代码是否可用发生错误")
+        log.error(e.getMessage)
+        log.debug(e.getMessage, e.fillInStackTrace())
+        Ok(Json.generate(Map("success" -> false,
+          "result" -> -1,
+          "message" -> "验证功能代码是否可用发生错误"))).as(JSON)
+    }
   }
 }

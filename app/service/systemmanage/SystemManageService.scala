@@ -313,25 +313,6 @@ trait RoleServiceComponentImpl extends RoleServiceComponent {
      */
     def insert(e: Role): Role = inTransaction(roleDao.insert(e))
 
-    def insert(role: Role, roleMenus: Option[List[RoleMenu]], roleFuncs: Option[List[RoleFunc]]): Unit = inTransaction {
-      val inserted = this.insert(role)
-      roleMenus match {
-        case Some(roleMenus) =>
-          roleMenus.foreach(rm => {
-            roleMenuDao.insert(rm)
-          })
-        case None =>
-      }
-      roleFuncs match {
-        case Some(roleFuncs) =>
-          roleFuncs.foreach(rf =>
-            roleFuncDao.insert(rf)
-          )
-        case None =>
-      }
-      inserted
-    }
-
   }
 
 }
@@ -825,6 +806,15 @@ trait FunctionServiceComponentImpl extends FunctionServiceComponent {
 
     def list(params: FunctionQueryCondition): List[Function] = inTransaction {
       functionDao.list(params)
+    }
+
+    /**
+     * 功能代码可用验证
+     * @param funccode
+     * @return
+     */
+    def checkFunccodeAvailable(funccode: String): Boolean = inTransaction {
+      !functionDao.checkIDRepeat(funccode)
     }
   }
 

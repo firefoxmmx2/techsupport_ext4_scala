@@ -104,7 +104,6 @@ trait SystemServiceComponent {
 trait RoleServiceComponent {
 
   trait RoleService extends BaseService[Role, Long, RoleQueryCondition] {
-    def insert(role: Role, roleMenus: Option[List[RoleMenu]] = None, roleFuncs: Option[List[RoleFunc]] = None)
   }
 
   val roleService: RoleService
@@ -244,7 +243,14 @@ trait FunctionServiceComponent {
   /**
    * 功能服务
    */
-  trait FunctionService extends BaseService[Function, String, FunctionQueryCondition]
+  trait FunctionService extends BaseService[Function, String, FunctionQueryCondition]{
+    /**
+     * 功能代码可用验证
+     * @param funccode
+     * @return
+     */
+    def checkFunccodeAvailable(funccode:String):Boolean
+  }
 
   val functionService: FunctionService
 }

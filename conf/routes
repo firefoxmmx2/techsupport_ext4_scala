@@ -90,6 +90,7 @@ PUT           /api/loginlogs/:id                                       controlle
 GET           /api/loginlogs/:id                                       controllers.systemmanage.LoginLog.get(id:Long)
 
 #功能
+GET           /api/functions/checkIDAvailable/:id                      controllers.systemmanage.Function.checkIDAvailable(id:String)
 GET           /api/functions                                           controllers.systemmanage.Function.list
 POST          /api/functions/:id                                       controllers.systemmanage.Function.add(id:String)
 DELETE        /api/functions/:id                                       controllers.systemmanage.Function.remove(id:String)
