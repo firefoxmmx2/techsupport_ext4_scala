@@ -3,8 +3,8 @@
  */
 Ext.define('Techsupport.view.sysadmin.role.List', {
     extend: 'Techsupport.view.base.BaseList',
+    alias:'widget.rolelist',
     initComponent: function () {
-        this.alias='widget.rolelist'
         this.store = 'Role'
         this.columns = [
             {text: 'ID', dataIndex: 'id', flex: 1},

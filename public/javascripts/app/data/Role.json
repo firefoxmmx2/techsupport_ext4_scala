@@ -1,0 +1,21 @@
+/**
+ * 角色的测试数据文件
+ */
+{
+    "success": true,
+    "result": 0,
+    "message": "成功",
+    "total":1,
+    "data": [
+        {
+            "id": 0,
+            "rolename": "测试",
+            "roleDescription": "测试描述",
+            "roleType": "0",
+            "jzlbdm": "",
+            "jzlbmc": "",
+            "departid": 0
+        }
+    ]
+}
+

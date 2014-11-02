@@ -15,7 +15,7 @@ Ext.application({
         'sysadmin.Dict',
         'sysadmin.DictItem',
         "sysadmin.LoginLog",
-//        "sysadmin.Role",
+        "sysadmin.Role",
         "sysadmin.Function"
     ],
     autoCreateViewport: true,

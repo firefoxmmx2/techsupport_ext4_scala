@@ -5,7 +5,6 @@ Ext.define('Techsupport.view.sysadmin.role.Manage',{
     extend:'Techsupport.view.base.BaseManage',
     alias:'widget.rolemanage',
     initComponent: function () {
-//        this.alias="widget.rolemanage"
         Ext.clone(this.items,this.superclass.items)
         //去掉左边的面板
         this.items.splice(0,1)
@@ -26,6 +25,5 @@ Ext.define('Techsupport.view.sysadmin.role.Manage',{
                 {xtype:'button',text:'关联菜单',action:'relateMenu'},
                 {xtype:'button',text:'关联功能',action:'relateFunction'}
             ])
-
     }
 })
