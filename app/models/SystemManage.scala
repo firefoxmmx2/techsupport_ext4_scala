@@ -150,10 +150,10 @@ case class UserQueryCondition(
 case class Role(
                  rolename: String,
                  roleDescription: Option[String] = None,
-                 roleType: Option[String] = None,
+                 roleType: String = "0",
                  jzlbdm: Option[String] = None,
                  jzlbmc: Option[String] = None,
-                 departid: Option[Long] = None,
+                 departid: Long = 0,
                  @Column("ROLEID")
                  id: Option[Long] = None) extends KeyedEntity[Option[Long]] {
 }
@@ -455,7 +455,7 @@ case class RoleFunc(
 /**
  * 角色功能查询
  * @param roleId
- * @param functionId
+ * @param funccode
  */
 case class RoleFuncQueryCondition(
                                    roleId: Option[Long] = None,
