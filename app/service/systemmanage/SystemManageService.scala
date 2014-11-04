@@ -313,6 +313,14 @@ trait RoleServiceComponentImpl extends RoleServiceComponent {
      */
     def insert(e: Role): Role = inTransaction(roleDao.insert(e))
 
+    /**
+     * 验证角色名称可用性
+     * @param rolename
+     * @return
+     */
+    def checkRolenameAvailable(rolename: String): Boolean = inTransaction{
+      !roleDao.checkRolenameRepeat(rolename)
+    }
   }
 
 }

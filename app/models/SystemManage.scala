@@ -158,11 +158,12 @@ case class Role(
                  id: Option[Long] = None) extends KeyedEntity[Option[Long]] {
 }
 
-case class RoleQueryCondition(id: Option[Long] = None,
-                              rolename: Option[String] = None,
-                              roleDescript: Option[String] = None,
-                              roleType: Option[String] = None,
-                              departid: Option[Long] = None) extends QueryCondition
+case class RoleQueryCondition(
+                               id: Option[Long] = None,
+                               rolename: Option[String] = None,
+                               roleDescript: Option[String] = None,
+                               roleType: Option[String] = None,
+                               departid: Option[Long] = None) extends QueryCondition
 
 /**
  * 系统

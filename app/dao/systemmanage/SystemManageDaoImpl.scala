@@ -655,6 +655,17 @@ trait RoleDaoComponentImpl extends RoleDaoComponent {
      * @return 插入后的实体
      */
     def insert(m: Role): Role = SystemManage.roles.insert(m)
+
+    /**
+     * 角色名称重复验证
+     * @param rolename
+     * @return
+     */
+    def checkRolenameRepeat(rolename: String): Boolean = from(SystemManage.roles)(
+      r =>
+        where(r.rolename === rolename)
+          select (r)
+    ).Count > 0
   }
 
 }
@@ -1672,7 +1683,7 @@ trait RoleFuncDaoComponentImpl extends RoleFuncDaoComponent {
                 rf.roleId asc
               else
                 rf.roleId desc
-           else if (sort == "funccode")
+            else if (sort == "funccode")
               if (dir == "asc")
                 rf.funccode asc
               else
@@ -1855,7 +1866,7 @@ trait FunctionDaoComponentImpl extends FunctionDaoComponent {
 
      * @return
      */
-    def deleteById(id: String): Unit = SystemManage.functions.deleteWhere(f=> f.id === id)
+    def deleteById(id: String): Unit = SystemManage.functions.deleteWhere(f => f.id === id)
 
     /**
      * 分页查询
@@ -1868,11 +1879,11 @@ trait FunctionDaoComponentImpl extends FunctionDaoComponent {
      * @return 分页结果
      */
     def page(pageno: Int, pagesize: Int, params: FunctionQueryCondition, sort: String, dir: String): Page[Function] = {
-      val page=Page[Function](pageno,pagesize,count(params))
-      if(page.total == 0)
+      val page = Page[Function](pageno, pagesize, count(params))
+      if (page.total == 0)
         page
-      else{
-        page.copy(data=selectForPage(params,sort,dir).page(page.start,page.limit).toList)
+      else {
+        page.copy(data = selectForPage(params, sort, dir).page(page.start, page.limit).toList)
       }
     }
 
@@ -1890,16 +1901,16 @@ trait FunctionDaoComponentImpl extends FunctionDaoComponent {
 
      * @return 实体
      */
-    def getById(id: String): Function = SystemManage.functions.where(f=>f.id === id).singleOption.get
+    def getById(id: String): Function = SystemManage.functions.where(f => f.id === id).singleOption.get
 
     /**
      * 验证ID是否重复
      * @param id
      */
     def checkIDRepeat(id: String): Boolean = from(SystemManage.functions)(
-      f=>
+      f =>
         where(f.id === id)
-        select(f.id)
+          select (f.id)
     ).Count > 0
   }
 

@@ -101,7 +101,14 @@ trait MenuDaoComponent {
  */
 trait RoleDaoComponent {
 
-  trait RoleDao extends BaseDao[Role, Long, RoleQueryCondition]
+  trait RoleDao extends BaseDao[Role, Long, RoleQueryCondition] {
+    /**
+     * 角色名称重复验证
+     * @param rolename
+     * @return
+     */
+    def checkRolenameRepeat(rolename:String):Boolean
+  }
 
   val roleDao: RoleDao
 }

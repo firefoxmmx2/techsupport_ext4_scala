@@ -7,11 +7,13 @@ import play.api.data._
 import play.api.data.Forms._
 
 import scala.util.{Success, Failure, Try}
+import util.ControllerUtils
+import models.RoleQueryCondition
 
 /**
  * 角色
  */
-object Role extends Controller {
+object Role extends Controller with ControllerUtils {
   private val log = Logger.logger
   val roleForm = Form(
     mapping(
@@ -36,96 +38,139 @@ object Role extends Controller {
         form =>
           BadRequest(form.errorsAsJson),
         role => {
-          try {
+          val response = Try {
             val inserted = roleService.insert(role)
-            Ok(Json.generate(Map(
-              "success" -> true,
-              "result" -> 0,
-              "message" -> "添加角色成功"
-            )))
+            responseData(message = "角色添加成功", extraParams = Some(Map("inserted" -> inserted)))
+          } match {
+            case Failure(e: Exception) =>
+              responseData(message = "角色添加发生错误", result = -1, e = Some(e))
+            case Success(p) =>
+              p
           }
-          catch {
-            case e: Exception =>
-              log.error("角色添加发生错误")
-              log.error(e.getMessage)
-              log.debug(e.getMessage, e.fillInStackTrace())
-              Ok(Json.generate(Map(
-                "success" -> false,
-                "result" -> -1,
-                "message" -> "角色添加发生错误"
-              )))
-          }
+          Ok(Json.generate(response))
         }
       )
   }
 
+  /**
+   * 角色信息删除
+   * @param id
+   * @return
+   */
   def remove(id: Long) = Action {
     implicit request =>
-      try {
+      val response = Try {
         roleService.deleteById(id)
-        Ok(Json.generate(Map(
-          "success" -> true,
-          "result" -> 0,
-          "message" -> "角色删除成功"
-        )))
+        responseData(message = "角色删除成功")
+      } match {
+        case Failure(e: Exception) =>
+          responseData(result = -1, message = "角色删除发生错误", e = Some(e))
+        case Success(p) =>
+          p
       }
-      catch {
-        case e: Exception =>
-          log.error("角色删除发生错误")
-          log.error(e.getMessage)
-          log.debug(e.getMessage, e.fillInStackTrace())
-          Ok(Json.generate(Map(
-            "success" -> false,
-            "result" -> -1,
-            "message" -> "角色删除发生错误"
-          )))
-      }
+      Ok(Json.generate(response))
   }
 
+  /**
+   * 角色信息修改
+   * @param id
+   * @return
+   */
   def update(id: Long) = Action {
     implicit request =>
       roleForm.bindFromRequest.fold(
         form =>
           BadRequest(form.errorsAsJson),
         role => {
-          val responseData = Try {
+          val response = Try {
             roleService.update(role)
+            responseData(message = "角色修改成功")
           } match {
             case Failure(e) =>
-              log.error("角色修改发生错误")
-              log.error(e.getMessage)
-              log.debug(e.getMessage, e.fillInStackTrace())
-              Map(
-                "success" -> false,
-                "result" -> -1,
-                "message" -> "角色修改发生错误"
-              )
+              responseData(result = -1, message = "角色修改发生错误")
             case Success(p) =>
-              Map(
-                "success" -> true,
-                "result" -> 0,
-                "message" -> "角色修改成功")
+              p
           }
-          Ok(Json.generate(responseData))
+          Ok(Json.generate(response))
         }
 
       )
   }
 
+  /**
+   * 获取单一角色信息
+   * @param id
+   * @return
+   */
   def get(id: Long) = Action {
-    implicit request=>
-      val responseData=Try{
-        val data=roleService.getById(id)
-        Map("success"->true,"result"->0,"data"->data)
-      }  match {
-        case Failure(e) =>
-
-        case None =>
+    implicit request =>
+      val response = Try {
+        val data = roleService.getById(id)
+        responseData(message = "获取单一角色信息成功", extraParams = Some(Map("data" -> data)))
+      } match {
+        case Failure(e: Exception) =>
+          responseData(result = -1, message = "获取单一角色信息发生错误", e = Some(e))
+        case Success(p) =>
+          p
       }
-      Ok(Json.generate(responseData))
+      Ok(Json.generate(response))
   }
 
-  def list = TODO
+  val roleQueryForm = Form(
+    mapping(
+      "id" -> optional(longNumber),
+      "rolename" -> optional(text),
+      "roleDescript" -> optional(text),
+      "roleType" -> optional(text),
+      "departid" -> optional(longNumber)
+    )(RoleQueryCondition.apply)(RoleQueryCondition.unapply)
+  )
 
-  def checkRolenameAvailable(rolename: String) = Try {}
+  /**
+   * 获取角色列表
+   * @return
+   */
+  def list = Action {
+    implicit request =>
+      val pageno = request.getQueryString("page").getOrElse("1").toInt
+      val limit = request.getQueryString("limit").getOrElse("20").toInt
+      val sort = request.getQueryString("sort").getOrElse("id")
+      val dir = request.getQueryString("dir").getOrElse("asc").toLowerCase
+
+      roleQueryForm.bindFromRequest.fold(
+        form =>
+          BadRequest(form.errorsAsJson),
+        roleQuery => {
+          val response = Try {
+            val page = roleService.page(pageno, limit, roleQuery, sort, dir)
+            responseData(message = "获取角色列表成功", extraParams = Some(Map("total" -> page.total, "data" -> page.data)))
+          } match {
+            case Failure(e: Exception) =>
+              responseData(result = -1, message = "获取角色列表发生错误", e = Some(e))
+            case Success(p) =>
+              p
+          }
+          Ok(Json.generate(response))
+        }
+      )
+  }
+
+  /**
+   * 验证角色名称可用性
+   * @param rolename
+   * @return
+   */
+  def checkRolenameAvailable(rolename: String) = Action {
+    implicit request =>
+      val response = Try {
+        val isAvailable = roleService.checkRolenameAvailable(rolename)
+        responseData(extraParams = Some(Map("isAvailable" -> isAvailable)))
+      } match {
+        case Failure(e: Exception) =>
+          responseData(result = -1, message = "验证角色名称可用性", e = Some(e))
+        case Success(p) =>
+          p
+      }
+      Ok(Json.generate(response))
+  }
 }

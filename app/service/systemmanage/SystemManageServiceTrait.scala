@@ -104,6 +104,12 @@ trait SystemServiceComponent {
 trait RoleServiceComponent {
 
   trait RoleService extends BaseService[Role, Long, RoleQueryCondition] {
+    /**
+     * 验证角色名称可用性
+     * @param rolename
+     * @return
+     */
+    def checkRolenameAvailable(rolename:String):Boolean
   }
 
   val roleService: RoleService

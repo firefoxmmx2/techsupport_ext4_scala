@@ -65,7 +65,7 @@ trait ControllerUtils {
   def responseData(result: Int = 0,
                    log: Logger = Logger.logger,
                    message: String = "操作成功",
-                   extraParams: Option[Map[String, AnyRef]] = None,
+                   extraParams: Option[Map[String, Any]] = None,
                    e: Option[Exception] = None): Map[String, Any] = Try {
     e match {
       case Some(e) =>

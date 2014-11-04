@@ -96,3 +96,11 @@ POST          /api/functions/:id                                       controlle
 DELETE        /api/functions/:id                                       controllers.systemmanage.Function.remove(id:String)
 PUT           /api/functions/:id                                       controllers.systemmanage.Function.update(id:String)
 GET           /api/functions/:id                                       controllers.systemmanage.Function.getById(id:String)
+
+#角色
+GET           /api/roles/checkRolenameAvailable/:id                    controllers.systemmanage.Role.checkRolenameAvailable(id:String)
+GET           /api/roles                                               controllers.systemmanage.Role.list
+POST          /api/roles/:id                                           controllers.systemmanage.Role.add(id:String)
+DELETE        /api/roles/:id                                           controllers.systemmanage.Role.remove(id:String)
+PUT           /api/roles/:id                                           controllers.systemmanage.Role.update(id:String)
+GET           /api/roles/:id                                           controllers.systemmanage.Role.getById(id:String)
