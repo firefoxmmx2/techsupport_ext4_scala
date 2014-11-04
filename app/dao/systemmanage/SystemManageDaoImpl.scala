@@ -548,14 +548,22 @@ trait RoleDaoComponentImpl extends RoleDaoComponent {
 
   class RoleDaoImpl extends RoleDao {
     def selectForPage(params: RoleQueryCondition, sort: String = "id", dir: String = "asc") = {
+      val rolenameLike= params.rolename match {
+        case Some(x) => Some("%"+x+"%")
+        case None => None
+      }
+      val roleDescriptionLike=params.roleDescript match {
+        case Some(x) => Some("%"+x+"%")
+        case None => None
+      }
       from(SystemManage.roles)(
         r =>
           where(
             r.id === params.id.?
               and r.departid === params.departid.?
-              and (r.rolename like params.rolename.?)
-              and (r.roleType like params.roleType.?)
-              and (r.roleDescription like params.roleDescript.?))
+              and (r.rolename like rolenameLike.?)
+              and (r.roleType === params.roleType.?)
+              and (r.roleDescription like roleDescriptionLike.?))
             select (r)
             orderBy {
             if (sort == "id")

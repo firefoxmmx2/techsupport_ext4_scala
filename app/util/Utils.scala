@@ -1,9 +1,9 @@
 package util
 
-import akka.actor.FSM.Failure
 import play.api.Logger
 
-import scala.util.{Success, Try}
+import scala.util.{Failure, Success, Try}
+import org.slf4j
 
 /**
  * Created by hooxin on 14-5-9.
@@ -63,7 +63,7 @@ class RichMap[K, +V](map: Map[K, V]) {
  */
 trait ControllerUtils {
   def responseData(result: Int = 0,
-                   log: Logger = Logger.logger,
+                   log: slf4j.Logger = Logger.logger,
                    message: String = "操作成功",
                    extraParams: Option[Map[String, Any]] = None,
                    e: Option[Exception] = None): Map[String, Any] = Try {

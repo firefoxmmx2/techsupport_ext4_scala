@@ -3,6 +3,7 @@
  */
 Ext.define('Techsupport.view.sysadmin.role.RelateFunc', {
     extend: 'Techsupport.view.base.BaseDetail',
+    title:'角色功能关联',
     initComponent: function () {
         this.callParent()
         this.down('form > panel')
@@ -27,18 +28,23 @@ Ext.define('Techsupport.view.sysadmin.role.RelateFunc', {
                             layout: 'hbox',
                             items: [
                                 {
-                                    xtype: 'combobox',
-                                    multiSelect: true,
-                                    queryMode: 'local',
-                                    displayField:'funcname',
-                                    valueField:'funccode',
+                                    xtype: 'grid',
+                                    border:false,
                                     store: Ext.create('Techsupport.store.RoleFunc', {
                                         autoLoad: false
-                                    })
+                                    }),
+                                    columns:[
+                                        {
+                                            dataIndex:'funcname',text:'功能名称'
+                                        }
+                                    ]
                                 },
                                 {
                                     xtype: 'panel',
-                                    layout: 'vbox',
+                                    layout: {
+                                        type:'vbox',
+                                        align:'center'
+                                    },
                                     items: [
                                         {
                                             xtype: 'button',
@@ -59,14 +65,16 @@ Ext.define('Techsupport.view.sysadmin.role.RelateFunc', {
                                     ]
                                 },
                                 {
-                                    xtype: 'combobox',
-                                    multiSelect: true,
-                                    queryMode: 'local',
-                                    displayField:'funcname',
-                                    valueField:'funccode',
+                                    xtype: 'grid',
+                                    border:false,
                                     store: Ext.create('Techsupport.store.RoleFunc', {
                                         autoLoad: false
-                                    })
+                                    }),
+                                    columns:[
+                                        {
+                                            dataIndex:'funcname',text:'功能名称'
+                                        }
+                                    ]
                                 }
                             ]
                         }

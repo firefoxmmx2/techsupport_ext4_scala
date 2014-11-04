@@ -8,7 +8,8 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
         "sysadmin.role.List",
         "sysadmin.role.Manage",
         "sysadmin.role.Detail",
-        "sysadmin.role.RelateFunc"
+        "sysadmin.role.RelateFunc"  ,
+        "sysadmin.role.RelateMenu"
     ],
     models: ['Role', 'RoleFunc'],
     refs: [
@@ -17,6 +18,14 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
     ],
     init: function () {
         this.control({
+            'rolemanage' : {
+              afterrender: function (p) {
+                  var queryBtn = p.down('panel[region=center] button[action=query]')
+                 setTimeout(function () {
+                     queryBtn.fireEvent('click', queryBtn)
+                 },50)
+              }
+            },
             'rolemanage rolelist': {
                 itemdblclick: function (grid, record) { //双击打开编辑窗口
                     this.toModifyRole(record)
@@ -47,12 +56,28 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
             },
             'rolemanage panel[region=center] button[action=relateMenu]': {//管理界面关联菜单按钮
                 click: function (button) {
-
+                    this.toRelateMenu()
                 }
             },
             'rolemanage panel[region=center] button[action=relateFunction]': {//关联操作按钮
                 click: function (button) {
-
+                    this.toRelateFunction()
+                }
+            },
+            'roledetail[usertype=add] button[action=enter]': { //添加窗口添加角色
+                click: function (button) {
+                    this.addRole(button.up('window').down('form'))
+                }
+            },
+            'roledetial[usertype=modify] button[action=enter]': {//修改窗口保存角色
+                click: function (button) {
+                    var form = button.up('window').down('form')
+                    this.modifyRole(form)
+                }
+            },
+            'roledetail button[action=cancel]': {
+                click: function (button) {
+                    button.up('window').close()
                 }
             }
         })
@@ -60,26 +85,66 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
     toAddRole: function () {//打开新增
         var _window = this.getView("sysadmin.role.Detail").create({
             title: '角色新增',
-            _type: 'add'
+            usertype: 'add'
         })
         var form = _window.down('form')
+//        _window.down('button[action=enter]').on('click', function (button) {
+//
+//        },this)
         form.loadRecord(this.getModel("Role").create())
         _window.show()
     },
-    addRole: function () {//新增
-
+    addRole: function (form) {//新增
+        var store = this.getRoleListGrid().getStore()
+        if (form.isValid()) {
+            form.updateRecord()
+            var record = form.getRecord()
+            store.add(record)
+            var extraParams = store.getProxy().extraParams
+            store.getProxy().extraParams = {}
+            store.sync({
+                success: function (batch, opts) {
+                    store.commitChanges()
+                    form.up('window').close()
+                    this.queryRole()
+                },
+                failure: function (batch, opts) {
+                    store.rejectChanges()
+                    Ext.Msg.alert("错误", "角色新增发生错误")
+                },
+                scope: this
+            })
+            store.getProxy().extraParams = extraParams
+        }
     },
     toModifyRole: function (record) { //打开修改
         var _window = this.getView("sysadmin.role.Detail").create({
-            title: '角色修改',
-            _type: 'modify'
+            title: '角色修改[' + record.data.rolename + ']',
+            usertype: 'modify'
         })
         var form = _window.down('form')
         form.loadRecord(record)
         _window.show()
     },
-    modifyRole: function () { //修改
-
+    modifyRole: function (form) { //修改
+        if (form.isValid()) {
+            var store = this.getRoleListGrid().getStore()
+            form.updateRecord()
+            var extraParams = store.getProxy().extraParams
+            store.getProxy().extraParams = {}
+            store.sync({
+                success: function (batch, opts) {
+                    store.commitChanges()
+                    form.up('window').close()
+                },
+                failure: function (batch, opts) {
+                    store.rejectChanges()
+                    Ext.Msg.alert("错误", '角色修改发生错误')
+                },
+                scope: this
+            })
+            store.getProxy().extraParams = extraParams
+        }
     },
     removeRole: function () { //删除
         var grid = this.getRoleListGrid()
@@ -112,10 +177,18 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
             store.load()
         }
     },
-    relateRoleMenu: function () { //角色关联菜单
+    toRelateMenu: function () { //打开角色关联菜单窗口
+        var _window = this.getView("sysadmin.role.RelateMenu").create()
+        _window.show()
+    },
+    toRelateFunction: function () {//打开角色关联功能窗口
+        var _window = this.getView("sysadmin.role.RelateFunc").create()
+        _window.show()
+    },
+    relateMenu: function () { //关联菜单操作
 
     },
-    relateRoleFunc: function () {//角色关联功能
+    relateFunction: function () { //关联功能操作
 
     }
 })

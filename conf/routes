@@ -35,12 +35,6 @@ DELETE        /api/menus/:id                                           controlle
 PUT           /api/menus/:id                                           controllers.systemmanage.Menu.update(id:String)
 GET           /api/menus/:id                                           controllers.systemmanage.Menu.get(id:String)
 GET           /api/menus                                               controllers.systemmanage.Menu.list
-#角色
-POST          /api/roles                                               controllers.systemmanage.Role.add
-DELETE        /api/roles/:id                                           controllers.systemmanage.Role.remove(id:Long)
-PUT           /api/roles/:id                                           controllers.systemmanage.Role.update(id:Long)
-GET           /api/roles/:id                                           controllers.systemmanage.Role.get(id:Long)
-GET           /api/roles                                               controllers.systemmanage.Role.list
 #系统
 GET           /api/systems/checkSystemcodeAvaliable/:systemcode        controllers.systemmanage.System.checkSystemcodeAvaliable(systemcode:String)
 GET           /api/systems/maxSystemOrder                              controllers.systemmanage.System.maxSystemOrder
@@ -100,7 +94,7 @@ GET           /api/functions/:id                                       controlle
 #角色
 GET           /api/roles/checkRolenameAvailable/:id                    controllers.systemmanage.Role.checkRolenameAvailable(id:String)
 GET           /api/roles                                               controllers.systemmanage.Role.list
-POST          /api/roles/:id                                           controllers.systemmanage.Role.add(id:String)
-DELETE        /api/roles/:id                                           controllers.systemmanage.Role.remove(id:String)
-PUT           /api/roles/:id                                           controllers.systemmanage.Role.update(id:String)
-GET           /api/roles/:id                                           controllers.systemmanage.Role.getById(id:String)
+POST          /api/roles/:id                                           controllers.systemmanage.Role.add(id:Long)
+DELETE        /api/roles/:id                                           controllers.systemmanage.Role.remove(id:Long)
+PUT           /api/roles/:id                                           controllers.systemmanage.Role.update(id:Long)
+GET           /api/roles/:id                                           controllers.systemmanage.Role.get(id:Long)

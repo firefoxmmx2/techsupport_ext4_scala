@@ -11,7 +11,9 @@ Ext.define('Techsupport.view.sysadmin.role.Detail', {
                 {name: 'id', fieldLabel: 'ID',
                     allowBlank: false,
                     blankText: 'ID不能为空',
-                    vtype:'number'
+                    vtype:'number',
+                    readOnly:true,
+                    hidden:true
                 },
                 {name: 'rolename',
                     fieldLabel: '角色名称',
@@ -47,6 +49,7 @@ Ext.define('Techsupport.view.sysadmin.role.Detail', {
                     allowBlank: false,
                     blankText: '机构ID不能为空',
                     hidden: true,
+                    readOnly:true,
                     vtype: 'number'
                 }
             ])
