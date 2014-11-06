@@ -7,5 +7,5 @@ Ext.define('Techsupport.model.RoleFunc', {
         {name: 'roloid', type: 'int'},
         {name: 'funccode', type: 'string'}
     ],
-    belongsTo: 'Function'
+    //belongsTo: 'Function'
 })

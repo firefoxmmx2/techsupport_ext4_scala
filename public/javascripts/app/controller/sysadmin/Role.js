@@ -178,12 +178,25 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
         }
     },
     toRelateMenu: function () { //打开角色关联菜单窗口
-        var _window = this.getView("sysadmin.role.RelateMenu").create()
-        _window.show()
+        var selection=this.getRoleListGrid().getSelectionModel().getSelection()
+        if(selection.length > 0){
+            var _window = this.getView("sysadmin.role.RelateMenu").create()
+            _window.show()
+        }
+        else{
+            Ext.Msg.alert("提示",'请选择要操作的角色记录')
+        }
+
     },
     toRelateFunction: function () {//打开角色关联功能窗口
-        var _window = this.getView("sysadmin.role.RelateFunc").create()
-        _window.show()
+        var selection=this.getRoleListGrid().getSelectionModel().getSelection()
+        if(selection.length>0){
+            var _window = this.getView("sysadmin.role.RelateFunc").create()
+            _window.show()
+        }
+        else{
+            Ext.Msg.alert("提示","请选择要操作的角色记录")
+        }
     },
     relateMenu: function () { //关联菜单操作
 

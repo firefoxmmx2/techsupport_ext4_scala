@@ -11,7 +11,8 @@ Ext.define('Techsupport.view.base.BaseList', {
     },
     loadMask: true,
     dockedItems: [
-        {xtype: 'pagingtoolbar',
+        {
+            xtype: 'pagingtoolbar',
             dock: 'bottom',
             pageSize: 10,
             listeners: {
@@ -27,20 +28,20 @@ Ext.define('Techsupport.view.base.BaseList', {
             g.getStore().removeAll()
         },
         afterlayout: function (g, layout, opts) {
-            var headerHeight=g.headerCt.down('[id*=gridcolumn]').getHeight() - 4
+            var headerHeight = g.headerCt.down('[id*=gridcolumn]').getHeight() - 4
             var pagesize = Math.ceil(
                     (g.getHeight()
-                - g.down('pagingtoolbar').getHeight()
-                - g.headerCt.down('[id*=gridcolumn]').getHeight())
-                    / headerHeight) -1;
+                    - g.down('pagingtoolbar').getHeight()
+                    - g.headerCt.down('[id*=gridcolumn]').getHeight())
+                    / headerHeight) - 1;
             g.getStore().pageSize = pagesize;
             g.getStore().trailingBufferZone = pagesize;
             g.getStore().getProxy().setExtraParam('limit', pagesize);
         }
     },
     initComponent: function () {
-        Ext.apply(this.dockedItems, this.superclass.dockedItems)
-        this.dockedItems[0].store = this.store
+        if (this.dockedItems && this.dockedItems.length > 0)
+            this.dockedItems[0].store = this.store
         this.callParent(arguments)
     }
 })
