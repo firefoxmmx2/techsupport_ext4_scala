@@ -32,13 +32,7 @@ Ext.define('Techsupport.view.sysadmin.role.Detail', {
                     emptyText: '请选择',
                     queryMode:'local',
                     triggerAction:'all',
-                    store: Ext.create('Ext.data.Store', {
-                        fields: ['text', 'value'],
-                        data: [
-                            {text: '管理角色', value: '0'},
-                            {text: '普通角色', value: '1'}
-                        ]
-                    })
+                    store: 'RoleType'
                 },
                 {name: 'jzlbdm', fieldLabel: '类别代码',
                     vtype: 'alphanum'

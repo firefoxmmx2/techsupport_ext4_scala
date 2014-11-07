@@ -5,6 +5,7 @@ Ext.define('Techsupport.view.sysadmin.role.RelateFunc', {
     extend: 'Techsupport.view.base.BaseDetail',
     title: '角色功能关联',
     modal: true,
+    alias:'widget.relateFunc',
     initComponent: function () {
         this.items = Ext.clone(this.superclass.items)
         var formGtPanel = this.items[0].items[0]
@@ -95,7 +96,7 @@ Ext.define('Techsupport.view.sysadmin.role.RelateFunc', {
                                     xtype: 'grid',
                                     border: false,
                                     width: '45%',
-                                    store: Ext.create('Techsupport.store.RoleFunc', {
+                                    store: Ext.create('Techsupport.store.Function', {
                                         autoLoad: false
                                     }),
                                     columns: [

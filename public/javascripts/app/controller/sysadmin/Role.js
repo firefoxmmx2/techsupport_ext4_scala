@@ -3,12 +3,12 @@
  */
 Ext.define('Techsupport.controller.sysadmin.Role', {
     extend: 'Ext.app.Controller',
-    stores: ['Role'],
+    stores: ['Role','RoleType','Function'],
     views: [
         "sysadmin.role.List",
         "sysadmin.role.Manage",
         "sysadmin.role.Detail",
-        "sysadmin.role.RelateFunc"  ,
+        "sysadmin.role.RelateFunc",
         "sysadmin.role.RelateMenu"
     ],
     models: ['Role', 'RoleFunc'],
@@ -18,13 +18,13 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
     ],
     init: function () {
         this.control({
-            'rolemanage' : {
-              afterrender: function (p) {
-                  var queryBtn = p.down('panel[region=center] button[action=query]')
-                 setTimeout(function () {
-                     queryBtn.fireEvent('click', queryBtn)
-                 },50)
-              }
+            'rolemanage': {
+                afterrender: function (p) {
+                    var queryBtn = p.down('panel[region=center] button[action=query]')
+                    setTimeout(function () {
+                        queryBtn.fireEvent('click', queryBtn)
+                    }, 50)
+                }
             },
             'rolemanage rolelist': {
                 itemdblclick: function (grid, record) { //双击打开编辑窗口
@@ -78,6 +78,16 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
             'roledetail button[action=cancel]': {
                 click: function (button) {
                     button.up('window').close()
+                }
+            },
+            'relateFunc button[action=cancel]': { //关联功能取消按钮
+                click: function (button) {
+                    button.up('window').close()
+                }
+            },
+            'relateFunc button[action=enter]': { //关联功能确定按钮
+                click: function (button) {
+
                 }
             }
         })
@@ -178,24 +188,32 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
         }
     },
     toRelateMenu: function () { //打开角色关联菜单窗口
-        var selection=this.getRoleListGrid().getSelectionModel().getSelection()
-        if(selection.length > 0){
+        var selection = this.getRoleListGrid().getSelectionModel().getSelection()
+        if (selection.length > 0) {
             var _window = this.getView("sysadmin.role.RelateMenu").create()
+            var form = _window.down('form')
+
             _window.show()
         }
-        else{
-            Ext.Msg.alert("提示",'请选择要操作的角色记录')
+        else {
+            Ext.Msg.alert("提示", '请选择要操作的角色记录')
         }
 
     },
     toRelateFunction: function () {//打开角色关联功能窗口
-        var selection=this.getRoleListGrid().getSelectionModel().getSelection()
-        if(selection.length>0){
+        var selection = this.getRoleListGrid().getSelectionModel().getSelection()
+        if (selection.length > 0) {
             var _window = this.getView("sysadmin.role.RelateFunc").create()
+            var form = _window.down('form')
+            var rolelist = form.down('rolelist')
+            var rolelistStore = rolelist.getStore()
+            rolelistStore.add(selection)
+
             _window.show()
+            rolelist.getSelectionModel().selectAll()
         }
-        else{
-            Ext.Msg.alert("提示","请选择要操作的角色记录")
+        else {
+            Ext.Msg.alert("提示", "请选择要操作的角色记录")
         }
     },
     relateMenu: function () { //关联菜单操作
