@@ -173,4 +173,81 @@ object Role extends Controller with ControllerUtils {
       }
       Ok(Json.generate(response))
   }
+
+  case class RelateFunction(
+                             roleIds: Seq[Long],
+                             removedFunctionIds: Option[Seq[String]] = None,
+                             addedFunctionIds: Option[Seq[String]] = None
+                             )
+
+  val relateFunctionForm = Form(
+    mapping(
+      "roleIds" -> seq(longNumber),
+      "removedFunctionIds" -> optional(seq(text)),
+      "addedFunctionsIds" -> optional(seq(text))
+    )(RelateFunction.apply)(RelateFunction.unapply)
+  )
+
+  /**
+   *
+   * 关联功能
+   */
+  def relateFunctions = Action {
+    implicit request =>
+      relateFunctionForm.bindFromRequest.fold(
+        form =>
+          BadRequest(form.errorsAsJson),
+        relateFunction => {
+          val response = Try {
+            roleService.relateFunctions(relateFunction.roleIds,
+              relateFunction.removedFunctionIds,
+              relateFunction.addedFunctionIds)
+            responseData(message = "关联功能成功")
+          } match {
+            case Failure(e: Exception) =>
+              responseData(result = -1, message = "关联功能发生错误", e = Some(e))
+            case Success(p) =>
+              p
+          }
+          Ok(Json.generate(response))
+        }
+      )
+  }
+
+  case class RelateMenu(
+                         roleIds: Seq[Long],
+                         removedMenuIds: Option[Seq[String]],
+                         addedMenuIds: Option[Seq[String]]
+                         )
+
+  val relateMenusForm = Form(
+    mapping(
+      "roleIds" -> seq(longNumber),
+      "removedMenuIds" -> optional(seq(text)),
+      "addedMenuIds" -> optional(seq(text))
+    )(RelateMenu.apply)(RelateMenu.unapply)
+  )
+
+  /**
+   * 关联菜单
+   */
+  def relateMenus = Action {
+    implicit request =>
+      relateMenusForm.bindFromRequest.fold(
+        form =>
+          BadRequest(form.errorsAsJson),
+        relateMenu => {
+          val response = Try {
+            roleService.relateMenus(relateMenu.roleIds, relateMenu.removedMenuIds, relateMenu.addedMenuIds)
+            responseData(message = "关联菜单成功")
+          } match {
+            case Failure(e: Exception) =>
+              responseData(result= -1,message="关联菜单发生错误",e=Some(e))
+            case Success(p) =>
+              p
+          }
+          Ok(Json.generate(response))
+        }
+      )
+  }
 }

@@ -109,7 +109,27 @@ trait RoleServiceComponent {
      * @param rolename
      * @return
      */
-    def checkRolenameAvailable(rolename:String):Boolean
+    def checkRolenameAvailable(rolename: String): Boolean
+
+    /**
+     * 关联功能
+     * @param roleIds
+     * @param removedFunctionIds
+     * @param addedFunctionIds
+     */
+    def relateFunctions(roleIds: Seq[Long],
+                        removedFunctionIds: Option[Seq[String]] = None,
+                        addedFunctionIds: Option[Seq[String]] = None)
+
+    /**
+     * 关联菜单
+     * @param roleIds
+     * @param removedMenuIds
+     * @param addedFunctionIds
+     */
+    def relateMenus(roleIds: Seq[Long],
+                    removedMenuIds: Option[Seq[String]] = None,
+                    addedFunctionIds: Option[Seq[String]] = None)
   }
 
   val roleService: RoleService
@@ -249,13 +269,13 @@ trait FunctionServiceComponent {
   /**
    * 功能服务
    */
-  trait FunctionService extends BaseService[Function, String, FunctionQueryCondition]{
+  trait FunctionService extends BaseService[Function, String, FunctionQueryCondition] {
     /**
      * 功能代码可用验证
      * @param funccode
      * @return
      */
-    def checkFunccodeAvailable(funccode:String):Boolean
+    def checkFunccodeAvailable(funccode: String): Boolean
   }
 
   val functionService: FunctionService

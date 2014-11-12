@@ -93,6 +93,8 @@ GET           /api/functions/:id                                       controlle
 
 #角色
 GET           /api/roles/checkRolenameAvailable/:id                    controllers.systemmanage.Role.checkRolenameAvailable(id:String)
+POST          /api/roles/relateFunctions                               controllers.systemmanage.Role.relateFunctions
+POST          /api/roles/relateMenus                                   controllers.systemmanage.Role.relateMenus
 GET           /api/roles                                               controllers.systemmanage.Role.list
 POST          /api/roles/:id                                           controllers.systemmanage.Role.add(id:Long)
 DELETE        /api/roles/:id                                           controllers.systemmanage.Role.remove(id:Long)

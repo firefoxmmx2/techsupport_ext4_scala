@@ -3,7 +3,7 @@
  */
 Ext.define('Techsupport.controller.sysadmin.Role', {
     extend: 'Ext.app.Controller',
-    stores: ['Role','RoleType','Function'],
+    stores: ['Role', 'RoleType', 'Function'],
     views: [
         "sysadmin.role.List",
         "sysadmin.role.Manage",
@@ -192,13 +192,54 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
         if (selection.length > 0) {
             var _window = this.getView("sysadmin.role.RelateMenu").create()
             var form = _window.down('form')
-
+            var roleLstGrid = form.down('rolelist')
+            var roleStore = roleLstGrid.getStore()
+            roleStore.add(selection)
             _window.show()
+            roleLstGrid.getSelectionModel().selectAll()
         }
         else {
             Ext.Msg.alert("提示", '请选择要操作的角色记录')
         }
 
+    },
+    relateMenu: function (form) { //关联菜单操作
+        if (form.isValid()) {
+
+            var store = form.down('grid[name=selectedMenuGrid]').getStore()
+            var removedMenus = Ext.Array.map(store.getRemovedRecords(),
+                function (record) {
+                    return record.data.id
+                })
+            var addedMenus = Ext.Array.map(store.getNewRecords(),
+                function (record) {
+                    return record.data.id
+                })
+
+            var roleIds = Ext.Array.map(form.down('rolelist').getSelectionModel().getSelection(),
+                function (record) {
+                    return record.data.id
+                })
+            var params = {
+                roleIds: roleIds,
+                removedMenus: removedMenus,
+                addedMenus: addedMenus
+            }
+            form.submit({
+                url: '/api/roles/relateMenus',
+                params: params,
+                method: 'POST',
+                success: function (form, result) {
+                    store.commitRecords()
+                    form.up('window').close()
+                },
+                failure: function (form, result) {
+                    store.rejectChanges()
+                    Ext.Msg.alert("错误","关联菜单发生错误")
+                },
+                scope: this
+            })
+        }
     },
     toRelateFunction: function () {//打开角色关联功能窗口
         var selection = this.getRoleListGrid().getSelectionModel().getSelection()
@@ -216,10 +257,40 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
             Ext.Msg.alert("提示", "请选择要操作的角色记录")
         }
     },
-    relateMenu: function () { //关联菜单操作
-
-    },
-    relateFunction: function () { //关联功能操作
-
+    relateFunction: function (form) { //关联功能操作
+        if (form.isValid()) {
+            var roleIds = Ext.Array.map(form.down('rolelist').getSelectionModel().getSelection(),
+                function (record) {
+                    return record.data.id
+                })
+            var store = form.down('grid[name=selectedFunctionGrid]').getStore()
+            var removedFunctions = Ext.Array.map(store.getRemovedRecords(),
+                function (record) {
+                    return record.data.id
+                })
+            var addedFunctions = Ext.Array.map(store.getNewRecords(),
+                function (record) {
+                    return record.data.id
+                })
+            var params = {
+                roleIds: roleIds,
+                removedFunctions: removedFunctions,
+                addedFunctions: addedFunctions
+            };
+            form.submit({
+                url: '/api/roles/relateFunctions',
+                method: 'POST',
+                params: params,
+                success: function (form, result) {
+                    store.commitChanges()
+                    form.up('window').close()
+                },
+                failure: function (form, result) {
+                    store.rejectChanges()
+                    Ext.Msg.alert('错误', '关联功能发生错误')
+                },
+                scope: this
+            })
+        }
     }
 })

@@ -321,6 +321,66 @@ trait RoleServiceComponentImpl extends RoleServiceComponent {
     def checkRolenameAvailable(rolename: String): Boolean = inTransaction{
       !roleDao.checkRolenameRepeat(rolename)
     }
+
+    /**
+     * 关联功能
+     * @param roleIds
+     * @param removedFunctionIds
+     * @param addedFunctionIds
+     */
+    def relateFunctions(roleIds: Seq[Long],
+                        removedFunctionIds: Option[Seq[String]]=None,
+                        addedFunctionIds: Option[Seq[String]]=None): Unit = inTransaction{
+      roleIds.foreach {
+        roleId=>
+          removedFunctionIds match {
+            case Some(functionIds) =>
+              functionIds.foreach{
+                funccode=>
+                  roleFuncDao.delete(RoleFunc(roleId,funccode))
+              }
+            case None =>
+          }
+          addedFunctionIds match {
+            case Some(functionIds) =>
+              functionIds.foreach{
+                funccode=>
+                  roleFuncDao.insert(RoleFunc(roleId,funccode))
+              }
+            case None =>
+          }
+      }
+    }
+
+    /**
+     * 关联菜单
+     * @param roleIds
+     * @param removedMenuIds
+     * @param addedMenuIds
+     */
+    def relateMenus(roleIds: Seq[Long],
+                    removedMenuIds: Option[Seq[String]],
+                    addedMenuIds: Option[Seq[String]]): Unit = inTransaction{
+      roleIds.foreach{
+        roleId=>
+          removedMenuIds match {
+            case Some(menuIds) =>
+              menuIds.foreach{
+                menucode=>
+                  roleMenuDao.delete(RoleMenu(menucode,roleId ))
+              }
+            case None =>
+          }
+          addedMenuIds match {
+            case Some(menuIds) =>
+              menuIds.foreach{
+                menucode=>
+                  roleMenuDao.insert(RoleMenu(menucode,roleId))
+              }
+            case None =>
+          }
+      }
+    }
   }
 
 }

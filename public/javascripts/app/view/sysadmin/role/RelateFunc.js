@@ -45,6 +45,7 @@ Ext.define('Techsupport.view.sysadmin.role.RelateFunc', {
                             },
                             items: [
                                 {
+                                    name:'allFunctionGrid',
                                     xtype: 'gridpanel',
                                     border: false,
                                     width: "45%",
@@ -55,7 +56,12 @@ Ext.define('Techsupport.view.sysadmin.role.RelateFunc', {
                                         {
                                             dataIndex: 'funcname', text: '全部功能名称', flex: 1
                                         }
-                                    ]
+                                    ],
+                                    listeners:{
+                                        render: function (p) {
+                                            var store=p.getStore()
+                                        }
+                                    }
                                 },
                                 {
                                     xtype: 'panel',
@@ -93,6 +99,7 @@ Ext.define('Techsupport.view.sysadmin.role.RelateFunc', {
                                     ]
                                 },
                                 {
+                                    name:'selectedFunctionGrid',
                                     xtype: 'grid',
                                     border: false,
                                     width: '45%',
