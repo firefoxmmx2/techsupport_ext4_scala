@@ -89,6 +89,112 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                 click: function (button) {
 
                 }
+            },
+            'relateFunc grid[name=allFunctionGrid]': {
+                render: function (p) {
+                    var store = p.getStore()
+                    var roleListGrid = p.up('relateFunc').down('rolelist')
+                    store.load({
+                        scope: this,
+                        callback: function (records, operation, success) {
+                            Ext.Ajax.request({
+                                url: '/api/functions/relateFuncs',
+                                method: 'GET',
+                                params: {
+                                    roleIds: Ext.Array.map(roleListGrid.getSelectionModel().getSelection(), function (r) {
+                                        return r.data.id
+                                    })
+                                },
+                                success: function (response) {
+                                    var res = Ext.decode(response.responseText)
+                                    if (res.data) {
+                                        var selectedFunctionGrid = p.up('relateFunc').down('grid[name=selectedFunctionGrid]')
+                                        var store2 = selectedFunctionGrid.getStore()
+                                        store2.loadData(res.data)
+                                        store.remove(store2.data)
+                                        store.commitChanges()
+                                    }
+                                },
+                                failure: function (response) {
+                                    Ext.Msg.alert('错误', '获取角色关联的功能发生错误')
+                                },
+                                scope: this
+                            })
+                        }
+                    })
+                }
+            },
+            'relateFunc button[action=allLeft]': { //全部左移
+                click: function (button) {
+                    var relateFunc = button.up('window')
+
+                    var selectedFunctionStore = relateFunc.down('grid[name=selectedFunctionGrid]').getStore()
+                    if (!Ext.isEmpty(selectedFunctionStore.data)) {
+                        var allFunctionStore = relateFunc.down('grid[name=allFunctionGrid]').getStore()
+                        try {
+                            allFunctionStore.add(selectedFunctionStore.data)
+                            selectedFunctionStore.removeAll()
+                            allFunctionStore.commitChanges()
+                            selectedFunctionStore.commitChanges()
+                        } catch (e) {
+                            if (console)
+                                console.error(e)
+                            allFunctionStore.rejectChanges()
+                            selectedFunctionStore.rejectChanges()
+                        }
+                    }
+                }
+            },
+            'relateFunc button[action=left]': {//左移
+                click: function (button) {
+                    var relateFunc = button.up('window')
+                    var selectedFunctionGrid = relateFunc.down("grid[name=selectedFunctionGrid]")
+                    var selection = selectedFunctionGrid.getSelectionModel().getSelection()
+                    if (selection.length > 0) {
+                        var allFunctionGrid = relateFunc.down('grid[name=allFunctionGrid]')
+                        try {
+                            allFunctionGrid.getStore().add(selection)
+                            selectedFunctionGrid.getStore().remove(selection)
+                            allFunctionGrid.getStore().commitChanges()
+                            selectedFunctionGrid.getStore().commitChanges()
+                        } catch (e) {
+                            if (console) {
+                                console.error(e)
+                            }
+                            allFunctionGrid.getStore().rejectChanges()
+                            selectedFunctionGrid.getStore().rejectChanges()
+                        }
+                    }
+                }
+            },
+            'relateFunc button[action=right]': {//右移
+                click: function (button) {
+                    var relateFunc = button.up('window')
+                    var allFunctionGrid = relateFunc.down('grid[name=allFunctionGrid]')
+                    var selection = allFunctionGrid.getSelectionModel().getSelection()
+                    if (selection.length > 0) {
+                        var selectedFunctionGrid = relateFunc.down('grid[name=selectedFunctionGrid]')
+                        try {
+                            selectedFunctionGrid.getStore().add(selection)
+                            allFunctionGrid.getStore().remove(selection)
+                            selectedFunctionGrid.getStore().commitChanges()
+                            allFunctionGrid.getStore().commitChanges()
+                        } catch (e) {
+                            if (console) {
+                                console.error(e)
+                            }
+                            selectedFunctionGrid.getStore().rejectChanges()
+                            allFunctionGrid.getStore().rejectChanges()
+                        }
+                    }
+                }
+            },
+            'relateFunc button[action=allRight]': { //全部右移
+                click: function (button) {
+                    var relateFunc=button.up('window')
+                    var allFunctionGridStore=relateFunc.down('grid[name=allFunctionGrid]').getStore()
+                    // TODO 全部又移动未完
+                }
             }
         })
     },
@@ -235,7 +341,7 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                 },
                 failure: function (form, result) {
                     store.rejectChanges()
-                    Ext.Msg.alert("错误","关联菜单发生错误")
+                    Ext.Msg.alert("错误", "关联菜单发生错误")
                 },
                 scope: this
             })

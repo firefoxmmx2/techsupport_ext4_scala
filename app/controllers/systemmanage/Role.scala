@@ -242,7 +242,7 @@ object Role extends Controller with ControllerUtils {
             responseData(message = "关联菜单成功")
           } match {
             case Failure(e: Exception) =>
-              responseData(result= -1,message="关联菜单发生错误",e=Some(e))
+              responseData(result = -1, message = "关联菜单发生错误", e = Some(e))
             case Success(p) =>
               p
           }
@@ -250,4 +250,59 @@ object Role extends Controller with ControllerUtils {
         }
       )
   }
+
+
+  val relateForm = Form(
+    single("roleIds" -> Forms.list(longNumber))
+  )
+
+  /**
+   * 获取关联功能列表
+   * @return
+   */
+  def getRelateFuncs = Action {
+    implicit request =>
+      relateForm.bindFromRequest.fold(
+        form =>
+          BadRequest(form.errorsAsJson),
+        roleIds => {
+          val response = Try {
+            val lData = roleService.getRelateFunctions(roleIds)
+            responseData(message = "获取关联功能列表成功", extraParams = Some(Map("data" -> lData)))
+          } match {
+            case Failure(e: Exception) =>
+              responseData(result = -1, message = "获取关联功能列表发生错误", e = Some(e))
+            case Success(p) =>
+              p
+          }
+          Ok(Json.generate(response))
+        }
+      )
+  }
+
+  /**
+   * 关联菜单列表
+   * @return
+   */
+  def getRelateMenus = Action {
+    implicit request =>
+      relateForm.bindFromRequest().fold(
+        form =>
+          BadRequest(form.errorsAsJson),
+        roleIds => {
+          val response = Try {
+            val lData = roleService.getRelateMenus(roleIds)
+            responseData(message = "获取关联菜单列表成功", extraParams = Some(Map("data" -> lData)))
+          } match {
+            case Failure(e: Exception) =>
+              responseData(result = -1, message = "获取关联菜单列表发生错误", e = Some(e))
+            case Success(p) =>
+              p
+          }
+          Ok(Json.generate(response))
+        }
+      )
+  }
+
+
 }

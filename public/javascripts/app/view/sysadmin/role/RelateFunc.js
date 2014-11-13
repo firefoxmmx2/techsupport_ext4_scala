@@ -5,7 +5,7 @@ Ext.define('Techsupport.view.sysadmin.role.RelateFunc', {
     extend: 'Techsupport.view.base.BaseDetail',
     title: '角色功能关联',
     modal: true,
-    alias:'widget.relateFunc',
+    alias: 'widget.relateFunc',
     initComponent: function () {
         this.items = Ext.clone(this.superclass.items)
         var formGtPanel = this.items[0].items[0]
@@ -29,7 +29,7 @@ Ext.define('Techsupport.view.sysadmin.role.RelateFunc', {
                             listeners: {
                                 render: function (p) {
 
-                               },
+                                },
                                 afterrender: function (p) {
 
                                 }
@@ -45,7 +45,7 @@ Ext.define('Techsupport.view.sysadmin.role.RelateFunc', {
                             },
                             items: [
                                 {
-                                    name:'allFunctionGrid',
+                                    name: 'allFunctionGrid',
                                     xtype: 'gridpanel',
                                     border: false,
                                     width: "45%",
@@ -56,12 +56,7 @@ Ext.define('Techsupport.view.sysadmin.role.RelateFunc', {
                                         {
                                             dataIndex: 'funcname', text: '全部功能名称', flex: 1
                                         }
-                                    ],
-                                    listeners:{
-                                        render: function (p) {
-                                            var store=p.getStore()
-                                        }
-                                    }
+                                    ]
                                 },
                                 {
                                     xtype: 'panel',
@@ -82,24 +77,28 @@ Ext.define('Techsupport.view.sysadmin.role.RelateFunc', {
                                     items: [
                                         {
                                             xtype: 'button',
-                                            text: '全左'
+                                            text: '全左',
+                                            action: 'allLeft'
                                         },
                                         {
                                             xtype: 'button',
-                                            text: '左'
+                                            text: '左',
+                                            action: 'left'
                                         },
                                         {
                                             xtype: 'button',
-                                            text: '右'
+                                            text: '右',
+                                            action: 'right'
                                         },
                                         {
                                             xtype: 'button',
-                                            text: '全右'
+                                            text: '全右',
+                                            action: 'allRight'
                                         }
                                     ]
                                 },
                                 {
-                                    name:'selectedFunctionGrid',
+                                    name: 'selectedFunctionGrid',
                                     xtype: 'grid',
                                     border: false,
                                     width: '45%',

@@ -130,6 +130,19 @@ trait RoleServiceComponent {
     def relateMenus(roleIds: Seq[Long],
                     removedMenuIds: Option[Seq[String]] = None,
                     addedFunctionIds: Option[Seq[String]] = None)
+
+    /**
+     * 获取关联功能列表
+     * @param roleIds
+     */
+    def getRelateFunctions(roleIds:Seq[Long]):List[Function]
+
+    /**
+     * 获取关联菜单列表
+     * @param roleIds
+     * @return
+     */
+    def getRelateMenus(roleIds:Seq[Long]):List[Menu]
   }
 
   val roleService: RoleService

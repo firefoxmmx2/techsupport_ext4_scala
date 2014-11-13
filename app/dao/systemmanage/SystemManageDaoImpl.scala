@@ -548,12 +548,12 @@ trait RoleDaoComponentImpl extends RoleDaoComponent {
 
   class RoleDaoImpl extends RoleDao {
     def selectForPage(params: RoleQueryCondition, sort: String = "id", dir: String = "asc") = {
-      val rolenameLike= params.rolename match {
-        case Some(x) => Some("%"+x+"%")
+      val rolenameLike = params.rolename match {
+        case Some(x) => Some("%" + x + "%")
         case None => None
       }
-      val roleDescriptionLike=params.roleDescript match {
-        case Some(x) => Some("%"+x+"%")
+      val roleDescriptionLike = params.roleDescript match {
+        case Some(x) => Some("%" + x + "%")
         case None => None
       }
       from(SystemManage.roles)(
@@ -846,6 +846,19 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
      * @return 插入后的实体
      */
     def insert(m: Menu): Menu = SystemManage.menus.insert(m)
+
+    /**
+     *
+     * @param roleIds
+     * @return
+     */
+    def getRelatedMenusByRoleids(roleIds: Seq[Long]): List[Menu] =
+      join(SystemManage.menus, SystemManage.roleMenus)(
+        (m, rm) =>
+          where(rm.roleid in (roleIds))
+            select (m)
+            on (m.id === rm.menucode)
+      ).distinct.toList
   }
 
 }
@@ -1909,7 +1922,10 @@ trait FunctionDaoComponentImpl extends FunctionDaoComponent {
 
      * @return 实体
      */
-    def getById(id: String): Function = SystemManage.functions.where(f => f.id === id).singleOption.get
+    def getById(id: String): Function = SystemManage.functions.where(f => f.id === id).singleOption match {
+      case Some(function) => function
+      case None => null
+    }
 
     /**
      * 验证ID是否重复
@@ -1920,6 +1936,17 @@ trait FunctionDaoComponentImpl extends FunctionDaoComponent {
         where(f.id === id)
           select (f.id)
     ).Count > 0
+
+    /**
+     * 通过角色ID获取关联的功能信息
+     */
+    def getRelatedFunctionsByRoleids(roleIds: Seq[Long]): List[Function] =
+      join(SystemManage.functions, SystemManage.roleFuncs)(
+        (f, rf) =>
+          where(rf.roleId in (roleIds))
+            select (f)
+            on (f.id === rf.funccode)
+      ).distinct.toList
   }
 
 }

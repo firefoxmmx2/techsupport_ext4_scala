@@ -91,6 +91,13 @@ trait MenuDaoComponent {
      * @return
      */
     def maxOrder(parentId: String): Int
+
+    /**
+     *
+     * @param roleIds
+     * @return
+     */
+    def getRelatedMenusByRoleids(roleIds:Seq[Long]):List[Menu]
   }
 
   val menuDao: MenuDao
@@ -241,6 +248,11 @@ trait FunctionDaoComponent {
      * @param id
      */
     def checkIDRepeat(id:String):Boolean
+
+    /**
+     * 通过角色ID获取关联的功能信息
+     */
+    def getRelatedFunctionsByRoleids(roleIds:Seq[Long]):List[Function]
   }
 
   val functionDao: FunctionDao
