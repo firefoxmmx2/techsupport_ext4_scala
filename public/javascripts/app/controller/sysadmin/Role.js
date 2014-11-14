@@ -131,17 +131,8 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                     var selectedFunctionStore = relateFunc.down('grid[name=selectedFunctionGrid]').getStore()
                     if (!Ext.isEmpty(selectedFunctionStore.data)) {
                         var allFunctionStore = relateFunc.down('grid[name=allFunctionGrid]').getStore()
-                        try {
-                            allFunctionStore.add(selectedFunctionStore.data)
-                            selectedFunctionStore.removeAll()
-                            allFunctionStore.commitChanges()
-                            selectedFunctionStore.commitChanges()
-                        } catch (e) {
-                            if (console)
-                                console.error(e)
-                            allFunctionStore.rejectChanges()
-                            selectedFunctionStore.rejectChanges()
-                        }
+                        allFunctionStore.add(selectedFunctionStore.data)
+                        selectedFunctionStore.removeAll()
                     }
                 }
             },
@@ -152,18 +143,8 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                     var selection = selectedFunctionGrid.getSelectionModel().getSelection()
                     if (selection.length > 0) {
                         var allFunctionGrid = relateFunc.down('grid[name=allFunctionGrid]')
-                        try {
-                            allFunctionGrid.getStore().add(selection)
-                            selectedFunctionGrid.getStore().remove(selection)
-                            allFunctionGrid.getStore().commitChanges()
-                            selectedFunctionGrid.getStore().commitChanges()
-                        } catch (e) {
-                            if (console) {
-                                console.error(e)
-                            }
-                            allFunctionGrid.getStore().rejectChanges()
-                            selectedFunctionGrid.getStore().rejectChanges()
-                        }
+                        allFunctionGrid.getStore().add(selection)
+                        selectedFunctionGrid.getStore().remove(selection)
                     }
                 }
             },
@@ -174,18 +155,8 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                     var selection = allFunctionGrid.getSelectionModel().getSelection()
                     if (selection.length > 0) {
                         var selectedFunctionGrid = relateFunc.down('grid[name=selectedFunctionGrid]')
-                        try {
-                            selectedFunctionGrid.getStore().add(selection)
-                            allFunctionGrid.getStore().remove(selection)
-                            selectedFunctionGrid.getStore().commitChanges()
-                            allFunctionGrid.getStore().commitChanges()
-                        } catch (e) {
-                            if (console) {
-                                console.error(e)
-                            }
-                            selectedFunctionGrid.getStore().rejectChanges()
-                            allFunctionGrid.getStore().rejectChanges()
-                        }
+                        selectedFunctionGrid.getStore().add(selection)
+                        allFunctionGrid.getStore().remove(selection)
                     }
                 }
             },
@@ -194,6 +165,11 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                     var relateFunc=button.up('window')
                     var allFunctionGridStore=relateFunc.down('grid[name=allFunctionGrid]').getStore()
                     // TODO 全部又移动未完
+                    if(!Ext.isEmpty(allFunctionGridStore.data)){
+                        var selectedFunctionGridStore=relateFunc.down('grid[name=selectedFunctionGrid]').getStore()
+                        selectedFunctionGridStore.add(allFunctionGridStore.data)
+                        allFunctionGridStore.removeAll()
+                    }
                 }
             }
         })
