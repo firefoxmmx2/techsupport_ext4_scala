@@ -389,7 +389,11 @@ trait RoleServiceComponentImpl extends RoleServiceComponent {
      * @param roleIds
      */
     def getRelateFunctions(roleIds: Seq[Long]): List[Function] = inTransaction {
-      functionDao.getRelatedFunctionsByRoleids(roleIds)
+      require(roleIds!=null)
+      roleIds.map{
+        roleId=>
+          functionDao.getRelatedFunctionsByRoleid(roleId)
+      }
     }
 
     /**
