@@ -1940,13 +1940,21 @@ trait FunctionDaoComponentImpl extends FunctionDaoComponent {
     /**
      * 通过角色ID获取关联的功能信息
      */
-    def getRelatedFunctionsByRoleids(roleIds: Seq[Long]): List[Function] =
+    def getRelatedFunctionsByRoleids(roleIds: Seq[Long]): List[Function] ={
+      Logger.debug("通过角色ID获取关联的功能信息语句=====")
+      Logger.debug(join(SystemManage.functions, SystemManage.roleFuncs)(
+        (f, rf) =>
+          where(rf.roleId in (roleIds))
+            select (f)
+            on (f.id === rf.funccode)
+      ).distinct.statement)
       join(SystemManage.functions, SystemManage.roleFuncs)(
         (f, rf) =>
           where(rf.roleId in (roleIds))
             select (f)
             on (f.id === rf.funccode)
       ).distinct.toList
+    }
   }
 
 }

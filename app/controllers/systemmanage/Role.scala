@@ -7,13 +7,13 @@ import play.api.data._
 import play.api.data.Forms._
 
 import scala.util.{Success, Failure, Try}
-import util.ControllerUtils
+import util.{ComponentRegister, ControllerUtils}
 import models.RoleQueryCondition
 
 /**
  * 角色
  */
-object Role extends Controller with ControllerUtils {
+object Role extends Controller with ControllerUtils{
   private val log = Logger.logger
   val roleForm = Form(
     mapping(
@@ -175,16 +175,19 @@ object Role extends Controller with ControllerUtils {
   }
 
   case class RelateFunction(
-                             roleIds: Seq[Long],
-                             removedFunctionIds: Option[Seq[String]] = None,
-                             addedFunctionIds: Option[Seq[String]] = None
-                             )
+                             roleIds: List[Long],
+                             removedFunctionIds: Option[List[String]] = None,
+                             addedFunctionIds: Option[List[String]] = None
+                             ) {
+    override def toString = "[roleIds=" + roleIds + ",removedFunctionIds=" +
+      removedFunctionIds + ",addedFunctionIds=" + addedFunctionIds + "]"
+  }
 
   val relateFunctionForm = Form(
     mapping(
-      "roleIds" -> seq(longNumber),
-      "removedFunctionIds" -> optional(seq(text)),
-      "addedFunctionsIds" -> optional(seq(text))
+      "roleIds" -> Forms.list(longNumber),
+      "removedFunctionIds" -> optional(Forms.list(text)),
+      "addedFunctionsIds" -> optional(Forms.list(text))
     )(RelateFunction.apply)(RelateFunction.unapply)
   )
 
@@ -194,11 +197,13 @@ object Role extends Controller with ControllerUtils {
    */
   def relateFunctions = Action {
     implicit request =>
+      log.debug("=" * 13 + "关联功能开始" + "=" * 13)
       relateFunctionForm.bindFromRequest.fold(
         form =>
           BadRequest(form.errorsAsJson),
         relateFunction => {
           val response = Try {
+            log.debug("=" * 13 + "relateFunction=" + relateFunction + "=" * 13)
             roleService.relateFunctions(relateFunction.roleIds,
               relateFunction.removedFunctionIds,
               relateFunction.addedFunctionIds)
@@ -209,6 +214,7 @@ object Role extends Controller with ControllerUtils {
             case Success(p) =>
               p
           }
+          log.debug("=" * 13 + "关联功能结束" + "=" * 13)
           Ok(Json.generate(response))
         }
       )
@@ -262,6 +268,7 @@ object Role extends Controller with ControllerUtils {
    */
   def getRelateFuncs = Action {
     implicit request =>
+      log.debug("==================获取关联功能列表===================")
       relateForm.bindFromRequest.fold(
         form =>
           BadRequest(form.errorsAsJson),

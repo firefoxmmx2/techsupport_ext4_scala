@@ -87,7 +87,8 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
             },
             'relateFunc button[action=enter]': { //关联功能确定按钮
                 click: function (button) {
-
+                    var form = button.up('window').down('form')
+                    this.relateFunction(form)
                 }
             },
             'relateFunc grid[name=allFunctionGrid]': {
@@ -97,21 +98,29 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                     store.load({
                         scope: this,
                         callback: function (records, operation, success) {
+                            var params={}
+                            Ext.Array.each(roleListGrid.getSelectionModel().getSelection(), function (r,idx) {
+                                params["roleIds["+idx+"]"]= r.data.id
+                            })
                             Ext.Ajax.request({
-                                url: '/api/functions/relateFuncs',
+                                url: '/api/roles/relateFunctions',
                                 method: 'GET',
-                                params: {
-                                    roleIds: Ext.Array.map(roleListGrid.getSelectionModel().getSelection(), function (r) {
-                                        return r.data.id
-                                    })
-                                },
+                                params: params,
                                 success: function (response) {
                                     var res = Ext.decode(response.responseText)
                                     if (res.data) {
                                         var selectedFunctionGrid = p.up('relateFunc').down('grid[name=selectedFunctionGrid]')
                                         var store2 = selectedFunctionGrid.getStore()
-                                        store2.loadData(res.data)
-                                        store.remove(store2.data)
+                                        store2.loadData(Ext.Array.map(res.data, function (r) {
+                                            return Ext.create('Techsupport.model.RoleFunc', {
+                                                funccode: r.id,
+                                                funcname: r.funcname,
+                                                "function": Ext.create('Techsupport.model.Function',r)
+                                            })
+                                        }))
+                                        store.remove(Ext.Array.map(store2.getRange(), function (r) {
+                                            return r.raw.function
+                                        }))
                                         store.commitChanges()
                                     }
                                 },
@@ -131,7 +140,9 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                     var selectedFunctionStore = relateFunc.down('grid[name=selectedFunctionGrid]').getStore()
                     if (!Ext.isEmpty(selectedFunctionStore.data)) {
                         var allFunctionStore = relateFunc.down('grid[name=allFunctionGrid]').getStore()
-                        allFunctionStore.add(selectedFunctionStore.data)
+                        allFunctionStore.add(Ext.Array.Map(selectedFunctionStore.getRange(), function (r) {
+                            return r.raw.function
+                        }))
                         selectedFunctionStore.removeAll()
                     }
                 }
@@ -143,7 +154,9 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                     var selection = selectedFunctionGrid.getSelectionModel().getSelection()
                     if (selection.length > 0) {
                         var allFunctionGrid = relateFunc.down('grid[name=allFunctionGrid]')
-                        allFunctionGrid.getStore().add(selection)
+                        allFunctionGrid.getStore().add(Ext.Array.map(selection, function (r) {
+                            return r.raw.function;
+                        }))
                         selectedFunctionGrid.getStore().remove(selection)
                     }
                 }
@@ -155,21 +168,45 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                     var selection = allFunctionGrid.getSelectionModel().getSelection()
                     if (selection.length > 0) {
                         var selectedFunctionGrid = relateFunc.down('grid[name=selectedFunctionGrid]')
-                        selectedFunctionGrid.getStore().add(selection)
+                        selectedFunctionGrid.getStore().add(Ext.Array.map(selection, function (r) {
+                            var a = Ext.create('Techsupport.model.RoleFunc', {
+                                "funccode": r.data.id,
+                                "funcname": r.data.funcname,
+                                "function": r.data
+                            })
+                            return a
+                        }))
                         allFunctionGrid.getStore().remove(selection)
                     }
                 }
             },
             'relateFunc button[action=allRight]': { //全部右移
                 click: function (button) {
-                    var relateFunc=button.up('window')
-                    var allFunctionGridStore=relateFunc.down('grid[name=allFunctionGrid]').getStore()
-                    // TODO 全部又移动未完
-                    if(!Ext.isEmpty(allFunctionGridStore.data)){
-                        var selectedFunctionGridStore=relateFunc.down('grid[name=selectedFunctionGrid]').getStore()
-                        selectedFunctionGridStore.add(allFunctionGridStore.data)
+                    var relateFunc = button.up('window')
+                    var allFunctionGridStore = relateFunc.down('grid[name=allFunctionGrid]').getStore()
+                    //  全部又移动未完
+                    if (!Ext.isEmpty(allFunctionGridStore.data)) {
+                        var selectedFunctionGridStore = relateFunc.down('grid[name=selectedFunctionGrid]').getStore()
+                        selectedFunctionGridStore.add(Ext.Array.Map(allFunctionGridStore.getRange(), function (r) {
+                            var a = Ext.create('Techsupport.model.RoleFunc', {
+                                "funccode": r.data.id,
+                                "funcname": r.data.funcname,
+                                "function": r.data
+                            })
+                            return a;
+                        }))
                         allFunctionGridStore.removeAll()
                     }
+                }
+            },
+            'relateMenu button[action=enter]': {
+                click: function (button) {
+                    var form = button.up('window').down('form')
+                    this.relateMenu(form)
+                }
+            }, 'relateMenu button[action=cancel]': {
+                click: function (button) {
+                    button.up('window').close()
                 }
             }
         })
@@ -180,9 +217,6 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
             usertype: 'add'
         })
         var form = _window.down('form')
-//        _window.down('button[action=enter]').on('click', function (button) {
-//
-//        },this)
         form.loadRecord(this.getModel("Role").create())
         _window.show()
     },
@@ -311,7 +345,7 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                 url: '/api/roles/relateMenus',
                 params: params,
                 method: 'POST',
-                success: function (form, result) {
+                success: function (basicForm, result) {
                     store.commitRecords()
                     form.up('window').close()
                 },
@@ -348,22 +382,27 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
             var store = form.down('grid[name=selectedFunctionGrid]').getStore()
             var removedFunctions = Ext.Array.map(store.getRemovedRecords(),
                 function (record) {
-                    return record.data.id
+                    return record.data.funccode
                 })
             var addedFunctions = Ext.Array.map(store.getNewRecords(),
                 function (record) {
-                    return record.data.id
+                    return record.data.funccode
                 })
-            var params = {
-                roleIds: roleIds,
-                removedFunctions: removedFunctions,
-                addedFunctions: addedFunctions
-            };
+            var params = {};
+            Ext.each(roleIds, function (r, idx) {
+                params['roleIds[' + idx + ']'] = r
+            })
+            Ext.each(removedFunctions, function (r, idx) {
+                params['removedFunctionIds[' + idx + ']'] = r
+            })
+            Ext.each(addedFunctions, function (r, idx) {
+                params['addedFunctionsIds[' + idx + ']'] = r
+            })
             form.submit({
                 url: '/api/roles/relateFunctions',
                 method: 'POST',
                 params: params,
-                success: function (form, result) {
+                success: function (basicForm, result) {
                     store.commitChanges()
                     form.up('window').close()
                 },

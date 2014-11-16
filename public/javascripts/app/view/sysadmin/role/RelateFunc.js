@@ -102,8 +102,8 @@ Ext.define('Techsupport.view.sysadmin.role.RelateFunc', {
                                     xtype: 'grid',
                                     border: false,
                                     width: '45%',
-                                    store: Ext.create('Techsupport.store.Function', {
-                                        autoLoad: false
+                                    store: Ext.create('Ext.data.Store', {
+                                        model:'Techsupport.model.RoleFunc'
                                     }),
                                     columns: [
                                         {
