@@ -393,6 +393,9 @@ trait RoleServiceComponentImpl extends RoleServiceComponent {
       roleIds.map{
         roleId=>
           functionDao.getRelatedFunctionsByRoleid(roleId)
+      }.reduceLeft{
+        (x,y) =>
+          x intersect y
       }
     }
 
