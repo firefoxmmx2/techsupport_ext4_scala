@@ -97,7 +97,7 @@ trait MenuDaoComponent {
      * @param roleIds
      * @return
      */
-    def getRelatedMenusByRoleids(roleIds:Seq[Long]):List[Menu]
+    def getRelatedMenusByRoleId(roleId:Long):List[Menu]
   }
 
   val menuDao: MenuDao

@@ -849,16 +849,16 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
 
     /**
      *
-     * @param roleIds
+     * @param roleId
      * @return
      */
-    def getRelatedMenusByRoleids(roleIds: Seq[Long]): List[Menu] =
+    def getRelatedMenusByRoleId(roleId: Long): List[Menu] =
       join(SystemManage.menus, SystemManage.roleMenus)(
         (m, rm) =>
-          where(rm.roleid in (roleIds))
+          where(rm.roleid === roleId)
             select (m)
             on (m.id === rm.menucode)
-      ).distinct.toList
+      ).toList
   }
 
 }

@@ -98,9 +98,9 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                     store.load({
                         scope: this,
                         callback: function (records, operation, success) {
-                            var params={}
-                            Ext.Array.each(roleListGrid.getSelectionModel().getSelection(), function (r,idx) {
-                                params["roleIds["+idx+"]"]= r.data.id
+                            var params = {}
+                            Ext.Array.each(roleListGrid.getSelectionModel().getSelection(), function (r, idx) {
+                                params["roleIds[" + idx + "]"] = r.data.id
                             })
                             Ext.Ajax.request({
                                 url: '/api/roles/relateFunctions',
@@ -115,7 +115,7 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                                             return Ext.create('Techsupport.model.RoleFunc', {
                                                 funccode: r.id,
                                                 funcname: r.funcname,
-                                                "function": Ext.create('Techsupport.model.Function',r)
+                                                "function": Ext.create('Techsupport.model.Function', r)
                                             })
                                         }))
                                         store.remove(Ext.Array.map(store2.getRange(), function (r) {
@@ -207,6 +207,30 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
             }, 'relateMenu button[action=cancel]': {
                 click: function (button) {
                     button.up('window').close()
+                }
+            },
+            'relateMenu menutree': {//关联菜单的树形列表
+                afterrender: function (p) {
+                    p.getRootNode().expand(true, function () {
+                        Ext.Ajax.request({
+                            url: '/api/roles/relateMenus',
+                            method: 'GET',
+                            success: function (response) {
+                                var res = Ext.decode(response.responseText)
+                                if (res.data && res.data.length > 0) {
+                                    Ext.Array.each(res.data, function (m) {
+                                        var node = p.getStore().getNodeById(m.id)
+                                        p.getSelectionModel().select(node, true)
+                                    })
+
+                                }
+                            },
+                            failure: function (response) {
+                                Ext.Msg.alert('错误', '获取关联菜单列表发生错误')
+                            },
+                            scope: this
+                        })
+                    })
                 }
             }
         })
@@ -322,7 +346,7 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
     relateMenu: function (form) { //关联菜单操作
         if (form.isValid()) {
 
-            var store = form.down('grid[name=selectedMenuGrid]').getStore()
+            var store = form.down('menutree[name=selectedMenuGrid]').getStore()
             var removedMenus = Ext.Array.map(store.getRemovedRecords(),
                 function (record) {
                     return record.data.id
@@ -336,17 +360,22 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                 function (record) {
                     return record.data.id
                 })
-            var params = {
-                roleIds: roleIds,
-                removedMenus: removedMenus,
-                addedMenus: addedMenus
-            }
+            var params = {}
+            Ext.Array.each(roleIds, function (r, idx) { //角色id列表
+                params['roleIds[' + idx + ']'] = r;
+            })
+            Ext.Array.each(addedMenus, function (r, idx) { //移除的关联菜单
+                params['removedMenuIds[' + idx + ']'] = r
+            })
+            Ext.Array.each(removedMenus, function (r, idx) {//添加的关联菜单
+                params['addedMenuIds[' + idx + ']'] = r
+            })
             form.submit({
                 url: '/api/roles/relateMenus',
                 params: params,
                 method: 'POST',
                 success: function (basicForm, result) {
-                    store.commitRecords()
+                    store.commitChanges()
                     form.up('window').close()
                 },
                 failure: function (form, result) {

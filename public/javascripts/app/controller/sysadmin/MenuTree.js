@@ -22,11 +22,12 @@ Ext.define('Techsupport.controller.sysadmin.MenuTree', {
                 render: function (tree) {
                     tree.cdata = {menucode: 0, menuname: "", systemcode: '', menulevel: 0, menufullcode: ''};
 
-                    tree.refresh = function (nodeId) {
+                    tree.refresh = function (nodeId,callback) {
                         //刷新
                         var node = this.getStore().getNodeById(nodeId);
                         this.getStore().load({
-                            node: node
+                            node: node,
+                            callback:callback
                         });
                     };
                 },
@@ -67,6 +68,36 @@ Ext.define('Techsupport.controller.sysadmin.MenuTree', {
                         ]
                     });
                     menu.showAt(e.getXY()); //在点击处显示
+                },
+                select: function (model, record, index, eOpts) {
+                    var tree = model.treeStore.ownerTree
+                    tree.cdata.menucode = record.raw.id;
+                    tree.cdata.menuname = record.raw.text;
+                    tree.cdata.menulevel = record.raw.menulevel;
+                    tree.cdata.menufullcode = record.raw.menufullcode;
+                    tree.cdata.systemcode = record.raw.systemcode;
+                    if(!record.data.leaf){
+                        var node = tree.getStore().getNodeById(record.data.id)
+                        if(node.data.expandable){
+                            node.expand(false, function () {
+                                tree.getSelectionModel().select(node.childNodes,true)
+                            })
+                        }
+                        else {
+                            node.expand(false, function () {
+                                tree.getSelectionModel().select(node.childNodes,true)
+                            })
+                        }
+                    }
+                },
+                deselect: function (model, record, index, eOpts) {
+                    if(!record.data.leaf){
+                        var tree=model.treeStore.ownerTree
+                        var node=tree.getStore().getNodeById(record.data.id)
+                        if(node.hasChildNodes()){
+                            tree.getSelectionModel().deselect(node.childNodes)
+                        }
+                    }
                 }
             }
 

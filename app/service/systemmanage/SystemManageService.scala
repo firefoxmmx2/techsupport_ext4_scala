@@ -405,7 +405,14 @@ trait RoleServiceComponentImpl extends RoleServiceComponent {
      * @return
      */
     def getRelateMenus(roleIds: Seq[Long]): List[Menu] = inTransaction {
-      menuDao.getRelatedMenusByRoleids(roleIds)
+      require(roleIds!=null)
+      roleIds.map {
+        roleId=>
+          menuDao.getRelatedMenusByRoleId(roleId)
+      }.reduceLeft{
+        (x,y) =>
+          x intersect y
+      }
     }
   }
 

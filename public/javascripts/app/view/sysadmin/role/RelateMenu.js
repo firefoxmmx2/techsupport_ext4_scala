@@ -36,26 +36,20 @@ Ext.define('Techsupport.view.sysadmin.role.RelateMenu', {
                         },
                         {
                             xtype: 'panel',
-                            layout: 'hbox',
                             border: false,
-                            height: 130,
-                            defaults: {
-                                height: '100%'
-                            },
+                            layout: 'fit',
+                            height: Ext.getBody().getHeight()/5,
                             items: [
                                 {
-                                    name: 'allFunctionGrid',
-                                    xtype: 'gridpanel',
+                                    name: 'selectedMenuGrid',
+                                    xtype: 'menutree',
                                     border: false,
-                                    width: "45%",
-                                    store: Ext.create('Techsupport.store.Function', {
-                                        autoLoad: false
-                                    }),
-                                    columns: [
-                                        {
-                                            dataIndex: 'funcname', text: '全部功能名称', flex: 1
+                                    selType:'checkboxmodel',
+                                    listeners:{
+                                        afterrender: function (p) {
+
                                         }
-                                    ]
+                                    }
                                 }
                             ]
                         }
