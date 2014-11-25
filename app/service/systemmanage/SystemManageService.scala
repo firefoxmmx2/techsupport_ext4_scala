@@ -95,7 +95,7 @@ trait DepartmentServiceComponentImpl extends DepartmentServiceComponent {
      * @return
      */
     def maxDepartmentOrder(parentDepartid: Long): Int = inTransaction {
-      if (parentDepartid == null)
+      if (parentDepartid <=0)
         throw new RuntimeException("获取最大序号的上级机构ID为空")
       departmentDao.maxDepartmentOrder(parentDepartid)
     }
@@ -405,7 +405,7 @@ trait RoleServiceComponentImpl extends RoleServiceComponent {
      * @return
      */
     def getRelateMenus(roleIds: Seq[Long]): List[Menu] = inTransaction {
-      require(roleIds!=null)
+      require(roleIds!=null && roleIds.size>0)
       roleIds.map {
         roleId=>
           menuDao.getRelatedMenusByRoleId(roleId)
@@ -655,7 +655,7 @@ trait UserServiceComponentImpl extends UserServiceComponent {
      * @return
      */
     def getMaxUserOrder(departid: Long): Int = inTransaction {
-      require(departid != null)
+      require(departid >= 0)
       userDao.maxUserOrder(departid)
     }
 
@@ -762,7 +762,7 @@ trait DictItemServiceComponentImpl extends DictItemServiceComponent {
     def maxDictItemOrder(dictcode: String, id: Long): Int = inTransaction {
       if (StringUtils.isEmpty(dictcode))
         throw new RuntimeException("获取最大序列的dictcode不能为空")
-      if (id == null)
+      if (id <= 0)
         throw new RuntimeException("获取最大序列的id不能为空")
       dictItemDao.maxOrder(dictcode, id)
     }
@@ -797,7 +797,7 @@ trait DictServiceComponentImpl extends DictServiceComponent {
     }
 
     def deleteById(id: Long): Unit = inTransaction {
-      if (id == null)
+      if (id <=0)
         throw new RuntimeException("字典ID为空")
       dictItemDao.list(DictItemQueryCondition(dictcode = Some(dictDao.getById(id).dictcode)))
         .foreach(di => dictItemDao.deleteById(di.id.get))
@@ -805,9 +805,9 @@ trait DictServiceComponentImpl extends DictServiceComponent {
     }
 
     def page(pageno: Int, pagesize: Int, params: DictQueryCondition, sort: String = "sibOrder", dir: String = "asc"): Page[Dict] = inTransaction {
-      if (pageno == null || pageno == 0)
+      if (pageno == 0)
         throw new RuntimeException("页数不能为空")
-      if (pagesize == null || pagesize == 0)
+      if (pagesize == 0)
         throw new RuntimeException("每页显示数不能为空")
       if (StringUtils.isEmpty(sort))
         throw new RuntimeException("排序列不能为空")
@@ -821,7 +821,7 @@ trait DictServiceComponentImpl extends DictServiceComponent {
     }
 
     def getById(id: Long): Dict = inTransaction {
-      if (id == null)
+      if (id <= 0)
         throw new RuntimeException("获取指定id字典,字典id为空")
       dictDao.getById(id)
     }

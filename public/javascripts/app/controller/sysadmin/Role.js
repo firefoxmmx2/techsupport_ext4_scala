@@ -208,30 +208,6 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                 click: function (button) {
                     button.up('window').close()
                 }
-            },
-            'relateMenu menutree': {//关联菜单的树形列表
-                afterrender: function (p) {
-                    p.getRootNode().expand(true, function () {
-                        Ext.Ajax.request({
-                            url: '/api/roles/relateMenus',
-                            method: 'GET',
-                            success: function (response) {
-                                var res = Ext.decode(response.responseText)
-                                if (res.data && res.data.length > 0) {
-                                    Ext.Array.each(res.data, function (m) {
-                                        var node = p.getStore().getNodeById(m.id)
-                                        p.getSelectionModel().select(node, true)
-                                    })
-
-                                }
-                            },
-                            failure: function (response) {
-                                Ext.Msg.alert('错误', '获取关联菜单列表发生错误')
-                            },
-                            scope: this
-                        })
-                    })
-                }
             }
         })
     },
@@ -337,6 +313,32 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
             roleStore.add(selection)
             _window.show()
             roleLstGrid.getSelectionModel().selectAll()
+            //初始化角色关联菜单内容
+            var menutree = form.down('menutree')
+            menutree.getRootNode().expand(true, function () {
+                var params = {}
+                var selection = roleLstGrid.getSelectionModel().getSelection()
+                Ext.Array.each(selection, function (r, idx) {
+                    params['roleIds[' + idx + ']'] = r.data.id
+                })
+                Ext.Ajax.request({
+                    url: '/api/roles/relateMenus',
+                    method: 'GET',
+                    params: params,
+                    success: function (response) {
+                        var res = Ext.decode(response.responseText)
+                        if (res.data && res.data.length > 0) {
+                            Ext.Array.each(res.data, function (m) {
+                                var node = menutree.getStore().getNodeById(m.id)
+                                menutree.getSelectionModel().select(node, true)
+                            })
+                        }
+                    },
+                    failure: function (response) {
+                        Ext.Msg.alert('错误', '获取关联菜单列表发生错误')
+                    }
+                })
+            })
         }
         else {
             Ext.Msg.alert("提示", '请选择要操作的角色记录')
@@ -346,7 +348,7 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
     relateMenu: function (form) { //关联菜单操作
         if (form.isValid()) {
 
-            var store = form.down('menutree[name=selectedMenuGrid]').getStore()
+            var store = form.down('menutree[name=selectedMenuGrid]').getSelectedStore()
             var removedMenus = Ext.Array.map(store.getRemovedRecords(),
                 function (record) {
                     return record.data.id
@@ -375,11 +377,9 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                 params: params,
                 method: 'POST',
                 success: function (basicForm, result) {
-                    store.commitChanges()
                     form.up('window').close()
                 },
                 failure: function (form, result) {
-                    store.rejectChanges()
                     Ext.Msg.alert("错误", "关联菜单发生错误")
                 },
                 scope: this

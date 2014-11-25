@@ -239,11 +239,13 @@ object Role extends Controller with ControllerUtils{
    */
   def relateMenus = Action {
     implicit request =>
+      log.debug("="*13+"关联菜单"+"="*13)
       relateMenusForm.bindFromRequest.fold(
         form =>
           BadRequest(form.errorsAsJson),
         relateMenu => {
           val response = Try {
+            log.debug("="*13+relateMenu+"="*13)
             roleService.relateMenus(relateMenu.roleIds, relateMenu.removedMenuIds, relateMenu.addedMenuIds)
             responseData(message = "关联菜单成功")
           } match {

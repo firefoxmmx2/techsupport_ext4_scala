@@ -76,18 +76,16 @@ Ext.define('Techsupport.controller.sysadmin.MenuTree', {
                     tree.cdata.menulevel = record.raw.menulevel;
                     tree.cdata.menufullcode = record.raw.menufullcode;
                     tree.cdata.systemcode = record.raw.systemcode;
+                    var node = tree.getStore().getNodeById(record.data.id)
                     if(!record.data.leaf){
-                        var node = tree.getStore().getNodeById(record.data.id)
                         if(node.data.expandable){
                             node.expand(false, function () {
                                 tree.getSelectionModel().select(node.childNodes,true)
                             })
                         }
-                        else {
-                            node.expand(false, function () {
-                                tree.getSelectionModel().select(node.childNodes,true)
-                            })
-                        }
+                    }
+                    else {
+                        tree.getSelectionModel().select(node.parentNode,true,true)
                     }
                 },
                 deselect: function (model, record, index, eOpts) {
