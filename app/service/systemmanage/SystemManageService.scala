@@ -31,7 +31,7 @@ trait DepartmentServiceComponentImpl extends DepartmentServiceComponent {
      * @param id
      * @return
      */
-    def getById(id: Long): Department = inTransaction(departmentDao.getById(id))
+    def getById(id: Long): Option[Department] = inTransaction(departmentDao.getById(id))
 
     /**
      * 获取机构列表不分页
@@ -95,7 +95,7 @@ trait DepartmentServiceComponentImpl extends DepartmentServiceComponent {
      * @return
      */
     def maxDepartmentOrder(parentDepartid: Long): Int = inTransaction {
-      if (parentDepartid <=0)
+      if (parentDepartid <= 0)
         throw new RuntimeException("获取最大序号的上级机构ID为空")
       departmentDao.maxDepartmentOrder(parentDepartid)
     }
@@ -129,7 +129,7 @@ trait GlobalParamServiceComponentImpl extends GlobalParamServiceComponent {
      * @param id
      * @return
      */
-    def getById(id: String): models.GlobalParam = inTransaction(globalParamDao.getById(id))
+    def getById(id: String): Option[models.GlobalParam] = inTransaction(globalParamDao.getById(id))
 
     /**
      * 获取列表不分页
@@ -187,7 +187,7 @@ trait MenuServiceComponentImpl extends MenuServiceComponent {
      * @param id
      * @return
      */
-    def getById(id: String): Menu = inTransaction(menuDao.getById(id))
+    def getById(id: String): Option[Menu] = inTransaction(menuDao.getById(id))
 
     /**
      * 获取列表不分页
@@ -275,7 +275,7 @@ trait RoleServiceComponentImpl extends RoleServiceComponent {
      * @param id
      * @return
      */
-    def getById(id: Long): Role = inTransaction(roleDao.getById(id))
+    def getById(id: Long): Option[Role] = inTransaction(roleDao.getById(id))
 
     /**
      * 获取列表不分页
@@ -347,7 +347,11 @@ trait RoleServiceComponentImpl extends RoleServiceComponent {
             case Some(functionIds) =>
               functionIds.foreach {
                 funccode =>
-                  roleFuncDao.insert(RoleFunc(roleId, funccode))
+                  roleFuncDao.getById(roleId, funccode) match {
+                    case Some(roleFunc)=>
+                    case None =>
+                      roleFuncDao.insert(RoleFunc(roleId, funccode))
+                  }
               }
             case None =>
           }
@@ -377,7 +381,13 @@ trait RoleServiceComponentImpl extends RoleServiceComponent {
             case Some(menuIds) =>
               menuIds.foreach {
                 menucode =>
-                  roleMenuDao.insert(RoleMenu(menucode, roleId))
+                  roleMenuDao.getById((menucode, roleId)) match {
+                    case Some(roleMenu) =>
+                    case None =>
+                      //当为空的时候才插入新的关联
+                      roleMenuDao.insert(RoleMenu(menucode, roleId))
+                  }
+
               }
             case None =>
           }
@@ -389,12 +399,12 @@ trait RoleServiceComponentImpl extends RoleServiceComponent {
      * @param roleIds
      */
     def getRelateFunctions(roleIds: Seq[Long]): List[Function] = inTransaction {
-      require(roleIds!=null)
-      roleIds.map{
-        roleId=>
+      require(roleIds != null)
+      roleIds.map {
+        roleId =>
           functionDao.getRelatedFunctionsByRoleid(roleId)
-      }.reduceLeft{
-        (x,y) =>
+      }.reduceLeft {
+        (x, y) =>
           x intersect y
       }
     }
@@ -405,12 +415,12 @@ trait RoleServiceComponentImpl extends RoleServiceComponent {
      * @return
      */
     def getRelateMenus(roleIds: Seq[Long]): List[Menu] = inTransaction {
-      require(roleIds!=null && roleIds.size>0)
+      require(roleIds != null && roleIds.size > 0)
       roleIds.map {
-        roleId=>
+        roleId =>
           menuDao.getRelatedMenusByRoleId(roleId)
-      }.reduceLeft{
-        (x,y) =>
+      }.reduceLeft {
+        (x, y) =>
           x intersect y
       }
     }
@@ -444,7 +454,7 @@ trait RoleMenuServiceComponentImpl extends RoleMenuServiceComponent {
       roleMenuDao.page(pageno, pagesize, params, sort, dir)
     }
 
-    def getById(id: (String, Long)): RoleMenu = inTransaction {
+    def getById(id: (String, Long)): Option[RoleMenu] = inTransaction {
       roleMenuDao.getById(id)
     }
 
@@ -481,7 +491,7 @@ trait RoleFuncServiceComponentImpl extends RoleFuncServiceComponent {
       roleFuncDao.page(pageno, pagesize, params, sort, dir)
     }
 
-    def getById(id: (Long, String)): RoleFunc = inTransaction {
+    def getById(id: (Long, String)): Option[RoleFunc] = inTransaction {
       roleFuncDao.getById(id)
     }
 
@@ -533,7 +543,7 @@ trait SystemServiceComponentImpl extends SystemServiceComponent {
      * @param id
      * @return
      */
-    def getById(id: String): models.System = inTransaction(systemDao.getById(id))
+    def getById(id: String): Option[models.System] = inTransaction(systemDao.getById(id))
 
     /**
      * 获取列表不分页
@@ -591,7 +601,7 @@ trait UserServiceComponentImpl extends UserServiceComponent {
      * @param id
      * @return
      */
-    def getById(id: Long): User = inTransaction(userDao.getById(id))
+    def getById(id: Long): Option[User] = inTransaction(userDao.getById(id))
 
     /**
      * 获取列表不分页
@@ -691,9 +701,10 @@ trait DictItemServiceComponentImpl extends DictItemServiceComponent {
      */
     def insert(e: DictItem): DictItem = inTransaction {
       val inserted = dictItemDao.insert(e)
-      val parent = dictItemDao.getById(inserted.superItemId.get)
-      if (parent != null)
-        dictItemDao.update(parent.copy(isleaf = "N"))
+      dictItemDao.getById(inserted.superItemId.get) match {
+        case Some(parent) =>
+          dictItemDao.update(parent.copy(isleaf = "N"))
+      }
       inserted
     }
 
@@ -714,18 +725,17 @@ trait DictItemServiceComponentImpl extends DictItemServiceComponent {
           dictItemDao.deleteById(child.id.get)
       }
 
-
-      val thisDictItem = dictItemDao.getById(id)
       dictItemDao.deleteById(id)
+      dictItemDao.getById(id) match {
+        case Some(thisDictItem) =>
+          dictItemDao.getById(thisDictItem.superItemId.get) match {
+            case Some(parent) if parent.isleaf == "N" && !dictItemDao.hasChildren(parent.id.get) =>
+              dictItemDao.update(parent.copy(isleaf = "Y"))
+          }
 
-      val parent = dictItemDao.getById(thisDictItem.superItemId.get)
-
-      //      Logger.debug("=" * 13 + "parent.isleaf == \"N\" is " + (parent.isleaf == "N") + "=" * 13)
-      //      Logger.debug("=" * 13 + "dictItemDao.hasChildren(parent.id.get) is" + dictItemDao.hasChildren(parent.id.get) + "=" * 13)
-      if (parent != null && parent.isleaf == "N" && !dictItemDao.hasChildren(parent.id.get)) {
-        dictItemDao.update(parent.copy(isleaf = "Y"))
       }
     }
+
 
     /**
      * 获取列表分页
@@ -744,7 +754,7 @@ trait DictItemServiceComponentImpl extends DictItemServiceComponent {
      * @param id
      * @return
      */
-    def getById(id: Long): DictItem = inTransaction(dictItemDao.getById(id))
+    def getById(id: Long): Option[DictItem] = inTransaction(dictItemDao.getById(id))
 
     /**
      * 获取列表不分页
@@ -797,11 +807,14 @@ trait DictServiceComponentImpl extends DictServiceComponent {
     }
 
     def deleteById(id: Long): Unit = inTransaction {
-      if (id <=0)
+      if (id <= 0)
         throw new RuntimeException("字典ID为空")
-      dictItemDao.list(DictItemQueryCondition(dictcode = Some(dictDao.getById(id).dictcode)))
-        .foreach(di => dictItemDao.deleteById(di.id.get))
-      dictDao.deleteById(id)
+      dictDao.getById(id) match {
+        case Some(x) => dictItemDao.list(DictItemQueryCondition(dictcode = Some(x.dictcode)))
+          .foreach(di => dictItemDao.deleteById(di.id.get))
+          dictDao.deleteById(id)
+      }
+
     }
 
     def page(pageno: Int, pagesize: Int, params: DictQueryCondition, sort: String = "sibOrder", dir: String = "asc"): Page[Dict] = inTransaction {
@@ -820,7 +833,7 @@ trait DictServiceComponentImpl extends DictServiceComponent {
       dictDao.list(params)
     }
 
-    def getById(id: Long): Dict = inTransaction {
+    def getById(id: Long): Option[Dict] = inTransaction {
       if (id <= 0)
         throw new RuntimeException("获取指定id字典,字典id为空")
       dictDao.getById(id)
@@ -864,7 +877,7 @@ trait LoginLogServiceComponentImpl extends LoginLogServiceComponent {
       loginLogDao.page(pageno, pagesize, params, sort, dir)
     }
 
-    def getById(id: Long): LoginLog = inTransaction {
+    def getById(id: Long): Option[LoginLog] = inTransaction {
       loginLogDao.getById(id)
     }
 
@@ -901,7 +914,7 @@ trait FunctionServiceComponentImpl extends FunctionServiceComponent {
       functionDao.page(pageno, pagesize, params, sort, dir)
     }
 
-    def getById(id: String): Function = inTransaction {
+    def getById(id: String): Option[Function] = inTransaction {
       functionDao.getById(id)
     }
 

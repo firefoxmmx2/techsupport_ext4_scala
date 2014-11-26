@@ -54,7 +54,7 @@ object Department extends Controller with ComponentRegister {
             "success" -> true,
             "inserted" -> inserted))).as(JSON)
         } catch {
-          case e =>
+          case e:Exception =>
             log.error(e.toString, e.fillInStackTrace())
             Ok(Json.generate(Map("result" -> -1,
               "success" -> false,
@@ -73,7 +73,7 @@ object Department extends Controller with ComponentRegister {
           "success" -> true,
           "message" -> "删除成功"))).as(JSON)
       } catch {
-        case e =>
+        case e:Exception =>
           log.error(e.toString, e.fillInStackTrace())
           val resultMap = Map("result" -> -1,
             "success" -> false,

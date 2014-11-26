@@ -138,10 +138,10 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): Department = from(SystemManage.departments)(d =>
+    def getById(id: Long): Option[Department] = from(SystemManage.departments)(d =>
       where(d.id === id)
         select (d)
-    ).single
+    ).singleOption
 
     /**
      * 通过主键删除
@@ -314,7 +314,7 @@ trait UserDaoComponentImpl extends UserDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): User = SystemManage.users.where(u => u.id === id).single
+    def getById(id: Long): Option[User] = SystemManage.users.where(u => u.id === id).singleOption
 
     /**
      * 通过主键删除
@@ -507,7 +507,7 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
 
      * @return 实体
      */
-    def getById(id: String): System = SystemManage.systems.where(s => s.id === id).single
+    def getById(id: String): Option[System] = SystemManage.systems.where(s => s.id === id).singleOption
 
     /**
      * 通过主键删除
@@ -630,7 +630,7 @@ trait RoleDaoComponentImpl extends RoleDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): Role = SystemManage.roles.where(r => r.id === id).single
+    def getById(id: Long): Option[Role] = SystemManage.roles.where(r => r.id === id).singleOption
 
     /**
      * 通过主键删除
@@ -813,7 +813,7 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
 
      * @return 实体
      */
-    def getById(id: String): Menu = SystemManage.menus.where(m => m.id === id).single
+    def getById(id: String): Option[Menu] = SystemManage.menus.where(m => m.id === id).singleOption
 
     /**
      * 通过主键删除
@@ -933,7 +933,7 @@ trait GlobalParamDaoComponentImpl extends GlobalParamDaoComponent {
 
      * @return 实体
      */
-    def getById(id: String): GlobalParam = SystemManage.globalParams.where(g => g.id === id).single
+    def getById(id: String): Option[GlobalParam]  = SystemManage.globalParams.where(g => g.id === id).singleOption
 
     /**
      * 通过主键删除
@@ -1044,9 +1044,9 @@ trait UserRoleDaoComponentImpl extends UserRoleDaoComponent {
 
      * @return 实体
      */
-    def getById(id: (Long, Long)): UserRole = SystemManage.userRoles.where {
+    def getById(id: (Long, Long)): Option[UserRole] = SystemManage.userRoles.where {
       ur => (ur.roleid === id._1) and (ur.userid === id._2)
-    }.single
+    }.singleOption
 
     /**
      * 通过主键删除
@@ -1146,10 +1146,10 @@ trait RoleMenuDaoComponentImpl extends RoleMenuDaoComponent {
 
      * @return 实体
      */
-    def getById(id: (String, Long)): RoleMenu = SystemManage.roleMenus.where {
+    def getById(id: (String, Long)): Option[RoleMenu] = SystemManage.roleMenus.where {
       rm =>
         (rm.menucode === id._1) and (rm.roleid === id._2)
-    }.single
+    }.singleOption
 
     /**
      * 通过主键删除
@@ -1326,8 +1326,8 @@ trait DictItemDaoComponentImpl extends DictItemDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): DictItem = SystemManage.dictItems.where(di =>
-      di.id === id).singleOption.getOrElse(null)
+    def getById(id: Long): Option[DictItem] = SystemManage.dictItems.where(di =>
+      di.id === id).singleOption
 
     /**
      * 吃否有子字典项
@@ -1496,7 +1496,7 @@ trait DictDaoComponentImpl extends DictDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): Dict = SystemManage.dicts.where(d => d.id === id).singleOption.get
+    def getById(id: Long): Option[Dict] = SystemManage.dicts.where(d => d.id === id).singleOption
 
     /**
      * 验证字典代码是否重复
@@ -1682,7 +1682,7 @@ trait LoginLogDaoComponentImpl extends LoginLogDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): LoginLog = SystemManage.loginLogs.where(l => l.id === id).singleOption.get
+    def getById(id: Long): Option[LoginLog] = SystemManage.loginLogs.where(l => l.id === id).singleOption
   }
 
 }
@@ -1787,7 +1787,7 @@ trait RoleFuncDaoComponentImpl extends RoleFuncDaoComponent {
 
      * @return 实体
      */
-    def getById(id: (Long, String)): RoleFunc = SystemManage.roleFuncs.where(rf => rf.id === id).singleOption.get
+    def getById(id: (Long, String)): Option[RoleFunc] = SystemManage.roleFuncs.where(rf => rf.id === id).singleOption
   }
 
 }
@@ -1922,10 +1922,7 @@ trait FunctionDaoComponentImpl extends FunctionDaoComponent {
 
      * @return 实体
      */
-    def getById(id: String): Function = SystemManage.functions.where(f => f.id === id).singleOption match {
-      case Some(function) => function
-      case None => null
-    }
+    def getById(id: String): Option[Function] = SystemManage.functions.where(f => f.id === id).singleOption
 
     /**
      * 验证ID是否重复

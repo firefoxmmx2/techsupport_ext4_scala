@@ -79,9 +79,9 @@ object Login extends Controller with ComponentRegister {
     implicit request =>
       Cache.get(request.session.get("authCode").getOrElse("")) match {
         case Some(x: Map[String, Any]) => {
-          val loginLog = loginLogService.getById(x.getOrElseAs("loginlogid", 0L))
-          if (loginLog != null) {
-            loginLogService.update(loginLog.copy(quittime = Some(new DateTime())))
+          loginLogService.getById(x.getOrElseAs("loginlogid", 0L)) match {
+            case  Some(loginLog) =>
+              loginLogService.update(loginLog.copy(quittime = Some(new DateTime())))
           }
         }
       }

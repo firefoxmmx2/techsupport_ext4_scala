@@ -50,7 +50,7 @@ object User extends Controller with ComponentRegister {
               "message" -> "添加成功",
               "inserted" -> inserted))).as(JSON)
           } catch {
-            case e =>
+            case e:Exception =>
               log.error(e.toString, e.fillInStackTrace())
               Ok(Json.generate(Map("result" -> -1,
                 "success" -> false,
@@ -69,7 +69,7 @@ object User extends Controller with ComponentRegister {
           "success" -> true,
           "message" -> "删除成功"))).as(JSON)
       } catch {
-        case e =>
+        case e:Exception =>
           log.error(e.toString, e.fillInStackTrace())
           Ok(Json.generate(Map("result" -> -1,
             "success" -> false,
@@ -118,7 +118,7 @@ object User extends Controller with ComponentRegister {
               "limit" -> limit))).as(JSON)
           }
           catch {
-            case e =>
+            case e:Exception =>
               log.error(e.toString, e.fillInStackTrace())
               Ok(Json.generate(Map("result" -> -1,
                 "success" -> false,
@@ -141,7 +141,7 @@ object User extends Controller with ComponentRegister {
         "user" -> user))).as(JSON)
     }
     catch {
-      case e =>
+      case e:Exception =>
         log.error(e.toString, e.fillInStackTrace())
         Ok(Json.generate(Map("result" -> -1,
           "success" -> false,
@@ -164,7 +164,7 @@ object User extends Controller with ComponentRegister {
               "message" -> "修改成功")))
           }
           catch {
-            case e =>
+            case e:Exception =>
               log.error(e.toString, e.fillInStackTrace())
               Ok(Json.generate(Map("result" -> -1,
                 "success" -> false,

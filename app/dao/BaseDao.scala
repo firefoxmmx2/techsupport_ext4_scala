@@ -51,7 +51,7 @@ trait BaseDao[M, L,Q<:QueryCondition] {
 
    * @return 实体
    */
-  def getById(id: L): M
+  def getById(id: L): Option[M]
 
   /**
    * 分页总数查询

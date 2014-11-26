@@ -14,5 +14,5 @@ trait BaseService[T, P, Q <: QueryCondition] {
 
   def list(params: Q): List[T]
 
-  def getById(id: P): T
+  def getById(id: P): Option[T]
 }
