@@ -99,9 +99,6 @@ Ext.define('Techsupport.controller.sysadmin.MenuTree', {
                     else{
                         //当子菜单不再被选中的时候,也清理掉父菜单的选中状态.
                         if(node.parentNode ){
-                            Ext.Array.reduce(, function (x, y) {
-                                return x && y
-                            })
                             var selectedResults=Ext.Array.map(node.parentNode.childNodes, function (r) {
                                 return !tree.getSelectionModel().isSelected(r)
                             })

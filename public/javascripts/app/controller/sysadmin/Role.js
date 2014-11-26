@@ -347,7 +347,12 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                         })
                         //添加反选择事件
                         menutree.on('deselect', function (model, record, index, eOpts) {
-                            menutree.selectedStore.remove(menutree.selectedStore)
+                            var rrecord= menutree.selectedStore.findRecord('menucode',
+                                record.data.id)
+                            if(rrecord){
+                                menutree.selectedStore.remove(rrecord)
+                            }
+
                         })
                     },
                     failure: function (response) {
@@ -368,11 +373,11 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
             var store = form.down('menutree[name=selectedMenuGrid]').selectedStore
             var removedMenus = Ext.Array.map(store.getRemovedRecords(),
                 function (record) {
-                    return record.data.id
+                    return record.data.menucode
                 })
             var addedMenus = Ext.Array.map(store.getNewRecords(),
                 function (record) {
-                    return record.data.id
+                    return record.data.menucode
                 })
 
             var roleIds = Ext.Array.map(form.down('rolelist').getSelectionModel().getSelection(),
@@ -384,10 +389,10 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                 params['roleIds[' + idx + ']'] = r;
             })
             Ext.Array.each(addedMenus, function (r, idx) { //移除的关联菜单
-                params['removedMenuIds[' + idx + ']'] = r
+                params['addedMenuIds[' + idx + ']'] = r
             })
             Ext.Array.each(removedMenus, function (r, idx) {//添加的关联菜单
-                params['addedMenuIds[' + idx + ']'] = r
+                params['removedMenuIds[' + idx + ']'] = r
             })
             form.submit({
                 url: '/api/roles/relateMenus',
