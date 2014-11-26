@@ -44,6 +44,9 @@ Ext.define('Techsupport.view.sysadmin.role.RelateMenu', {
                                     name: 'selectedMenuGrid',
                                     xtype: 'menutree',
                                     border: false,
+                                    selectedStore:Ext.create('Ext.data.Store',{
+                                        model:'Techsupport.model.RoleMenu'
+                                    }),
                                     selType:'checkboxmodel',
                                     listeners:{
                                         afterrender: function (p) {

@@ -11,7 +11,7 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
         "sysadmin.role.RelateFunc",
         "sysadmin.role.RelateMenu"
     ],
-    models: ['Role', 'RoleFunc'],
+    models: ['Role', 'RoleFunc','RoleMenu'],
     refs: [
         {ref: 'queryForm', selector: 'rolemanage panel[region=center] form'},
         {ref: 'roleListGrid', selector: "rolemanage panel[region=center] rolelist"}
@@ -331,14 +331,31 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                             Ext.Array.each(res.data, function (m) {
                                 var node = menutree.getStore().getNodeById(m.id)
                                 menutree.getSelectionModel().select(node, true)
+                                var newRecord=Ext.create('Techsupport.model.RoleMenu',{
+                                    menucode: m.id
+                                })
+                                menutree.selectedStore.add(newRecord)
                             })
+                            menutree.selectedStore.commitChanges()
                         }
+                        //添加选择事件
+                        menutree.on('select', function (model, record, index, eOpts) {
+                            var newRecord=Ext.create('Techsupport.model.RoleMenu',{
+                                menucode:record.data.id
+                            })
+                            menutree.selectedStore.add(newRecord)
+                        })
+                        //添加反选择事件
+                        menutree.on('deselect', function (model, record, index, eOpts) {
+                            menutree.selectedStore.remove(menutree.selectedStore)
+                        })
                     },
                     failure: function (response) {
                         Ext.Msg.alert('错误', '获取关联菜单列表发生错误')
                     }
                 })
             })
+
         }
         else {
             Ext.Msg.alert("提示", '请选择要操作的角色记录')
@@ -348,7 +365,7 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
     relateMenu: function (form) { //关联菜单操作
         if (form.isValid()) {
 
-            var store = form.down('menutree[name=selectedMenuGrid]').getSelectedStore()
+            var store = form.down('menutree[name=selectedMenuGrid]').selectedStore
             var removedMenus = Ext.Array.map(store.getRemovedRecords(),
                 function (record) {
                     return record.data.id

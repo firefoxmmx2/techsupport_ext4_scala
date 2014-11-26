@@ -89,11 +89,28 @@ Ext.define('Techsupport.controller.sysadmin.MenuTree', {
                     }
                 },
                 deselect: function (model, record, index, eOpts) {
+                    var tree=model.treeStore.ownerTree
+                    var node=tree.getStore().getNodeById(record.data.id)
                     if(!record.data.leaf){
-                        var tree=model.treeStore.ownerTree
-                        var node=tree.getStore().getNodeById(record.data.id)
                         if(node.hasChildNodes()){
                             tree.getSelectionModel().deselect(node.childNodes)
+                        }
+                    }
+                    else{
+                        //当子菜单不再被选中的时候,也清理掉父菜单的选中状态.
+                        if(node.parentNode ){
+                            Ext.Array.reduce(, function (x, y) {
+                                return x && y
+                            })
+                            var selectedResults=Ext.Array.map(node.parentNode.childNodes, function (r) {
+                                return !tree.getSelectionModel().isSelected(r)
+                            })
+                            var result=true;
+                            Ext.Array.each(selectedResults, function (r) {
+                                result=result && r
+                            })
+                            if(result)
+                                tree.getSelectionModel().deselect(node.parentNode)
                         }
                     }
                 }
