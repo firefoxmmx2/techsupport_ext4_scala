@@ -704,6 +704,7 @@ trait DictItemServiceComponentImpl extends DictItemServiceComponent {
       dictItemDao.getById(inserted.superItemId.get) match {
         case Some(parent) =>
           dictItemDao.update(parent.copy(isleaf = "N"))
+        case None=>
       }
       inserted
     }
@@ -731,8 +732,9 @@ trait DictItemServiceComponentImpl extends DictItemServiceComponent {
           dictItemDao.getById(thisDictItem.superItemId.get) match {
             case Some(parent) if parent.isleaf == "N" && !dictItemDao.hasChildren(parent.id.get) =>
               dictItemDao.update(parent.copy(isleaf = "Y"))
+            case None=>
           }
-
+        case None=>
       }
     }
 
@@ -813,6 +815,7 @@ trait DictServiceComponentImpl extends DictServiceComponent {
         case Some(x) => dictItemDao.list(DictItemQueryCondition(dictcode = Some(x.dictcode)))
           .foreach(di => dictItemDao.deleteById(di.id.get))
           dictDao.deleteById(id)
+        case None=>
       }
 
     }

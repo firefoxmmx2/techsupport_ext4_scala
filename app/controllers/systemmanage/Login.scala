@@ -77,13 +77,17 @@ object Login extends Controller with ComponentRegister {
    */
   def logout = Action {
     implicit request =>
-      Cache.get(request.session.get("authCode").getOrElse("")) match {
-        case Some(x: Map[String, Any]) => {
-          loginLogService.getById(x.getOrElseAs("loginlogid", 0L)) match {
-            case  Some(loginLog) =>
-              loginLogService.update(loginLog.copy(quittime = Some(new DateTime())))
+      request.session.get("authCode") match {
+        case Some(s) =>
+          Cache.get(s) match {
+            case Some(x: Map[String, Any]) =>
+              loginLogService.getById(x.getOrElseAs("loginlogid", 0L)) match {
+                case Some(loginLog) =>
+                  loginLogService.update(loginLog.copy(quittime = Some(new DateTime())))
+                case None =>
+              }
+            case None =>
           }
-        }
       }
 
       Cache.remove(request.session.get("authCode").getOrElse(""))
