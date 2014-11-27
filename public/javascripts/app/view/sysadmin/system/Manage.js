@@ -8,7 +8,8 @@ Ext.define('Techsupport.view.sysadmin.system.Manage', {
     extend: 'Techsupport.view.base.BaseManage',
     alias: 'widget.systemmanage',
     initComponent: function () {
-        this.items = [this.superclass.items[1]]
+        this.items = Ext.clone(this.superclass.items)
+        this.items.splice(0,1)
         this.callParent(arguments);
 //        this.down('panel[region=west]').remove();
         this.down('form').add([
