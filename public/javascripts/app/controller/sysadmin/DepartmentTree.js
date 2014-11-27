@@ -42,14 +42,6 @@ Ext.define('Techsupport.controller.sysadmin.DepartmentTree', {
                     }
                     store.getProxy().setExtraParam("parentDepartid", tree.cdata.departid);
                 },
-                itemclick: function (v, record, item, index, e, eOpts) {
-                    var tree = v.ownerCt;
-                    tree.cdata.departid = record.raw.id;
-                    tree.cdata.departcode = record.raw.departcode;
-                    tree.cdata.departname = record.raw.text;
-                    tree.cdata.departfullcode = record.raw.departfullcode;
-                    tree.cdata.departlevel = record.raw.departlevel;
-                },
                 itemcontextmenu: function (view, record, item, index, e, eOpts) {
                     //右键菜单
                     e.preventDefault();
@@ -65,6 +57,14 @@ Ext.define('Techsupport.controller.sysadmin.DepartmentTree', {
                         ]
                     });
                     menu.showAt(e.getXY()); //在点击处显示
+                } ,
+                select: function (node, record, index, opts) { //选择时候的设置参数值
+                    var tree = node.treeStore.ownerTree;
+                    tree.cdata.departid = record.raw.id;
+                    tree.cdata.departcode = record.raw.departcode;
+                    tree.cdata.departname = record.raw.text;
+                    tree.cdata.departfullcode = record.raw.departfullcode;
+                    tree.cdata.departlevel = record.raw.departlevel;
                 }
             }
         });
