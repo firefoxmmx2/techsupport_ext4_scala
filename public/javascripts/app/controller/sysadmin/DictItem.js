@@ -39,6 +39,11 @@ Ext.define('Techsupport.controller.sysadmin.DictItem', {
                         this.getTreeListGrid().show()
                         this.queryDictItem()
                     }
+                },
+                afterrender: function (p) { //在选燃完成后,自动查询左边的字典列表
+                    setTimeout(function () {
+                        p.getStore().load()
+                    },100)
                 }
             },
             'dictItemManage dictList textfield[name=queryfield]': {//左边侧栏快捷查询输入框
