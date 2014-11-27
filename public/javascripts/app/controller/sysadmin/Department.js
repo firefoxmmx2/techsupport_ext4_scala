@@ -221,13 +221,23 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
                         }
                     });
                 }
+            },
+            'departmentManage departmenttree':{//机构管理下的机构树
+                render: function (p) {
+                    p.on('select', function (node, record, index, opts) {   //在选择的时候,查询机构信息
+                        this.queryDepartment(this)
+                    },this)
+                }
             }
         });
     },
     queryDepartment: function (controller) {
         //机构查询
         var params = controller.getQueryForm().getForm().getValues();
-        params.parentDepartid = controller.getDepartmentTree().cdata.departid;
+        var tree=controller.getDepartmentTree();
+        if(tree.getSelectionModel().getCount()==0)
+            tree.getSelectionModel().select(tree.getRootNode())
+        params.parentDepartid = tree.getSelectionModel().getSelection()[0].data.id;
         Ext.apply(controller.getDepartmentStore().getProxy().extraParams, params);
         controller.getDepartmentStore().load();
     },

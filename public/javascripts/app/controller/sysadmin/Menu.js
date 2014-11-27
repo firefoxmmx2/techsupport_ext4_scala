@@ -109,7 +109,9 @@ Ext.define('Techsupport.controller.sysadmin.Menu', {
             var form = this.getQueryForm();
             var params = form.getForm().getValues();
             var store = this.getMenuStore();
-            params.parentmenucode = this.getMenuTree().cdata.menucode;
+            if(this.getMenuTree().getSelectionModel().getCount()==0)
+                this.getMenuTree().getSelectionModel().select(this.getMenuTree().getRootNode())
+            params.parentmenucode = this.getMenuTree().getSelectionModel().getSelection()[0].data.id;
             Ext.apply(store.getProxy().extraParams, params);
             store.load();
         };
@@ -237,6 +239,13 @@ Ext.define('Techsupport.controller.sysadmin.Menu', {
             'menumanage button[action=remove]': { //删除按钮
                 click: function () {
                     this.removeMenu();
+                }
+            },
+            'menumanage menutree':{//菜单管理里面的菜单树
+                render: function (p) {
+                    p.on('select', function (view, record, index, eOpts) { //在选择的时候,查询菜单信息
+                        this.queryMenu()
+                    },this)
                 }
             }
         });

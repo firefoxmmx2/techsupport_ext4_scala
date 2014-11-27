@@ -201,13 +201,23 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                     var form = _window.query('form')[0];
                     this.modifyUser(form, this.getUserStore(), _window);
                 }
+            },
+            'usermanage departmenttree':{//用户管理下的机构树
+                render: function (p) {
+                    p.on('select', function (node, record, index, opts) { //在选择的时候查询用户
+                        this.queryUsers(this)
+                    },this)
+                }
             }
         });
     },
     queryUsers: function (controller) {
         //查询用户
         var params = controller.getQueryForm().getForm().getValues();
-        params.departid = controller.getDepartmentTree().cdata.departid;
+        var tree=controller.getDepartmentTree();
+        if(tree.getSelectionModel().getCount()==0)
+            tree.getSelectionModel().select(tree.getRootNode())
+        params.departid = tree.getSelectionModel().getSelection()[0].data.id;
         Ext.apply(controller.getUserStore().getProxy().extraParams, params);
         controller.getUserStore().load();
     },
