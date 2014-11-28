@@ -1,0 +1,19 @@
+/**
+ *  支持单
+ */
+Ext.define('Techsupport.model.TechSupportTicket',{
+    extend:'Ext.data.Model',
+    fields:[
+        {
+            name:'stNo',type:'string'
+        },
+        {name:'applicant',type:'string'},
+        {name:'supportContent',type:'string'},
+        {name:'devScheDate',type:'string'},
+        {name:'psgScheDate',type:'string'},
+        {name:'stStatus',type:'string'},
+        {name:'region',type:'string'},
+        {name:'serialNumber',type:'string'},
+        {name:'id',type:'string'},
+    ]
+})
