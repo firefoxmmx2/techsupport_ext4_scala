@@ -1,4 +1,5 @@
 import org.specs2.mutable.Specification
+import play.api.Logger
 import util.{Utils, Page}
 
 /**
@@ -13,7 +14,7 @@ class UtilSpec  extends Specification{
       println("="*13+"[page1.limit]"+page1.limit+"="*13)
       println("="*13+"[page2.start]"+page2.start+"="*13)
       println("="*13+"[page2.limit]"+page2.limit+"="*13)
-      page1 must be equals(page2) 
+      page1 mustNotEqual page2
     }
   }
   "Utils Md5 " should {
