@@ -24,9 +24,9 @@ class TechsupportSpec extends Specification with ComponentRegister {
           //                 where(b.id === d.id and r.id === b.id and f.id === b.id and a.id === b.id)
           //                   select(SupportTicket(b,Option(d),Option(r),Option(f),Option(a),None,None,None))
           //             ).toList
-          join(Techsupport.supportTickets, Techsupport.supportDepartments, Techsupport.supportLeaders)(
+          from(Techsupport.supportTickets, Techsupport.supportDepartments, Techsupport.supportLeaders)(
             (s, sd, sl) =>
-
+              where(s.id === sd.stId and s.id === sl.stId)
               select(SupportTicket(
                 BaseSupportTicket(s.applicantId,
                   s.supportContent,
@@ -96,11 +96,10 @@ class TechsupportSpec extends Specification with ComponentRegister {
                 None,
                 None
               ))
-                on (s.id === sd.stId and s.id === sl.stId)
           ).toList
         }
         println("=" * 13 + "supportTickets list.size is " + list.size + "=" * 13)
-        println("=" * 13 + "supportTickets list(0).support_content" + list(0).supportContent + "=" * 13)
+        println("=" * 13 + "supportTickets list(0)" + list(0) + "=" * 13)
         list.size must be > 0
       }
     }

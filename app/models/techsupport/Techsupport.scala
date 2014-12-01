@@ -210,7 +210,9 @@ case class SupportDepartment(
  * @param slDepartId
  */
 case class SupportLeader(
+                          @Column("st_id")
                           stId: Long,
+                          @Column("sl_id")
                           slId: Long,
                           @Column("sl_departid")
                           slDepartId: Long
@@ -259,7 +261,7 @@ case object Techsupport extends Schema {
   val trackings = table[Tracking]("t_ts_tracking")
   on(trackings)(t => declare(t.id is(autoIncremented("seq_ts_track"), primaryKey)))
   val supportDepartments = table[SupportDepartment]("T_TS_STDEPT_MAPPING")
-  on(supportDepartments)(d=>declare(d.id is (autoIncremented("SEQ_TS_STDEPT"),primaryKey)))
+  on(supportDepartments)(d => declare(d.id is(autoIncremented("SEQ_TS_STDEPT"), primaryKey)))
   val supportLeaders = table[SupportLeader]("T_TS_STSL_MAP")
   val attachments = table[Attachment]("T_TS_SUPPORT_ATTACHMENT")
   on(attachments)(a => declare(a.id is(autoIncremented("SEQ_TS_ATTACH"), primaryKey)))
