@@ -23,13 +23,12 @@ case class BaseSupportTicket(
                               serialNumber: Int,
                               lastUpdateDate: DateTime,
                               id: Option[Long] = None
-                              ) extends KeyedEntity[Option[Long]]
+                              )
 
 
 /**
  * 部门审批
  * @param id
- * @param lastUpdateDate
  * @param devScheDate
  * @param psgScheDate
  * @param devDsScheDate
@@ -40,62 +39,39 @@ case class BaseSupportTicket(
  */
 case class DepartmentApproval(
                                id: Long,
-                               @Column("last_update_date")
-                               lastUpdateDate: DateTime,
-                               @Column("dev_sche_date")
                                devScheDate: Option[DateTime],
-                               @Column("psg_sche_date")
                                psgScheDate: Option[DateTime],
-                               @Column("dev_ds_sche_date")
                                devDsScheDate: Option[DateTime],
-                               @Column("dev_dd_sche_date")
                                devDdScheDate: Option[DateTime],
-                               @Column("dev_dt_sche_date")
                                devDtScheDate: Option[DateTime],
-                               @Column("psg_ds_sche_date")
                                psgDsScheDate: Option[DateTime],
-                               @Column("psg_Is_sche_date")
                                psgIsScheDate: Option[DateTime]
-                               ) extends KeyedEntity[Long]
+                               )
 
 /**
  * 追踪批复
  */
 case class TrackingApproval(
                              id: Long,
-                             @Column("applying_feedback_date")
                              applyingFeedbackDate: DateTime,
-                             @Column("last_update_date")
-                             lastUpdateDate: DateTime,
-                             @Column("psg_comp_date")
                              psgCompDate: Option[DateTime],
-                             @Column("dev_comp_date")
                              devCompDate: Option[DateTime],
-                             @Column("psg_ds_comp_date")
                              psgDsCompDate: Option[DateTime],
-                             @Column("psg_is_comp_date")
                              psgIsCompDate: Option[DateTime],
-                             @Column("dev_ds_comp_date")
                              devDsCompDate: Option[DateTime],
-                             @Column("dev_dd_comp_date")
                              devDdCompDate: Option[DateTime],
-                             @Column("dev_dt_comp_date")
                              devDtCompDate: Option[DateTime]
-                             ) extends KeyedEntity[Long]
+                             )
 
 /**
  * 反馈确认
  * @param id
  * @param feedbackConfirmDate
- * @param lastUpdateDate
  */
 case class Feedback(
                      id: Long,
-                     @Column("feedback_confirm_date")
-                     feedbackConfirmDate: DateTime,
-                     @Column("last_update_date")
-                     lastUpdateDate: DateTime
-                     ) extends KeyedEntity[Long]
+                     feedbackConfirmDate: DateTime
+                     )
 
 /**
  * 归档
@@ -104,20 +80,14 @@ case class Feedback(
  * @param archiveCode
  * @param archiveDate
  * @param archiveUserId
- * @param lastUpdateDate
  */
 case class Archive(
                     id: Long,
                     comments: String,
-                    @Column("archive_code")
                     archiveCode: String,
-                    @Column("archive_date")
                     archiveDate: DateTime,
-                    @Column("archive_userid")
-                    archiveUserId: Long,
-                    @Column("last_update_date")
-                    lastUpdateDate: DateTime
-                    ) extends KeyedEntity[Long]
+                    archiveUserId: Long
+                    )
 
 /**
  * 技术支持单
@@ -137,6 +107,61 @@ case class SupportTicket(
                           lSupportDepartments: Option[Department],
                           lSupportLeaders: Option[User]
                           )
+
+class SupportTicketTable(
+                          @Column("applicant")
+                          val applicantId: Long,
+                          @Column("support_content")
+                          val supportContent: String,
+                          @Column("st_status")
+                          val stStatus: String,
+                          val region: String,
+                          @Column("serial_number")
+                          val serialNumber: Int,
+                          @Column("dev_sche_date")
+                          val devScheDate: Option[DateTime],
+                          @Column("psg_sche_date")
+                          val psgScheDate: Option[DateTime],
+                          @Column("dev_ds_sche_date")
+                          val devDsScheDate: Option[DateTime],
+                          @Column("dev_dd_sche_date")
+                          val devDdScheDate: Option[DateTime],
+                          @Column("dev_dt_sche_date")
+                          val devDtScheDate: Option[DateTime],
+                          @Column("psg_ds_sche_date")
+                          val psgDsScheDate: Option[DateTime],
+                          @Column("psg_Is_sche_date")
+                          val psgIsScheDate: Option[DateTime],
+                          @Column("applying_feedback_date")
+                          val applyingFeedbackDate: Option[DateTime],
+                          @Column("psg_comp_date")
+                          val psgCompDate: Option[DateTime],
+                          @Column("dev_comp_date")
+                          val devCompDate: Option[DateTime],
+                          @Column("psg_ds_comp_date")
+                          val psgDsCompDate: Option[DateTime],
+                          @Column("psg_is_comp_date")
+                          val psgIsCompDate: Option[DateTime],
+                          @Column("dev_ds_comp_date")
+                          val devDsCompDate: Option[DateTime],
+                          @Column("dev_dd_comp_date")
+                          val devDdCompDate: Option[DateTime],
+                          @Column("dev_dt_comp_date")
+                          val devDtCompDate: Option[DateTime],
+                          @Column("feedback_confirm_date")
+                          val feedbackConfirmDate: Option[DateTime],
+                          val comments: Option[String],
+                          @Column("archive_code")
+                          val archiveCode: Option[String],
+                          @Column("archive_date")
+                          val archiveDate: Option[DateTime],
+                          @Column("archive_userid")
+                          val archiveUserId: Option[Long],
+                          @Column("last_update_date")
+                          val lastUpdateDate: DateTime,
+                          val id: Option[Long] = None
+                          ) extends KeyedEntity[Option[Long]] {
+}
 
 /**
  * 追踪批复或者进展情况
@@ -229,17 +254,13 @@ case class Attachment(
                        ) extends KeyedEntity[Option[Long]]
 
 case object Techsupport extends Schema {
-  val baseSupportTickets = table[BaseSupportTicket]("t_ts_tech_support")
-  on(baseSupportTickets)(s => declare(s.id is(autoIncremented("SEQ_TS_ST"), primaryKey)))
-  val departmentApprovals = table[DepartmentApproval]("t_ts_tech_support")
-  val trackingApprovals = table[TrackingApproval]("t_ts_tech_support")
-  val feedbacks = table[Feedback]("t_ts_tech_support")
-  val archives = table[Archive]("t_ts_tech_support")
-
+  val supportTickets = table[SupportTicketTable]("t_ts_tech_support")
+  on(supportTickets)(s => declare(s.id is(autoIncremented("SEQ_TS_ST"), primaryKey)))
   val trackings = table[Tracking]("t_ts_tracking")
   on(trackings)(t => declare(t.id is(autoIncremented("seq_ts_track"), primaryKey)))
   val supportDepartments = table[SupportDepartment]("T_TS_STDEPT_MAPPING")
+  on(supportDepartments)(d=>declare(d.id is (autoIncremented("SEQ_TS_STDEPT"),primaryKey)))
   val supportLeaders = table[SupportLeader]("T_TS_STSL_MAP")
-  val attachments=table[Attachment]("T_TS_SUPPORT_ATTACHMENT")
-  on(attachments)(a=>declare(a.id is(autoIncremented("SEQ_TS_ATTACH"),primaryKey)))
+  val attachments = table[Attachment]("T_TS_SUPPORT_ATTACHMENT")
+  on(attachments)(a => declare(a.id is(autoIncremented("SEQ_TS_ATTACH"), primaryKey)))
 }
