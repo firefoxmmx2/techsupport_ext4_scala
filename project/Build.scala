@@ -8,7 +8,7 @@ object ApplicationBuild extends Build {
   val appVersion = "1.0-SNAPSHOT"
 
 
-  resolvers += "Typesafe Releases" at "http://repo.typesafe.com/typesafe/maven-releases/"
+//  resolvers += "Typesafe Releases" at "http://repo.typesafe.com/typesafe/maven-releases/"
 
   val appDependencies = Seq(
     // Add your project dependencies here,
@@ -20,7 +20,7 @@ object ApplicationBuild extends Build {
     "org.slf4j" % "slf4j-nop" % "1.6.4",
     "com.cloudphysics" % "jerkson_2.10" % "0.6.3",
     "com.typesafe.slick" %% "slick-extensions" % "2.1.0",
-    "org.squeryl" %% "squeryl" % "0.9.6-RC2"
+    "org.squeryl" %% "squeryl" % "0.9.6-RC3"
 //    "com.typesafe" %% "webdriver" % "1.0.0",
 //    "com.typesafe" %% "jse" % "1.0.0",
 //    "com.typesafe" %% "npm" % "1.0.0"
