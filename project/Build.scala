@@ -9,7 +9,7 @@ object ApplicationBuild extends Build {
 
 
 //  resolvers += "Typesafe Releases" at "http://repo.typesafe.com/typesafe/maven-releases/"
-
+  // test test test
   val appDependencies = Seq(
     // Add your project dependencies here,
     jdbc,
