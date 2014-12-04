@@ -203,6 +203,35 @@ class SupportTicket(
 
   def canEqual(other: Any): Boolean = other.isInstanceOf[SupportTicket]
 
+  override def toString: String = s"SupportTicket(" +
+  s"$applicantId,"+
+  s"$supportContent,"+
+  s"$stStatus,"+
+  s"$region,"+
+  s"$serialNumber,"+
+  s"$devScheDate,"+
+  s"$psgScheDate,"+
+  s"$devDsScheDate,"+
+  s"$devDdScheDate,"+
+  s"$devDtScheDate,"+
+  s"$psgDsScheDate,"+
+  s"$psgIsScheDate,"+
+  s"$applyingFeedbackDate,"+
+  s"$psgCompDate,"+
+  s"$devCompDate,"+
+  s"$psgDsCompDate,"+
+  s"$psgIsCompDate,"+
+  s"$devDsCompDate,"+
+  s"$devDdCompDate,"+
+  s"$devDtCompDate,"+
+  s"$feedbackConfirmDate,"+
+  s"$comments,"+
+  s"$archiveCode,"+
+  s"$archiveDate,"+
+  s"$archiveUserId,"+
+  s"$lastUpdateDate,"+
+  s"$id,"+ s")"
+
   override def equals(other: Any): Boolean = other match {
     case that: SupportTicket =>
       super.equals(that) &&
