@@ -29,7 +29,6 @@ class TechsupportSpec extends Specification with ComponentRegister {
           ).page(1, 5)
           val stList = subQuery.toList
           val stIdLst = stList.map(_.id.get)
-          println(stIdLst)
           val query = from(
             Techsupport.supportDepartments,
             SystemManage.departments
@@ -52,34 +51,34 @@ class TechsupportSpec extends Specification with ComponentRegister {
           ).toList
           val archiveUsers=from(SystemManage.users)(
             u=>
-              where(u.id in stList.map(_.archiveUserId.get))
+              where(u.id in stList.map(_.archiveUserId.getOrElse(0)))
             select(u)
           ).toList
           stList.map {
             st =>
-              val departments = sdAndDepartments.filter(sdd => Option(sdd._1.stId)  == st.id)
+              val departments = sdAndDepartments.filter(sdd => sdd._1.stId  == st.id.get)
                 .map(sdd => sdd._2)
-//              val supportLeaders = slAndUsers.filter(slu => slu._1.stId == st.id.get)
-//                .map(slu => slu._2)
-//              val applicantPerson= applicantUsers.filter(_.id.get == st.applicantId) match {
-//                case lUsers if(lUsers.size > 0)  =>
-//                  Some(lUsers(0))
-//                case _ =>
-//                  None
-//              }
-//              val archivePerson=archiveUsers.filter(_.id.get == st.archiveUserId) match {
-//                case lUsers if(lUsers.size >0)=>
-//                  Some(lUsers(0))
-//                case _=>
-//                  None
-//              }
-                        st
-//              SupportTicketP(st,
-//                applicant=applicantPerson,
-//                archivePerson=archivePerson,
-//                lSupportDepartments = departments,
-//                lSupportLeaders = supportLeaders)
-          }
+              val supportLeaders = slAndUsers.filter(slu => slu._1.stId == st.id.get)
+                .map(slu => slu._2)
+              val applicantPerson= applicantUsers.filter(_.id.get == st.applicantId) match {
+                case lUsers if(lUsers.size > 0)  =>
+                  Some(lUsers(0))
+                case _ =>
+                  None
+              }
+              val archivePerson=archiveUsers.filter(_.id == st.archiveUserId) match {
+                case lUsers if(lUsers.size >0)=>
+                  Some(lUsers(0))
+                case _=>
+                  None
+              }
+//                        st
+              SupportTicketP(st,
+                applicant=applicantPerson,
+                archivePerson=archivePerson,
+                lSupportDepartments = departments,
+                lSupportLeaders = supportLeaders)
+      }
         }
         println("=" * 13 + "slist.size" + slist.size + "=" * 13)
         println("=" * 13 + "supportTickets list.size is " + list.size + "=" * 13)
