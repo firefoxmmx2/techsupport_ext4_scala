@@ -1,14 +1,15 @@
 package controllers.systemmanage
 
 import com.codahale.jerkson.Json
+import models.systemmanage
+import models.systemmanage.RoleQueryCondition
 import play.api.Logger
-import play.api.mvc._
-import play.api.data._
 import play.api.data.Forms._
+import play.api.data._
+import play.api.mvc._
+import util.ControllerUtils
 
-import scala.util.{Success, Failure, Try}
-import util.{ComponentRegister, ControllerUtils}
-import models.RoleQueryCondition
+import scala.util.{Failure, Success, Try}
 
 /**
  * 角色
@@ -24,7 +25,7 @@ object Role extends Controller with ControllerUtils{
       "jzlbmc" -> optional(text),
       "departid" -> default(longNumber, 0l),
       "id" -> optional(longNumber)
-    )(models.Role.apply)(models.Role.unapply)
+    )(systemmanage.Role.apply)(systemmanage.Role.unapply)
   )
 
   /**

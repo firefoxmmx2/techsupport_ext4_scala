@@ -1,14 +1,15 @@
 package controllers.systemmanage
 
-import play.api.mvc._
+import java.util.UUID
+
+import com.codahale.jerkson.Json
+import org.joda.time.DateTime
+import play.api.Play.current
+import play.api.cache.Cache
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.cache.Cache
-import com.codahale.jerkson.Json
-import play.api.Play.current
-import java.util.UUID
-import util.{Implicits, ComponentRegister}
-import org.joda.time.DateTime
+import play.api.mvc._
+import util.ComponentRegister
 
 /**
  * 登录
@@ -45,7 +46,7 @@ object Login extends Controller with ComponentRegister {
               "message" -> "帐号或者密码错误")))
           else {
             log.debug("存在指定用户")
-            val loginLog = loginLogService.insert(models.LoginLog(
+            val loginLog = loginLogService.insert(models.systemmanage.LoginLog(
               loginuserid = user.id.get,
               useraccount = user.useraccount,
               username = user.username,

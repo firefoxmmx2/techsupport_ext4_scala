@@ -1,9 +1,9 @@
-package models
+package models.systemmanage
 
 import models.CommonTypeMode._
 import org.joda.time.DateTime
 import org.squeryl.annotations._
-import org.squeryl.dsl.{ManyToOne, CompositeKey2}
+import org.squeryl.dsl.CompositeKey2
 import org.squeryl.{KeyedEntity, Schema}
 
 object SystemManage extends Schema {

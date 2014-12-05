@@ -1,7 +1,8 @@
 package controllers.systemmanage
 
 import com.codahale.jerkson.Json
-import models.DictItemQueryCondition
+import models.systemmanage
+import models.systemmanage.DictItemQueryCondition
 import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._
@@ -89,7 +90,7 @@ object DictItem extends Controller with ComponentRegister {
       "itemSimplePin" -> optional(text),
       "itemAllPin" -> optional(text),
       "id" -> optional(longNumber)
-    )(models.DictItem.apply)(models.DictItem.unapply)
+    )(systemmanage.DictItem.apply)(systemmanage.DictItem.unapply)
   )
 
   /**

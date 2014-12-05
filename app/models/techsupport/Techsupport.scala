@@ -1,6 +1,7 @@
 package models.techsupport
 
-import models.{User, Department}
+import models.QueryCondition
+import models.systemmanage.{User, Department}
 import org.joda.time.DateTime
 import org.squeryl._
 import org.squeryl.annotations._
@@ -90,28 +91,18 @@ case class Archive(
                     )
 
 /**
- * 技术支持单
- * @param baseTicket
- * @param departmentApproval
- * @param trackingApproval
- * @param feedbackApproval
- * @param archive
+ * 技术支持单结构化
+ * @param supportTicket
+ * @param applicant
+ * @param archivePerson
+ * @param lTrackings
+ * @param lSupportDepartments
+ * @param lSupportLeaders
  */
-case class SupportTicketAll(
-                             baseTicket: BaseSupportTicket,
-                             departmentApproval: Option[DepartmentApproval],
-                             trackingApproval: Option[TrackingApproval],
-                             feedbackApproval: Option[Feedback],
-                             archive: Option[Archive],
-                             lTrackings: Option[List[Tracking]],
-                             lSupportDepartments: Option[Department],
-                             lSupportLeaders: Option[User]
-                             )
-
 case class SupportTicketP(
                            supportTicket: SupportTicket,
-                           applicant:Option[User],
-                           archivePerson:Option[User],
+                           applicant: Option[User],
+                           archivePerson: Option[User],
                            lTrackings: List[Tracking] = List(),
                            lSupportDepartments: List[Department] = List(),
                            lSupportLeaders: List[User] = List()
@@ -204,33 +195,33 @@ class SupportTicket(
   def canEqual(other: Any): Boolean = other.isInstanceOf[SupportTicket]
 
   override def toString: String = s"SupportTicket(" +
-  s"$applicantId,"+
-  s"$supportContent,"+
-  s"$stStatus,"+
-  s"$region,"+
-  s"$serialNumber,"+
-  s"$devScheDate,"+
-  s"$psgScheDate,"+
-  s"$devDsScheDate,"+
-  s"$devDdScheDate,"+
-  s"$devDtScheDate,"+
-  s"$psgDsScheDate,"+
-  s"$psgIsScheDate,"+
-  s"$applyingFeedbackDate,"+
-  s"$psgCompDate,"+
-  s"$devCompDate,"+
-  s"$psgDsCompDate,"+
-  s"$psgIsCompDate,"+
-  s"$devDsCompDate,"+
-  s"$devDdCompDate,"+
-  s"$devDtCompDate,"+
-  s"$feedbackConfirmDate,"+
-  s"$comments,"+
-  s"$archiveCode,"+
-  s"$archiveDate,"+
-  s"$archiveUserId,"+
-  s"$lastUpdateDate,"+
-  s"$id,"+ s")"
+    s"$applicantId," +
+    s"$supportContent," +
+    s"$stStatus," +
+    s"$region," +
+    s"$serialNumber," +
+    s"$devScheDate," +
+    s"$psgScheDate," +
+    s"$devDsScheDate," +
+    s"$devDdScheDate," +
+    s"$devDtScheDate," +
+    s"$psgDsScheDate," +
+    s"$psgIsScheDate," +
+    s"$applyingFeedbackDate," +
+    s"$psgCompDate," +
+    s"$devCompDate," +
+    s"$psgDsCompDate," +
+    s"$psgIsCompDate," +
+    s"$devDsCompDate," +
+    s"$devDdCompDate," +
+    s"$devDtCompDate," +
+    s"$feedbackConfirmDate," +
+    s"$comments," +
+    s"$archiveCode," +
+    s"$archiveDate," +
+    s"$archiveUserId," +
+    s"$lastUpdateDate," +
+    s"$id," + s")"
 
   override def equals(other: Any): Boolean = other match {
     case that: SupportTicket =>
@@ -273,6 +264,28 @@ class SupportTicket(
 }
 
 /**
+ * 支持单查询结构
+ * @param id
+ * @param applicantId
+ * @param stStatus
+ * @param region
+ * @param devScheDate
+ * @param psgScheDate
+ * @param psgCompDate
+ * @param devCompDate
+ */
+case class SupportTicketQueryCondition(
+                                        id: Option[Long] = None,
+                                        applicantId: Option[Long],
+                                        stStatus: Option[String] = None,
+                                        region: Option[String] = None,
+                                        devScheDate: Option[DateTime] = None,
+                                        psgScheDate: Option[DateTime] = None,
+                                        psgCompDate: Option[DateTime] = None,
+                                        devCompDate: Option[DateTime] = None
+                                        ) extends QueryCondition
+
+/**
  * 追踪批复或者进展情况
  * @param stId
  * @param trackingDate
@@ -297,6 +310,15 @@ case class Tracking(
                      processorId: Long,
                      id: Option[Long]
                      ) extends KeyedEntity[Option[Long]]
+
+case class TrackingQueryCondition(
+                                   stId: Option[Long],
+                                   trackingDate: Option[DateTime],
+                                   type_ : Option[String],
+                                   approvalCode: Option[String],
+                                   processorId: Option[Long],
+                                   id: Option[Long]
+                                   ) extends QueryCondition
 
 /**
  * 支持部门
@@ -364,6 +386,61 @@ case class Attachment(
                        id: Option[Long] = None
                        ) extends KeyedEntity[Option[Long]]
 
+/**
+ * 督办
+ * @param supervisionSuggetion 督办建议
+ * @param supervisionPersonId 督办人
+ * @param supervisionDate 督办时间
+ * @param stId 支持单ID
+ * @param id 主键
+ */
+case class Supervision(
+                        @Column("supervision_suggestion")
+                        supervisionSuggetion: String,
+                        @Column("supervision_person")
+                        supervisionPersonId: Long,
+                        @Column("supervision_date")
+                        supervisionDate: DateTime,
+                        @Column("st_id")
+                        stId: Long,
+                        id: Option[Long]
+                        ) extends KeyedEntity[Option[Long]]
+
+/**
+ * 修改计划时间的轨迹
+ * @param trackingId
+ * @param devScheDate
+ * @param psgScheDate
+ * @param devDsScheDate
+ * @param devDdScheDate
+ * @param devDtScheDate
+ * @param psgDsScheDate
+ * @param psgIsScheDate
+ * @param type_ 改变时间类型: 0 产品 1 技术
+ * @param id
+ */
+case class TimeChange(
+                       @Column("tracking_id")
+                       trackingId: Long,
+                       @Column("dev_sche_date")
+                       devScheDate: Option[DateTime],
+                       @Column("psg_sche_date")
+                       val psgScheDate: Option[DateTime],
+                       @Column("dev_ds_sche_date")
+                       val devDsScheDate: Option[DateTime],
+                       @Column("dev_dd_sche_date")
+                       val devDdScheDate: Option[DateTime],
+                       @Column("dev_dt_sche_date")
+                       val devDtScheDate: Option[DateTime],
+                       @Column("psg_ds_sche_date")
+                       val psgDsScheDate: Option[DateTime],
+                       @Column("psg_Is_sche_date")
+                       val psgIsScheDate: Option[DateTime],
+                       @Column("type")
+                       type_ : String,
+                       id: Option[Long]
+                       ) extends KeyedEntity[Option[Long]]
+
 case object Techsupport extends Schema {
   val supportTickets = table[SupportTicket]("t_ts_tech_support")
   on(supportTickets)(s => declare(s.id is(autoIncremented("SEQ_TS_ST"), primaryKey)))
@@ -374,4 +451,8 @@ case object Techsupport extends Schema {
   val supportLeaders = table[SupportLeader]("T_TS_STSL_MAP")
   val attachments = table[Attachment]("T_TS_SUPPORT_ATTACHMENT")
   on(attachments)(a => declare(a.id is(autoIncremented("SEQ_TS_ATTACH"), primaryKey)))
+  val supervisions = table[Supervision]("t_ts_supervision")
+  on(supervisions)(s => declare(s.id is(autoIncremented("SEQ_TS_SUPERVISION"), primaryKey)))
+  val timeChanges = table[TimeChange]("t_ts_timechange")
+  on(timeChanges)(t => declare(t.id is(autoIncremented("timechange_id"), primaryKey)))
 }

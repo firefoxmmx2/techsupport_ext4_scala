@@ -1,13 +1,14 @@
 package controllers.systemmanage
 
-import org.joda.time.DateTime
-import play.api.mvc._
-import play.api.data.Forms._
-import play.api.data.Form
-import models.DictQueryCondition
-import util.ComponentRegister
 import com.codahale.jerkson.Json
+import models.systemmanage
+import models.systemmanage.DictQueryCondition
+import org.joda.time.DateTime
 import play.api.Logger
+import play.api.data.Form
+import play.api.data.Forms._
+import play.api.mvc._
+import util.ComponentRegister
 
 /**
  * 字典控制器
@@ -80,7 +81,7 @@ object Dict extends Controller with ComponentRegister {
       "dictVersion" -> optional(text),
       "createTime" -> default(optional(jodaDate("yyyy-MM-dd HH:mm:ss")), Some(new DateTime())),
       "id" -> optional(longNumber)
-    )(models.Dict.apply)(models.Dict.unapply)
+    )(systemmanage.Dict.apply)(systemmanage.Dict.unapply)
   )
 
   /**

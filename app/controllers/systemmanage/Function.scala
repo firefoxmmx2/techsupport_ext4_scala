@@ -1,11 +1,12 @@
 package controllers.systemmanage
 
-import play.api.mvc.{Action, Controller}
+import com.codahale.jerkson.Json
+import models.systemmanage
+import models.systemmanage.FunctionQueryCondition
+import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._
-import com.codahale.jerkson.Json
-import play.api.Logger
-import models.FunctionQueryCondition
+import play.api.mvc.{Action, Controller}
 
 /**
  * 功能
@@ -19,7 +20,7 @@ object Function extends Controller {
       "funcname" -> optional(text),
       "funcdefine" -> optional(text),
       "functype" -> longNumber
-    )(models.Function.apply)(models.Function.unapply)
+    )(systemmanage.Function.apply)(systemmanage.Function.unapply)
   )
 
   /**

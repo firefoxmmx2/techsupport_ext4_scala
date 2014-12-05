@@ -1,6 +1,6 @@
 package test
 
-import models.SystemManage
+import models.systemmanage.SystemManage
 import models.techsupport._
 import play.api.test._
 import play.api.test.Helpers._

@@ -1,11 +1,10 @@
 package service.systemmanage
 
+import java.lang.System
+
 import models._
+import models.systemmanage._
 import service.BaseService
-import models.Department
-import models.System
-import models.User
-import models.Role
 
 /**
  * Created by hooxin on 14-3-10.
@@ -74,13 +73,13 @@ trait SystemServiceComponent {
   /**
    * 系统服务
    */
-  trait SystemService extends BaseService[System, String, SystemQueryCondition] {
+  trait SystemService extends BaseService[systemmanage.System, String, SystemQueryCondition] {
     /**
      * 获取用户系统
      * @param userid
      * @return
      */
-    def getUserSystems(userid: Long): List[System]
+    def getUserSystems(userid: Long): List[systemmanage.System]
 
     /**
      * 获取最大系统序列

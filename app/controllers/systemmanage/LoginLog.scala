@@ -1,11 +1,13 @@
 package controllers.systemmanage
 
+import com.codahale.jerkson.Json
+import models.systemmanage
+import models.systemmanage.LoginLogQueryCondition
 import play.api.Logger
-import play.api.mvc._
-import util.ComponentRegister
 import play.api.data.Form
 import play.api.data.Forms._
-import com.codahale.jerkson.Json
+import play.api.mvc._
+import util.ComponentRegister
 
 /**
  * 登录日志
@@ -25,7 +27,7 @@ object LoginLog extends Controller with ComponentRegister {
       "loginmac" -> optional(text),
       "logintiime" -> jodaDate("yyyy-MM-dd HH:mm:ss"),
       "quittime" -> optional(jodaDate("yyyy-MM-dd HH:mm:ss"))
-    )(models.LoginLog.apply)(models.LoginLog.unapply)
+    )(systemmanage.LoginLog.apply)(systemmanage.LoginLog.unapply)
   )
 
   val loginLogQueryForm = Form(
@@ -42,7 +44,7 @@ object LoginLog extends Controller with ComponentRegister {
       "logintiimeEnd" -> optional(jodaDate("yyyy-MM-dd HH:mm:ss")),
       "quittimeStart" -> optional(jodaDate("yyyy-MM-dd HH:mm:ss")),
       "quittimeEnd" -> optional(jodaDate("yyyy-MM-dd HH:mm:ss"))
-    )(models.LoginLogQueryCondition.apply)(models.LoginLogQueryCondition.unapply)
+    )(LoginLogQueryCondition.apply)(systemmanage.LoginLogQueryCondition.unapply)
   )
 
   /**

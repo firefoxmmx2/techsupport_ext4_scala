@@ -1,13 +1,14 @@
 package controllers.systemmanage
 
-import play.api.mvc._
-import play.api.data._
-import play.api.data.Forms._
-import models.MenuQueryCondition
+import com.codahale.jerkson.Json
+import models.systemmanage
+import models.systemmanage.MenuQueryCondition
+import play.api.Logger
 import play.api.Play.current
 import play.api.cache.Cache
-import com.codahale.jerkson.Json
-import play.api.Logger
+import play.api.data.Forms._
+import play.api.data._
+import play.api.mvc._
 import util.ComponentRegister
 
 /**
@@ -168,7 +169,7 @@ object Menu extends Controller with ComponentRegister {
     "menufullcode" -> text,
     "nodeorder" -> number,
     "isleaf" -> text,
-    "systemcode" -> text)(models.Menu.apply)(models.Menu.unapply))
+    "systemcode" -> text)(systemmanage.Menu.apply)(systemmanage.Menu.unapply))
 
   //查询表单
   val menuQueryForm = Form(

@@ -1,11 +1,12 @@
 package controllers.systemmanage
 
-import play.api.mvc._
+import com.codahale.jerkson.Json
+import models.systemmanage
+import models.systemmanage.UserQueryCondition
+import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.Logger
-import models.UserQueryCondition
-import com.codahale.jerkson.Json
+import play.api.mvc._
 import util.ComponentRegister
 
 /**
@@ -31,7 +32,7 @@ object User extends Controller with ComponentRegister {
       "jzlbmc" -> optional(text),
       "email" -> optional(email),
       "id" -> optional(longNumber)
-    )(models.User.apply)(models.User.unapply)
+    )(systemmanage.User.apply)(systemmanage.User.unapply)
   )
 
   def add = Action {

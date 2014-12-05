@@ -1,12 +1,10 @@
 package dao.systemmanage
 
+import java.lang.System
+
 import models._
+import models.systemmanage._
 import util.Page
-import models.Role
-import models.Department
-import models.Menu
-import models.User
-import models.System
 import play.api.Logger
 
 import scala.Option
@@ -387,7 +385,7 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
         compute(max(s.nodeorder))
     ).single.measures.getOrElse(0)
 
-    def getUserSystem(userid: Long): List[System] = {
+    def getUserSystem(userid: Long): List[systemmanage.System] = {
       from(SystemManage.systems, SystemManage.userRoles, SystemManage.roleMenus, SystemManage.menus)(
         (s, ur, rm, m) =>
           where(
@@ -473,9 +471,9 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
 
      * @return 分页结果
      */
-    def page(pageno: Int, pagesize: Int, params: SystemQueryCondition, sort: String, dir: String): Page[System] = {
+    def page(pageno: Int, pagesize: Int, params: SystemQueryCondition, sort: String, dir: String): Page[systemmanage.System] = {
       log.debug("=" * 13 + "系统列表查询" + "=" * 13)
-      val page = Page[System](pageno, pagesize, count(params))
+      val page = Page[systemmanage.System](pageno, pagesize, count(params))
       log.debug("=" * 13 + "page sql is " + selectForPage(params, sort, dir).page(page.start, page.limit).statement + "=" * 13)
       if (page.total == 0)
         page
@@ -491,7 +489,7 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
 
      * @return 结果列表
      */
-    def list(params: SystemQueryCondition): List[System] = selectForPage(params).toList
+    def list(params: SystemQueryCondition): List[systemmanage.System] = selectForPage(params).toList
 
     /**
      * 分页总数查询
@@ -507,7 +505,7 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
 
      * @return 实体
      */
-    def getById(id: String): Option[System] = SystemManage.systems.where(s => s.id === id).singleOption
+    def getById(id: String): Option[systemmanage.System] = SystemManage.systems.where(s => s.id === id).singleOption
 
     /**
      * 通过主键删除
@@ -523,7 +521,7 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
 
      * @return
      */
-    def delete(m: System): Unit = SystemManage.systems.delete(m.id)
+    def delete(m: systemmanage.System): Unit = SystemManage.systems.delete(m.id)
 
     /**
      * 修改
@@ -531,7 +529,7 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
 
      * @return
      */
-    def update(m: System): Unit = SystemManage.systems.update(m)
+    def update(m: systemmanage.System): Unit = SystemManage.systems.update(m)
 
     /**
      * 插入
@@ -539,7 +537,7 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: System): System = SystemManage.systems.insert(m)
+    def insert(m: systemmanage.System): systemmanage.System = SystemManage.systems.insert(m)
   }
 
 }

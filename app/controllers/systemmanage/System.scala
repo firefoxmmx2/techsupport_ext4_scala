@@ -1,13 +1,14 @@
 package controllers.systemmanage
 
-import play.api.mvc._
+import com.codahale.jerkson.Json
+import models.systemmanage
+import models.systemmanage.SystemQueryCondition
+import play.api.Logger
+import play.api.Play.current
+import play.api.cache.Cache
 import play.api.data.Form
 import play.api.data.Forms._
-import com.codahale.jerkson.Json
-import play.api.Logger
-import models.SystemQueryCondition
-import play.api.cache.Cache
-import play.api.Play.current
+import play.api.mvc._
 import util.ComponentRegister
 
 /**
@@ -25,7 +26,7 @@ object System extends Controller with ComponentRegister {
       "nodeorder" -> number,
       "isleaf" -> text,
       "fullcode" -> text
-    )(models.System.apply)(models.System.unapply)
+    )(systemmanage.System.apply)(systemmanage.System.unapply)
   )
 
   /**

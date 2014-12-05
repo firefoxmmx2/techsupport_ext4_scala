@@ -1,6 +1,8 @@
 package controllers.systemmanage
 
 import com.codahale.jerkson.Json
+import models.systemmanage
+import models.systemmanage.GlobalParamQueryCondition
 import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._
@@ -17,7 +19,7 @@ object GlobalParam extends Controller with ComponentRegister {
       "id" -> text,
       "globalparname" -> text,
       "globalparvalue" -> text
-    )(models.GlobalParam.apply)(models.GlobalParam.unapply)
+    )(systemmanage.GlobalParam.apply)(systemmanage.GlobalParam.unapply)
   )
 
   val globalParamQueryForm = Form(
@@ -25,7 +27,7 @@ object GlobalParam extends Controller with ComponentRegister {
       "id" -> optional(text),
       "globalparname" -> optional(text),
       "globalparvalue" -> optional(text)
-    )(models.GlobalParamQueryCondition.apply)(models.GlobalParamQueryCondition.unapply)
+    )(GlobalParamQueryCondition.apply)(systemmanage.GlobalParamQueryCondition.unapply)
   )
 
   /**

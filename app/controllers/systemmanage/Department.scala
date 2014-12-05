@@ -1,11 +1,12 @@
 package controllers.systemmanage
 
-import play.api.mvc._
-import play.api.data._
-import play.api.data.Forms._
-import play.api.Logger
-import models.DepartmentQueryCondition
 import com.codahale.jerkson.Json
+import models.systemmanage
+import models.systemmanage.DepartmentQueryCondition
+import play.api.Logger
+import play.api.data.Forms._
+import play.api.data._
+import play.api.mvc._
 import util.ComponentRegister
 
 object Department extends Controller with ComponentRegister {
@@ -23,7 +24,7 @@ object Department extends Controller with ComponentRegister {
       "departallpin" -> optional(text),
       "departbrevitycode" -> optional(text),
       "id" -> optional(longNumber)
-    )(models.Department.apply)(models.Department.unapply)
+    )(systemmanage.Department.apply)(systemmanage.Department.unapply)
   )
 
   val updateForm = Form(
@@ -39,7 +40,7 @@ object Department extends Controller with ComponentRegister {
       "departallpin" -> optional(text),
       "departbrevitycode" -> optional(text),
       "id" -> optional(longNumber(min = 1))
-    )(models.Department.apply)(models.Department.unapply)
+    )(systemmanage.Department.apply)(systemmanage.Department.unapply)
   )
 
   def add = Action {

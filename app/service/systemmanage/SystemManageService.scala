@@ -1,12 +1,12 @@
 package service.systemmanage
 
+import java.lang.System
+
 import models._
 import dao.systemmanage._
-import models.Department
-import models.Menu
+import models.systemmanage._
 import play.api.Logger
 import util.Page
-import models.Role
 import org.apache.commons.lang3.StringUtils
 import util.Utils
 
@@ -129,14 +129,14 @@ trait GlobalParamServiceComponentImpl extends GlobalParamServiceComponent {
      * @param id
      * @return
      */
-    def getById(id: String): Option[models.GlobalParam] = inTransaction(globalParamDao.getById(id))
+    def getById(id: String): Option[GlobalParam] = inTransaction(globalParamDao.getById(id))
 
     /**
      * 获取列表不分页
      * @param params
      * @return
      */
-    def list(params: GlobalParamQueryCondition): List[models.GlobalParam] = inTransaction(globalParamDao.list(params))
+    def list(params: GlobalParamQueryCondition): List[GlobalParam] = inTransaction(globalParamDao.list(params))
 
     /**
      * 获取列表分页
@@ -147,7 +147,7 @@ trait GlobalParamServiceComponentImpl extends GlobalParamServiceComponent {
      * @param dir
      * @return
      */
-    def page(pageno: Int, pagesize: Int, params: GlobalParamQueryCondition, sort: String, dir: String): Page[models.GlobalParam] =
+    def page(pageno: Int, pagesize: Int, params: GlobalParamQueryCondition, sort: String, dir: String): Page[GlobalParam] =
       inTransaction(globalParamDao.page(pageno, pagesize, params, sort, dir))
 
     /**
@@ -160,14 +160,14 @@ trait GlobalParamServiceComponentImpl extends GlobalParamServiceComponent {
      * 修改
      * @param e
      */
-    def update(e: models.GlobalParam): Unit = inTransaction(globalParamDao.update(e))
+    def update(e: GlobalParam): Unit = inTransaction(globalParamDao.update(e))
 
     /**
      * 新增
      * @param e
      * @return
      */
-    def insert(e: models.GlobalParam): models.GlobalParam = inTransaction(globalParamDao.insert(e))
+    def insert(e: GlobalParam): GlobalParam = inTransaction(globalParamDao.insert(e))
   }
 
 }
@@ -536,21 +536,21 @@ trait SystemServiceComponentImpl extends SystemServiceComponent {
      * @return
      */
 
-    def getUserSystems(userid: Long): List[System] = inTransaction(systemDao.getUserSystem(userid))
+    def getUserSystems(userid: Long): List[systemmanage.System] = inTransaction(systemDao.getUserSystem(userid))
 
     /**
      * 获取单个通过id
      * @param id
      * @return
      */
-    def getById(id: String): Option[models.System] = inTransaction(systemDao.getById(id))
+    def getById(id: String): Option[systemmanage.System] = inTransaction(systemDao.getById(id))
 
     /**
      * 获取列表不分页
      * @param params
      * @return
      */
-    def list(params: SystemQueryCondition): List[models.System] = inTransaction(systemDao.list(params))
+    def list(params: SystemQueryCondition): List[systemmanage.System] = inTransaction(systemDao.list(params))
 
     /**
      * 获取列表分页
@@ -561,7 +561,7 @@ trait SystemServiceComponentImpl extends SystemServiceComponent {
      * @param dir
      * @return
      */
-    def page(pageno: Int, pagesize: Int, params: SystemQueryCondition, sort: String, dir: String): Page[models.System] =
+    def page(pageno: Int, pagesize: Int, params: SystemQueryCondition, sort: String, dir: String): Page[systemmanage.System] =
       inTransaction(systemDao.page(pageno, pagesize, params, sort, dir))
 
     /**
@@ -574,14 +574,14 @@ trait SystemServiceComponentImpl extends SystemServiceComponent {
      * 修改
      * @param e
      */
-    def update(e: models.System): Unit = inTransaction(systemDao.update(e))
+    def update(e: systemmanage.System): Unit = inTransaction(systemDao.update(e))
 
     /**
      * 新增
      * @param e
      * @return
      */
-    def insert(e: models.System): models.System = inTransaction(systemDao.insert(e))
+    def insert(e: systemmanage.System): systemmanage.System = inTransaction(systemDao.insert(e))
   }
 
 }

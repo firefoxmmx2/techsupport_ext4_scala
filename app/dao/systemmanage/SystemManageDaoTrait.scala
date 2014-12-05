@@ -1,11 +1,10 @@
 package dao.systemmanage
 
+import java.lang.System
+
 import dao.BaseDao
 import models._
-import models.Department
-import models.Menu
-import models.User
-import models.Role
+import models.systemmanage._
 import org.squeryl.dsl.CompositeKey2
 
 /**
@@ -47,13 +46,13 @@ trait UserDaoComponent {
 trait SystemDaoComponent {
   val systemDao: SystemDao
 
-  trait SystemDao extends BaseDao[System, String, SystemQueryCondition] {
+  trait SystemDao extends BaseDao[systemmanage.System, String, SystemQueryCondition] {
     /**
      * 获取用户所使用的系统
      * @param userid
      * @return
      */
-    def getUserSystem(userid: Long): List[System]
+    def getUserSystem(userid: Long): List[systemmanage.System]
 
     /**
      * 最大序列
@@ -94,7 +93,7 @@ trait MenuDaoComponent {
 
     /**
      *
-     * @param roleIds
+     * @param roleId
      * @return
      */
     def getRelatedMenusByRoleId(roleId:Long):List[Menu]
