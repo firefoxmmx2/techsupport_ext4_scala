@@ -88,7 +88,8 @@ case class Archive(
                     archiveCode: String,
                     archiveDate: DateTime,
                     archiveUserId: Long
-                    )
+                    ) {
+}
 
 /**
  * 技术支持单结构化
@@ -141,8 +142,10 @@ case class SupportTicketP(
 class SupportTicket(
                      @Column("applicant")
                      val applicantId: Long,
+                     @Column("st_no")
+                     val stNo: String,
                      @Column("support_content")
-                     val supportContent: String,
+                     val supportContent: Option[String],
                      @Column("st_status")
                      val stStatus: String,
                      val region: String,
@@ -192,10 +195,70 @@ class SupportTicket(
                      val id: Option[Long] = None
                      ) extends KeyedEntity[Option[Long]] {
 
+  def copy(
+            applicantId: Long = this.applicantId,
+            stNo:String = this.stNo,
+            supportContent: Option[String] = this.supportContent,
+            stStatus: String = this.stStatus,
+            region: String = this.region,
+            serialNumber: Int = this.serialNumber,
+            devScheDate: Option[DateTime] = this.devScheDate,
+            psgScheDate: Option[DateTime] = this.psgScheDate,
+            devDsScheDate: Option[DateTime] = this.devDsScheDate,
+            devDdScheDate: Option[DateTime] = this.devDdScheDate,
+            devDtScheDate: Option[DateTime] = this.devDtScheDate,
+            psgDsScheDate: Option[DateTime] = this.psgDsScheDate,
+            psgIsScheDate: Option[DateTime] = this.psgIsScheDate,
+            applyingFeedbackDate: Option[DateTime] = this.applyingFeedbackDate,
+            psgCompDate: Option[DateTime] = this.psgCompDate,
+            devCompDate: Option[DateTime] = this.devCompDate,
+            psgDsCompDate: Option[DateTime] = this.psgDsCompDate,
+            psgIsCompDate: Option[DateTime] = this.psgIsCompDate,
+            devDsCompDate: Option[DateTime] = this.devDsCompDate,
+            devDdCompDate: Option[DateTime] = this.devDdCompDate,
+            devDtCompDate: Option[DateTime] = this.devDtCompDate,
+            feedbackConfirmDate: Option[DateTime] = this.feedbackConfirmDate,
+            comments: Option[String] = this.comments,
+            archiveCode: Option[String] = this.archiveCode,
+            archiveDate: Option[DateTime] = this.archiveDate,
+            archiveUserId: Option[Long] = this.archiveUserId,
+            lastUpdateDate: DateTime = this.lastUpdateDate,
+            id: Option[Long] = this.id
+            ) = new SupportTicket(
+    applicantId,
+    stNo,
+    supportContent,
+    stStatus,
+    region,
+    serialNumber,
+    devScheDate,
+    psgScheDate,
+    devDsScheDate,
+    devDdScheDate,
+    devDtScheDate,
+    psgDsScheDate,
+    psgIsScheDate,
+    applyingFeedbackDate,
+    psgCompDate,
+    devCompDate,
+    psgDsCompDate,
+    psgIsCompDate,
+    devDsCompDate,
+    devDdCompDate,
+    devDtCompDate,
+    feedbackConfirmDate,
+    comments,
+    archiveCode,
+    archiveDate,
+    archiveUserId,
+    lastUpdateDate,
+    id)
+
   def canEqual(other: Any): Boolean = other.isInstanceOf[SupportTicket]
 
   override def toString: String = s"SupportTicket(" +
     s"$applicantId," +
+    s"$stNo,"+
     s"$supportContent," +
     s"$stStatus," +
     s"$region," +
@@ -223,11 +286,13 @@ class SupportTicket(
     s"$lastUpdateDate," +
     s"$id," + s")"
 
+
   override def equals(other: Any): Boolean = other match {
     case that: SupportTicket =>
       super.equals(that) &&
         (that canEqual this) &&
         applicantId == that.applicantId &&
+        stNo == that.stNo &&
         supportContent == that.supportContent &&
         stStatus == that.stStatus &&
         region == that.region &&
@@ -253,12 +318,12 @@ class SupportTicket(
         archiveDate == that.archiveDate &&
         archiveUserId == that.archiveUserId &&
         lastUpdateDate == that.lastUpdateDate &&
-        id == that.id
+  id == that.id
     case _ => false
   }
 
   override def hashCode(): Int = {
-    val state = Seq(super.hashCode(), applicantId, supportContent, stStatus, region, serialNumber, devScheDate, psgScheDate, devDsScheDate, devDdScheDate, devDtScheDate, psgDsScheDate, psgIsScheDate, applyingFeedbackDate, psgCompDate, devCompDate, psgDsCompDate, psgIsCompDate, devDsCompDate, devDdCompDate, devDtCompDate, feedbackConfirmDate, comments, archiveCode, archiveDate, archiveUserId, lastUpdateDate, id)
+    val state = Seq(super.hashCode(), applicantId, stNo, supportContent, stStatus, region, serialNumber, devScheDate, psgScheDate, devDsScheDate, devDdScheDate, devDtScheDate, psgDsScheDate, psgIsScheDate, applyingFeedbackDate, psgCompDate, devCompDate, psgDsCompDate, psgIsCompDate, devDsCompDate, devDdCompDate, devDtCompDate, feedbackConfirmDate, comments, archiveCode, archiveDate, archiveUserId, lastUpdateDate, id)
     state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
   }
 }
@@ -276,7 +341,7 @@ class SupportTicket(
  */
 case class SupportTicketQueryCondition(
                                         id: Option[Long] = None,
-                                        applicantId: Option[Long],
+                                        applicantId: Option[Long] = None,
                                         stStatus: Option[String] = None,
                                         region: Option[String] = None,
                                         devScheDate: Option[DateTime] = None,
@@ -334,6 +399,12 @@ case class SupportDepartment(
                               id: Option[Long]
                               ) extends KeyedEntity[Option[Long]]
 
+case class SupportDepartmentQuery(
+                                   stId: Option[Long],
+                                   deptId: Option[Long],
+                                   id: Option[Long]
+                                   ) extends QueryCondition
+
 /**
  * 支持单负责人
  * @param stId
@@ -348,8 +419,14 @@ case class SupportLeader(
                           @Column("sl_departid")
                           slDepartId: Long
                           ) {
-  def id(stId: Long, slId: Long) = compositeKey(stId, slId)
+  def id = compositeKey(stId, slId)
 }
+
+case class SupportLeaderQuery(
+                               stId: Option[Long],
+                               slId: Option[Long],
+                               slDepartId: Option[Long]
+                               ) extends QueryCondition
 
 /**
  * 附件
@@ -386,6 +463,13 @@ case class Attachment(
                        id: Option[Long] = None
                        ) extends KeyedEntity[Option[Long]]
 
+case class AttachmentQuery(
+                            attachmentName: Option[String],
+                            stId: Option[Long],
+                            attachmentContentType: Option[String],
+                            id: Option[Long]
+                            ) extends QueryCondition
+
 /**
  * 督办
  * @param supervisionSuggetion 督办建议
@@ -405,6 +489,11 @@ case class Supervision(
                         stId: Long,
                         id: Option[Long]
                         ) extends KeyedEntity[Option[Long]]
+
+case class SupervisionQuery(
+                             stId: Option[Long],
+                             id: Option[Long]
+                             ) extends QueryCondition
 
 /**
  * 修改计划时间的轨迹
@@ -440,6 +529,12 @@ case class TimeChange(
                        type_ : String,
                        id: Option[Long]
                        ) extends KeyedEntity[Option[Long]]
+
+case class TimeChangeQuery(
+                            trackingId: Option[Long],
+                            type_ : Option[String],
+                            id: Option[Long]
+                            ) extends QueryCondition
 
 case object Techsupport extends Schema {
   val supportTickets = table[SupportTicket]("t_ts_tech_support")

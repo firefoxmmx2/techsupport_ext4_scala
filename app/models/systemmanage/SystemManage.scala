@@ -1,6 +1,7 @@
 package models.systemmanage
 
 import models.CommonTypeMode._
+import models.QueryCondition
 import org.joda.time.DateTime
 import org.squeryl.annotations._
 import org.squeryl.dsl.CompositeKey2

@@ -86,5 +86,17 @@ class TechsupportSpec extends Specification with ComponentRegister {
         list.size must be > 0
       }
     }
+    "test SupportTicketDao " in {
+      running(FakeApplication()) {
+        inTransaction{
+          val stList=supportTicketDao.list(SupportTicketQueryCondition())
+          stList.size must be > 0
+          println("="*13+"newSupportTicket.supportContent = "+stList(0).supportContent+"="*13)
+          val newSupportTicket=stList(0).copy(id=None,psgScheDate = None,devScheDate = None)
+          val insertedSupportTicket= supportTicketDao.insert(newSupportTicket)
+          stList.size must be < supportTicketDao.list(SupportTicketQueryCondition()).size
+        }
+      }
+    }
   }
 }
