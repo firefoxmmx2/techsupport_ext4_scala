@@ -15,15 +15,25 @@ import org.jbpm.pvm.internal.task.TaskImpl
  * @param supportDeptName
  */
 case class Worksheet(
-                    st:SupportTicket,
-                    task:TaskImpl,
-                    taskId:Long,
-                    activityName:String="",
-                    activity:String="",
-                    regionName:String="",
-                    applicantName:String="",
-                    stStatusName:String="",
-                    supportLeaderName:Option[String]=None,
-                    supportDeptName:Option[String]=None
+                      st: SupportTicket,
+                      task: TaskImpl,
+                      taskId: Long,
+                      activityName: String = "",
+                      activity: String = "",
+                      regionName: String = "",
+                      applicantName: String = "",
+                      stStatusName: String = "",
+                      supportLeaderName: Option[String] = None,
+                      supportDeptName: Option[String] = None
                       )
 
+case class SupportTicketQuery(
+                               region: Option[String] = None,
+                               id: Option[Long] = None
+                               )
+
+case class WorksheetQuery(
+                           taskId: Option[Long] = None,
+                           activity: Option[String] = None,
+                           st: Option[SupportTicketQuery] = None
+                           )

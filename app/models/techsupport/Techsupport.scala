@@ -106,7 +106,8 @@ case class SupportTicketP(
                            archivePerson: Option[User],
                            lTrackings: List[Tracking] = List(),
                            lSupportDepartments: List[Department] = List(),
-                           lSupportLeaders: List[User] = List()
+                           lSupportLeaders: List[User] = List(),
+                           lSupervision:List[Supervision]=List()
                            )
 
 /**
