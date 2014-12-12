@@ -2,6 +2,7 @@ package service.techsupport
 
 import dao.techsupport.{TimeChangeDaoComponent, TrackingDaoComponent, SupervisionDaoComponent, SupportTicketDaoComponent}
 import models.techsupport._
+import org.jbpm.api.Configuration
 import service.BaseService
 import util.Page
 import models.CommonTypeMode._
@@ -128,10 +129,23 @@ trait TimeChangeServiceComponentImpl extends TimeChangeServiceComponent{
 
 trait WorksheetServiceComponentImpl extends WorksheetServiceComponent{
   class WorksheetServiceImpl extends WorksheetService {
-    def getWorksheet(taskId: String): Option[Worksheet] = ???
+    private val procoessEngine = Configuration.getProcessEngine
+     val repositoryService=procoessEngine.getRepositoryService
+     val executionService=procoessEngine.getExecutionService
+     val taskService=procoessEngine.getTaskService
+     val identityService=procoessEngine.getIdentityService
+     val historyService=procoessEngine.getHistoryService
+
+    def getWorksheet(taskId: String): Option[Worksheet] = inTransaction{
+
+    }
 
     def goNext(taskId: String, params: Map[String, Any]): Unit = ???
 
     def page(pageno: Int, pageSize: Int, params: WorksheetQuery, sort: String, dir: String): Page[Worksheet] = ???
+
+    def goStart(workflowName: String, version: Option[String]): Unit = ???
+
+    def goNext(taskId: String, transition: String, params: Map[String, Any]): Unit = ???
   }
 }

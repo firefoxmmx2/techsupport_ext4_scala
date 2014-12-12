@@ -34,7 +34,8 @@ trait WorksheetServiceComponent {
     def getWorksheet(taskId:String):Option[Worksheet]
     def goNext(taskId:String,params:Map[String,Any])
     def page(pageno:Int,pageSize:Int,params:WorksheetQuery,sort:String,dir:String):Page[Worksheet]
-
+    def goStart(workflowName:String,version:Option[String]=None)
+    def goNext(taskId:String,transition:String,params:Map[String,Any])
   }
   val worksheetService:WorksheetService
 }
