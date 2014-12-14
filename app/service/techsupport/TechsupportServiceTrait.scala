@@ -31,10 +31,14 @@ trait TrackingServiceComponent {
  */
 trait WorksheetServiceComponent {
   trait WorksheetService {
-    def getWorksheet(taskId:String):Option[Worksheet]
-    def goNext(taskId:String,params:Map[String,Any])
-    def page(pageno:Int,pageSize:Int,params:WorksheetQuery,sort:String,dir:String):Page[Worksheet]
+    val DEPLOY_XML_PATH_TECHSUPPORT="util.workflow.techsupport.jpdl.xml"
 
+    def getWorksheet(taskId:String):Option[Worksheet]
+    def next(taskId:String,params:Map[String,Any])
+    def page(pageno:Int,pageSize:Int,params:WorksheetQuery,sort:String,dir:String):Page[Worksheet]
+    def next(taskId:String,transition:String,params:Map[String,Any])
+    def start(processName:String,params:Map[String,Any])
+    def deploy(processDeclareXmlPath:String):String
   }
   val worksheetService:WorksheetService
 }

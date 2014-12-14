@@ -2,6 +2,8 @@ package service.techsupport
 
 import dao.techsupport.{TimeChangeDaoComponent, TrackingDaoComponent, SupervisionDaoComponent, SupportTicketDaoComponent}
 import models.techsupport._
+import org.jbpm.api._
+import org.jbpm.api.task.Task
 import service.BaseService
 import util.Page
 import models.CommonTypeMode._
@@ -127,11 +129,44 @@ trait TimeChangeServiceComponentImpl extends TimeChangeServiceComponent{
 }
 
 trait WorksheetServiceComponentImpl extends WorksheetServiceComponent{
+  this : SupportTicketDaoComponent=>
+  import scala.collection.JavaConversions._
   class WorksheetServiceImpl extends WorksheetService {
-    def getWorksheet(taskId: String): Option[Worksheet] = ???
+    val processEngine:ProcessEngine=Configuration.getProcessEngine
+    val repositoryService:RepositoryService=processEngine.getRepositoryService
+    val executionService:ExecutionService=processEngine.getExecutionService
+    val taskService : TaskService=processEngine.getTaskService
+    val identityService : IdentityService=processEngine.getIdentityService
 
-    def goNext(taskId: String, params: Map[String, Any]): Unit = ???
+    def getWorksheet(taskId: String): Option[Worksheet] = inTransaction{
+      val task = taskService.getTask(taskId)
+
+      val worksheetno=executionService.getVariable(task.getExecutionId,"worksheetno").asInstanceOf[Long]
+      val st=supportTicketDao.getById(worksheetno)
+
+    }
+
+    def next(taskId: String, params: Map[String, Any]): Unit = {
+      taskService.completeTask(taskId,params)
+    }
 
     def page(pageno: Int, pageSize: Int, params: WorksheetQuery, sort: String, dir: String): Page[Worksheet] = ???
+
+    def next(taskId: String, transition: String, params: Map[String, Any]): Unit = {
+      taskService.completeTask(taskId,transition,params)
+    }
+
+    def start(processName: String,params:Map[String,Any]): Unit = inTransaction{
+      val pdList=repositoryService.createProcessDefinitionQuery()
+        .processDefinitionName(processName)
+        .orderDesc(ProcessDefinitionQuery.PROPERTY_VERSION).list()
+      if(pdList.size() > 0)
+        executionService.startProcessInstanceById(pdList(0).getId,params)
+    }
+
+    def deploy(processDeclareXmlPath: String): String = inTransaction{
+      val deployment=repositoryService.createDeployment().addResourceFromClasspath(processDeclareXmlPath)
+      deployment.deploy()
+    }
   }
 }
