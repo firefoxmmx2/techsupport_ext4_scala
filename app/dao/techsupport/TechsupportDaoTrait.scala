@@ -60,3 +60,10 @@ trait TimeChangeDaoComponent{
   val timeChangeDao:TimeChangeDao
 }
 
+/**
+ * 工作单
+ */
+trait WorksheetDaoComponent {
+  trait WorksheetDao
+  val worksheetDao:WorksheetDao
+}

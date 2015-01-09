@@ -537,6 +537,117 @@ case class TimeChangeQuery(
                             id: Option[Long]
                             ) extends QueryCondition
 
+/**
+ * JBPM流程指派候选控制表
+ * @param id
+ * @param dbversion_
+ * @param groupid_
+ * @param userid_
+ * @param type_
+ * @param task_
+ * @param swimlane_
+ */
+case class JbpmParticipation(
+                            @Column("dbid_")
+                            id : Option[Long],
+                            dbversion_ : Int,
+                            groupid_ : Option[String],
+                            userid_ : Option[String],
+                            type_ : String,
+                            task_ : Long,
+                            swimlane_ : Option[String]
+                              ) extends KeyedEntity[Option[Long]]
+
+/**
+ * JBPM流程任务表
+ * @param id
+ * @param class_
+ * @param dbversion_
+ * @param name_
+ * @param descr_
+ * @param state_
+ * @param supsphiststate_
+ * @param assignee_
+ * @param form_
+ * @param priority_
+ * @param creaet_
+ * @param duedate_
+ * @param progress_
+ * @param signalling_
+ * @param executionId_
+ * @param activityName_
+ * @param hasvars_
+ * @param supertask_
+ * @param execution_
+ * @param procinst_
+ * @param swimlane_
+ * @param taskdefname_
+ */
+case class JbpmTask(
+                   @Column("dbid_")
+                   id: Option[Long],
+                   class_ : Long,
+                   dbversion_ : Int,
+                   name_ : String,
+                   descr_ : Option[String],
+                   state_ : String,
+                   supsphiststate_ : Option[String],
+                   assignee_ : Option[String],
+                   form_ : Option[String],
+                   priority_ : Int,
+                   creaet_ : DateTime,
+                   duedate_ : Option[DateTime],
+                   progress_ : Option[String],
+                   signalling_ : Int,
+                   @Column("execution_id_")
+                   executionId_ : String,
+                   activityName_ : Option[String],
+                   hasvars_ : Int,
+                   supertask_ : Option[Long],
+                   execution_ : Long,
+                   procinst_ : Long,
+                   swimlane_ : Option[String],
+                   taskdefname_ : String
+                     ) extends KeyedEntity[Option[Long]]
+
+/**
+ * JBPM流程变量表,里面存放流程里面说设置的变量值
+ * @param id
+ * @param class_
+ * @param dbversion_
+ * @param key_
+ * @param converter_
+ * @param hist_
+ * @param execution_
+ * @param task_
+ * @param lob_
+ * @param date_value_
+ * @param double_value_
+ * @param classname_
+ * @param long_value_
+ * @param string_value_
+ * @param text_value_
+ * @param exesys_
+ */
+case class JbpmVariable(
+                       @Column("dbid_")
+                       id:Option[String],
+                       class_ :String,
+                       dbversion_ : Int,
+                       key_ : String,
+                       converter_ : Option[String],
+                       hist_ : Int,
+                       execution_ : Long,
+                       task_ : Option[Long],
+                       lob_ : Option[Array[Byte]],
+                       date_value_ : Option[DateTime],
+                       double_value_ : Option[Double],
+                       classname_ : Option[String],
+                       long_value_ : Option[Long],
+                       string_value_ : Option[String],
+                       text_value_ : Option[String],
+                       exesys_ : Option[String]
+                         )
 case object Techsupport extends Schema {
   val supportTickets = table[SupportTicket]("t_ts_tech_support")
   on(supportTickets)(s => declare(s.id is(autoIncremented("SEQ_TS_ST"), primaryKey)))
@@ -551,4 +662,7 @@ case object Techsupport extends Schema {
   on(supervisions)(s => declare(s.id is(autoIncremented("SEQ_TS_SUPERVISION"), primaryKey)))
   val timeChanges = table[TimeChange]("t_ts_timechange")
   on(timeChanges)(t => declare(t.id is(autoIncremented("timechange_id"), primaryKey)))
+  val jbpmParticipations = table[JbpmParticipation]("Jbpm4_Participation")
+  val jbpmTasks = table[JbpmTask]("Jbpm4_Task")
+  val jbpmVariables = table[JbpmVariable]("Jbpm4_Variable")
 }

@@ -730,3 +730,12 @@ trait TimeChangeDaoComponentImpl extends TimeChangeDaoComponent {
   }
 
 }
+
+/**
+ * 工作单
+ */
+trait WorksheetDaoComponentImpl extends WorksheetDaoComponent {
+  class WorksheetDaoImpl extends WorksheetDao {
+
+  }
+}
