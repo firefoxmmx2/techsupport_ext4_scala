@@ -736,6 +736,73 @@ trait TimeChangeDaoComponentImpl extends TimeChangeDaoComponent {
  */
 trait WorksheetDaoComponentImpl extends WorksheetDaoComponent {
   class WorksheetDaoImpl extends WorksheetDao {
-
+    def page(pageno: Int, pagesize: Int, worksheetQuery: WorksheetQuery, sort: String="stNo", dir: String="desc"): Page[Worksheet] = {
+      from(Techsupport.jbpmTasks,Techsupport.jbpmParticipations,Techsupport.jbpmVariables,
+      Techsupport.supportTickets)(
+          (t,p,v,s) =>
+            where {
+              (worksheetQuery.taskId.? === t.id)
+                .and(v.execution_ === t.procinst_)
+                .and(worksheetQuery.activity.? === t.activityName_)
+                .and(worksheetQuery.st match {
+                case Some(st) => (st.region.? === s.region)
+                  .and(st.stStatus.? === s.stStatus)
+                case None => 1 === 1
+              })
+            }
+            select {
+              val supportTicket = new SupportTicket(
+                s.applicantId,
+                s.stNo,
+                None,
+                s.stStatus,
+                s.region,
+                s.serialNumber,
+                lastUpdateDate = s.lastUpdateDate,
+                id = s.id
+              )
+              (supportTicket,t)
+            }
+            orderBy {
+              if(sort=="stNo")
+                if(dir=="asc")
+                  s.stNo asc
+                else
+                  s.stNo desc
+              if(sort=="region")
+                if(dir=="asc")
+                  s.region asc
+                else
+                  s.region desc
+              if(sort=="applicantId")
+                if(dir=="asc")
+                  s.applicantId asc
+                else
+                  s.applicantId desc
+//              if(sort=="supportLeader")
+//                if(dir=="asc")
+//                  s.supportLeader asc
+//                else
+//                  s.supportLeader desc
+//              if(sort=="supportDept")
+//                if(dir=="asc")
+//                  s.supportDept asc
+//                else
+//                  s.supportDept desc
+              if(sort=="stStatus")
+                if(dir=="asc")
+                  s.stStatus asc
+                else
+                  s.stStatus desc
+              if(sort=="activityName_")
+                if(dir=="asc")
+                  t.activityName_ asc
+                    else
+                  t.activityName_ desc
+              else
+                s.stNo desc
+            }
+        )
+    }
   }
 }

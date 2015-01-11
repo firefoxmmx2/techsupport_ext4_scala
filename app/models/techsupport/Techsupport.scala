@@ -146,56 +146,55 @@ class SupportTicket(
                      @Column("st_no")
                      val stNo: String,
                      @Column("support_content")
-                     val supportContent: Option[String],
+                     val supportContent: Option[String]=None,
                      @Column("st_status")
                      val stStatus: String,
                      val region: String,
                      @Column("serial_number")
                      val serialNumber: Int,
                      @Column("dev_sche_date")
-                     val devScheDate: Option[DateTime],
+                     val devScheDate: Option[DateTime]=None,
                      @Column("psg_sche_date")
-                     val psgScheDate: Option[DateTime],
+                     val psgScheDate: Option[DateTime]=None,
                      @Column("dev_ds_sche_date")
-                     val devDsScheDate: Option[DateTime],
+                     val devDsScheDate: Option[DateTime]=None,
                      @Column("dev_dd_sche_date")
-                     val devDdScheDate: Option[DateTime],
+                     val devDdScheDate: Option[DateTime]=None,
                      @Column("dev_dt_sche_date")
-                     val devDtScheDate: Option[DateTime],
+                     val devDtScheDate: Option[DateTime]=None,
                      @Column("psg_ds_sche_date")
-                     val psgDsScheDate: Option[DateTime],
+                     val psgDsScheDate: Option[DateTime]=None,
                      @Column("psg_Is_sche_date")
-                     val psgIsScheDate: Option[DateTime],
+                     val psgIsScheDate: Option[DateTime]=None,
                      @Column("applying_feedback_date")
-                     val applyingFeedbackDate: Option[DateTime],
+                     val applyingFeedbackDate: Option[DateTime]=None,
                      @Column("psg_comp_date")
-                     val psgCompDate: Option[DateTime],
+                     val psgCompDate: Option[DateTime]=None,
                      @Column("dev_comp_date")
-                     val devCompDate: Option[DateTime],
+                     val devCompDate: Option[DateTime]=None,
                      @Column("psg_ds_comp_date")
-                     val psgDsCompDate: Option[DateTime],
+                     val psgDsCompDate: Option[DateTime]=None,
                      @Column("psg_is_comp_date")
-                     val psgIsCompDate: Option[DateTime],
+                     val psgIsCompDate: Option[DateTime]=None,
                      @Column("dev_ds_comp_date")
-                     val devDsCompDate: Option[DateTime],
+                     val devDsCompDate: Option[DateTime]=None,
                      @Column("dev_dd_comp_date")
-                     val devDdCompDate: Option[DateTime],
+                     val devDdCompDate: Option[DateTime]=None,
                      @Column("dev_dt_comp_date")
-                     val devDtCompDate: Option[DateTime],
+                     val devDtCompDate: Option[DateTime]=None,
                      @Column("feedback_confirm_date")
-                     val feedbackConfirmDate: Option[DateTime],
-                     val comments: Option[String],
+                     val feedbackConfirmDate: Option[DateTime]=None,
+                     val comments: Option[String]=None,
                      @Column("archive_code")
-                     val archiveCode: Option[String],
+                     val archiveCode: Option[String]=None,
                      @Column("archive_date")
-                     val archiveDate: Option[DateTime],
+                     val archiveDate: Option[DateTime]=None,
                      @Column("archive_userid")
-                     val archiveUserId: Option[Long],
+                     val archiveUserId: Option[Long]=None,
                      @Column("last_update_date")
                      val lastUpdateDate: DateTime,
                      val id: Option[Long] = None
                      ) extends KeyedEntity[Option[Long]] {
-
   def copy(
             applicantId: Long = this.applicantId,
             stNo:String = this.stNo,

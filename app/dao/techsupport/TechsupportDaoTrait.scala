@@ -3,6 +3,7 @@ package dao.techsupport
 import dao.BaseDao
 import models.QueryCondition
 import models.techsupport._
+import util.Page
 
 /**
  * 技术支持单主要表单dao
@@ -64,6 +65,8 @@ trait TimeChangeDaoComponent{
  * 工作单
  */
 trait WorksheetDaoComponent {
-  trait WorksheetDao
+  trait WorksheetDao {
+    def page(pageno:Int,pagesize:Int,worksheetQuery: WorksheetQuery,sort:String,dir:String):Page[Worksheet]
+  }
   val worksheetDao:WorksheetDao
 }
