@@ -98,5 +98,13 @@ class TechsupportSpec extends Specification with ComponentRegister {
         }
       }
     }
+
+    "test WorksheetDao " in {
+      running(FakeApplication()) {
+        inTransaction {
+
+        }
+      }
+    }
   }
 }

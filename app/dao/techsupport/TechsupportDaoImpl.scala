@@ -1,8 +1,11 @@
 package dao.techsupport
 
-import models.techsupport._
-import util.Page
 import models.CommonTypeMode._
+import models.systemmanage.SystemManage
+import models.techsupport.Constants.DictItems
+import models.techsupport._
+import org.jbpm.pvm.internal.task.TaskImpl
+import util.Page
 
 trait SupportTicketDaoComponentImpl extends SupportTicketDaoComponent {
 
@@ -737,13 +740,14 @@ trait TimeChangeDaoComponentImpl extends TimeChangeDaoComponent {
 trait WorksheetDaoComponentImpl extends WorksheetDaoComponent {
   class WorksheetDaoImpl extends WorksheetDao {
     def page(pageno: Int, pagesize: Int, worksheetQuery: WorksheetQuery, sort: String="stNo", dir: String="desc"): Page[Worksheet] = {
-      from(Techsupport.jbpmTasks,Techsupport.jbpmParticipations,Techsupport.jbpmVariables,
-      Techsupport.supportTickets)(
-          (t,p,v,s) =>
+      val resultQuery = join(Techsupport.jbpmTasks,Techsupport.jbpmParticipations,Techsupport.jbpmVariables,
+      Techsupport.supportTickets,Techsupport.supportLeaders.leftOuter,
+        Techsupport.supportDepartments.leftOuter)(
+          (t,p,v,s,sl,sd) =>
             where {
               (worksheetQuery.taskId.? === t.id)
-                .and(v.execution_ === t.procinst_)
                 .and(worksheetQuery.activity.? === t.activityName_)
+                .and(v.key_ === "worksheetno")
                 .and(worksheetQuery.st match {
                 case Some(st) => (st.region.? === s.region)
                   .and(st.stStatus.? === s.stStatus)
@@ -779,16 +783,16 @@ trait WorksheetDaoComponentImpl extends WorksheetDaoComponent {
                   s.applicantId asc
                 else
                   s.applicantId desc
-//              if(sort=="supportLeader")
-//                if(dir=="asc")
-//                  s.supportLeader asc
-//                else
-//                  s.supportLeader desc
-//              if(sort=="supportDept")
-//                if(dir=="asc")
-//                  s.supportDept asc
-//                else
-//                  s.supportDept desc
+              if(sort=="supportLeader")
+                if(dir=="asc")
+                  sl.map(_.slId) asc
+                else
+                  sl.map(_.slId) desc
+              if(sort=="supportDept")
+                if(dir=="asc")
+                  sd.map(_.deptId) asc
+                else
+                  sd.map(_.deptId) desc
               if(sort=="stStatus")
                 if(dir=="asc")
                   s.stStatus asc
@@ -802,7 +806,40 @@ trait WorksheetDaoComponentImpl extends WorksheetDaoComponent {
               else
                 s.stNo desc
             }
-        )
+        on(t.procinst_ === v.execution_,
+              s.id === sl.map(_.stId),
+              s.id === sl.map(_.stId),
+              s.id === v.long_value_,
+              p.task_ === t.id)
+        ).distinct
+      val page=Page[Worksheet](pageno,pagesize,resultQuery.Count.toInt)
+      if(page.total == 0)
+        page
+      else{
+        val data=resultQuery.page(page.start,page.limit).toList.map(r => {
+          val st = r._1
+          val task = r._2
+          val applicantName = from(SystemManage.users)(u =>
+            where(u.id === st.applicantId)
+              select(u.username)
+          ).singleOption.getOrElse("")
+          val regionName = from(SystemManage.dictItems)(di =>
+            where(di.dictcode === DictItems.DictCodes.REGION)
+              select(di.displayName)
+          ).singleOption.getOrElse("")
+          val stStatusName = from(SystemManage.dictItems)(di =>
+            where(di.dictcode === DictItems.DictCodes.STATUS)
+              select(di.displayName)
+          ).singleOption.getOrElse("")
+          val supportLeaderNames=from(SystemManage.users,Techsupport.supportLeaders)(
+            (u,sl) =>
+              where(sl.slId === u.id and sl.stId === st.id)
+                select(u.username)
+          )
+          Worksheet(st,task.asInstanceOf[TaskImpl],task.id.toString,task.activityName_.getOrElse(""),task.name_,regionName,applicantName,stStatusName)
+        })
+        page.copy(data=data)
+      }
     }
   }
 }

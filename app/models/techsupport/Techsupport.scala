@@ -665,3 +665,25 @@ case object Techsupport extends Schema {
   val jbpmTasks = table[JbpmTask]("Jbpm4_Task")
   val jbpmVariables = table[JbpmVariable]("Jbpm4_Variable")
 }
+
+
+
+object Constants {
+  object DictItems {
+    object DictCodes {
+      val REGION = "dm_ts_regin"
+      val STATUS = "dm_ts_status"
+      val PROECESS = "dm_ts_proc"
+      val ROLE_STATUS = "dm_ts_role_status"
+      val DEPARTMENT_LIST = "dm_ts_depart_list"
+      val SUPPORT_APPR_TYPE = "dm_support_appr_type"
+      val USER_AND_EMAIL = "dm_userAndEmail_tech"
+    }
+  }
+  object GlobalParams {
+    object GlobalCodes {
+
+    }
+  }
+
+}
