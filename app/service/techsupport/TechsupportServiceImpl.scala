@@ -158,29 +158,12 @@ trait WorksheetServiceComponentImpl extends WorksheetServiceComponent {
     val historyService = procoessEngine.getHistoryService
 
     def getWorksheet(taskId: String): Option[Worksheet] = {
-//      val task = taskService.getTask(taskId)
       val task = jbpmTaskDao.getById(taskId.toLong)  match {
         case Some(t) =>
           t
         case None =>
           throw new RuntimeException("编号为"+taskId+"的任务在系统中不存在")
       }
-//      val taskImpl = task.asInstanceOf[TaskImpl]
-//      val jTask = JbpmTask(
-//        taskImpl.getId,
-//        "",
-//        0,
-//        task.getName,
-//        task.getDescription,
-//      taskImpl.getState,
-//      taskImpl.getAssignee,
-//      taskImpl.getFormResourceName,
-//      taskImpl.getPriority,
-//      taskImpl.getCreateTime,
-//      taskImpl.getDuedate,
-//      taskImpl.getProgress,
-//      taskImpl.getpaisSignalling,
-//      )
       val worksheetno = executionService.getVariable(task.executionId_, "worksheetno").asInstanceOf[Long]
       val st = supportTicketDao.getById(worksheetno).get
       val regionDictItems = dictItemDao.list(DictItemQueryCondition(dictcode = Some("dm_ts_regin")))
@@ -221,7 +204,7 @@ trait WorksheetServiceComponentImpl extends WorksheetServiceComponent {
       ).departname)
         .filter(_ != "").mkString(",")
 
-      Option(Worksheet(st, task, taskId, task.activity_name_, task.name_,
+      Option(Worksheet(st, task, taskId, task.activity_name_.getOrElse(""), task.name_,
         regionDictItems.filter(_.factValue == st.region).map(_.displayName).get(0),
         applicantUser match {
           case Some(u) => u.username
@@ -237,7 +220,9 @@ trait WorksheetServiceComponentImpl extends WorksheetServiceComponent {
       taskService.completeTask(taskId, params)
     }
 
-    def page(pageno: Int, pageSize: Int, params: WorksheetQuery, sort: String, dir: String): Page[Worksheet] = ???
+    def page(pageno: Int, pageSize: Int, params: WorksheetQuery, sort: String, dir: String): Page[Worksheet] = inTransaction {
+      worksheetDao.page(pageno,pageSize,params,sort,dir)
+    }
 
     def next(taskId: String, transition: String, params: Map[String, Any]): Unit = {
       taskService.completeTask(taskId, transition, params)

@@ -92,9 +92,16 @@ class TechsupportSpec extends Specification with ComponentRegister {
           val stList=supportTicketDao.list(SupportTicketQueryCondition())
           stList.size must be > 0
           println("="*13+"newSupportTicket.supportContent = "+stList(0).supportContent+"="*13)
-          val newSupportTicket=stList(0).copy(id=None,psgScheDate = None,devScheDate = None)
+          val newSupportTicket=stList(0).copy(id=None,
+            psgScheDate = None,
+            devScheDate = None,
+            supportContent = Some("测试"),
+            stNo = "重庆-20150114-2"
+            )
           val insertedSupportTicket= supportTicketDao.insert(newSupportTicket)
           stList.size must be < supportTicketDao.list(SupportTicketQueryCondition()).size
+          supportTicketDao.deleteById(insertedSupportTicket.id.get)
+          supportTicketDao.getById(insertedSupportTicket.id.get) must be empty
         }
       }
     }
@@ -104,8 +111,19 @@ class TechsupportSpec extends Specification with ComponentRegister {
         inTransaction {
           val worksheets = worksheetDao.page(1,5,WorksheetQuery(st = Some(SupportTicketQuery(stStatus = Some("going")))))
           worksheets.total must be > 0
-          println("="*13+"[worksheet]="+worksheets+"="*13)
-          worksheets.data.size must be >= 5
+          println("="*13+"[worksheet]="+worksheets.data.map(worksheet => {
+            (worksheet.taskId ,
+              worksheet.activityName,
+              worksheet.st.stNo,
+              worksheet.applicantName,
+              worksheet.regionName,
+              worksheet.stStatusName,
+              worksheet.supportLeaderName,
+              worksheet.supportDeptName
+              )
+          })+"="*13)
+          println("="*13+"[worksheet.size]="+ worksheets.data.size +"="*13)
+          worksheets.data.size must be be_=== 5
         }
       }
     }
