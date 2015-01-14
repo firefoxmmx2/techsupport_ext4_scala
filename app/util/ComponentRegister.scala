@@ -1,7 +1,7 @@
 package util
 
 import dao.systemmanage._
-import dao.techsupport.SupportTicketDaoComponentImpl
+import dao.techsupport.{WorksheetDaoComponentImpl, SupportTicketDaoComponentImpl}
 import service.systemmanage._
 
 /**
@@ -31,7 +31,8 @@ with RoleFuncDaoComponentImpl
 with RoleFuncServiceComponentImpl
 with RoleMenuServiceComponentImpl
 with RoleMenuDaoComponentImpl
-with SupportTicketDaoComponentImpl{
+with SupportTicketDaoComponentImpl
+with WorksheetDaoComponentImpl {
 
   val functionService: FunctionService = new FunctionServiceImpl
   val roleFuncService: RoleFuncService = new RoleFuncServiceImpl
@@ -58,4 +59,5 @@ with SupportTicketDaoComponentImpl{
   val loginLogDao: LoginLogDao = new LoginLogDaoImpl
   val loginLogService: LoginLogService = new LoginLogServiceImpl
   val supportTicketDao: SupportTicketDao = new SupportTicketDaoImpl
+  val worksheetDao: WorksheetDao = new WorksheetDaoImpl
 }

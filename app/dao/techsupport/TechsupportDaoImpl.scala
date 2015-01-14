@@ -316,7 +316,7 @@ trait SupportDepartmentDaoComponentImpl extends SupportDepartmentDaoComponent {
 trait SupportLeaderDaoComponentImpl extends SupportLeaderDaoComponent {
 
   class SupportLeaderDaoImpl extends SupportLeaderDao {
-    def selectForList(params: SupportLeaderQuery, sort: String = "id", dir: String = "asc") = {
+    def selectForList(params: SupportLeaderQuery, sort: String = "slId", dir: String = "asc") = {
       from(Techsupport.supportLeaders)(
         sl =>
           where(params.slDepartId.? === sl.slDepartId
@@ -324,13 +324,13 @@ trait SupportLeaderDaoComponentImpl extends SupportLeaderDaoComponent {
             and params.stId.? === sl.stId)
             select (sl)
             orderBy {
-            if (sort == "id")
+            if (sort == "slId")
               if (dir == "asc")
-                sl.id asc
+                sl.slId asc
               else
-                sl.id desc
+                sl.slId desc
             else
-              sl.id asc
+              sl.slId asc
           }
       )
     }
@@ -740,13 +740,17 @@ trait TimeChangeDaoComponentImpl extends TimeChangeDaoComponent {
 trait WorksheetDaoComponentImpl extends WorksheetDaoComponent {
   class WorksheetDaoImpl extends WorksheetDao {
     def page(pageno: Int, pagesize: Int, worksheetQuery: WorksheetQuery, sort: String="stNo", dir: String="desc"): Page[Worksheet] = {
-      val resultQuery = join(Techsupport.jbpmTasks,Techsupport.jbpmParticipations,Techsupport.jbpmVariables,
-      Techsupport.supportTickets,Techsupport.supportLeaders.leftOuter,
+      val resultQuery = join(
+        Techsupport.jbpmTasks,
+        Techsupport.jbpmVariables,
+        Techsupport.supportTickets,
+        Techsupport.jbpmParticipations,
+        Techsupport.supportLeaders.leftOuter,
         Techsupport.supportDepartments.leftOuter)(
-          (t,p,v,s,sl,sd) =>
+          (t,v,s,p,sl,sd) =>
             where {
               (worksheetQuery.taskId.? === t.id)
-                .and(worksheetQuery.activity.? === t.activityName_)
+                .and(worksheetQuery.activity.? === t.activity_name_)
                 .and(v.key_ === "worksheetno")
                 .and(worksheetQuery.st match {
                 case Some(st) => (st.region.? === s.region)
@@ -765,7 +769,8 @@ trait WorksheetDaoComponentImpl extends WorksheetDaoComponent {
                 lastUpdateDate = s.lastUpdateDate,
                 id = s.id
               )
-              (supportTicket,t)
+              val task = t.copy(descr_ = None)
+              (supportTicket,task)
             }
             orderBy {
               if(sort=="stNo")
@@ -773,44 +778,45 @@ trait WorksheetDaoComponentImpl extends WorksheetDaoComponent {
                   s.stNo asc
                 else
                   s.stNo desc
-              if(sort=="region")
+              else if(sort=="region")
                 if(dir=="asc")
                   s.region asc
                 else
                   s.region desc
-              if(sort=="applicantId")
+              else if(sort=="applicantId")
                 if(dir=="asc")
                   s.applicantId asc
                 else
                   s.applicantId desc
-              if(sort=="supportLeader")
+              else if(sort=="supportLeader")
                 if(dir=="asc")
                   sl.map(_.slId) asc
                 else
                   sl.map(_.slId) desc
-              if(sort=="supportDept")
+              else if(sort=="supportDept")
                 if(dir=="asc")
                   sd.map(_.deptId) asc
                 else
                   sd.map(_.deptId) desc
-              if(sort=="stStatus")
+              else if(sort=="stStatus")
                 if(dir=="asc")
                   s.stStatus asc
                 else
                   s.stStatus desc
-              if(sort=="activityName_")
+              else if(sort=="activityName_")
                 if(dir=="asc")
-                  t.activityName_ asc
+                  t.activity_name_ asc
                     else
-                  t.activityName_ desc
+                  t.activity_name_ desc
               else
                 s.stNo desc
             }
-        on(t.procinst_ === v.execution_,
-              s.id === sl.map(_.stId),
-              s.id === sl.map(_.stId),
+              on(t.procinst_ === v.execution_,
               s.id === v.long_value_,
-              p.task_ === t.id)
+              p.task_ === t.id,
+              s.id === sl.map(_.stId),
+              s.id === sd.map(_.stId)
+              )
         ).distinct
       val page=Page[Worksheet](pageno,pagesize,resultQuery.Count.toInt)
       if(page.total == 0)
@@ -824,22 +830,33 @@ trait WorksheetDaoComponentImpl extends WorksheetDaoComponent {
               select(u.username)
           ).singleOption.getOrElse("")
           val regionName = from(SystemManage.dictItems)(di =>
-            where(di.dictcode === DictItems.DictCodes.REGION)
+            where(di.dictcode === DictItems.DictCodes.REGION
+            and di.factValue === st.region)
               select(di.displayName)
           ).singleOption.getOrElse("")
           val stStatusName = from(SystemManage.dictItems)(di =>
-            where(di.dictcode === DictItems.DictCodes.STATUS)
+            where(di.dictcode === DictItems.DictCodes.STATUS
+            and di.factValue === st.stStatus)
               select(di.displayName)
           ).singleOption.getOrElse("")
           val supportLeaderNames=from(SystemManage.users,Techsupport.supportLeaders)(
             (u,sl) =>
               where(sl.slId === u.id and sl.stId === st.id)
                 select(u.username)
-          )
-          Worksheet(st,task.asInstanceOf[TaskImpl],task.id.toString,task.activityName_.getOrElse(""),task.name_,regionName,applicantName,stStatusName)
+          ).toList.mkString(",")
+          Worksheet(st,task,task.id.toString,task.activity_name_.getOrElse(""),task.name_,regionName,applicantName,stStatusName)
         })
         page.copy(data=data)
       }
     }
+  }
+}
+
+/**
+ * 工作流任务
+ */
+trait JbpmTaskDaoComponentImpl extends JbpmTaskDaoComponent{
+  class JbpmTaskDaoImpl extends JbpmTaskDao{
+    def getById(taskId: Long): Option[JbpmTask] = Techsupport.jbpmTasks.where(_.id === taskId).singleOption
   }
 }

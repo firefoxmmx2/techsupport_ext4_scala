@@ -6,6 +6,7 @@ import org.joda.time.DateTime
 import org.squeryl._
 import org.squeryl.annotations._
 import models.CommonTypeMode._
+import org.squeryl.dsl.CompositeKey2
 
 /**
  * 支持单基本信息
@@ -418,7 +419,7 @@ case class SupportLeader(
                           slId: Long,
                           @Column("sl_departid")
                           slDepartId: Long
-                          ) {
+                          ) extends KeyedEntity[CompositeKey2[Long,Long]]{
   def id = compositeKey(stId, slId)
 }
 
@@ -554,7 +555,7 @@ case class JbpmParticipation(
                             userid_ : Option[String],
                             type_ : String,
                             task_ : Long,
-                            swimlane_ : Option[String]
+                            swimlane_ : Option[Long]
                               ) extends KeyedEntity[Option[Long]]
 
 /**
@@ -565,16 +566,16 @@ case class JbpmParticipation(
  * @param name_
  * @param descr_
  * @param state_
- * @param supsphiststate_
+ * @param susphiststate_
  * @param assignee_
  * @param form_
  * @param priority_
- * @param creaet_
+ * @param create_
  * @param duedate_
  * @param progress_
  * @param signalling_
  * @param executionId_
- * @param activityName_
+ * @param activity_name_
  * @param hasvars_
  * @param supertask_
  * @param execution_
@@ -585,22 +586,22 @@ case class JbpmParticipation(
 case class JbpmTask(
                    @Column("dbid_")
                    id: Option[Long],
-                   class_ : Long,
+                   class_ : String,
                    dbversion_ : Int,
                    name_ : String,
                    descr_ : Option[String],
                    state_ : String,
-                   supsphiststate_ : Option[String],
+                   susphiststate_ : Option[String],
                    assignee_ : Option[String],
                    form_ : Option[String],
                    priority_ : Int,
-                   creaet_ : DateTime,
+                   create_ : DateTime,
                    duedate_ : Option[DateTime],
-                   progress_ : Option[String],
+                   progress_ : Option[Int],
                    signalling_ : Int,
                    @Column("execution_id_")
                    executionId_ : String,
-                   activityName_ : Option[String],
+                   activity_name_ : Option[String],
                    hasvars_ : Int,
                    supertask_ : Option[Long],
                    execution_ : Long,
@@ -630,7 +631,7 @@ case class JbpmTask(
  */
 case class JbpmVariable(
                        @Column("dbid_")
-                       id:Option[String],
+                       id:Option[Long],
                        class_ :String,
                        dbversion_ : Int,
                        key_ : String,
@@ -638,14 +639,14 @@ case class JbpmVariable(
                        hist_ : Int,
                        execution_ : Long,
                        task_ : Option[Long],
-                       lob_ : Option[Array[Byte]],
+                       lob_ : Option[Long],
                        date_value_ : Option[DateTime],
                        double_value_ : Option[Double],
                        classname_ : Option[String],
                        long_value_ : Option[Long],
                        string_value_ : Option[String],
                        text_value_ : Option[String],
-                       exesys_ : Option[String]
+                       exesys_ : Option[Long]
                          )
 case object Techsupport extends Schema {
   val supportTickets = table[SupportTicket]("t_ts_tech_support")

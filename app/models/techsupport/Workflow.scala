@@ -16,7 +16,7 @@ import org.jbpm.pvm.internal.task.TaskImpl
  */
 case class Worksheet(
                       st: SupportTicket,
-                      task: TaskImpl,
+                      task: JbpmTask,
                       taskId: String,
                       activityName: String = "",
                       activity: String = "",

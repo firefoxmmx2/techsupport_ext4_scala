@@ -102,7 +102,10 @@ class TechsupportSpec extends Specification with ComponentRegister {
     "test WorksheetDao " in {
       running(FakeApplication()) {
         inTransaction {
-
+          val worksheets = worksheetDao.page(1,5,WorksheetQuery(st = Some(SupportTicketQuery(stStatus = Some("going")))))
+          worksheets.total must be > 0
+          println("="*13+"[worksheet]="+worksheets+"="*13)
+          worksheets.data.size must be >= 5
         }
       }
     }

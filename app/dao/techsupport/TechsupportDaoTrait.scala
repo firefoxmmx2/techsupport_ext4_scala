@@ -66,7 +66,17 @@ trait TimeChangeDaoComponent{
  */
 trait WorksheetDaoComponent {
   trait WorksheetDao {
-    def page(pageno:Int,pagesize:Int,worksheetQuery: WorksheetQuery,sort:String,dir:String):Page[Worksheet]
+    def page(pageno:Int,pagesize:Int,worksheetQuery: WorksheetQuery,sort:String = "stNo",dir:String = "desc"):Page[Worksheet]
   }
   val worksheetDao:WorksheetDao
+}
+
+/**
+ * 工作流任务
+ */
+trait JbpmTaskDaoComponent {
+  trait JbpmTaskDao {
+    def getById(taskId:Long):Option[JbpmTask]
+  }
+  val jbpmTaskDao:JbpmTaskDao
 }
