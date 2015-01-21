@@ -41,7 +41,7 @@ Ext.define('Techsupport.controller.sysadmin.Login', {
         var me = this;
         var form = this.getLoginForm();
         var url = "/login";
-        if (form.getForm().isValid) {
+        if (form.getForm().isValid()) {
             form.submit({
                 url: url,
                 params: form.getForm().getValues(),
