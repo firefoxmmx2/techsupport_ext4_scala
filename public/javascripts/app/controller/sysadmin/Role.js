@@ -119,7 +119,7 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                                             })
                                         }))
                                         store.remove(Ext.Array.map(store2.getRange(), function (r) {
-                                            return r.raw.function
+                                            return r.raw['function']
                                         }))
                                         store.commitChanges()
                                     }
@@ -141,7 +141,7 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                     if (!Ext.isEmpty(selectedFunctionStore.data)) {
                         var allFunctionStore = relateFunc.down('grid[name=allFunctionGrid]').getStore()
                         allFunctionStore.add(Ext.Array.Map(selectedFunctionStore.getRange(), function (r) {
-                            return r.raw.function
+                            return r.raw['function']
                         }))
                         selectedFunctionStore.removeAll()
                     }
@@ -155,7 +155,7 @@ Ext.define('Techsupport.controller.sysadmin.Role', {
                     if (selection.length > 0) {
                         var allFunctionGrid = relateFunc.down('grid[name=allFunctionGrid]')
                         allFunctionGrid.getStore().add(Ext.Array.map(selection, function (r) {
-                            return r.raw.function;
+                            return r.raw['function'];
                         }))
                         selectedFunctionGrid.getStore().remove(selection)
                     }
