@@ -10,6 +10,8 @@ Ext.define('Techsupport.controller.Main', {
         {ref: 'systemMenuAccordion', selector: 'main systemMenuAccordion'}
     ],
     init: function () {
+        //加载系统菜单树控制器
+        var systemMenuCotroller = this.getController("sysadmin.SystemMenu")
 //        身份验证
         var loginController = this.getController('sysadmin.Login');
         loginController.heartCheck();
@@ -39,5 +41,6 @@ Ext.define('Techsupport.controller.Main', {
                 }
             }
         });
+
     }
 })

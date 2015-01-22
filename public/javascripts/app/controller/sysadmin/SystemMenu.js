@@ -10,6 +10,7 @@ Ext.define('Techsupport.controller.sysadmin.SystemMenu', {
         {ref: 'tabPanel', selector: 'panel>tabpanel'}
     ],
     init: function () {
+        var systemMenuController = this;
         var systemStore = this.getUserSystemNodeStore();
         this.control({
             'systemMenuAccordion': {
@@ -36,8 +37,9 @@ Ext.define('Techsupport.controller.sysadmin.SystemMenu', {
                                                             record.raw.funcentry.indexOf(".jsp") == -1
                                                             && record.raw.funcentry.indexOf(".action") == -1
                                                             && tp.query('panel[itemId=' + record.raw.id + ']').length == 0) {
+                                                            var dd = eval("("+record.raw.funcentry+")")
                                                             tp.add({id: record.raw.id, itemId: record.raw.id, title: record.raw.text, layout: 'fit', items: [
-                                                                {xtype: record.raw.funcentry}
+                                                                dd(systemMenuController)
                                                             ]});
                                                         }
 

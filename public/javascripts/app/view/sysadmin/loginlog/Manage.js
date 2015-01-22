@@ -5,7 +5,7 @@ Ext.define('Techsupport.view.sysadmin.loginlog.Manage', {
     extend: 'Techsupport.view.base.BaseManage',
     alias: 'widget.loginlogmanage',
     initComponent: function () {
-        Ext.clone(this.items,this.superclass.items)
+        this.items = Ext.clone(this.superclass.items)
         //移除左边的面板
         this.items.splice(0,1)
         //移除上面的工具栏

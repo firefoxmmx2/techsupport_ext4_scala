@@ -3,20 +3,7 @@ Ext.application({
     appFolder: 'assets/javascripts/app',
     controllers: [
         "sysadmin.Login",
-        "Main",
-        //"sysadmin.SystemMenu",
-        //"sysadmin.DepartmentTree",
-        //"sysadmin.User",
-        //"sysadmin.Department",
-        //'sysadmin.MenuTree',
-        //'sysadmin.Menu',
-        //'sysadmin.System',
-        //'sysadmin.GlobalParam',
-        //'sysadmin.Dict',
-        //'sysadmin.DictItem',
-        //"sysadmin.LoginLog",
-        //"sysadmin.Role",
-        //"sysadmin.Function"
+        "Main"
     ],
     autoCreateViewport: true,
     refs: [

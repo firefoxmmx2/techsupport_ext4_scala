@@ -16,6 +16,9 @@ Ext.define('Techsupport.controller.sysadmin.Department', {
         {ref: 'queryForm', selector: 'departmentManage panel form'}
     ],
     init: function () {
+        //加载机构树控制器
+        var departmentTreeController = this.getController("sysadmin.DepartmentTree")
+
         this.control({
             'departmentlist': {
                 itemdblclick: function (g, record, item, index, e, eOpts) {

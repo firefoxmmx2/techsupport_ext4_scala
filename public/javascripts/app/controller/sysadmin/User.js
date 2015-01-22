@@ -21,6 +21,8 @@ Ext.define('Techsupport.controller.sysadmin.User', {
         {ref: 'departmentTree', selector: 'usermanage departmenttree'}
     ],
     init: function () {
+        //加载依赖机构树控制器
+        var departmentTreeController = this.getController("sysadmin.DepartmentTree")
         this.control({
             'userlist': {
                 itemdblclick: function (g, record, item, index, e, eOpts) {

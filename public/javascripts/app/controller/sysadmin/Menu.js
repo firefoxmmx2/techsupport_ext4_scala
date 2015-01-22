@@ -16,6 +16,9 @@ Ext.define('Techsupport.controller.sysadmin.Menu', {
         {ref: 'menuListGrid', selector: 'menumanage menulist'}
     ],
     init: function () {
+        //加载依赖菜单树控制器
+        var menuTreeController = this.getController("sysadmin.MenuTree")
+
         this.toEditMenu = function (record) { //初始化编辑窗口
             var title = '';
             var config = {};
