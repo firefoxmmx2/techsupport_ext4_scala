@@ -1,9 +1,10 @@
-package models
+package models.squeryl
 
+import java.sql.Timestamp
+
+import org.joda.time._
 import org.squeryl._
 import org.squeryl.dsl._
-import java.sql.Timestamp
-import org.joda.time._
 
 /**
  * Created by hooxin on 14-3-23.
@@ -24,5 +25,3 @@ object CommonTypeMode extends PrimitiveTypeMode {
 
   implicit def optionJodaTimeToTE(s: Option[DateTime]) = optionJotaTimeTEF.create(s)
 }
-
-trait QueryCondition

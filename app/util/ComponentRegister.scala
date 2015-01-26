@@ -1,7 +1,7 @@
 package util
 
-import dao.systemmanage._
-import dao.techsupport.{WorksheetDaoComponentImpl, SupportTicketDaoComponentImpl}
+import dao.systemmanage.squeryl._
+import dao.techsupport.squeryl.{SupportTicketDaoComponentImpl, WorksheetDaoComponentImpl}
 import service.systemmanage._
 
 /**

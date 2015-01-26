@@ -1,9 +1,9 @@
 package service
 
 import util.Page
-import models.QueryCondition
+import models.TQueryable
 
-trait BaseService[T, P, Q <: QueryCondition] {
+trait BaseService[T, P, Q <: TQueryable] {
   def insert(e: T): T
 
   def update(e: T)

@@ -1,7 +1,8 @@
 package dao.techsupport
 
 import dao.BaseDao
-import models.QueryCondition
+import models.TQueryable
+import models.slick.techsupport._
 import models.techsupport._
 import util.Page
 

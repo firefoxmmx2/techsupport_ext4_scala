@@ -4,6 +4,7 @@ import java.lang.System
 
 import models._
 import dao.systemmanage._
+import models.squeryl.CommonTypeMode
 import models.systemmanage._
 import play.api.Logger
 import util.Page
@@ -14,7 +15,7 @@ import util.Utils
  * Created by hooxin on 14-3-10.
  */
 
-import models.CommonTypeMode._
+import CommonTypeMode._
 
 /**
  * 机构服务组件实现

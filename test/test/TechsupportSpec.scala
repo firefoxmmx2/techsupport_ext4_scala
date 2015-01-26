@@ -1,12 +1,14 @@
 package test
 
+import models.slick.techsupport.{Techsupport, SupportTicketQueryCondition, SupportTicketP}
+import models.squeryl.CommonTypeMode
 import models.systemmanage.SystemManage
 import models.techsupport._
 import play.api.test._
 import play.api.test.Helpers._
 import org.specs2.mutable._
 import util.ComponentRegister
-import models.CommonTypeMode._
+import CommonTypeMode._
 
 /**
  * 技术支持单测试用力.

@@ -15,7 +15,7 @@ import util.ComponentRegister
  * 登录
  */
 object Login extends Controller with ComponentRegister {
-  private val log = play.api.Logger.logger
+  private val log = play.api.Logger
 
   case class Login(useraccount: String, password: String)
 
@@ -32,7 +32,7 @@ object Login extends Controller with ComponentRegister {
    */
   def login = Action {
     implicit request =>
-      loginForm.bindFromRequest().fold(
+      loginForm.bindFromRequest.fold(
         hasErrors => BadRequest,
         login => {
           log.debug("调试登录函数")
@@ -46,12 +46,21 @@ object Login extends Controller with ComponentRegister {
               "message" -> "帐号或者密码错误")))
           else {
             log.debug("存在指定用户")
+            val department = departmentService.getById(user.departid)
+            val departcode = department match {
+              case Some(x) => x.departcode
+              case None => ""
+            }
+            val departname = department match {
+              case Some(x) => x.departname
+              case _ => ""
+            }
             val loginLog = loginLogService.insert(models.systemmanage.LoginLog(
               loginuserid = user.id.get,
               useraccount = user.useraccount,
               username = user.username,
-              loginunitcode = user.department.departcode,
-              loginunitname = user.department.departname,
+              loginunitcode = departcode,
+              loginunitname = departname,
               loginip = request.remoteAddress,
               loginmac = None,
               logintiime = new DateTime()
@@ -82,7 +91,7 @@ object Login extends Controller with ComponentRegister {
         case Some(s) =>
           Cache.get(s) match {
             case Some(x: Map[String, Any]) =>
-              loginLogService.getById(x.getOrElseAs("loginlogid", 0L)) match {
+              loginLogService.getById(x.getOrElseAs("loginlogid", 0)) match {
                 case Some(loginLog) =>
                   loginLogService.update(loginLog.copy(quittime = Some(new DateTime())))
                 case None =>

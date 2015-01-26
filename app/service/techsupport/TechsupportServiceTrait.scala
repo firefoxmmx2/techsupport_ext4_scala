@@ -1,5 +1,6 @@
 package service.techsupport
 
+import models.slick.techsupport._
 import models.techsupport._
 import service.BaseService
 import util.Page

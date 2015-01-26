@@ -1,21 +1,17 @@
-package dao.systemmanage
+package dao.systemmanage.squeryl
 
-import java.lang.System
-
+import dao.systemmanage._
 import models._
+import models.squeryl.systemmanage.SystemManage
 import models.systemmanage._
-import util.Page
 import play.api.Logger
-
-import scala.Option
+import util.Page
 
 /**
  * Created by hooxin on 14-2-14.
  */
 
-import org.squeryl._
-import org.squeryl.dsl._
-import models.CommonTypeMode._
+import models.squeryl.CommonTypeMode._
 
 trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 

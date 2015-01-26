@@ -1,11 +1,11 @@
-package models.techsupport
+package models.slick.techsupport
 
-import models.QueryCondition
-import models.systemmanage.{User, Department}
+import models.TQueryable
+import models.squeryl.CommonTypeMode._
+import models.systemmanage.{Department, User}
 import org.joda.time.DateTime
 import org.squeryl._
 import org.squeryl.annotations._
-import models.CommonTypeMode._
 import org.squeryl.dsl.CompositeKey2
 
 /**
@@ -349,7 +349,7 @@ case class SupportTicketQueryCondition(
                                         psgScheDate: Option[DateTime] = None,
                                         psgCompDate: Option[DateTime] = None,
                                         devCompDate: Option[DateTime] = None
-                                        ) extends QueryCondition
+                                        ) extends TQueryable
 
 /**
  * 追踪批复或者进展情况
@@ -384,7 +384,7 @@ case class TrackingQueryCondition(
                                    approvalCode: Option[String],
                                    processorId: Option[Long],
                                    id: Option[Long]
-                                   ) extends QueryCondition
+                                   ) extends TQueryable
 
 /**
  * 支持部门
@@ -404,7 +404,7 @@ case class SupportDepartmentQuery(
                                    stId: Option[Long],
                                    deptId: Option[Long],
                                    id: Option[Long]
-                                   ) extends QueryCondition
+                                   ) extends TQueryable
 
 /**
  * 支持单负责人
@@ -427,7 +427,7 @@ case class SupportLeaderQuery(
                                stId: Option[Long],
                                slId: Option[Long],
                                slDepartId: Option[Long]
-                               ) extends QueryCondition
+                               ) extends TQueryable
 
 /**
  * 附件
@@ -469,7 +469,7 @@ case class AttachmentQuery(
                             stId: Option[Long],
                             attachmentContentType: Option[String],
                             id: Option[Long]
-                            ) extends QueryCondition
+                            ) extends TQueryable
 
 /**
  * 督办
@@ -494,7 +494,7 @@ case class Supervision(
 case class SupervisionQuery(
                              stId: Option[Long],
                              id: Option[Long]
-                             ) extends QueryCondition
+                             ) extends TQueryable
 
 /**
  * 修改计划时间的轨迹
@@ -535,7 +535,7 @@ case class TimeChangeQuery(
                             trackingId: Option[Long],
                             type_ : Option[String],
                             id: Option[Long]
-                            ) extends QueryCondition
+                            ) extends TQueryable
 
 /**
  * JBPM流程指派候选控制表

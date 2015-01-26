@@ -1,10 +1,11 @@
-package dao.techsupport
+package dao.techsupport.squeryl
 
-import models.CommonTypeMode._
-import models.systemmanage.SystemManage
-import models.techsupport.Constants.DictItems
+import dao.techsupport._
+import models.slick.techsupport._
+import models.squeryl.CommonTypeMode._
+import models.squeryl.systemmanage.SystemManage
+import Constants.DictItems
 import models.techsupport._
-import org.jbpm.pvm.internal.task.TaskImpl
 import util.Page
 
 trait SupportTicketDaoComponentImpl extends SupportTicketDaoComponent {

@@ -1,12 +1,12 @@
 package dao
 
 import util.Page
-import models.QueryCondition
+import models.TQueryable
 
 /**
  * Created by hooxin on 14-3-7.
  */
-trait BaseDao[M, L,Q<:QueryCondition] {
+trait BaseDao[M, L,Q<:TQueryable] {
   //  case class MaybeFilter[X, Y](val query: Query[X, Y]) {
   //    def filter[T, R: CanBeQueryCondition](data: Option[T])(f: T => X => R) = {
   //      data.map(v => MaybeFilter(query.filter(f(v)))).getOrElse(this)
