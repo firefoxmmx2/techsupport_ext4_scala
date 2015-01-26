@@ -8,4 +8,6 @@ import scala.slick.lifted._
 object SystemManage {
   val departments = TableQuery[DepartmentTable]
   val users = TableQuery[UserTable]
+  val dicts = TableQuery[DictTable]
+  val dictItems = TableQuery[DictItemTable]
 }

@@ -5,6 +5,7 @@ import models.slick.systemmanage.SystemManage
 import models.systemmanage.{DepartmentQueryCondition, Department}
 import play.api.db
 import util.Page
+import play.api.Play.current
 import com.typesafe.slick.driver.oracle.OracleDriver.simple._
 /**
  * Created by hooxin on 15-1-26.

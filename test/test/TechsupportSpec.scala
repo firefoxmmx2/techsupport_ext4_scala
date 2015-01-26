@@ -1,6 +1,6 @@
 package test
 
-import models.slick.techsupport.{Techsupport, SupportTicketQueryCondition, SupportTicketP}
+import models.squeryl.techsupport.{Techsupport, SupportTicketP}
 import models.squeryl.CommonTypeMode
 import models.systemmanage.SystemManage
 import models.techsupport._

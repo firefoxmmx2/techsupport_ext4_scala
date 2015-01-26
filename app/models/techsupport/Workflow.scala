@@ -1,6 +1,6 @@
 package models.techsupport
 
-import models.slick.techsupport.{JbpmTask, SupportTicket}
+import models.squeryl.techsupport.{JbpmTask, SupportTicket}
 import org.jbpm.pvm.internal.task.TaskImpl
 
 

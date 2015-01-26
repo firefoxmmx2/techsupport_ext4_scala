@@ -1,7 +1,7 @@
 package dao.techsupport.squeryl
 
 import dao.techsupport._
-import models.slick.techsupport._
+import models.squeryl.techsupport._
 import models.squeryl.CommonTypeMode._
 import models.squeryl.systemmanage.SystemManage
 import Constants.DictItems

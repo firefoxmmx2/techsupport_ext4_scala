@@ -2,7 +2,7 @@ package service.techsupport
 
 import dao.systemmanage.{DepartmentDaoComponent, UserDaoComponent, DictItemDaoComponent}
 import dao.techsupport._
-import models.slick.techsupport._
+import models.squeryl.techsupport._
 import models.squeryl.CommonTypeMode
 import CommonTypeMode._
 import models.systemmanage.{Department, User, DictItemQueryCondition}

@@ -2,7 +2,7 @@ package dao.techsupport
 
 import dao.BaseDao
 import models.TQueryable
-import models.slick.techsupport._
+import models.squeryl.techsupport._
 import models.techsupport._
 import util.Page
 

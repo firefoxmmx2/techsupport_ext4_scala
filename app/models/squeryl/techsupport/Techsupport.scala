@@ -1,4 +1,4 @@
-package models.slick.techsupport
+package models.squeryl.techsupport
 
 import models.TQueryable
 import models.squeryl.CommonTypeMode._

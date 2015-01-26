@@ -267,27 +267,16 @@ case class DictQueryCondition(id: Option[Long] = None,
  */
 case class DictItem(
                      dictcode: String,
-                    
                      displayName: String,
-                    
                      factValue: String,
-                    
                      appendValue: Option[String] = None,
-                    
                      superItemId: Option[Long] = None,
-                    
                      sibOrder: Int = 0,
-                    
                      isleaf: String = "Y",
-                    
                      displayFlag: Int = 0,
-                    
                      isValid: Int = 0,
-                    
                      itemSimplePin: Option[String] = None,
-                    
                      itemAllPin: Option[String] = None,
-                    
                      id: Option[Long] = None)  {
 }
 

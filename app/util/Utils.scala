@@ -4,7 +4,7 @@ import play.api.Logger
 
 import scala.util.{Failure, Success, Try}
 import org.slf4j
-
+import play.api.Play.current
 /**
  * Created by hooxin on 14-5-9.
  */
@@ -34,6 +34,8 @@ object Utils {
   val _md5 = DigestHelper("MD5")
   val _sha1 = DigestHelper("SHA1")
   private val hexDigests: Array[String] = (0 to 9).map(_.toString).toArray ++ Array("a", "b", "c", "d", "e", "f")
+
+  def db(dataSource:String="default") = play.api.db.slick.DB(dataSource)
 }
 
 /**
