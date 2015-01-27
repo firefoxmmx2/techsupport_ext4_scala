@@ -15,7 +15,7 @@ import util.ComponentRegister
  * 登录
  */
 object Login extends Controller with ComponentRegister {
-  private val log = play.api.Logger
+  private val log = play.api.Logger(classOf[Login])
 
   case class Login(useraccount: String, password: String)
 
