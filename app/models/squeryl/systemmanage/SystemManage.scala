@@ -1,11 +1,11 @@
 package models.squeryl.systemmanage
 
 import models.squeryl.CommonTypeMode._
+import models.systemmanage
 import org.joda.time.DateTime
 import org.squeryl.{Schema, KeyedEntity}
 import org.squeryl.annotations._
 import org.squeryl.dsl.CompositeKey2
-
 
 
 /**
@@ -37,8 +37,39 @@ case class Department(
                        id: Option[Long]) extends KeyedEntity[Option[Long]] {
   override def toString = s"id=$id,departcode=$departcode,departname=$departname," +
     s"departlevel=$departlevel,departfullcode=$departfullcode,parentDepartid=$parentDepartid}"
+
+  def convertTo(): systemmanage.Department = Department.convertTo(this)
 }
 
+case object Department {
+  def convertFrom(department: systemmanage.Department): Department = Department(
+    department.departcode,
+    department.departname,
+    department.departlevel,
+    department.departfullcode,
+    department.parentDepartid,
+    department.nodeOrder,
+    department.isLeaf,
+    department.departsimplepin,
+    department.departallpin,
+    department.departbrevitycode,
+    department.id
+  )
+
+  def convertTo(department: Department): systemmanage.Department = systemmanage.Department(
+    department.departcode,
+    department.departname,
+    department.departlevel,
+    department.departfullcode,
+    department.parentDepartid,
+    department.nodeOrder,
+    department.isLeaf,
+    department.departsimplepin,
+    department.departallpin,
+    department.departbrevitycode,
+    department.id
+  )
+}
 
 
 /**
@@ -75,9 +106,43 @@ case class User(
   override def toString: String = s"{id:$id,departid=$departid,useraccount=$useraccount," +
     s"username=$username,password=$password,idnum=$idnum," +
     s"mobilePhone=$mobilePhone,...}"
+
+  def convertTo: systemmanage.User = User.convertTo(this)
 }
 
+case object User {
+  def convertFrom(user: systemmanage.User): User = User(
+    user.departid,
+    user.useraccount,
+    user.username,
+    user.password,
+    user.idnum,
+    user.mobilePhone,
+    user.userorder,
+    user.isValid,
+    user.userType,
+    user.jzlbdm,
+    user.jzlbmc,
+    user.email,
+    user.id
+  )
 
+  def convertTo(user: User): systemmanage.User = systemmanage.User(
+    user.departid,
+    user.useraccount,
+    user.username,
+    user.password,
+    user.idnum,
+    user.mobilePhone,
+    user.userorder,
+    user.isValid,
+    user.userType,
+    user.jzlbdm,
+    user.jzlbmc,
+    user.email,
+    user.id
+  )
+}
 
 /**
  * 角色
@@ -97,9 +162,30 @@ case class Role(
                  departid: Long = 0,
                  @Column("ROLEID")
                  id: Option[Long] = None) extends KeyedEntity[Option[Long]] {
+  def convertTo: systemmanage.Role = Role.convertTo(this)
 }
 
+case object Role {
+  def convertForm(role: systemmanage.Role): Role = Role(
+    role.rolename,
+    role.roleDescription,
+    role.roleType,
+    role.jzlbdm,
+    role.jzlbmc,
+    role.departid,
+    role.id
+  )
 
+  def convertTo(role: Role): systemmanage.Role = systemmanage.Role(
+    role.rolename,
+    role.roleDescription,
+    role.roleType,
+    role.jzlbdm,
+    role.jzlbmc,
+    role.departid,
+    role.id
+  )
+}
 
 /**
  * 系统
@@ -122,10 +208,33 @@ case class System(
                    nodeorder: Int,
                    isleaf: String,
                    fullcode: String) extends KeyedEntity[String] {
+  def convertTo: systemmanage.System = System.convertTo(this)
 
 }
 
+case object System {
+  def convertFrom(system: systemmanage.System): System = System(
+    system.id,
+    system.systemname,
+    system.systemdefine,
+    system.picturepath,
+    system.parentsystemcode,
+    system.nodeorder,
+    system.isleaf,
+    system.fullcode
+  )
 
+  def convertTo(system: System): systemmanage.System = systemmanage.System(
+    system.id,
+    system.systemname,
+    system.systemdefine,
+    system.picturepath,
+    system.parentsystemcode,
+    system.nodeorder,
+    system.isleaf,
+    system.fullcode
+  )
+}
 
 /**
  * 菜单
@@ -150,9 +259,34 @@ case class Menu(
                  nodeorder: Int,
                  isleaf: String,
                  systemcode: String) extends KeyedEntity[String] {
+  def convertTo : systemmanage.Menu = Menu.convertTo(this)
 }
 
+case object Menu {
+  def convertFrom(menu: systemmanage.Menu): Menu = Menu(
+    menu.id,
+    menu.menuname,
+    menu.funcentry,
+    menu.menulevel,
+    menu.parentmenucode,
+    menu.menufullcode,
+    menu.nodeorder,
+    menu.isleaf,
+    menu.systemcode
+  )
 
+  def convertTo(menu: Menu): systemmanage.Menu = systemmanage.Menu(
+    menu.id,
+    menu.menuname,
+    menu.funcentry,
+    menu.menulevel,
+    menu.parentmenucode,
+    menu.menufullcode,
+    menu.nodeorder,
+    menu.isleaf,
+    menu.systemcode
+  )
+}
 
 /**
  * 全局参数
@@ -165,9 +299,21 @@ case class GlobalParam(
                         id: String,
                         globalparname: String,
                         globalparvalue: String) extends KeyedEntity[String] {
+  def convertTo : systemmanage.GlobalParam = GlobalParam.convertTo(this)
 }
+case object GlobalParam {
+  def convertFrom(globalParam: systemmanage.GlobalParam):GlobalParam = GlobalParam(
+    globalParam.id,
+      globalParam.globalparname,
+      globalParam.globalparvalue
+  )
 
-
+  def convertTo(globalParam: GlobalParam): systemmanage.GlobalParam = systemmanage.GlobalParam(
+    globalParam.id,
+    globalParam.globalparname,
+    globalParam.globalparvalue
+  )
+}
 
 /**
  * 字典
@@ -214,7 +360,6 @@ case class Dict(
 }
 
 
-
 /**
  * 字典项
  * @param dictcode
@@ -257,7 +402,6 @@ case class DictItem(
 }
 
 
-
 /**
  * 版本
  * @param versionNum
@@ -287,9 +431,20 @@ case class RoleMenu(
                      roleid: Long
                      ) extends KeyedEntity[CompositeKey2[String, Long]] {
   def id = compositeKey(menucode, roleid)
+
+  def convertTo : systemmanage.RoleMenu = RoleMenu.convertTo(this)
 }
+case object RoleMenu {
+  def convertFrom(roleMenu: systemmanage.RoleMenu):RoleMenu = RoleMenu(
+    roleMenu.menucode,
+    roleMenu.roleid
+  )
 
-
+  def convertTo(roleMenu: RoleMenu):systemmanage.RoleMenu = systemmanage.RoleMenu(
+    roleMenu.menucode,
+    roleMenu.roleid
+  )
+}
 
 /**
  * 用户角色
@@ -298,8 +453,20 @@ case class RoleMenu(
  */
 case class UserRole(roleid: Long, userid: Long) extends KeyedEntity[CompositeKey2[Long, Long]] {
   def id = compositeKey(roleid, userid)
-}
 
+  def convertTo: systemmanage.UserRole = UserRole.convertTo(this)
+}
+case object UserRole {
+  def convertForm(userRole: systemmanage.UserRole) : UserRole  = UserRole(
+     userRole.roleid,
+  userRole.userid
+  )
+
+  def convertTo(userRole: UserRole):systemmanage.UserRole = systemmanage.UserRole(
+    userRole.roleid,
+    userRole.userid
+  )
+}
 
 
 /**
@@ -330,7 +497,6 @@ case class LoginLog(
                      ) extends KeyedEntity[Option[Long]]
 
 
-
 /**
  * 角色功能
  * @param roleId
@@ -344,7 +510,6 @@ case class RoleFunc(
                      ) extends KeyedEntity[CompositeKey2[Long, String]] {
   def id = compositeKey(roleId, funccode)
 }
-
 
 
 /**

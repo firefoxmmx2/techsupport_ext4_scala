@@ -25,7 +25,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
             and (d.departfullcode like params.departfullcode.?)
             and d.departlevel === params.departlevel.?
             and d.parentDepartid === params.parentDepartid.?)
-            select (d)
+            select (d.convertTo())
             orderBy {
             if (sort == "nodeOrder")
               if (dir == "asc")
@@ -134,7 +134,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
      */
     def getById(id: Long): Option[Department] = from(SystemManage.departments)(d =>
       where(d.id === id)
-        select (d)
+        select (models.squeryl.systemmanage.Department.convertTo(d))
     ).singleOption
 
     /**
@@ -159,7 +159,8 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return
      */
-    def update(m: Department): Unit = SystemManage.departments.update(m)
+    def update(m: Department): Unit = SystemManage.departments.update(
+      models.squeryl.systemmanage.Department.convertFrom(m))
 
     /**
      * 获取机构制定上级机构下最大序号
@@ -179,7 +180,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: Department): Department = SystemManage.departments.insert(m)
+    def insert(m: Department): Department = SystemManage.departments.insert(models.squeryl.systemmanage.Department.convertFrom(m)).convertTo()
   }
 
 }
@@ -199,7 +200,7 @@ trait UserDaoComponentImpl extends UserDaoComponent {
             and u.idnum === params.idnum.?
             and u.userorder === params.userorder.?
             and u.password === params.password.?)
-          select (u)
+          select (u.convertTo)
           orderBy {
           if (sort == "id")
             if (dir == "asc")
@@ -308,7 +309,11 @@ trait UserDaoComponentImpl extends UserDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): Option[User] = SystemManage.users.where(u => u.id === id).singleOption
+    def getById(id: Long): Option[User] = from(SystemManage.users)(
+      u =>
+        where(u.id === id)
+          select (u.convertTo)
+    ).singleOption
 
     /**
      * 通过主键删除
@@ -332,7 +337,7 @@ trait UserDaoComponentImpl extends UserDaoComponent {
 
      * @return
      */
-    def update(m: User): Unit = SystemManage.users.update(m)
+    def update(m: User): Unit = SystemManage.users.update(models.squeryl.systemmanage.User.convertFrom(m))
 
     /**
      * 插入
@@ -340,7 +345,7 @@ trait UserDaoComponentImpl extends UserDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: User): User = SystemManage.users.insert(m)
+    def insert(m: User): User = SystemManage.users.insert(models.squeryl.systemmanage.User.convertFrom(m)).convertTo
 
     /**
      * 获取指定机构上最大的用户序列
@@ -358,7 +363,7 @@ trait UserDaoComponentImpl extends UserDaoComponent {
 
 
 trait SystemDaoComponentImpl extends SystemDaoComponent {
-  private val log = Logger.logger
+  private val log = Logger(classOf[SystemDaoComponentImpl])
 
   class SystemDaoImpl extends SystemDao {
 
@@ -390,7 +395,7 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
               and rm.menucode === m.id
               and ur.userid === userid
           )
-            select (s)
+            select (s.convertTo)
       ).distinct.toList
     }
 
@@ -400,7 +405,6 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
         case Some(x) => Some("%" + x + "%")
         case _ => None
       }
-      log.debug("=" * 13 + "systemnameLikeOpt = " + systemnameLikeOpt + "=" * 13)
       val systemDeineOpt = params.systemdefine match {
         case Some(x) => Some("%" + x + "%")
         case _ => None
@@ -414,7 +418,7 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
               and (s.systemname like systemnameLikeOpt.?)
               and (s.fullcode like params.fullcode.?)
               and (s.systemdefine like systemDeineOpt.?))
-            select (s)
+            select (s.convertTo)
             orderBy {
             if (sort == "id")
               if (dir == "asc")
@@ -501,7 +505,11 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
 
      * @return 实体
      */
-    def getById(id: String): Option[systemmanage.System] = SystemManage.systems.where(s => s.id === id).singleOption
+    def getById(id: String): Option[systemmanage.System] = from(SystemManage.systems)(
+      s =>
+        where(s.id === id)
+          select (s.convertTo)
+    ).singleOption
 
     /**
      * 通过主键删除
@@ -525,7 +533,7 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
 
      * @return
      */
-    def update(m: systemmanage.System): Unit = SystemManage.systems.update(m)
+    def update(m: systemmanage.System): Unit = SystemManage.systems.update(models.squeryl.systemmanage.System.convertFrom(m))
 
     /**
      * 插入
@@ -533,7 +541,7 @@ trait SystemDaoComponentImpl extends SystemDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: systemmanage.System): systemmanage.System = SystemManage.systems.insert(m)
+    def insert(m: systemmanage.System): systemmanage.System = SystemManage.systems.insert(models.squeryl.systemmanage.System.convertFrom(m)).convertTo
   }
 
 }
@@ -558,7 +566,7 @@ trait RoleDaoComponentImpl extends RoleDaoComponent {
               and (r.rolename like rolenameLike.?)
               and (r.roleType === params.roleType.?)
               and (r.roleDescription like roleDescriptionLike.?))
-            select (r)
+            select (r.convertTo)
             orderBy {
             if (sort == "id")
               if (dir == "asc")
@@ -624,7 +632,11 @@ trait RoleDaoComponentImpl extends RoleDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): Option[Role] = SystemManage.roles.where(r => r.id === id).singleOption
+    def getById(id: Long): Option[Role] = from(SystemManage.roles)(
+      r =>
+        where(r.id === id)
+          select (r.convertTo)
+    ).singleOption
 
     /**
      * 通过主键删除
@@ -648,7 +660,7 @@ trait RoleDaoComponentImpl extends RoleDaoComponent {
 
      * @return
      */
-    def update(m: Role): Unit = SystemManage.roles.update(m)
+    def update(m: Role): Unit = SystemManage.roles.update(models.squeryl.systemmanage.Role.convertForm(m))
 
     /**
      * 插入
@@ -656,7 +668,7 @@ trait RoleDaoComponentImpl extends RoleDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: Role): Role = SystemManage.roles.insert(m)
+    def insert(m: Role): Role = SystemManage.roles.insert(models.squeryl.systemmanage.Role.convertForm(m)).convertTo
 
     /**
      * 角色名称重复验证
@@ -704,7 +716,7 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
             and ur.userid === userid
             and m.parentmenucode === parentmenucode
             and m.systemcode === systemcode.?)
-            select (m)
+            select (m.convertTo)
             orderBy (m.nodeorder asc)
       ).toList
     }
@@ -721,7 +733,7 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
             and m.systemcode === params.systemcode.?
             and m.isleaf === params.isleaf.?
             and (m.funcentry like params.funcentry.?))
-          select (m)
+          select (m.convertTo)
           orderBy {
           if (sort == "id")
             if (dir == "asc")
@@ -807,7 +819,10 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
 
      * @return 实体
      */
-    def getById(id: String): Option[Menu] = SystemManage.menus.where(m => m.id === id).singleOption
+    def getById(id: String): Option[Menu] = from(SystemManage.menus)(m =>
+      where(m.id === id)
+        select (m.convertTo)
+    ).singleOption
 
     /**
      * 通过主键删除
@@ -831,7 +846,7 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
 
      * @return
      */
-    def update(m: Menu): Unit = SystemManage.menus.update(m)
+    def update(m: Menu): Unit = SystemManage.menus.update(models.squeryl.systemmanage.Menu.convertFrom(m))
 
     /**
      * 插入
@@ -839,7 +854,7 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: Menu): Menu = SystemManage.menus.insert(m)
+    def insert(m: Menu): Menu = SystemManage.menus.insert(models.squeryl.systemmanage.Menu.convertFrom(m)).convertTo
 
     /**
      *
@@ -850,7 +865,7 @@ trait MenuDaoComponentImpl extends MenuDaoComponent {
       join(SystemManage.menus, SystemManage.roleMenus)(
         (m, rm) =>
           where(rm.roleid === roleId)
-            select (m)
+            select (m.convertTo)
             on (m.id === rm.menucode)
       ).toList
   }
@@ -867,7 +882,7 @@ trait GlobalParamDaoComponentImpl extends GlobalParamDaoComponent {
             g.id === params.id.?
               and (g.globalparname like params.globalparname.?)
               and g.globalparvalue === params.globalparvalue.?)
-            select (g)
+            select (g.convertTo)
             orderBy {
             if (sort == "id")
               if (dir == "asc")
@@ -927,7 +942,10 @@ trait GlobalParamDaoComponentImpl extends GlobalParamDaoComponent {
 
      * @return 实体
      */
-    def getById(id: String): Option[GlobalParam]  = SystemManage.globalParams.where(g => g.id === id).singleOption
+    def getById(id: String): Option[GlobalParam] = from(SystemManage.globalParams)(g =>
+      where(g.id === id)
+        select (g.convertTo)
+    ).singleOption
 
     /**
      * 通过主键删除
@@ -951,7 +969,7 @@ trait GlobalParamDaoComponentImpl extends GlobalParamDaoComponent {
 
      * @return
      */
-    def update(m: GlobalParam): Unit = SystemManage.globalParams.update(m)
+    def update(m: GlobalParam): Unit = SystemManage.globalParams.update(models.squeryl.systemmanage.GlobalParam.convertFrom(m))
 
     /**
      * 插入
@@ -959,7 +977,7 @@ trait GlobalParamDaoComponentImpl extends GlobalParamDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: GlobalParam): GlobalParam = SystemManage.globalParams.insert(m)
+    def insert(m: GlobalParam): GlobalParam = SystemManage.globalParams.insert(models.squeryl.systemmanage.GlobalParam.convertFrom(m)).convertTo
 
     /**
      * 全局参数代码重复性验证
@@ -986,7 +1004,7 @@ trait UserRoleDaoComponentImpl extends UserRoleDaoComponent {
             ur.userid.? === params.userid
               and ur.roleid.? === params.roleid
           )
-            select (ur)
+            select (ur.convertTo)
             orderBy {
             if (sort == "userid")
               if (dir == "asc")
@@ -1038,9 +1056,10 @@ trait UserRoleDaoComponentImpl extends UserRoleDaoComponent {
 
      * @return 实体
      */
-    def getById(id: (Long, Long)): Option[UserRole] = SystemManage.userRoles.where {
-      ur => (ur.roleid === id._1) and (ur.userid === id._2)
-    }.singleOption
+    def getById(id: (Long, Long)): Option[UserRole] = from(SystemManage.userRoles)(ur =>
+      where {
+        (ur.roleid === id._1) and (ur.userid === id._2)
+      } select (ur.convertTo)).singleOption
 
     /**
      * 通过主键删除
@@ -1067,7 +1086,7 @@ trait UserRoleDaoComponentImpl extends UserRoleDaoComponent {
 
      * @return
      */
-    def update(m: UserRole): Unit = SystemManage.userRoles.update(m)
+    def update(m: UserRole): Unit = SystemManage.userRoles.update(models.squeryl.systemmanage.UserRole.convertForm(m))
 
     /**
      * 插入
@@ -1075,7 +1094,7 @@ trait UserRoleDaoComponentImpl extends UserRoleDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: UserRole): UserRole = SystemManage.userRoles.insert(m)
+    def insert(m: UserRole): UserRole = SystemManage.userRoles.insert(models.squeryl.systemmanage.UserRole.convertForm(m)).convertTo
   }
 
 }
@@ -1090,7 +1109,7 @@ trait RoleMenuDaoComponentImpl extends RoleMenuDaoComponent {
             rm.menucode.? === params.menucode
               and rm.roleid.? === params.roleid
           )
-            select (rm)
+            select (rm.convertTo)
             orderBy {
             if (sort == "roleid")
               if (dir == "asc")
@@ -1140,10 +1159,10 @@ trait RoleMenuDaoComponentImpl extends RoleMenuDaoComponent {
 
      * @return 实体
      */
-    def getById(id: (String, Long)): Option[RoleMenu] = SystemManage.roleMenus.where {
-      rm =>
-        (rm.menucode === id._1) and (rm.roleid === id._2)
-    }.singleOption
+    def getById(id: (String, Long)): Option[RoleMenu] = from(SystemManage.roleMenus)(rm =>
+      where(rm.menucode === id._1 and rm.roleid === id._2)
+      select(rm.convertTo)
+    ).singleOption
 
     /**
      * 通过主键删除
@@ -1170,7 +1189,7 @@ trait RoleMenuDaoComponentImpl extends RoleMenuDaoComponent {
 
      * @return
      */
-    def update(m: RoleMenu): Unit = SystemManage.roleMenus.update(m)
+    def update(m: RoleMenu): Unit = SystemManage.roleMenus.update(models.squeryl.systemmanage.RoleMenu.convertFrom(m))
 
     /**
      * 插入
@@ -1178,7 +1197,7 @@ trait RoleMenuDaoComponentImpl extends RoleMenuDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: RoleMenu): RoleMenu = SystemManage.roleMenus.insert(m)
+    def insert(m: RoleMenu): RoleMenu = SystemManage.roleMenus.insert(models.squeryl.systemmanage.RoleMenu.convertFrom(m)).convertTo
   }
 
 }
