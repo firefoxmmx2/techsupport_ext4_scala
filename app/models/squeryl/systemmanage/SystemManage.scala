@@ -259,7 +259,7 @@ case class Menu(
                  nodeorder: Int,
                  isleaf: String,
                  systemcode: String) extends KeyedEntity[String] {
-  def convertTo : systemmanage.Menu = Menu.convertTo(this)
+  def convertTo: systemmanage.Menu = Menu.convertTo(this)
 }
 
 case object Menu {
@@ -299,13 +299,14 @@ case class GlobalParam(
                         id: String,
                         globalparname: String,
                         globalparvalue: String) extends KeyedEntity[String] {
-  def convertTo : systemmanage.GlobalParam = GlobalParam.convertTo(this)
+  def convertTo: systemmanage.GlobalParam = GlobalParam.convertTo(this)
 }
+
 case object GlobalParam {
-  def convertFrom(globalParam: systemmanage.GlobalParam):GlobalParam = GlobalParam(
+  def convertFrom(globalParam: systemmanage.GlobalParam): GlobalParam = GlobalParam(
     globalParam.id,
-      globalParam.globalparname,
-      globalParam.globalparvalue
+    globalParam.globalparname,
+    globalParam.globalparvalue
   )
 
   def convertTo(globalParam: GlobalParam): systemmanage.GlobalParam = systemmanage.GlobalParam(
@@ -357,8 +358,42 @@ case class Dict(
                  createTime: Option[DateTime] = None,
                  @Column("DICT_ID")
                  id: Option[Long] = None) extends KeyedEntity[Option[Long]] {
+  def convertTo: systemmanage.Dict = Dict.convertTo(this)
 }
 
+case object Dict {
+  def convertFrom(dict: systemmanage.Dict): Dict = Dict(
+    dict.dictcode,
+    dict.dictname,
+    dict.superDictcode,
+    dict.sibOrder,
+    dict.isleaf,
+    dict.maintFlag,
+    dict.dictType,
+    dict.dictSimplePin,
+    dict.dictAllPin,
+    dict.dictItemTableName,
+    dict.dictVersion,
+    dict.createTime,
+    dict.id
+  )
+
+  def convertTo(dict: Dict): systemmanage.Dict = systemmanage.Dict(
+    dict.dictcode,
+    dict.dictname,
+    dict.superDictcode,
+    dict.sibOrder,
+    dict.isleaf,
+    dict.maintFlag,
+    dict.dictType,
+    dict.dictSimplePin,
+    dict.dictAllPin,
+    dict.dictItemTableName,
+    dict.dictVersion,
+    dict.createTime,
+    dict.id
+  )
+}
 
 /**
  * 字典项
@@ -399,8 +434,40 @@ case class DictItem(
                      itemAllPin: Option[String] = None,
                      @Column("ITEM_ID")
                      id: Option[Long] = None) extends KeyedEntity[Option[Long]] {
+  def convertTo: systemmanage.DictItem = DictItem.convertTo(this)
 }
 
+case object DictItem {
+  def convertFrom(dictItem: systemmanage.DictItem): DictItem = DictItem(
+    dictItem.dictcode,
+    dictItem.displayName,
+    dictItem.factValue,
+    dictItem.appendValue,
+    dictItem.superItemId,
+    dictItem.sibOrder,
+    dictItem.isleaf,
+    dictItem.displayFlag,
+    dictItem.isValid,
+    dictItem.itemSimplePin,
+    dictItem.itemAllPin,
+    dictItem.id
+  )
+
+  def convertTo(dictItem: DictItem): systemmanage.DictItem = systemmanage.DictItem(
+    dictItem.dictcode,
+    dictItem.displayName,
+    dictItem.factValue,
+    dictItem.appendValue,
+    dictItem.superItemId,
+    dictItem.sibOrder,
+    dictItem.isleaf,
+    dictItem.displayFlag,
+    dictItem.isValid,
+    dictItem.itemSimplePin,
+    dictItem.itemAllPin,
+    dictItem.id
+  )
+}
 
 /**
  * 版本
@@ -432,15 +499,16 @@ case class RoleMenu(
                      ) extends KeyedEntity[CompositeKey2[String, Long]] {
   def id = compositeKey(menucode, roleid)
 
-  def convertTo : systemmanage.RoleMenu = RoleMenu.convertTo(this)
+  def convertTo: systemmanage.RoleMenu = RoleMenu.convertTo(this)
 }
+
 case object RoleMenu {
-  def convertFrom(roleMenu: systemmanage.RoleMenu):RoleMenu = RoleMenu(
+  def convertFrom(roleMenu: systemmanage.RoleMenu): RoleMenu = RoleMenu(
     roleMenu.menucode,
     roleMenu.roleid
   )
 
-  def convertTo(roleMenu: RoleMenu):systemmanage.RoleMenu = systemmanage.RoleMenu(
+  def convertTo(roleMenu: RoleMenu): systemmanage.RoleMenu = systemmanage.RoleMenu(
     roleMenu.menucode,
     roleMenu.roleid
   )
@@ -456,13 +524,14 @@ case class UserRole(roleid: Long, userid: Long) extends KeyedEntity[CompositeKey
 
   def convertTo: systemmanage.UserRole = UserRole.convertTo(this)
 }
+
 case object UserRole {
-  def convertForm(userRole: systemmanage.UserRole) : UserRole  = UserRole(
-     userRole.roleid,
-  userRole.userid
+  def convertForm(userRole: systemmanage.UserRole): UserRole = UserRole(
+    userRole.roleid,
+    userRole.userid
   )
 
-  def convertTo(userRole: UserRole):systemmanage.UserRole = systemmanage.UserRole(
+  def convertTo(userRole: UserRole): systemmanage.UserRole = systemmanage.UserRole(
     userRole.roleid,
     userRole.userid
   )
@@ -494,8 +563,37 @@ case class LoginLog(
                      loginmac: Option[String] = None,
                      logintiime: DateTime,
                      quittime: Option[DateTime] = None
-                     ) extends KeyedEntity[Option[Long]]
+                     ) extends KeyedEntity[Option[Long]] {
+  def convertTo: systemmanage.LoginLog = LoginLog.convertTo(this)
+}
 
+case object LoginLog {
+  def convertTo(loginLog: LoginLog): systemmanage.LoginLog = systemmanage.LoginLog(
+    loginLog.id,
+    loginLog.loginuserid,
+    loginLog.useraccount,
+    loginLog.username,
+    loginLog.loginunitcode,
+    loginLog.loginunitname,
+    loginLog.loginip,
+    loginLog.loginmac,
+    loginLog.logintiime,
+    loginLog.quittime
+  )
+
+  def convertFrom(loginLog: systemmanage.LoginLog): LoginLog = LoginLog(
+    loginLog.id,
+    loginLog.loginuserid,
+    loginLog.useraccount,
+    loginLog.username,
+    loginLog.loginunitcode,
+    loginLog.loginunitname,
+    loginLog.loginip,
+    loginLog.loginmac,
+    loginLog.logintiime,
+    loginLog.quittime
+  )
+}
 
 /**
  * 角色功能
@@ -509,8 +607,23 @@ case class RoleFunc(
                      param: Option[String] = None
                      ) extends KeyedEntity[CompositeKey2[Long, String]] {
   def id = compositeKey(roleId, funccode)
+
+  def convertTo:systemmanage.RoleFunc = RoleFunc.convertTo(this)
 }
 
+case object RoleFunc {
+  def convertFrom(roleFunc: systemmanage.RoleFunc): RoleFunc = RoleFunc(
+    roleFunc.roleId,
+    roleFunc.funccode,
+    roleFunc.param
+  )
+
+  def convertTo(roleFunc: RoleFunc): systemmanage.RoleFunc = systemmanage.RoleFunc(
+    roleFunc.roleId,
+    roleFunc.funccode,
+    roleFunc.param
+  )
+}
 
 /**
  * 功能
@@ -527,9 +640,27 @@ case class Function(
                      funcname: Option[String] = None,
                      funcdefine: Option[String] = None,
                      functype: Long = 0
-                     ) extends KeyedEntity[Option[String]]
+                     ) extends KeyedEntity[Option[String]] {
+  def convertTo:systemmanage.Function = Function.convertTo(this)
+}
 
+case object Function {
+  def convertFrom(function: systemmanage.Function):Function = Function(
+    function.id,
+      function.systemcode,
+      function.funcname,
+      function.funcdefine,
+      function.functype
+  )
 
+  def convertTo(function: Function):systemmanage.Function = systemmanage.Function(
+    function.id,
+    function.systemcode,
+    function.funcname,
+    function.funcdefine,
+    function.functype
+  )
+}
 object SystemManage extends Schema {
   val departments = table[Department]("t_department")
   on(departments)(d => declare(d.id is(autoIncremented("departid"), primaryKey)

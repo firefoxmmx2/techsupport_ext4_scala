@@ -1161,7 +1161,7 @@ trait RoleMenuDaoComponentImpl extends RoleMenuDaoComponent {
      */
     def getById(id: (String, Long)): Option[RoleMenu] = from(SystemManage.roleMenus)(rm =>
       where(rm.menucode === id._1 and rm.roleid === id._2)
-      select(rm.convertTo)
+        select (rm.convertTo)
     ).singleOption
 
     /**
@@ -1225,7 +1225,7 @@ trait DictItemDaoComponentImpl extends DictItemDaoComponent {
               or di.displayName === params.queryfield.?
               or di.dictcode === params.queryfield.?))
           )
-            select (di)
+            select (di.convertTo)
             orderBy {
             if (sort == "id")
               if (dir == "asc")
@@ -1270,7 +1270,7 @@ trait DictItemDaoComponentImpl extends DictItemDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: DictItem): DictItem = SystemManage.dictItems.insert(m)
+    def insert(m: DictItem): DictItem = SystemManage.dictItems.insert(models.squeryl.systemmanage.DictItem.convertFrom(m)).convertTo
 
     /**
      * 分页总数查询
@@ -1286,7 +1286,7 @@ trait DictItemDaoComponentImpl extends DictItemDaoComponent {
 
      * @return
      */
-    def update(m: DictItem): Unit = SystemManage.dictItems.update(m)
+    def update(m: DictItem): Unit = SystemManage.dictItems.update(models.squeryl.systemmanage.DictItem.convertFrom(m))
 
     /**
      * 删除
@@ -1339,8 +1339,12 @@ trait DictItemDaoComponentImpl extends DictItemDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): Option[DictItem] = SystemManage.dictItems.where(di =>
-      di.id === id).singleOption
+    def getById(id: Long): Option[DictItem] =
+      from(SystemManage.dictItems)(
+        di =>
+          where(di.id === id)
+            select (di.convertTo)
+      ).singleOption
 
     /**
      * 吃否有子字典项
@@ -1404,7 +1408,7 @@ trait DictDaoComponentImpl extends DictDaoComponent {
               or d.dictSimplePin === params.queryfield.?
               )
           )
-            select (d)
+            select (d.convertTo)
             orderBy {
             if (sort == "id")
               if (dir == "asc")
@@ -1443,7 +1447,7 @@ trait DictDaoComponentImpl extends DictDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: Dict): Dict = SystemManage.dicts.insert(m)
+    def insert(m: Dict): Dict = SystemManage.dicts.insert(models.squeryl.systemmanage.Dict.convertFrom(m)).convertTo
 
     /**
      * 分页总数查询
@@ -1459,7 +1463,7 @@ trait DictDaoComponentImpl extends DictDaoComponent {
 
      * @return
      */
-    def update(m: Dict): Unit = SystemManage.dicts.update(m)
+    def update(m: Dict): Unit = SystemManage.dicts.update(models.squeryl.systemmanage.Dict.convertFrom(m))
 
     /**
      * 删除
@@ -1509,7 +1513,11 @@ trait DictDaoComponentImpl extends DictDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): Option[Dict] = SystemManage.dicts.where(d => d.id === id).singleOption
+    def getById(id: Long): Option[Dict] = from(SystemManage.dicts)(
+      d =>
+        where(d.id === id)
+          select (d.convertTo)
+    ).singleOption
 
     /**
      * 验证字典代码是否重复
@@ -1565,7 +1573,7 @@ trait LoginLogDaoComponentImpl extends LoginLogDaoComponent {
               and l.loginunitcode === params.loginunitcode.?
               and (l.loginunitname like loginUnitNameLike.?)
           )
-            select (l)
+            select (l.convertTo)
             orderBy {
             if (sort == "id")
               if (dir == "asc")
@@ -1628,7 +1636,7 @@ trait LoginLogDaoComponentImpl extends LoginLogDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: LoginLog): LoginLog = SystemManage.loginLogs.insert(m)
+    def insert(m: LoginLog): LoginLog = SystemManage.loginLogs.insert(models.squeryl.systemmanage.LoginLog.convertFrom(m)).convertTo
 
     /**
      * 分页总数查询
@@ -1644,7 +1652,7 @@ trait LoginLogDaoComponentImpl extends LoginLogDaoComponent {
 
      * @return
      */
-    def update(m: LoginLog): Unit = SystemManage.loginLogs.update(m)
+    def update(m: LoginLog): Unit = SystemManage.loginLogs.update(models.squeryl.systemmanage.LoginLog.convertFrom(m))
 
     /**
      * 删除
@@ -1695,7 +1703,11 @@ trait LoginLogDaoComponentImpl extends LoginLogDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): Option[LoginLog] = SystemManage.loginLogs.where(l => l.id === id).singleOption
+    def getById(id: Long): Option[LoginLog] = from(SystemManage.loginLogs)(
+      ll =>
+        where(ll.id === id)
+          select (ll.convertTo)
+    ).singleOption
   }
 
 }
@@ -1710,7 +1722,7 @@ trait RoleFuncDaoComponentImpl extends RoleFuncDaoComponent {
             rf.roleId === params.roleId.?
               and rf.funccode === params.funccode.?
           )
-            select (rf)
+            select (rf.convertTo)
             orderBy {
             if (sort == "roleId")
               if (dir == "asc")
@@ -1734,7 +1746,7 @@ trait RoleFuncDaoComponentImpl extends RoleFuncDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: RoleFunc): RoleFunc = SystemManage.roleFuncs.insert(m)
+    def insert(m: RoleFunc): RoleFunc = SystemManage.roleFuncs.insert(models.squeryl.systemmanage.RoleFunc.convertFrom(m)).convertTo
 
     /**
      * 分页总数查询
@@ -1750,7 +1762,7 @@ trait RoleFuncDaoComponentImpl extends RoleFuncDaoComponent {
 
      * @return
      */
-    def update(m: RoleFunc): Unit = SystemManage.roleFuncs.update(m)
+    def update(m: RoleFunc): Unit = SystemManage.roleFuncs.update(models.squeryl.systemmanage.RoleFunc.convertFrom(m))
 
     /**
      * 删除
@@ -1800,7 +1812,11 @@ trait RoleFuncDaoComponentImpl extends RoleFuncDaoComponent {
 
      * @return 实体
      */
-    def getById(id: (Long, String)): Option[RoleFunc] = SystemManage.roleFuncs.where(rf => rf.id === id).singleOption
+    def getById(id: (Long, String)): Option[RoleFunc] = from(SystemManage.roleFuncs)(
+      rf =>
+        where(rf.id === id)
+          select (rf.convertTo)
+    ).singleOption
   }
 
 }
@@ -1824,7 +1840,7 @@ trait FunctionDaoComponentImpl extends FunctionDaoComponent {
               and f.funcdefine === params.funcdefine.?
               and f.functype === params.functype.?
           )
-            select (f)
+            select (f.convertTo)
             orderBy {
             if (sort == "id") {
               if (dir == "asc")
@@ -1868,7 +1884,7 @@ trait FunctionDaoComponentImpl extends FunctionDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: Function): Function = SystemManage.functions.insert(m)
+    def insert(m: Function): Function = SystemManage.functions.insert(models.squeryl.systemmanage.Function.convertFrom(m)).convertTo
 
     /**
      * 分页总数查询
@@ -1884,7 +1900,7 @@ trait FunctionDaoComponentImpl extends FunctionDaoComponent {
 
      * @return
      */
-    def update(m: Function): Unit = SystemManage.functions.update(m)
+    def update(m: Function): Unit = SystemManage.functions.update(models.squeryl.systemmanage.Function.convertFrom(m))
 
     /**
      * 删除
@@ -1935,7 +1951,11 @@ trait FunctionDaoComponentImpl extends FunctionDaoComponent {
 
      * @return 实体
      */
-    def getById(id: String): Option[Function] = SystemManage.functions.where(f => f.id === id).singleOption
+    def getById(id: String): Option[Function] = from(SystemManage.functions)(
+      f =>
+        where(f.id === id)
+          select (f.convertTo)
+    ).singleOption
 
     /**
      * 验证ID是否重复
@@ -1955,7 +1975,7 @@ trait FunctionDaoComponentImpl extends FunctionDaoComponent {
       join(SystemManage.functions, SystemManage.roleFuncs)(
         (f, rf) =>
           where(rf.roleId === roleId)
-            select (f)
+            select (f.convertTo)
             on (f.id === rf.funccode)
       ).toList
     }

@@ -5,7 +5,7 @@ import org.joda.time.DateTime
 
 import scala.slick.lifted._
 import com.typesafe.slick.driver.oracle.OracleDriver.simple._
-
+import models.slick.common.OracleJodaSupport._
 /**
  * Created by hooxin on 15-1-26.
  */
@@ -21,7 +21,7 @@ class DictTable(tag:Tag) extends Table[Dict](tag,"d"){
   def dictAllPin = column[String]("dictAllPin")
   def dictItemTableName = column[String]("dictItemTableName")
   def dictVersion = column[String]("dictVersion")
-  def createTime = column[Option[DateTime]]("createTime")
+  def createTime = column[DateTime]("createTime")
   def id = column[Long]("dictid",O.PrimaryKey)
 
   def * = (
@@ -36,7 +36,7 @@ class DictTable(tag:Tag) extends Table[Dict](tag,"d"){
       dictAllPin.?,
       dictItemTableName.?,
       dictVersion.?,
-      createTime,
+      createTime.?,
       id.?
     ) <> (Dict.tupled,Dict.unapply)
 }
