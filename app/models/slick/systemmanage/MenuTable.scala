@@ -6,7 +6,7 @@ import models.systemmanage.Menu
 /**
  * Created by hooxin on 15-2-11.
  */
-class MenuTable(tag:Tag) extends Table[Menu](tag,"m"){
+class MenuTable(tag:Tag) extends Table[Menu](tag,"t_menu"){
   def id = column[String]("menucode",O.PrimaryKey)
   def menuname = column[String]("menuname")
   def funcentry = column[String]("funcentry")

@@ -7,7 +7,7 @@ import scala.slick.lifted._
 /**
  * Created by hooxin on 15-1-26.
  */
-class DepartmentTable(tag: Tag) extends Table[Department](tag, "dpt") {
+class DepartmentTable(tag: Tag) extends Table[Department](tag, "t_department") {
   def departcode = column[String]("departcode")
   def departname = column[String]("departname")
   def departlevel = column[Int]("departlevel")

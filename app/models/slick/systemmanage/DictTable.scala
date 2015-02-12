@@ -9,7 +9,7 @@ import models.slick.common.OracleJodaSupport._
 /**
  * Created by hooxin on 15-1-26.
  */
-class DictTable(tag:Tag) extends Table[Dict](tag,"d"){
+class DictTable(tag:Tag) extends Table[Dict](tag,"t_dict"){
   def dictcode = column[String]("dictcode")
   def dictname = column[String]("dictname")
   def superDictcode = column[String]("superDictcode")

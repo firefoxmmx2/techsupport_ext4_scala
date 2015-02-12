@@ -7,7 +7,7 @@ import scala.slick.lifted._
 /**
  * Created by hooxin on 15-2-11.
  */
-class SystemTable(tag:Tag) extends Table[System](tag,"s"){
+class SystemTable(tag:Tag) extends Table[System](tag,"t_system"){
   def id = column[String]("id")
   def systemname = column[String]("systemname")
   def systemdefine = column[String]("systemdefine")

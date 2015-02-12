@@ -10,4 +10,11 @@ object SystemManage {
   val users = TableQuery[UserTable]
   val dicts = TableQuery[DictTable]
   val dictItems = TableQuery[DictItemTable]
+  val functions = TableQuery[FunctionTable]
+  val roles  = TableQuery[RoleTable]
+  val roleFuncs = TableQuery[RoleFuncTable]
+  val menus = TableQuery[MenuTable]
+  val roleMenus = TableQuery[RoleMenuTable]
+  val globalParams = TableQuery[GlobalParamTable]
+  val userRoles = TableQuery[UserRoleTable]
 }
