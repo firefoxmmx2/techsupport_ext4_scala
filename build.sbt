@@ -26,4 +26,11 @@ libraryDependencies ++= Seq(
   // "group" % "artifact" % "version"
 )
 
+//unmanagedClasspath in run +=  file("/home/hooxin/Pro/jrebel_6.0.3-agent-crack")
+
+seq(jrebelSettings: _*)
+
+jrebel.enabled := true
+
+
 lazy val `techsupport_ext4_scala` = (project in file(".")).enablePlugins(PlayScala, SbtWeb)
