@@ -9,4 +9,4 @@ logLevel := Level.Warn
 
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.3.6")
 
-addSbtPlugin("fi.gekkio.sbtplugins" % "sbt-jrebel-plugin" % "0.10.0")
+//addSbtPlugin("fi.gekkio.sbtplugins" % "sbt-jrebel-plugin" % "0.10.0")
