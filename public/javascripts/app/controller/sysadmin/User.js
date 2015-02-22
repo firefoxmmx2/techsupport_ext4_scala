@@ -89,9 +89,9 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                                     var field = form.down('textfield[name=useraccount]')
                                     field.originalValue = record.data.useraccount;
                                     record.data.userType = Ext.isString(record.data.userType) ? record.data.userType.split(',') : record.data.userType;
-                                    form.loadRecord(record);
                                 }
                                 else {
+
                                     Ext.Msg.alert('提示', res.message);
                                 }
                             },
@@ -126,7 +126,7 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                                 cg.add({boxLabel: r.raw.displayName, name: 'userType', inputValue: r.raw.factValue,
                                     uncheckedValue: '0'});
                             });
-                            if (!record) //当窗口不存在更新记录的时候,再进行复选框内容初始化
+                            if (record) //当窗口不存在更新记录的时候,再进行复选框内容初始化
                                 cg.setValue({userType: record.data.userType});
                         }
                     });

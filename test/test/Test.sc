@@ -1,3 +1,4 @@
+import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 import scala.util.parsing.combinator.RegexParsers
 
@@ -72,3 +73,169 @@ fox2.hashCode()
 set.size
 map.size
 
+trait InstantaneousTime extends Equals{
+  val repr:Int
+
+  def canEqual(that: Any): Boolean = that.isInstanceOf[InstantaneousTime]
+
+  override def equals(other: scala.Any): Boolean = other match {
+    case that:InstantaneousTime =>
+      if(this eq that)
+        true
+      else{
+        (that.canEqual(this)) &&
+        (that.## == this.##) &&
+          (repr == that.repr)
+      }
+    case _ => false
+  }
+
+  override def hashCode(): Int = repr.##
+}
+
+trait Event extends InstantaneousTime {
+  val name:String
+
+  override def canEqual(that: Any): Boolean = that.isInstanceOf[Event]
+
+  override def equals(other: Any): Boolean = other match {
+    case that:Event =>
+      if(this eq that)
+        true
+      else{
+        (that.canEqual(this)) &&
+        (repr == that.repr) &&
+          (name == that.name)
+      }
+    case _ => false
+  }
+
+}
+
+val x=new InstantaneousTime {
+  val repr: Int = 2
+}
+
+val y=new Event {
+  val name: String = "TestEvent"
+  val repr: Int = 2
+}
+val z=new Event {
+  val name: String = "TestEvent"
+  val repr: Int = 2
+}
+x == y
+y == z
+
+object Kaaaa extends App {
+  println("111111111111111111111111111111111")
+}
+
+Kaaaa.main(Array())
+trait Property {
+  val name:String
+
+  override val toString = "Property("+name+")"
+}
+
+val xx=new Property {
+  override val name: String = "HI"
+}
+
+val yy=new { val name="HI2"} with Property
+trait SimulationMessage {
+  def message :Unit
+}
+trait Simulation {
+}
+trait SimulationEntity {
+  def handleMessage(msg:SimulationMessage,ctx:Simulation):Unit
+}
+//trait NetworkEntity extends MixableParent{
+//  def getMacAddress(ip:String):String
+//  def hasIpAddress(addr:String):Boolean
+//
+//  def handleMessage(msg:SimulationMessage,ctx:Simulation):Unit = msg match {
+////    case PingRequest(ip,sender) if hasIpAddress(ip) =>
+////      ctx respond (sender,PingResponse(getMacAddress(ip)))
+//    case _ =>
+////      super.handleMessage(msg,ctx)
+//  }
+//}
+
+trait MixableParent extends SimulationEntity {
+  def handleMessage(msg: SimulationMessage, ctx: Simulation): Unit = {}
+}
+
+class Router extends SimulationEntity {
+  def handleMessage(msg: SimulationMessage, ctx: Simulation): Unit = msg match {
+    case x => println("YAY! "+x)
+    case _ =>
+  }
+}
+
+trait Logger {
+  def log(category:String,msg:String):Unit = {
+    println(msg)
+  }
+}
+
+//trait DataAccess {
+//  val logger=new Logger {}
+//  def query[A](in:String):A={
+//    logger.log("QUERY",in)
+//  }
+//}
+
+trait RemoteLogger extends Logger{
+  val socket = ???
+
+  override def log(category: String, msg: String): Unit = {
+    println("""aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa""")
+    super.log(category,msg)
+  }
+}
+
+trait NullLogger extends Logger{
+  override def log(category: String, msg: String): Unit = {
+    println("1111111111111111111111111111111111")
+  }
+}
+
+trait HasLogger{
+  val logger=new Logger {}
+}
+
+trait HasRemoteLogger extends HasLogger{
+  override val logger: Logger with Object = new RemoteLogger {}
+}
+
+trait HasNullLogger extends HasLogger{
+  override val logger: Logger with Object = new NullLogger {}
+}
+
+class Matrix(private val repr:Array[Array[Double]]) {
+  def row(idx:Int):Seq[Double]={
+    repr(idx)
+  }
+  def col(idx:Int):Seq[Double]={
+    repr.foldLeft(ArrayBuffer[Double]()) {
+      (buffer,currentRow) =>
+        buffer.append(currentRow(idx))
+        buffer
+    }.toArray
+  }
+
+  lazy val rowRank=repr.size
+  lazy val colRank=if(rowRank>0) repr(0).size else 0
+
+  override def toString: String = "Matrix"+repr.foldLeft("") {
+    (msg,row) =>msg+row.mkString("\n|"," | ","|")
+  }
+}
+
+val matrix1=new Matrix(Array(Array(1,2,3),Array(4,5,6)))
+val list1=List(1,2,3,4)
+list1 match {
+  case head::tail => print(head+"++++"+tail)
+}
