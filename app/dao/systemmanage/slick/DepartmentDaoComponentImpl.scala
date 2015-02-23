@@ -26,7 +26,8 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
       )
     }
 
-    def maxDepartmentOrder(parentdepartid: Long): Int = db.slick.DB.withDynSession {
+    def maxDepartmentOrder(parentdepartid: Long): Int = db.slick.DB.withSession {
+      implicit session =>
         SystemManage.departments.filter(d => d.parentDepartid === parentdepartid).size.run
     }
 
@@ -36,7 +37,8 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return 结果数
      */
-    def count(params: DepartmentQueryCondition): Int = db.slick.DB.withDynSession {
+    def count(params: DepartmentQueryCondition): Int = db.slick.DB.withSession {
+      implicit session =>
        selectForPage(params).size.run
     }
 
@@ -46,7 +48,8 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return
      */
-    def update(m: Department): Unit = db.slick.DB.withDynSession {
+    def update(m: Department): Unit = db.slick.DB.withSession {
+      implicit session =>
         SystemManage.departments.update(m).run
     }
 
@@ -56,7 +59,9 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: Department): Department = db.slick.DB.withDynSession {
+    def insert(m: Department): Department = db.slick.DB.withSession {
+      implicit session =>
+
         val x=SystemManage.departments.insert(m).run
         m
     }
@@ -67,7 +72,8 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return
      */
-    def delete(m: Department): Unit = db.slick.DB.withDynSession {
+    def delete(m: Department): Unit = db.slick.DB.withSession {
+      implicit session =>
       SystemManage.departments.filter(_.id === m.id).delete
     }
 
@@ -77,7 +83,12 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return
      */
-    def deleteById(id: Long): Unit = SystemManage.departments.filter(_.id === id).delete
+    def deleteById(id: Long): Unit = db.slick.DB.withSession {
+      implicit session =>
+        SystemManage.departments.filter(_.id === id).delete
+    }
+
+
 
     /**
      * 分页查询
@@ -113,9 +124,13 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): Option[Department] = db.slick.DB.withDynSession {
-      SystemManage.departments.filter(_.id === id).firstOption
-    }
+    def getById(id: Long): Option[Department] =
+      db.slick.DB.withSession {
+        implicit session =>
+          SystemManage.departments.filter(_.id === id).firstOption
+      }
   }
+
+
 
 }
