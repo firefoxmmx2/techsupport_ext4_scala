@@ -28,6 +28,10 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                 itemdblclick: function (g, record, item, index, e, eOpts) {
                     //打开更新窗口
                     this.toModifyUser(g, this.getView('sysadmin.user.Edit'));
+                },
+                render: function (g) {
+                    g.userTypeDictItemStore=Ext.create('Techsupport.store.DictItem');
+                    g.userTypeDictItemStore.load({ params: {'dictcode': 'dm_yhlb', page: 1, limit: 999}})
                 }
             },
             'usermanage button[action=add]': {
@@ -89,6 +93,7 @@ Ext.define('Techsupport.controller.sysadmin.User', {
                                     var field = form.down('textfield[name=useraccount]')
                                     field.originalValue = record.data.useraccount;
                                     record.data.userType = Ext.isString(record.data.userType) ? record.data.userType.split(',') : record.data.userType;
+                                    form.loadRecord(record);
                                 }
                                 else {
 
