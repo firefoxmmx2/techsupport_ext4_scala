@@ -100,7 +100,9 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return 分页结果
      */
-    def page(pageno: Int, pagesize: Int, params: DepartmentQueryCondition, sort: String, dir: String): Page[Department] = {
+    def page(pageno: Int, pagesize: Int, params: DepartmentQueryCondition, sort: String, dir: String): Page[Department] =
+      db.slick.DB.withSession {
+        implicit session =>
       val page = Page[Department](pageno,pagesize,count(params))
       if(page.total==0)
         page
@@ -116,7 +118,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return 结果列表
      */
-    def list(params: DepartmentQueryCondition): List[Department] = selectForPage(params).list
+    def list(params: DepartmentQueryCondition): List[Department] =  db.slick.DB.withSession  { implicit session => selectForPage(params).list}
 
     /**
      * 通过主键获取单个实体
