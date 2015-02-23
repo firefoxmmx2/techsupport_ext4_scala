@@ -32,11 +32,11 @@ Ext.define('Techsupport.view.THeader', {
                     items:[
                         {
                             xtype:'button',
-                            text:'注销'
+                            text:'首页'
                         },
                         {
                             xtype:'button',
-                            text:'首页'
+                            text:'注销'
                         },
                         {
                             xtype:'button',
