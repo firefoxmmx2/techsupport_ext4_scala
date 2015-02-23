@@ -7,17 +7,28 @@ import play.api.db
 import util.Page
 import play.api.Play.current
 import com.typesafe.slick.driver.oracle.OracleDriver.simple._
+
 /**
  * Created by hooxin on 15-1-26.
  */
-trait DepartmentDaoComponentImpl extends DepartmentDaoComponent{
+trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
+
   class DepartmentDaoImpl extends DepartmentDao {
-    private def selectForPage(params:DepartmentQueryCondition,sort:String,dir:String) = {
-//      SystemManage.departments.
+    private def selectForPage(params: DepartmentQueryCondition, sort: String="id", dir: String="asc") = {
+      SystemManage.departments.filter(d => {
+        val l = List(params.id.map(d.id === _),
+          params.departcode.map(d.departcode === _),
+          params.departname.map(d.departname === _),
+          params.parentDepartid.map(d.parentDepartid === _)
+        ).flatten
+        l.reduceOption(_ && _) getOrElse(LiteralColumn(true))
+      }
+      )
     }
+
     def maxDepartmentOrder(parentdepartid: Long): Int = db.slick.DB.withSession {
       implicit session =>
-        SystemManage.departments.filter( d=> d.parentDepartid === parentdepartid).size.run
+        SystemManage.departments.filter(d => d.parentDepartid === parentdepartid).size.run
     }
 
     /**
@@ -26,7 +37,10 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent{
 
      * @return 结果数
      */
-    def count(params: DepartmentQueryCondition): Int = ???
+    def count(params: DepartmentQueryCondition): Int = db.slick.DB.withSession {
+      implicit session =>
+       selectForPage(params).size.run
+    }
 
     /**
      * 修改
@@ -34,7 +48,10 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent{
 
      * @return
      */
-    def update(m: Department): Unit = ???
+    def update(m: Department): Unit = db.slick.DB.withSession {
+      implicit session =>
+        SystemManage.departments.update(m).run
+    }
 
     /**
      * 插入
@@ -42,7 +59,12 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent{
 
      * @return 插入后的实体
      */
-    def insert(m: Department): Department = ???
+    def insert(m: Department): Department = db.slick.DB.withSession {
+      implicit session =>
+
+        val x=SystemManage.departments.insert(m).run
+        m
+    }
 
     /**
      * 删除
@@ -50,7 +72,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent{
 
      * @return
      */
-    def delete(m: Department): Unit = ???
+    def delete(m: Department): Unit = SystemManage.departments.filter(_.id === m.id).delete
 
     /**
      * 通过主键删除
@@ -58,7 +80,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent{
 
      * @return
      */
-    def deleteById(id: Long): Unit = ???
+    def deleteById(id: Long): Unit = SystemManage.departments.filter(_.id === id).delete
 
     /**
      * 分页查询
@@ -70,7 +92,15 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent{
 
      * @return 分页结果
      */
-    def page(pageno: Int, pagesize: Int, params: DepartmentQueryCondition, sort: String, dir: String): Page[Department] = ???
+    def page(pageno: Int, pagesize: Int, params: DepartmentQueryCondition, sort: String, dir: String): Page[Department] = {
+      val page = Page[Department](pageno,pagesize,count(params))
+      if(page.total==0)
+        page
+      else{
+        val data=selectForPage(params,sort,dir).drop(page.start).take(page.limit).list
+        page.copy(data=data)
+      }
+    }
 
     /**
      * 非分页查询
@@ -78,7 +108,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent{
 
      * @return 结果列表
      */
-    def list(params: DepartmentQueryCondition): List[Department] = ???
+    def list(params: DepartmentQueryCondition): List[Department] = selectForPage(params).list
 
     /**
      * 通过主键获取单个实体
@@ -86,6 +116,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent{
 
      * @return 实体
      */
-    def getById(id: Long): Option[Department] = ???
+    def getById(id: Long): Option[Department] = SystemManage.departments.filter(_.id === id).firstOption
   }
+
 }
