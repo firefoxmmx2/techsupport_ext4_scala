@@ -26,8 +26,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
       )
     }
 
-    def maxDepartmentOrder(parentdepartid: Long): Int = db.slick.DB.withSession {
-      implicit session =>
+    def maxDepartmentOrder(parentdepartid: Long): Int = db.slick.DB.withDynSession {
         SystemManage.departments.filter(d => d.parentDepartid === parentdepartid).size.run
     }
 
@@ -37,8 +36,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return 结果数
      */
-    def count(params: DepartmentQueryCondition): Int = db.slick.DB.withSession {
-      implicit session =>
+    def count(params: DepartmentQueryCondition): Int = db.slick.DB.withDynSession {
        selectForPage(params).size.run
     }
 
@@ -48,8 +46,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return
      */
-    def update(m: Department): Unit = db.slick.DB.withSession {
-      implicit session =>
+    def update(m: Department): Unit = db.slick.DB.withDynSession {
         SystemManage.departments.update(m).run
     }
 
@@ -59,9 +56,7 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: Department): Department = db.slick.DB.withSession {
-      implicit session =>
-
+    def insert(m: Department): Department = db.slick.DB.withDynSession {
         val x=SystemManage.departments.insert(m).run
         m
     }
@@ -72,7 +67,9 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return
      */
-    def delete(m: Department): Unit = SystemManage.departments.filter(_.id === m.id).delete
+    def delete(m: Department): Unit = db.slick.DB.withDynSession {
+      SystemManage.departments.filter(_.id === m.id).delete
+    }
 
     /**
      * 通过主键删除
@@ -116,7 +113,9 @@ trait DepartmentDaoComponentImpl extends DepartmentDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): Option[Department] = SystemManage.departments.filter(_.id === id).firstOption
+    def getById(id: Long): Option[Department] = db.slick.DB.withDynSession {
+      SystemManage.departments.filter(_.id === id).firstOption
+    }
   }
 
 }
