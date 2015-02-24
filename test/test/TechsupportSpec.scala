@@ -2,7 +2,7 @@ package test
 
 import models.squeryl.techsupport.{Techsupport, SupportTicketP}
 import models.squeryl.CommonTypeMode
-import models.systemmanage.SystemManage
+import models.squeryl.systemmanage.SystemManage
 import models.techsupport._
 import play.api.test._
 import play.api.test.Helpers._

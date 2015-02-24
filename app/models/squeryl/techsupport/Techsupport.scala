@@ -8,89 +8,11 @@ import org.squeryl._
 import org.squeryl.annotations._
 import org.squeryl.dsl.CompositeKey2
 
-/**
- * 支持单基本信息
- * @param applicantId
- * @param supportContent
- * @param stStatus
- * @param region
- * @param serialNumber
- * @param id
- */
-case class BaseSupportTicket(
-                              applicantId: Long,
-                              supportContent: String,
-                              stStatus: String,
-                              region: String,
-                              serialNumber: Int,
-                              lastUpdateDate: DateTime,
-                              id: Option[Long] = None
-                              )
 
 
-/**
- * 部门审批
- * @param id
- * @param devScheDate
- * @param psgScheDate
- * @param devDsScheDate
- * @param devDdScheDate
- * @param devDtScheDate
- * @param psgDsScheDate
- * @param psgIsScheDate
- */
-case class DepartmentApproval(
-                               id: Long,
-                               devScheDate: Option[DateTime],
-                               psgScheDate: Option[DateTime],
-                               devDsScheDate: Option[DateTime],
-                               devDdScheDate: Option[DateTime],
-                               devDtScheDate: Option[DateTime],
-                               psgDsScheDate: Option[DateTime],
-                               psgIsScheDate: Option[DateTime]
-                               )
 
-/**
- * 追踪批复
- */
-case class TrackingApproval(
-                             id: Long,
-                             applyingFeedbackDate: DateTime,
-                             psgCompDate: Option[DateTime],
-                             devCompDate: Option[DateTime],
-                             psgDsCompDate: Option[DateTime],
-                             psgIsCompDate: Option[DateTime],
-                             devDsCompDate: Option[DateTime],
-                             devDdCompDate: Option[DateTime],
-                             devDtCompDate: Option[DateTime]
-                             )
 
-/**
- * 反馈确认
- * @param id
- * @param feedbackConfirmDate
- */
-case class Feedback(
-                     id: Long,
-                     feedbackConfirmDate: DateTime
-                     )
 
-/**
- * 归档
- * @param id
- * @param comments
- * @param archiveCode
- * @param archiveDate
- * @param archiveUserId
- */
-case class Archive(
-                    id: Long,
-                    comments: String,
-                    archiveCode: String,
-                    archiveDate: DateTime,
-                    archiveUserId: Long
-                    ) {
-}
 
 /**
  * 技术支持单结构化
@@ -329,27 +251,7 @@ class SupportTicket(
   }
 }
 
-/**
- * 支持单查询结构
- * @param id
- * @param applicantId
- * @param stStatus
- * @param region
- * @param devScheDate
- * @param psgScheDate
- * @param psgCompDate
- * @param devCompDate
- */
-case class SupportTicketQueryCondition(
-                                        id: Option[Long] = None,
-                                        applicantId: Option[Long] = None,
-                                        stStatus: Option[String] = None,
-                                        region: Option[String] = None,
-                                        devScheDate: Option[DateTime] = None,
-                                        psgScheDate: Option[DateTime] = None,
-                                        psgCompDate: Option[DateTime] = None,
-                                        devCompDate: Option[DateTime] = None
-                                        ) extends TQueryable
+
 
 /**
  * 追踪批复或者进展情况
@@ -377,14 +279,7 @@ case class Tracking(
                      id: Option[Long]
                      ) extends KeyedEntity[Option[Long]]
 
-case class TrackingQueryCondition(
-                                   stId: Option[Long],
-                                   trackingDate: Option[DateTime],
-                                   type_ : Option[String],
-                                   approvalCode: Option[String],
-                                   processorId: Option[Long],
-                                   id: Option[Long]
-                                   ) extends TQueryable
+
 
 /**
  * 支持部门
@@ -400,11 +295,7 @@ case class SupportDepartment(
                               id: Option[Long]
                               ) extends KeyedEntity[Option[Long]]
 
-case class SupportDepartmentQuery(
-                                   stId: Option[Long],
-                                   deptId: Option[Long],
-                                   id: Option[Long]
-                                   ) extends TQueryable
+
 
 /**
  * 支持单负责人
@@ -423,11 +314,7 @@ case class SupportLeader(
   def id = compositeKey(stId, slId)
 }
 
-case class SupportLeaderQuery(
-                               stId: Option[Long],
-                               slId: Option[Long],
-                               slDepartId: Option[Long]
-                               ) extends TQueryable
+
 
 /**
  * 附件
@@ -464,12 +351,7 @@ case class Attachment(
                        id: Option[Long] = None
                        ) extends KeyedEntity[Option[Long]]
 
-case class AttachmentQuery(
-                            attachmentName: Option[String],
-                            stId: Option[Long],
-                            attachmentContentType: Option[String],
-                            id: Option[Long]
-                            ) extends TQueryable
+
 
 /**
  * 督办
@@ -491,10 +373,7 @@ case class Supervision(
                         id: Option[Long]
                         ) extends KeyedEntity[Option[Long]]
 
-case class SupervisionQuery(
-                             stId: Option[Long],
-                             id: Option[Long]
-                             ) extends TQueryable
+
 
 /**
  * 修改计划时间的轨迹
@@ -531,11 +410,7 @@ case class TimeChange(
                        id: Option[Long]
                        ) extends KeyedEntity[Option[Long]]
 
-case class TimeChangeQuery(
-                            trackingId: Option[Long],
-                            type_ : Option[String],
-                            id: Option[Long]
-                            ) extends TQueryable
+
 
 /**
  * JBPM流程指派候选控制表

@@ -28,16 +28,11 @@ case class Worksheet(
                       supportDeptName: Option[String] = None
                       )
 
-case class SupportTicketQuery(
-                               region: Option[String] = None,
-                               id: Option[Long] = None,
-                               stStatus : Option[String]=None
-                               )
-
 case class WorksheetQuery(
                            taskId: Option[Long] = None,
                            activity: Option[String] = None,
                            process: Option[String] = None,
                            st: Option[SupportTicketQuery] = None
                            )
+
 
