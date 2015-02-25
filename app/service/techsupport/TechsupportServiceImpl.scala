@@ -2,21 +2,24 @@ package service.techsupport
 
 import dao.systemmanage.{DepartmentDaoComponent, UserDaoComponent, DictItemDaoComponent}
 import dao.techsupport._
-import models.squeryl.techsupport._
 import models.squeryl.CommonTypeMode
-import CommonTypeMode._
 import models.systemmanage.{Department, User, DictItemQueryCondition}
+import models.techsupport.SupportTicket
 import models.techsupport._
-import org.jbpm.api.{Configuration, _}
-import org.jbpm.pvm.internal.task.TaskImpl
+import org.jbpm.api._
+import CommonTypeMode._
+import org.joda.time.DateTime
 import util.Page
 
 trait SupportTicketServiceComponentImpl extends SupportTicketServiceComponent {
-  this: SupportTicketDaoComponent =>
+  this: SupportTicketDaoComponent
+  with AttachmentDaoComponent =>
 
   class SupportTicketServiceImpl extends SupportTicketService {
     def insert(e: SupportTicket): SupportTicket = inTransaction {
       supportTicketDao.insert(e)
+
+      e.lAttachments.foreach( _.id )
     }
 
     def update(e: SupportTicket): Unit = inTransaction {
@@ -147,7 +150,8 @@ trait WorksheetServiceComponentImpl extends WorksheetServiceComponent {
     with SupportDepartmentDaoComponent
     with DepartmentDaoComponent
     with WorksheetDaoComponent
-    with JbpmTaskDaoComponent =>
+    with JbpmTaskDaoComponent
+    with SupportTicketServiceComponent =>
 
   import scala.collection.JavaConversions._
 
@@ -160,62 +164,62 @@ trait WorksheetServiceComponentImpl extends WorksheetServiceComponent {
     val historyService = procoessEngine.getHistoryService
 
     def getWorksheet(taskId: String): Option[Worksheet] = {
-      val task = jbpmTaskDao.getById(taskId.toLong)  match {
-        case Some(t) =>
-          t
+      jbpmTaskDao.getById(taskId.toLong)  match {
+        case Some(task) =>
+          val worksheetno = executionService.getVariable(task.executionId_, "worksheetno").asInstanceOf[Long]
+          val st = supportTicketDao.getById(worksheetno).get
+          val regionDictItems = dictItemDao.list(DictItemQueryCondition(dictcode = Some("dm_ts_regin")))
+          val stStatusDictItems = dictItemDao.list(DictItemQueryCondition(dictcode = Some("dm_ts_status")))
+          val applicantUser = userDao.getById(st.applicantId)
+          val supportLeaderStr = supportLeaderDao.list(SupportLeaderQuery(st.id, None, None))
+            .map(sl => userDao.getById(sl.slId).getOrElse(User(
+            0,
+            "",
+            "",
+            "",
+            None,
+            None,
+            1,
+            "Y",
+            None,
+            None,
+            None,
+            None,
+            None
+          )).username).filter("" != _).mkString(",")
+
+          val supportDepartmentStr = supportDepartmentDao.list(SupportDepartmentQuery(st.id, None, None))
+            .map(sd => departmentDao.getById(sd.deptId).getOrElse(
+            Department(
+              "",
+              "",
+              0,
+              "",
+              None,
+              0,
+              "Y",
+              None,
+              None,
+              None,
+              None
+            )
+          ).departname)
+            .filter(_ != "").mkString(",")
+
+          Option(Worksheet(st, task, taskId, task.activity_name_.getOrElse(""), task.name_,
+            regionDictItems.filter(_.factValue == st.region).map(_.displayName).get(0),
+            applicantUser match {
+              case Some(u) => u.username
+              case None => ""
+            },
+            stStatusDictItems.filter(_.factValue == st.stStatus).map(_.displayName).get(0),
+            Option(supportLeaderStr),
+            Option(supportDepartmentStr)
+          ))
         case None =>
           throw new RuntimeException("编号为"+taskId+"的任务在系统中不存在")
       }
-      val worksheetno = executionService.getVariable(task.executionId_, "worksheetno").asInstanceOf[Long]
-      val st = supportTicketDao.getById(worksheetno).get
-      val regionDictItems = dictItemDao.list(DictItemQueryCondition(dictcode = Some("dm_ts_regin")))
-      val stStatusDictItems = dictItemDao.list(DictItemQueryCondition(dictcode = Some("dm_ts_status")))
-      val applicantUser = userDao.getById(st.applicantId)
-      val supportLeaderStr = supportLeaderDao.list(SupportLeaderQuery(st.id, None, None))
-        .map(sl => userDao.getById(sl.slId).getOrElse(User(
-        0,
-        "",
-        "",
-        "",
-        None,
-        None,
-        1,
-        "Y",
-        None,
-        None,
-        None,
-        None,
-        None
-      )).username).filter("" != _).mkString(",")
 
-      val supportDepartmentStr = supportDepartmentDao.list(SupportDepartmentQuery(st.id, None, None))
-        .map(sd => departmentDao.getById(sd.deptId).getOrElse(
-        Department(
-          "",
-          "",
-          0,
-          "",
-          None,
-          0,
-          "Y",
-          None,
-          None,
-          None,
-          None
-        )
-      ).departname)
-        .filter(_ != "").mkString(",")
-
-      Option(Worksheet(st, task, taskId, task.activity_name_.getOrElse(""), task.name_,
-        regionDictItems.filter(_.factValue == st.region).map(_.displayName).get(0),
-        applicantUser match {
-          case Some(u) => u.username
-          case None => ""
-        },
-        stStatusDictItems.filter(_.factValue == st.stStatus).map(_.displayName).get(0),
-        Option(supportLeaderStr),
-        Option(supportDepartmentStr)
-      ))
     }
 
     def next(taskId: String, params: Map[String, Any]): Unit = {
@@ -243,6 +247,21 @@ trait WorksheetServiceComponentImpl extends WorksheetServiceComponent {
       deployment.deploy()
     }
 
+    def applySuppport(taskId: String, bst: BaseSupportTicket): Unit = inTransaction {
+      val st=new models.techsupport.SupportTicket(
+        bst.applicantId,
+          bst.stNo,
+          Some(bst.supportContent),
+          bst.stStatus,
+          bst.region,
+          bst.serialNumber,
+          lastUpdateDate = DateTime.now(),
+          lAttachments = bst.attachments
+      )
+
+      val insertedSt = supportTicketService.insert(st)
+
+    }
   }
 
 }

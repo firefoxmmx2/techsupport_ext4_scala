@@ -1,6 +1,6 @@
 package models.squeryl.techsupport
 
-import models.TQueryable
+import models.{techsupport, TQueryable}
 import models.squeryl.CommonTypeMode._
 import models.systemmanage.{Department, User}
 import org.joda.time.DateTime
@@ -249,8 +249,73 @@ class SupportTicket(
     val state = Seq(super.hashCode(), applicantId, stNo, supportContent, stStatus, region, serialNumber, devScheDate, psgScheDate, devDsScheDate, devDdScheDate, devDtScheDate, psgDsScheDate, psgIsScheDate, applyingFeedbackDate, psgCompDate, devCompDate, psgDsCompDate, psgIsCompDate, devDsCompDate, devDdCompDate, devDtCompDate, feedbackConfirmDate, comments, archiveCode, archiveDate, archiveUserId, lastUpdateDate, id)
     state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
   }
+
+  def convertTo :  techsupport.SupportTicket = SupportTicket.convertTo(this)
 }
 
+object SupportTicket {
+  def convertFrom(supportTicket: techsupport.SupportTicket):SupportTicket = new SupportTicket(
+    supportTicket.applicantId,
+      supportTicket.stNo,
+      supportTicket.supportContent,
+      supportTicket.stStatus,
+      supportTicket.region,
+      supportTicket.serialNumber,
+      supportTicket.devScheDate,
+      supportTicket.psgScheDate,
+      supportTicket.devDsScheDate,
+      supportTicket.devDdScheDate,
+      supportTicket.devDtScheDate,
+      supportTicket.psgDsScheDate,
+      supportTicket.psgIsScheDate,
+      supportTicket.applyingFeedbackDate,
+      supportTicket.psgCompDate,
+      supportTicket.devCompDate,
+      supportTicket.psgDsCompDate,
+      supportTicket.psgIsCompDate,
+      supportTicket.devDsCompDate,
+      supportTicket.devDdCompDate,
+      supportTicket.devDtCompDate,
+      supportTicket.feedbackConfirmDate,
+      supportTicket.comments,
+      supportTicket.archiveCode,
+      supportTicket.archiveDate,
+      supportTicket.archiveUserId,
+      supportTicket.lastUpdateDate,
+      supportTicket.id
+  )
+
+  def convertTo(supportTicket: SupportTicket):techsupport.SupportTicket = new techsupport.SupportTicket(
+    supportTicket.applicantId,
+    supportTicket.stNo,
+    supportTicket.supportContent,
+    supportTicket.stStatus,
+    supportTicket.region,
+    supportTicket.serialNumber,
+    supportTicket.devScheDate,
+    supportTicket.psgScheDate,
+    supportTicket.devDsScheDate,
+    supportTicket.devDdScheDate,
+    supportTicket.devDtScheDate,
+    supportTicket.psgDsScheDate,
+    supportTicket.psgIsScheDate,
+    supportTicket.applyingFeedbackDate,
+    supportTicket.psgCompDate,
+    supportTicket.devCompDate,
+    supportTicket.psgDsCompDate,
+    supportTicket.psgIsCompDate,
+    supportTicket.devDsCompDate,
+    supportTicket.devDdCompDate,
+    supportTicket.devDtCompDate,
+    supportTicket.feedbackConfirmDate,
+    supportTicket.comments,
+    supportTicket.archiveCode,
+    supportTicket.archiveDate,
+    supportTicket.archiveUserId,
+    supportTicket.lastUpdateDate,
+    supportTicket.id
+  )
+}
 
 
 /**
@@ -277,8 +342,32 @@ case class Tracking(
                      @Column("processor_id")
                      processorId: Long,
                      id: Option[Long]
-                     ) extends KeyedEntity[Option[Long]]
+                     ) extends KeyedEntity[Option[Long]] {
 
+  def convertTo:techsupport.Tracking = Tracking.convertTo(this)
+
+}
+object Tracking {
+  def convertFrom(tracking: techsupport.Tracking):Tracking = Tracking(
+    tracking.stId,
+      tracking.trackingDate,
+      tracking.newProcess,
+      tracking.type_,
+      tracking.approvalCode,
+      tracking.processorId,
+      tracking.id
+  )
+
+  def convertTo(tracking: Tracking):techsupport.Tracking = techsupport.Tracking(
+    tracking.stId,
+    tracking.trackingDate,
+    tracking.newProcess,
+    tracking.type_,
+    tracking.approvalCode,
+    tracking.processorId,
+    tracking.id
+  )
+}
 
 
 /**
@@ -293,7 +382,22 @@ case class SupportDepartment(
                               @Column("dept_id")
                               deptId: Long,
                               id: Option[Long]
-                              ) extends KeyedEntity[Option[Long]]
+                              ) extends KeyedEntity[Option[Long]] {
+  def convertTo:  techsupport.SupportDepartment = SupportDepartment.convertTo(this)
+}
+
+object SupportDepartment {
+  def convertFrom(supportDepartment: techsupport.SupportDepartment):SupportDepartment =  SupportDepartment(
+    supportDepartment.stId,
+    supportDepartment.deptId,
+    supportDepartment.id
+  )
+  def convertTo(supportDepartment: SupportDepartment):techsupport.SupportDepartment = techsupport.SupportDepartment(
+    supportDepartment.stId,
+    supportDepartment.deptId,
+    supportDepartment.id
+  )
+}
 
 
 
@@ -312,8 +416,21 @@ case class SupportLeader(
                           slDepartId: Long
                           ) extends KeyedEntity[CompositeKey2[Long,Long]]{
   def id = compositeKey(stId, slId)
+  def convertTo : techsupport.SupportLeader = SupportLeader.convertTo(this)
 }
 
+object SupportLeader {
+  def convertFrom(supportLeader: techsupport.SupportLeader):SupportLeader = SupportLeader(
+    supportLeader.stId,
+      supportLeader.slId,
+      supportLeader.slDepartId
+  )
+  def convertTo(supportLeader: SupportLeader):techsupport.SupportLeader = techsupport.SupportLeader(
+    supportLeader.stId,
+    supportLeader.slId,
+    supportLeader.slDepartId
+  )
+}
 
 
 /**
@@ -349,8 +466,36 @@ case class Attachment(
                        @Column("batch_number")
                        batchNumber: String,
                        id: Option[Long] = None
-                       ) extends KeyedEntity[Option[Long]]
+                       ) extends KeyedEntity[Option[Long]]  {
+  def convertTo: techsupport.Attachment = Attachment.convertTo(this)
+}
+object Attachment {
+  def convertFrom(attachment: techsupport.Attachment) :Attachment = Attachment(
+    attachment.attachmentName,
+      attachment.attachmentComment,
+      attachment.attachmentSize,
+      attachment.stId,
+      attachment.attachmentContent,
+      attachment.attachmentContentType,
+      attachment.attachmentPath,
+      attachment.uploadTime,
+      attachment.batchNumber,
+      attachment.id
+  )
 
+  def convertTo(attachment: Attachment):techsupport.Attachment = techsupport.Attachment(
+    attachment.attachmentName,
+    attachment.attachmentComment,
+    attachment.attachmentSize,
+    attachment.stId,
+    attachment.attachmentContent,
+    attachment.attachmentContentType,
+    attachment.attachmentPath,
+    attachment.uploadTime,
+    attachment.batchNumber,
+    attachment.id
+  )
+}
 
 
 /**
@@ -371,8 +516,28 @@ case class Supervision(
                         @Column("st_id")
                         stId: Long,
                         id: Option[Long]
-                        ) extends KeyedEntity[Option[Long]]
+                        ) extends KeyedEntity[Option[Long]] {
+  def convertTo: techsupport.Supervision = Supervision.convertTo(this)
 
+}
+
+object Supervision {
+  def convertFrom(supervision: techsupport.Supervision) :Supervision = Supervision(
+    supervision.supervisionSuggetion,
+      supervision.supervisionPersonId,
+      supervision.supervisionDate,
+      supervision.stId,
+      supervision.id
+  )
+
+  def convertTo(supervision: Supervision) : techsupport.Supervision =techsupport.Supervision(
+    supervision.supervisionSuggetion,
+    supervision.supervisionPersonId,
+    supervision.supervisionDate,
+    supervision.stId,
+    supervision.id
+  )
+}
 
 
 /**
@@ -408,8 +573,36 @@ case class TimeChange(
                        @Column("type")
                        type_ : String,
                        id: Option[Long]
-                       ) extends KeyedEntity[Option[Long]]
+                       ) extends KeyedEntity[Option[Long]] {
+  def convertTo:techsupport.TimeChange = TimeChange.convertTo(this)
+}
+object TimeChange {
+  def convertFrom(timeChange: techsupport.TimeChange):TimeChange = TimeChange(
+    timeChange.trackingId,
+      timeChange.devScheDate,
+      timeChange.psgScheDate,
+      timeChange.devDsScheDate,
+      timeChange.devDdScheDate,
+      timeChange.devDtScheDate,
+      timeChange.psgDsScheDate,
+      timeChange.psgIsScheDate,
+      timeChange.type_,
+      timeChange.id
+  )
 
+  def convertTo(timeChange: TimeChange):techsupport.TimeChange = techsupport.TimeChange(
+    timeChange.trackingId,
+    timeChange.devScheDate,
+    timeChange.psgScheDate,
+    timeChange.devDsScheDate,
+    timeChange.devDdScheDate,
+    timeChange.devDtScheDate,
+    timeChange.psgDsScheDate,
+    timeChange.psgIsScheDate,
+    timeChange.type_,
+    timeChange.id
+  )
+}
 
 
 /**

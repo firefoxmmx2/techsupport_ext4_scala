@@ -1,10 +1,10 @@
 package dao.techsupport.squeryl
 
 import dao.techsupport._
-import models.squeryl.techsupport._
+import models.squeryl.techsupport.{JbpmTask, Techsupport}
 import models.squeryl.CommonTypeMode._
 import models.squeryl.systemmanage.SystemManage
-import Constants.DictItems
+import models.squeryl.techsupport.Constants.DictItems
 import models.techsupport._
 import util.Page
 
@@ -18,7 +18,7 @@ trait SupportTicketDaoComponentImpl extends SupportTicketDaoComponent {
             and params.applicantId.? === s.applicantId
             and params.region.? === s.region
             and params.stStatus.? === s.stStatus)
-            select (s.copy(supportContent = None))
+            select (s.copy(supportContent = None).convertTo)
             orderBy {
             if (sort == "id")
               if (dir == "asc")
@@ -37,7 +37,7 @@ trait SupportTicketDaoComponentImpl extends SupportTicketDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: SupportTicket): SupportTicket = Techsupport.supportTickets.insert(m)
+    def insert(m: SupportTicket): SupportTicket = Techsupport.supportTickets.insert(models.squeryl.techsupport.SupportTicket.convertFrom(m)).convertTo
 
     /**
      * 分页总数查询
@@ -53,7 +53,7 @@ trait SupportTicketDaoComponentImpl extends SupportTicketDaoComponent {
 
      * @return
      */
-    def update(m: SupportTicket): Unit = Techsupport.supportTickets.update(m)
+    def update(m: SupportTicket): Unit = Techsupport.supportTickets.update(models.squeryl.techsupport.SupportTicket.convertFrom(m))
 
     /**
      * 删除
@@ -61,7 +61,7 @@ trait SupportTicketDaoComponentImpl extends SupportTicketDaoComponent {
 
      * @return
      */
-    def delete(m: SupportTicket): Unit = Techsupport.supportTickets.delete(m.id)
+    def delete(m: SupportTicket): Unit = Techsupport.supportTickets.deleteWhere(_.id === m.id)
 
     /**
      * 通过主键删除
@@ -106,7 +106,11 @@ trait SupportTicketDaoComponentImpl extends SupportTicketDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): Option[SupportTicket] = Techsupport.supportTickets.where(_.id === id).singleOption
+    def getById(id: Long): Option[SupportTicket] = from(Techsupport.supportTickets)(
+      st =>
+        where(st.id === id)
+        select(st.convertTo)
+    ).singleOption
   }
 
 }
@@ -125,7 +129,7 @@ trait TrackingDaoComponentImpl extends TrackingDaoComponent {
             and params.processorId.? === t.processorId
             and params.stId.? === t.processorId
             and params.type_.? === t.type_)
-            select (t)
+            select (t.convertTo)
             orderBy {
             if (sort == "id")
               if (dir == "asc")
@@ -144,7 +148,7 @@ trait TrackingDaoComponentImpl extends TrackingDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: Tracking): Tracking = Techsupport.trackings.insert(m)
+    def insert(m: Tracking): Tracking = Techsupport.trackings.insert(models.squeryl.techsupport.Tracking.convertFrom(m)).convertTo
 
     /**
      * 分页总数查询
@@ -160,7 +164,7 @@ trait TrackingDaoComponentImpl extends TrackingDaoComponent {
 
      * @return
      */
-    def update(m: Tracking): Unit = Techsupport.trackings.update(m)
+    def update(m: Tracking): Unit = Techsupport.trackings.update(models.squeryl.techsupport.Tracking.convertFrom(m))
 
     /**
      * 删除
@@ -168,7 +172,7 @@ trait TrackingDaoComponentImpl extends TrackingDaoComponent {
 
      * @return
      */
-    def delete(m: Tracking): Unit = Techsupport.trackings.delete(m.id)
+    def delete(m: Tracking): Unit = Techsupport.trackings.deleteWhere(_.id === m.id)
 
     /**
      * 通过主键删除
@@ -210,7 +214,11 @@ trait TrackingDaoComponentImpl extends TrackingDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): Option[Tracking] = Techsupport.trackings.where(_.id === id).singleOption
+    def getById(id: Long): Option[Tracking] = from(Techsupport.trackings)(
+      t =>
+        where(t.id === id)
+        select(t.convertTo)
+    ).singleOption
   }
 
 }
@@ -224,7 +232,7 @@ trait SupportDepartmentDaoComponentImpl extends SupportDepartmentDaoComponent {
           where(params.deptId.? === sd.deptId
             and params.id.? === sd.id
             and params.stId.? === sd.stId)
-            select (sd)
+            select (sd.convertTo)
             orderBy {
             if (sort == "id")
               if (dir == "asc")
@@ -243,7 +251,7 @@ trait SupportDepartmentDaoComponentImpl extends SupportDepartmentDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: SupportDepartment): SupportDepartment = Techsupport.supportDepartments.insert(m)
+    def insert(m: SupportDepartment): SupportDepartment = Techsupport.supportDepartments.insert(models.squeryl.techsupport.SupportDepartment.convertFrom(m)).convertTo
 
     /**
      * 分页总数查询
@@ -259,7 +267,7 @@ trait SupportDepartmentDaoComponentImpl extends SupportDepartmentDaoComponent {
 
      * @return
      */
-    def update(m: SupportDepartment): Unit = Techsupport.supportDepartments.update(m)
+    def update(m: SupportDepartment): Unit = Techsupport.supportDepartments.update(models.squeryl.techsupport.SupportDepartment.convertFrom(m))
 
     /**
      * 删除
@@ -267,7 +275,7 @@ trait SupportDepartmentDaoComponentImpl extends SupportDepartmentDaoComponent {
 
      * @return
      */
-    def delete(m: SupportDepartment): Unit = Techsupport.supportDepartments.delete(m.id)
+    def delete(m: SupportDepartment): Unit = Techsupport.supportDepartments.deleteWhere(_.id === m.id)
 
     /**
      * 通过主键删除
@@ -309,7 +317,11 @@ trait SupportDepartmentDaoComponentImpl extends SupportDepartmentDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): Option[SupportDepartment] = Techsupport.supportDepartments.where(_.id === id).singleOption
+    def getById(id: Long): Option[SupportDepartment] = from(Techsupport.supportDepartments)(
+      sd =>
+        where(sd.id === id)
+        select(sd.convertTo)
+    ).singleOption
   }
 
 }
@@ -323,7 +335,7 @@ trait SupportLeaderDaoComponentImpl extends SupportLeaderDaoComponent {
           where(params.slDepartId.? === sl.slDepartId
             and params.slId.? === sl.slId
             and params.stId.? === sl.stId)
-            select (sl)
+            select (sl.convertTo)
             orderBy {
             if (sort == "slId")
               if (dir == "asc")
@@ -342,7 +354,7 @@ trait SupportLeaderDaoComponentImpl extends SupportLeaderDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: SupportLeader): SupportLeader = Techsupport.supportLeaders.insert(m)
+    def insert(m: SupportLeader): SupportLeader = Techsupport.supportLeaders.insert(models.squeryl.techsupport.SupportLeader.convertFrom(m)).convertTo
 
     /**
      * 分页总数查询
@@ -358,7 +370,7 @@ trait SupportLeaderDaoComponentImpl extends SupportLeaderDaoComponent {
 
      * @return
      */
-    def update(m: SupportLeader): Unit = Techsupport.supportLeaders.update(m)
+    def update(m: SupportLeader): Unit = Techsupport.supportLeaders.update(models.squeryl.techsupport.SupportLeader.convertFrom(m))
 
     /**
      * 删除
@@ -366,7 +378,7 @@ trait SupportLeaderDaoComponentImpl extends SupportLeaderDaoComponent {
 
      * @return
      */
-    def delete(m: SupportLeader): Unit = Techsupport.supportLeaders.delete(m.id)
+    def delete(m: SupportLeader): Unit = Techsupport.supportLeaders.deleteWhere(_.id === (m.stId,m.slId))
 
     /**
      * 通过主键删除
@@ -408,7 +420,11 @@ trait SupportLeaderDaoComponentImpl extends SupportLeaderDaoComponent {
 
      * @return 实体
      */
-    def getById(id: (Long, Long)): Option[SupportLeader] = Techsupport.supportLeaders.where(_.id === id).singleOption
+    def getById(id: (Long, Long)): Option[SupportLeader] = from(Techsupport.supportLeaders)(
+      sl =>
+        where(sl.id === id)
+        select(sl.convertTo)
+    ).singleOption
   }
 
 }
@@ -421,7 +437,7 @@ trait SupervisionDaoComponentImpl extends SupervisionDaoComponent {
         s =>
           where(params.id.? === s.id
             and params.stId.? === s.stId)
-            select (s)
+            select (s.convertTo)
             orderBy {
             if (sort == "id")
               if (dir == "asc")
@@ -440,7 +456,7 @@ trait SupervisionDaoComponentImpl extends SupervisionDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: Supervision): Supervision = Techsupport.supervisions.insert(m)
+    def insert(m: Supervision): Supervision = Techsupport.supervisions.insert(models.squeryl.techsupport.Supervision.convertFrom(m)).convertTo
 
     /**
      * 分页总数查询
@@ -456,7 +472,7 @@ trait SupervisionDaoComponentImpl extends SupervisionDaoComponent {
 
      * @return
      */
-    def update(m: Supervision): Unit = Techsupport.supervisions.update(m)
+    def update(m: Supervision): Unit = Techsupport.supervisions.update(models.squeryl.techsupport.Supervision.convertFrom(m))
 
     /**
      * 删除
@@ -464,7 +480,7 @@ trait SupervisionDaoComponentImpl extends SupervisionDaoComponent {
 
      * @return
      */
-    def delete(m: Supervision): Unit = Techsupport.supervisions.delete(m.id)
+    def delete(m: Supervision): Unit = Techsupport.supervisions.deleteWhere(_.id === m.id)
 
     /**
      * 通过主键删除
@@ -506,7 +522,11 @@ trait SupervisionDaoComponentImpl extends SupervisionDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): Option[Supervision] = Techsupport.supervisions.where(_.id === id).singleOption
+    def getById(id: Long): Option[Supervision] = from(Techsupport.supervisions)(
+      s =>
+        where(s.id === id)
+        select(s.convertTo)
+    ).singleOption
   }
 
 }
@@ -521,7 +541,7 @@ trait AttachmentDaoComponentImpl extends AttachmentDaoComponent {
             and params.attachmentContentType.? === a.attachmentContentType
             and params.attachmentName.? === a.attachmentName
             and params.stId.? === a.stId)
-            select (a)
+            select (a.convertTo)
             orderBy {
             if (sort == "id")
               if (dir == "asc")
@@ -555,7 +575,7 @@ trait AttachmentDaoComponentImpl extends AttachmentDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: Attachment): Attachment = Techsupport.attachments.insert(m)
+    def insert(m: Attachment): Attachment = Techsupport.attachments.insert(models.squeryl.techsupport.Attachment.convertFrom(m)).convertTo
 
     /**
      * 分页总数查询
@@ -571,7 +591,7 @@ trait AttachmentDaoComponentImpl extends AttachmentDaoComponent {
 
      * @return
      */
-    def update(m: Attachment): Unit = Techsupport.attachments.update(m)
+    def update(m: Attachment): Unit = Techsupport.attachments.update(models.squeryl.techsupport.Attachment.convertFrom(m))
 
     /**
      * 删除
@@ -579,7 +599,7 @@ trait AttachmentDaoComponentImpl extends AttachmentDaoComponent {
 
      * @return
      */
-    def delete(m: Attachment): Unit = Techsupport.attachments.delete(m.id)
+    def delete(m: Attachment): Unit = Techsupport.attachments.deleteWhere(_.id === m.id)
 
     /**
      * 通过主键删除
@@ -621,7 +641,11 @@ trait AttachmentDaoComponentImpl extends AttachmentDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): Option[Attachment] = Techsupport.attachments.where(_.id === id).singleOption
+    def getById(id: Long): Option[Attachment] = from(Techsupport.attachments)(
+      a =>
+        where(a.id === id)
+        select(a.convertTo)
+    ).singleOption
   }
 
 }
@@ -635,7 +659,7 @@ trait TimeChangeDaoComponentImpl extends TimeChangeDaoComponent {
           where(params.id.? === tc.id
             and params.trackingId.? === tc.trackingId
             and params.type_.? === tc.type_)
-            select (tc)
+            select (tc.convertTo)
             orderBy {
             if (sort == "id")
               if (dir == "asc")
@@ -664,7 +688,7 @@ trait TimeChangeDaoComponentImpl extends TimeChangeDaoComponent {
 
      * @return 插入后的实体
      */
-    def insert(m: TimeChange): TimeChange = Techsupport.timeChanges.insert(m)
+    def insert(m: TimeChange): TimeChange = Techsupport.timeChanges.insert(models.squeryl.techsupport.TimeChange.convertFrom(m)).convertTo
 
     /**
      * 分页总数查询
@@ -680,7 +704,7 @@ trait TimeChangeDaoComponentImpl extends TimeChangeDaoComponent {
 
      * @return
      */
-    def update(m: TimeChange): Unit = Techsupport.timeChanges.update(m)
+    def update(m: TimeChange): Unit = Techsupport.timeChanges.update(models.squeryl.techsupport.TimeChange.convertFrom(m))
 
     /**
      * 删除
@@ -730,7 +754,11 @@ trait TimeChangeDaoComponentImpl extends TimeChangeDaoComponent {
 
      * @return 实体
      */
-    def getById(id: Long): Option[TimeChange] = Techsupport.timeChanges.where(_.id === id).singleOption
+    def getById(id: Long): Option[TimeChange] = from(Techsupport.timeChanges)(
+      tc =>
+        where(tc.id === id)
+        select(tc.convertTo)
+    ).singleOption
   }
 
 }

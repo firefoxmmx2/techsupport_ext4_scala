@@ -59,22 +59,21 @@ class TechsupportSpec extends Specification with ComponentRegister {
           stList.map {
             st =>
               val departments = sdAndDepartments.filter(sdd => sdd._1.stId  == st.id.get)
-                .map(sdd => sdd._2)
+                .map(sdd => sdd._2.convertTo)
               val supportLeaders = slAndUsers.filter(slu => slu._1.stId == st.id.get)
-                .map(slu => slu._2)
+                .map(slu => slu._2.convertTo)
               val applicantPerson= applicantUsers.filter(_.id.get == st.applicantId) match {
                 case lUsers if(lUsers.size > 0)  =>
-                  Some(lUsers(0))
+                  Some(lUsers(0).convertTo)
                 case _ =>
                   None
               }
               val archivePerson=archiveUsers.filter(_.id == st.archiveUserId) match {
                 case lUsers if(lUsers.size >0)=>
-                  Some(lUsers(0))
+                  Some(lUsers(0).convertTo)
                 case _=>
                   None
               }
-//                        st
               SupportTicketP(st,
                 applicant=applicantPerson,
                 archivePerson=archivePerson,
@@ -127,6 +126,12 @@ class TechsupportSpec extends Specification with ComponentRegister {
           println("="*13+"[worksheet.size]="+ worksheets.data.size +"="*13)
           worksheets.data.size must be be_=== 5
         }
+      }
+    }
+
+    "test supportticket apply" in {
+      running(FakeApplication()){
+
       }
     }
   }

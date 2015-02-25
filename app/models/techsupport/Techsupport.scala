@@ -98,6 +98,7 @@ case class Attachment(
  */
 case class BaseSupportTicket(
                               applicantId: Long,
+                              stNo:String,
                               supportContent: String,
                               stStatus: String,
                               region: String,
@@ -269,12 +270,13 @@ class SupportTicket(
                      val archiveUserId: Option[Long] = None,
                      val lastUpdateDate: DateTime,
                      val id: Option[Long] = None,
-                     val applicant: Option[User],
-                     val archivePerson: Option[User],
+                     val applicant: Option[User]=None,
+                     val archivePerson: Option[User]=None,
                      val lTrackings: List[Tracking] = List(),
                      val lSupportDepartments: List[Department] = List(),
                      val lSupportLeaders: List[User] = List(),
-                     val lSupervision: List[Supervision] = List()
+                     val lSupervision: List[Supervision] = List(),
+                     val lAttachments:List[Attachment] = List()
                      ) {
   def copy(
             applicantId: Long = this.applicantId,
@@ -310,7 +312,8 @@ class SupportTicket(
             lTrackings: List[Tracking] = this.lTrackings,
             lSupportDepartments: List[Department] = this.lSupportDepartments,
             lSupportLeaders: List[User] = this.lSupportLeaders,
-            lSupervision: List[Supervision] = this.lSupervision
+            lSupervision: List[Supervision] = this.lSupervision,
+            lAttachments:List[Attachment] = List()
             ) = new SupportTicket(
     applicantId,
     stNo,
@@ -345,7 +348,8 @@ class SupportTicket(
     lTrackings,
     lSupportDepartments,
     lSupportLeaders,
-    lSupervision
+    lSupervision,
+    lAttachments
   )
 
   def canEqual(other: Any): Boolean = other.isInstanceOf[SupportTicket]
@@ -421,3 +425,54 @@ class SupportTicket(
     state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
   }
 }
+
+/**
+ * 修改计划时间的轨迹
+ * @param trackingId
+ * @param devScheDate
+ * @param psgScheDate
+ * @param devDsScheDate
+ * @param devDdScheDate
+ * @param devDtScheDate
+ * @param psgDsScheDate
+ * @param psgIsScheDate
+ * @param type_ 改变时间类型: 0 产品 1 技术
+ * @param id
+ */
+case class TimeChange(
+                       trackingId: Long,
+                       devScheDate: Option[DateTime],
+                       psgScheDate: Option[DateTime],
+                       devDsScheDate: Option[DateTime],
+                       devDdScheDate: Option[DateTime],
+                       devDtScheDate: Option[DateTime],
+                       psgDsScheDate: Option[DateTime],
+                       psgIsScheDate: Option[DateTime],
+                       type_ : String,
+                       id: Option[Long]
+                       )
+
+
+/**
+ * 支持部门
+ * @param stId
+ * @param deptId
+ * @param id
+ */
+case class SupportDepartment(
+                              stId: Long,
+                              deptId: Long,
+                              id: Option[Long]
+                              )
+
+/**
+ * 支持单负责人
+ * @param stId
+ * @param slId
+ * @param slDepartId
+ */
+case class SupportLeader(
+                          stId: Long,
+                          slId: Long,
+                          slDepartId: Long
+                          )

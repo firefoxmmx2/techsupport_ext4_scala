@@ -1,6 +1,5 @@
 package service.techsupport
 
-import models.squeryl.techsupport._
 import models.techsupport._
 import service.BaseService
 import util.Page
@@ -41,7 +40,7 @@ trait WorksheetServiceComponent {
     def start(processName:String,params:Map[String,Any])
     def deploy(processDeclareXmlPath:String):String
 
-    def applySuppport(st:SupportTicket)
+    def applySuppport(taskId:String,bst:BaseSupportTicket)
   }
   val worksheetService:WorksheetService
 }
