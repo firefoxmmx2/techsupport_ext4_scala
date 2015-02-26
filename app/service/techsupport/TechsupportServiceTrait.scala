@@ -40,7 +40,7 @@ trait WorksheetServiceComponent {
     def start(processName:String,params:Map[String,Any])
     def deploy(processDeclareXmlPath:String):String
 
-    def applySuppport(taskId:String,bst:BaseSupportTicket)
+    def applySupportTicket(bst:BaseSupportTicket)
   }
   val worksheetService:WorksheetService
 }

@@ -247,7 +247,7 @@ trait WorksheetServiceComponentImpl extends WorksheetServiceComponent {
       deployment.deploy()
     }
 
-    def applySuppport(taskId: String, bst: BaseSupportTicket): Unit = inTransaction {
+    def applySupportTicket(bst: BaseSupportTicket): Unit = inTransaction {
       val st=new models.techsupport.SupportTicket(
         bst.applicantId,
           bst.stNo,
@@ -261,6 +261,12 @@ trait WorksheetServiceComponentImpl extends WorksheetServiceComponent {
 
       val insertedSt = supportTicketService.insert(st)
 
+      if(insertedSt != null){
+        val ceArrovalCandidateIds =
+        val params=Map("worksheetno"-> insertedSt.id,
+        "ceApprovalUsers"->ceArrovalCandidateIds)
+        start(Constants.Workflow.TECHSUPPORT_WORKFLOW_NAME,params)
+      }
     }
   }
 

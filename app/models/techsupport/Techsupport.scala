@@ -98,7 +98,7 @@ case class Attachment(
  */
 case class BaseSupportTicket(
                               applicantId: Long,
-                              stNo:String,
+                              stNo: String,
                               supportContent: String,
                               stStatus: String,
                               region: String,
@@ -270,13 +270,13 @@ class SupportTicket(
                      val archiveUserId: Option[Long] = None,
                      val lastUpdateDate: DateTime,
                      val id: Option[Long] = None,
-                     val applicant: Option[User]=None,
-                     val archivePerson: Option[User]=None,
+                     val applicant: Option[User] = None,
+                     val archivePerson: Option[User] = None,
                      val lTrackings: List[Tracking] = List(),
                      val lSupportDepartments: List[Department] = List(),
                      val lSupportLeaders: List[User] = List(),
                      val lSupervision: List[Supervision] = List(),
-                     val lAttachments:List[Attachment] = List()
+                     val lAttachments: List[Attachment] = List()
                      ) {
   def copy(
             applicantId: Long = this.applicantId,
@@ -313,7 +313,7 @@ class SupportTicket(
             lSupportDepartments: List[Department] = this.lSupportDepartments,
             lSupportLeaders: List[User] = this.lSupportLeaders,
             lSupervision: List[Supervision] = this.lSupervision,
-            lAttachments:List[Attachment] = List()
+            lAttachments: List[Attachment] = List()
             ) = new SupportTicket(
     applicantId,
     stNo,
@@ -476,3 +476,91 @@ case class SupportLeader(
                           slId: Long,
                           slDepartId: Long
                           )
+
+
+object Constants {
+
+  object DictItems {
+
+    object DictCodes {
+      val REGION = "dm_ts_regin"
+      val STATUS = "dm_ts_status"
+      val PROECESS = "dm_ts_proc"
+      val ROLE_STATUS = "dm_ts_role_status"
+      val DEPARTMENT_LIST = "dm_ts_depart_list"
+      val SUPPORT_APPR_TYPE = "dm_support_appr_type"
+      val USER_AND_EMAIL = "dm_userAndEmail_tech"
+    }
+
+  }
+
+  /**
+   * 支持单角色
+   */
+  object Roles {
+
+    /**
+     * 角色名称
+     */
+    object RoleNames {
+      /**
+       * 申请人角色
+       */
+      final val applicant = "ts_填报人"
+      /**
+       * 公司审批人角色
+       */
+      final val company_approval = "ts_公司审批人"
+      /**
+       * 产品审批角色
+       */
+      final val product_approval = "ts_产品部审批人"
+      /**
+       * 技术审批角色
+       */
+      final val develop_approval = "ts_技术部审批人"
+      /**
+       * 技术负责角色
+       */
+      final val support_leader = "ts_技术支持单负责人"
+      /**
+       * 反馈角色
+       */
+      final val feedback = "ts_反馈人"
+      /**
+       * 技术质量角色 归档角色
+       */
+      final val pgp = "ts_技术质量人员"
+      /**
+       * 数据管理角色
+       */
+      final val data_manage = "ts_数据管理"
+      /**
+       * 进展提醒角色
+       */
+      final val tracking_remind = "ts_进展提醒"
+      /**
+       * 审批提醒角色
+       */
+      final val appr_remind = "ts_审批提醒"
+      /**
+       * 反馈提醒角色
+       */
+      final val feedback_remind = "ts_反馈提醒"
+      /**
+       * 督办角色
+       */
+      final val supervision = "ts_管理督办"
+    }
+
+  }
+
+  object GlobalParams {
+
+    object GlobalCodes {
+      final val TECHSUPPORT_WORKFLOW = "techsupport"
+    }
+
+  }
+
+}
