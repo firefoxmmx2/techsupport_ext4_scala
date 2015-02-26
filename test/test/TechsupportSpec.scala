@@ -131,7 +131,7 @@ class TechsupportSpec extends Specification with ComponentRegister {
 
     "test supportticket apply" in {
       running(FakeApplication()){
-
+        1 must be be_=== 1
       }
     }
   }

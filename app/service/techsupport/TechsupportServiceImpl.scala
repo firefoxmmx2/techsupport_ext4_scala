@@ -19,7 +19,7 @@ trait SupportTicketServiceComponentImpl extends SupportTicketServiceComponent {
     def insert(e: SupportTicket): SupportTicket = inTransaction {
       supportTicketDao.insert(e)
 
-      e.lAttachments.foreach( _.id )
+//      e.lAttachments.foreach( _.id )
     }
 
     def update(e: SupportTicket): Unit = inTransaction {
