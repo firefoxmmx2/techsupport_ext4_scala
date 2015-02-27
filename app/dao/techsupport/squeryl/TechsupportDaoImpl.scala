@@ -4,7 +4,7 @@ import dao.techsupport._
 import models.squeryl.techsupport.{JbpmTask, Techsupport}
 import models.squeryl.CommonTypeMode._
 import models.squeryl.systemmanage.SystemManage
-import models.squeryl.techsupport.Constants.DictItems
+import models.techsupport.Constants.DictItems
 import models.techsupport._
 import util.Page
 

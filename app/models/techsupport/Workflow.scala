@@ -1,7 +1,6 @@
 package models.techsupport
 
-import models.squeryl.techsupport.{JbpmTask, SupportTicket}
-import org.jbpm.pvm.internal.task.TaskImpl
+import models.squeryl.techsupport.JbpmTask
 
 
 /**

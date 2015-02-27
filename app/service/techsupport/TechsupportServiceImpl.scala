@@ -1,13 +1,11 @@
 package service.techsupport
 
-import dao.systemmanage.{DepartmentDaoComponent, UserDaoComponent, DictItemDaoComponent}
+import dao.systemmanage.{DepartmentDaoComponent, DictItemDaoComponent, GlobalParamDaoComponent, UserDaoComponent}
 import dao.techsupport._
-import models.squeryl.CommonTypeMode
-import models.systemmanage.{Department, User, DictItemQueryCondition}
-import models.techsupport.SupportTicket
-import models.techsupport._
+import models.squeryl.CommonTypeMode._
+import models.systemmanage.{Department, DictItemQueryCondition, User}
+import models.techsupport.{SupportTicket, _}
 import org.jbpm.api._
-import CommonTypeMode._
 import org.joda.time.DateTime
 import util.Page
 
@@ -151,7 +149,8 @@ trait WorksheetServiceComponentImpl extends WorksheetServiceComponent {
     with DepartmentDaoComponent
     with WorksheetDaoComponent
     with JbpmTaskDaoComponent
-    with SupportTicketServiceComponent =>
+    with SupportTicketServiceComponent
+    with GlobalParamDaoComponent=>
 
   import scala.collection.JavaConversions._
 
@@ -262,10 +261,16 @@ trait WorksheetServiceComponentImpl extends WorksheetServiceComponent {
       val insertedSt = supportTicketService.insert(st)
 
       if(insertedSt != null){
-        val ceArrovalCandidateIds =
+        val ceArrovalCandidateIds = 0
         val params=Map("worksheetno"-> insertedSt.id,
         "ceApprovalUsers"->ceArrovalCandidateIds)
-        start(Constants.Workflow.TECHSUPPORT_WORKFLOW_NAME,params)
+        val workflowGlobalParam=globalParamDao.getById(Constants.GlobalParams.GlobalCodes.TECHSUPPORT_WORKFLOW)
+
+        start(workflowGlobalParam match {
+          case Some(x) => x.globalparvalue
+          case _ =>
+            throw new RuntimeException("支持单流程名称全局参数不存在")
+        },params)
       }
     }
   }

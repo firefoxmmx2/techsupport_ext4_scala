@@ -1,7 +1,6 @@
 import akka.actor._
 import akka.event.Logging
 import org.specs2.mutable.Specification
-import play.api.Logger
 import util.{Utils, Page}
 
 /**
@@ -40,6 +39,42 @@ class UtilSpec  extends Specification{
 //      system.shutdown()
       1 must be be_=== 1
     }
+
+    " become " in {
+      val system=ActorSystem("myActorSystem")
+      val myActor=system.actorOf(Props(new MyActor2),"myActor")
+      myActor ! "foo"
+      myActor ! "bar"
+//      Thread.sleep(1000)
+      1 must be be_=== 1
+    }
+
+    "actor sum" in {
+      import akka.util.Timeout
+      import akka.pattern._
+      import scala.concurrent.{ ExecutionContext, Promise }
+      import scala.concurrent.duration._
+      import scala.concurrent.{Await, Future}
+
+      implicit val timeout = Timeout(2500 microseconds)
+      val system=ActorSystem("myActorSystem")
+      val myActor=system.actorOf(Props(new SumActor))
+//      (1 to 100).map( i =>  myActor.ask(i)(Timeout(10)).mapTo[Int]  ).sum must be be_=== (1 to 100).map( i => (1 to i).sum).sum
+//      (for( i <- (1 to 100)) yield (1 to i).sum).sum must be be_=== (1 to 100).map( i => (1 to i).sum).sum
+      val startTime =System.currentTimeMillis()
+      val normalResult=(1 to 1000).map( i => (1 to i).sum).sum
+      val useTime=System.currentTimeMillis()-startTime
+      println("="*13+" non parral time = "+useTime+"="*13)
+      val startConTime=System.currentTimeMillis()
+      val conResult=(for( i <- (1 to 1000)) yield {
+        val f=Future((1 to i).sum)
+        Await.result(f,timeout.duration)
+      }).sum
+      val conUseTime=System.currentTimeMillis()-startConTime
+      println("="*13+" use Future time = "+conUseTime+"="*13)
+      conResult must be be_=== normalResult
+
+    }
   }
 
   class MyActor extends Actor {
@@ -57,6 +92,38 @@ class UtilSpec  extends Specification{
         subActor ! "test"
         subActor ! "shutdown"
       case _ => log.info("system down")
+    }
+  }
+
+  class SumActor extends Actor {
+    def receive: Actor.Receive = {
+      case num:Int =>
+        sender ! ( 1 to num).sum
+    }
+  }
+  class MyActor2 extends Actor {
+    import context._
+    val log=Logging(context.system,this)
+    def happy:Actor.Receive ={
+      case "foo" =>
+        become(angry)
+      case "bar" =>
+        log.info("i am happy")
+        sender ! "i am happy"
+    }
+
+    def angry:Actor.Receive={
+      case "bar" =>
+        become(happy)
+      case "foo" =>
+        log.info("i am angry")
+        sender ! "i am angry"
+    }
+    def receive: Actor.Receive = {
+      case "foo" =>
+        become(angry)
+      case "bar" =>
+        become(happy)
     }
   }
 }
