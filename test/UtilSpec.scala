@@ -1,5 +1,6 @@
 import akka.actor._
 import akka.event.Logging
+import akka.util.Timeout
 import org.specs2.mutable.Specification
 import util.{Utils, Page}
 
@@ -75,6 +76,22 @@ class UtilSpec  extends Specification{
       conResult must be be_=== normalResult
 
     }
+
+    "actor send and receive future" in {
+      import akka.util.Timeout
+      import akka.pattern._
+      import scala.concurrent.{ ExecutionContext, Promise }
+      import scala.concurrent.duration._
+      import scala.concurrent.{Await, Future}
+      val system=ActorSystem("reply")
+      val actor1 = system.actorOf(Props(new ReplyActor))
+      val actor2 = system.actorOf(Props(new FutureActor))
+      implicit val timeout = Timeout(5000 microseconds)
+      val future1  = ask(actor1, "hi").mapTo[String]
+      import system.dispatcher
+      future1 pipeTo actor2
+      1 must  be be_=== 1
+    }
   }
 
   class MyActor extends Actor {
@@ -124,6 +141,18 @@ class UtilSpec  extends Specification{
         become(angry)
       case "bar" =>
         become(happy)
+    }
+  }
+
+  class ReplyActor extends Actor {
+    def receive: Actor.Receive = {
+      case "hi" => sender ! "="*13+"hello"+"="*13
+    }
+  }
+
+  class FutureActor extends Actor {
+    def receive: Actor.Receive = {
+      case m => println(m)
     }
   }
 }
