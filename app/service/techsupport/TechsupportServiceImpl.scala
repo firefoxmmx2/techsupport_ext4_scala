@@ -1,6 +1,6 @@
 package service.techsupport
 
-import dao.systemmanage.{DepartmentDaoComponent, DictItemDaoComponent, GlobalParamDaoComponent, UserDaoComponent}
+import dao.systemmanage._
 import dao.techsupport._
 import models.squeryl.CommonTypeMode._
 import models.systemmanage.{Department, DictItemQueryCondition, User}
@@ -141,13 +141,12 @@ trait TimeChangeServiceComponentImpl extends TimeChangeServiceComponent {
 }
 
 trait WorksheetServiceComponentImpl extends WorksheetServiceComponent {
-  this: SupportTicketDaoComponent
-    with DictItemDaoComponent
+  this: WorksheetDaoComponent
     with UserDaoComponent
     with SupportLeaderDaoComponent
     with SupportDepartmentDaoComponent
     with DepartmentDaoComponent
-    with WorksheetDaoComponent
+    with DictItemDaoComponent
     with JbpmTaskDaoComponent
     with SupportTicketServiceComponent
     with GlobalParamDaoComponent=>
@@ -156,17 +155,17 @@ trait WorksheetServiceComponentImpl extends WorksheetServiceComponent {
 
   class WorksheetServiceImpl extends WorksheetService {
     private val procoessEngine = Configuration.getProcessEngine
-    val repositoryService = procoessEngine.getRepositoryService
-    val executionService = procoessEngine.getExecutionService
-    val taskService = procoessEngine.getTaskService
-    val identityService = procoessEngine.getIdentityService
-    val historyService = procoessEngine.getHistoryService
+    private val repositoryService = procoessEngine.getRepositoryService
+    private val executionService = procoessEngine.getExecutionService
+    private val taskService = procoessEngine.getTaskService
+    private val identityService = procoessEngine.getIdentityService
+    private val historyService = procoessEngine.getHistoryService
 
     def getWorksheet(taskId: String): Option[Worksheet] = {
       jbpmTaskDao.getById(taskId.toLong)  match {
         case Some(task) =>
           val worksheetno = executionService.getVariable(task.executionId_, "worksheetno").asInstanceOf[Long]
-          val st = supportTicketDao.getById(worksheetno).get
+          val st = supportTicketService.getById(worksheetno).get
           val regionDictItems = dictItemDao.list(DictItemQueryCondition(dictcode = Some("dm_ts_regin")))
           val stStatusDictItems = dictItemDao.list(DictItemQueryCondition(dictcode = Some("dm_ts_status")))
           val applicantUser = userDao.getById(st.applicantId)
@@ -261,9 +260,13 @@ trait WorksheetServiceComponentImpl extends WorksheetServiceComponent {
       val insertedSt = supportTicketService.insert(st)
 
       if(insertedSt != null){
-        val ceArrovalCandidateIds = 0
+        val ceArrovalCandidateIds = userDao.userIdsByRole(None,Some(Constants.Roles.RoleNames.company_approval))
+        if(ceArrovalCandidateIds.size == 0)
+          throw new RuntimeException("公司审批人角色不存在")
+        val sCeArrovalCandidateIds = ceArrovalCandidateIds.mkString(",")
+
         val params=Map("worksheetno"-> insertedSt.id,
-        "ceApprovalUsers"->ceArrovalCandidateIds)
+        "ceApprovalUsers"->sCeArrovalCandidateIds)
         val workflowGlobalParam=globalParamDao.getById(Constants.GlobalParams.GlobalCodes.TECHSUPPORT_WORKFLOW)
 
         start(workflowGlobalParam match {

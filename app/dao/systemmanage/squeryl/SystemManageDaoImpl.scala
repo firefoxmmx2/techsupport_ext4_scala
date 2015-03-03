@@ -357,6 +357,24 @@ trait UserDaoComponentImpl extends UserDaoComponent {
         where(u.departid === departid)
           compute (max(u.userorder))
     ).single.measures.getOrElse(0)
+
+    /**
+     * 通过用户角色ID或者角色名称,获取用户ID序列
+     * @param roleId
+     * @param rolename
+     * @return
+     */
+    def userIdsByRole(roleId: Option[Long], rolename: Option[String]): Seq[Long] = {
+      require(roleId.isEmpty || rolename.isEmpty)
+      from(SystemManage.roles,SystemManage.userRoles)(
+        (r,ur) =>
+          where(
+            r.rolename === rolename.?
+            and r.id === roleId.?
+          )
+          select(ur.userid)
+      ).toSeq
+    }
   }
 
 }

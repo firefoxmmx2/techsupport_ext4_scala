@@ -1,13 +1,14 @@
 package util
 
 import dao.systemmanage.squeryl._
-import dao.techsupport.squeryl.{SupportTicketDaoComponentImpl, WorksheetDaoComponentImpl}
+import dao.techsupport.squeryl._
 import service.systemmanage._
+import service.techsupport.{SupportTicketServiceComponentImpl, WorksheetServiceComponentImpl}
 
 /**
  * Created by hooxin on 14-3-16.
  */
-trait ComponentRegister extends DepartmentDaoComponentImpl
+trait ComponentRegister extends  DepartmentDaoComponentImpl
 with DepartmentServiceComponentImpl
 with UserDaoComponentImpl
 with UserServiceComponentImpl
@@ -32,8 +33,17 @@ with RoleFuncServiceComponentImpl
 with RoleMenuServiceComponentImpl
 with RoleMenuDaoComponentImpl
 with SupportTicketDaoComponentImpl
-with WorksheetDaoComponentImpl {
+with JbpmTaskDaoComponentImpl
+with SupportDepartmentDaoComponentImpl
+with SupportLeaderDaoComponentImpl
+with WorksheetDaoComponentImpl
+with SupportTicketServiceComponentImpl
+with AttachmentDaoComponentImpl
+with WorksheetServiceComponentImpl
+{
 
+  val attachmentDao: AttachmentDao = new AttachmentDaoImpl
+  val supportTicketService: SupportTicketService = new SupportTicketServiceImpl
   val functionService: FunctionService = new FunctionServiceImpl
   val roleFuncService: RoleFuncService = new RoleFuncServiceImpl
   val functionDao: FunctionDao = new FunctionDaoImpl
@@ -59,5 +69,9 @@ with WorksheetDaoComponentImpl {
   val loginLogDao: LoginLogDao = new LoginLogDaoImpl
   val loginLogService: LoginLogService = new LoginLogServiceImpl
   val supportTicketDao: SupportTicketDao = new SupportTicketDaoImpl
+  val supportDepartmentDao: SupportDepartmentDao = new SupportDepartmentDaoImpl
+  val jbpmTaskDao: JbpmTaskDao = new JbpmTaskDaoImpl
+  val supportLeaderDao: SupportLeaderDao = new SupportLeaderDaoImpl
   val worksheetDao: WorksheetDao = new WorksheetDaoImpl
+  val worksheetService: WorksheetService = new WorksheetServiceImpl
 }

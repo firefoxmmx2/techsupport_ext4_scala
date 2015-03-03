@@ -36,6 +36,14 @@ trait UserDaoComponent {
      * @return
      */
     def maxUserOrder(departid: Long): Int
+
+    /**
+     * 通过用户角色ID或者角色名称,获取用户ID序列
+     * @param roleId
+     * @param rolename
+     * @return
+     */
+    def userIdsByRole(roleId:Option[Long],rolename:Option[String]):Seq[Long]
   }
 
 }
