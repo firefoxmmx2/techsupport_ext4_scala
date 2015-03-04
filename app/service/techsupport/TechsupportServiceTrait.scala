@@ -35,7 +35,7 @@ trait WorksheetServiceComponent {
 
     def getWorksheet(taskId:String):Option[Worksheet]
     def next(taskId:String,params:Map[String,Any])
-    def page(pageno:Int,pageSize:Int,params:WorksheetQuery,sort:String,dir:String):Page[Worksheet]
+    def page(pageno:Int,pageSize:Int,params:WorksheetQuery,sort:String="id",dir:String="desc"):Page[Worksheet]
     def next(taskId:String,transition:String,params:Map[String,Any])
     def start(processName:String,params:Map[String,Any])
     def deploy(processDeclareXmlPath:String):String

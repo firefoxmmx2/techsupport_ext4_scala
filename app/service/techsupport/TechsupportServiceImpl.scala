@@ -224,7 +224,7 @@ trait WorksheetServiceComponentImpl extends WorksheetServiceComponent {
       taskService.completeTask(taskId, params)
     }
 
-    def page(pageno: Int, pageSize: Int, params: WorksheetQuery, sort: String, dir: String): Page[Worksheet] = inTransaction {
+    def page(pageno: Int, pageSize: Int, params: WorksheetQuery, sort: String="id", dir: String="desc"): Page[Worksheet] = inTransaction {
       worksheetDao.page(pageno,pageSize,params,sort,dir)
     }
 

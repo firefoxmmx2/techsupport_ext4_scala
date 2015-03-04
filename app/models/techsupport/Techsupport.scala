@@ -8,7 +8,8 @@ import org.joda.time.DateTime
 case class SupportTicketQuery(
                                region: Option[String] = None,
                                id: Option[Long] = None,
-                               stStatus: Option[String] = None
+                               stStatus: Option[String] = None,
+                               stNo:Option[String] = None
                                )
 
 case class AttachmentQuery(
