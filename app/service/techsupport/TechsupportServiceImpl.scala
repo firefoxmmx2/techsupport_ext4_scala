@@ -152,19 +152,12 @@ trait WorksheetServiceComponentImpl extends WorksheetServiceComponent {
     with GlobalParamDaoComponent=>
 
   import scala.collection.JavaConversions._
-
   class WorksheetServiceImpl extends WorksheetService {
-    private val procoessEngine = Configuration.getProcessEngine
-    private val repositoryService = procoessEngine.getRepositoryService
-    private val executionService = procoessEngine.getExecutionService
-    private val taskService = procoessEngine.getTaskService
-    private val identityService = procoessEngine.getIdentityService
-    private val historyService = procoessEngine.getHistoryService
 
     def getWorksheet(taskId: String): Option[Worksheet] = {
       jbpmTaskDao.getById(taskId.toLong)  match {
         case Some(task) =>
-          val worksheetno = executionService.getVariable(task.executionId_, "worksheetno").asInstanceOf[Long]
+          val worksheetno = 0
           val st = supportTicketService.getById(worksheetno).get
           val regionDictItems = dictItemDao.list(DictItemQueryCondition(dictcode = Some("dm_ts_regin")))
           val stStatusDictItems = dictItemDao.list(DictItemQueryCondition(dictcode = Some("dm_ts_status")))

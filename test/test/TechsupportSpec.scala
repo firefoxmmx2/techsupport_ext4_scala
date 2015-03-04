@@ -14,7 +14,7 @@ import CommonTypeMode._
 /**
  * 技术支持单测试用力.
  */
-class TechsupportSpec extends Specification with ComponentRegister {
+class TechsupportSpec extends Specification with ComponentRegister{
   "techsupport system" should {
     "query a SupportTickets list" in {
       running(FakeApplication()) {
