@@ -5,7 +5,6 @@ import dao.techsupport._
 import models.squeryl.CommonTypeMode._
 import models.systemmanage.{Department, DictItemQueryCondition, User}
 import models.techsupport.{SupportTicket, _}
-import org.jbpm.api._
 import org.joda.time.DateTime
 import util.Page
 
@@ -214,7 +213,6 @@ trait WorksheetServiceComponentImpl extends WorksheetServiceComponent {
     }
 
     def next(taskId: String, params: Map[String, Any]): Unit = {
-      taskService.completeTask(taskId, params)
     }
 
     def page(pageno: Int, pageSize: Int, params: WorksheetQuery, sort: String="id", dir: String="desc"): Page[Worksheet] = inTransaction {
@@ -222,20 +220,13 @@ trait WorksheetServiceComponentImpl extends WorksheetServiceComponent {
     }
 
     def next(taskId: String, transition: String, params: Map[String, Any]): Unit = {
-      taskService.completeTask(taskId, transition, params)
     }
 
     def start(processName: String, params: Map[String, Any]): Unit = inTransaction {
-      val pdList = repositoryService.createProcessDefinitionQuery()
-        .processDefinitionName(processName)
-        .orderDesc(ProcessDefinitionQuery.PROPERTY_VERSION).list()
-      if (pdList.size() > 0)
-        executionService.startProcessInstanceById(pdList(0).getId, params)
     }
 
     def deploy(processDeclareXmlPath: String): String = inTransaction {
-      val deployment = repositoryService.createDeployment().addResourceFromClasspath(processDeclareXmlPath)
-      deployment.deploy()
+      ""
     }
 
     def applySupportTicket(bst: BaseSupportTicket): Unit = inTransaction {

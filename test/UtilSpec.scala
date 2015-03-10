@@ -1,8 +1,13 @@
+import akka.actor.SupervisorStrategy._
+import akka.pattern._
 import akka.actor._
-import akka.event.Logging
-import akka.util.Timeout
+import akka.event.{LoggingReceive, Logging}
+import akka.util._
+import com.typesafe.config.ConfigFactory
 import org.specs2.mutable.Specification
 import util.{Utils, Page}
+
+import scala.concurrent.duration._
 
 /**
  * Created by hooxin on 14-3-10.
@@ -92,7 +97,197 @@ class UtilSpec  extends Specification{
       future1 pipeTo actor2
       1 must  be be_=== 1
     }
+
+    "actor error process" in {
+
+      import Worker._
+      val config=ConfigFactory.parseString(
+        """
+          | akka.loglevel = DEBUG
+          |    akka.actor.debug {
+          |      receive = on
+          |      lifecycle = on
+          |    }
+        """.stripMargin)
+      val system=ActorSystem("FaultToleranceSample",config)
+      val worker=system.actorOf(Props[Worker],name="worker")
+      val listener=system.actorOf(Props[Listener],name="listener")
+
+      worker.tell(Start,sender=listener)
+    }
   }
+
+
+  object Worker {
+    case object Start
+    case object Do
+    case class Progress(percent:Double)
+  }
+  class Worker extends Actor with ActorLogging {
+    import Worker._
+    import CounterService._
+    implicit val askTimeout=Timeout(5 seconds)
+
+    override def supervisorStrategy: SupervisorStrategy = OneForOneStrategy() {
+      case _: CounterService.ServiceUnavailable => Stop
+    }
+
+    var progressListener:Option[ActorRef]=None
+    val counterService = context.actorOf(Props[CounterService],name="counter")
+    val totalCount = 51
+
+    def receive: Actor.Receive = LoggingReceive {
+      case Start if progressListener.isEmpty =>
+        progressListener=Some(sender)
+        context.system.scheduler.schedule(Duration.Zero,1 second,self,Do)
+      case Do =>
+        counterService ! Increment(1)
+        counterService ! Increment(1)
+        counterService ! Increment(1)
+
+        counterService ? GetCurrentCount map {
+          case CurrentCount(_,count) => Progress(100.0 * count / totalCount)
+        } pipeTo progressListener.get
+    }
+  }
+
+  object CounterService {
+    case class Increment(n:Int)
+    case object GetCurrentCount
+    case class CurrentCount(key:String,count:Long)
+    class ServiceUnavailable(msg:String) extends RuntimeException(msg)
+
+    private case object Reconnect
+  }
+
+  class CounterService extends Actor {
+    import CounterService._
+    import Counter._
+    import Storage._
+
+    override def supervisorStrategy: SupervisorStrategy = OneForOneStrategy(
+      maxNrOfRetries = 3,withinTimeRange = 5 seconds
+    ) {
+      case _ : StorageException => Restart
+    }
+
+    val key = self.path.name
+    var storage:Option[ActorRef]=None
+    var counter:Option[ActorRef]=None
+    var backlog=IndexedSeq.empty[(ActorRef,Any)]
+    val MaxBacklog=10000
+
+    @throws[Exception](classOf[Exception])
+    override def preStart(): Unit = initStorage()
+
+    def receive: Actor.Receive = LoggingReceive {
+      case Entry(k,v) if k==key && counter==None =>
+        val c=context.actorOf(Props(new Counter(key,v)))
+        counter=Some(c)
+        c ! UseStorage(storage)
+        for((replyTo,msg) <- backlog) c.tell(msg,sender=replyTo)
+        backlog=IndexedSeq.empty
+      case msg@Increment(n) => forwardOrPlaceBacklog(msg)
+      case msg@GetCurrentCount=>forwardOrPlaceBacklog(msg)
+      case Terminated(actorRef) if Some(actorRef)==storage=>
+        storage=None
+        counter.foreach(_!UseStorage(None))
+        context.system.scheduler.scheduleOnce(10 seconds,self,Reconnect)
+      case Reconnect=>
+        initStorage()
+    }
+
+    def forwardOrPlaceBacklog(msg:Any): Unit = {
+      counter match {
+        case Some(c)=>c.forward(msg)
+        case None=>
+          if(backlog.size >= MaxBacklog)
+            throw new CounterService.ServiceUnavailable("CounterService not available, lack of initial value")
+          backlog=backlog :+ (sender,msg)
+      }
+    }
+
+    def initStorage(): Unit ={
+      storage=Some(context.watch(context.actorOf(Props[Storage],name="storage")))
+      counter foreach( _ ! UseStorage(storage))
+      storage.get ! Get(key)
+    }
+  }
+
+  object DummyDB {
+    import Storage.StorageException
+    private var db=Map[String,Long]()
+
+    @throws(classOf[StorageException])
+    def save(key:String,value:Long):Unit=synchronized {
+      if(11 <= value && value <= 14) throw new StorageException("Simulated store failure "+value)
+      db += (key -> value)
+    }
+
+    @throws(classOf[StorageException])
+    def load(key:String):Option[Long]=synchronized {
+      db.get(key)
+    }
+  }
+  object Storage {
+    case class Store(entry:Entry)
+    case class Get(key:String)
+    case class Entry(key:String,value:Long)
+    class StorageException(msg:String) extends RuntimeException(msg)
+  }
+  class Storage extends Actor {
+    import Storage._
+    val db=DummyDB
+
+    def receive: Actor.Receive = LoggingReceive {
+      case Store(Entry(key,count)) => db.save(key,count)
+      case Get(key)=>sender ! Entry(key,db.load(key).getOrElse(0))
+    }
+  }
+  object Counter {
+    case class UseStorage(storage: Option[ActorRef])
+  }
+  class Counter(key:String,initialValue:Long) extends Actor {
+    import Counter._
+    import CounterService._
+    import Storage._
+
+    var count=initialValue
+    var storage:Option[ActorRef]=None
+
+    def receive: Actor.Receive = LoggingReceive {
+      case UseStorage(s)=>
+        storage=s
+        storeCount()
+      case Increment(n)=>
+        count += n
+        storeCount()
+      case GetCurrentCount=>
+        sender!CurrentCount(key,count)
+    }
+
+    def storeCount(): Unit ={
+      storage.foreach {
+        _ ! Store(Entry(key,count))
+      }
+    }
+  }
+  class Listener extends Actor with ActorLogging {
+    import Worker._
+    context.setReceiveTimeout(15 seconds)
+    def receive: Actor.Receive = {
+      case Progress(percent) =>
+        log.info("Current progress: {} %",percent)
+        if(percent >= 100) {
+          log.info("That's all, shuttting down")
+          context.system.shutdown()
+        }
+      case ReceiveTimeout =>
+        log.error("Shutting down due to unavaliable service")
+        context.system.shutdown()
+    }
+  }
+
 
   class MyActor extends Actor {
     val log=Logging(context.system,this)

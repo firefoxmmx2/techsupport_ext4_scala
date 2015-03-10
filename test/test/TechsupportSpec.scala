@@ -143,7 +143,7 @@ class TechsupportSpec extends Specification with ComponentRegister{
             DateTime.now()
           )
           println("="*13+"+"*13+"="*13)
-          worksheetService.applySupportTicket(bst)
+         // worksheetService.applySupportTicket(bst)
           println("="*13+"-"*13+"="*13)
           val workflowProcessName=globalParamService.getById(Constants.GlobalParams.GlobalCodes.TECHSUPPORT_WORKFLOW)
             .map(_.globalparvalue)
