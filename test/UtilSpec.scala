@@ -1,5 +1,5 @@
 import akka.actor.SupervisorStrategy._
-import akka.pattern._
+import akka.pattern.{ask,pipe}
 import akka.actor._
 import akka.event.{LoggingReceive, Logging}
 import akka.util._
@@ -7,7 +7,10 @@ import com.typesafe.config.ConfigFactory
 import org.specs2.mutable.Specification
 import util.{Utils, Page}
 
+import scala.collection.IterableLike
+import scala.collection.generic.CanBuildFrom
 import scala.concurrent.duration._
+import scala.concurrent.duration.Duration
 
 /**
  * Created by hooxin on 14-3-10.
@@ -114,10 +117,43 @@ class UtilSpec  extends Specification{
       val listener=system.actorOf(Props[Listener],name="listener")
 
       worker.tell(Start,sender=listener)
+      1 must be be_=== 1
     }
   }
 
+  "Collection Implicit" should {
+    "sort" in {
 
+    }
+  }
+
+  trait Sortable[A] {
+    def sort(a:A):A
+  }
+
+  trait GenericSortTrait {
+    implicit def quicksort[T,Coll](
+                                  implicit ev0: Coll <:< IterableLike[T,Coll],
+                                  cbf: CanBuildFrom[Coll,T,Coll],
+                                  n:Ordering[T]
+                                    ) = new Sortable[Coll] {
+      def sort(a: Coll): Coll =
+        if(a.size < 2)
+          a
+      else{
+          import n._
+          val pivot=a.head
+          val (lower:Coll,tmp:Coll)  = a.partition(_ < pivot)
+          val (upper:Coll,same:Coll) = tmp.partition( _ > pivot)
+          val b=cbf()
+          b.sizeHint(a.size)
+          b ++= sort(lower)
+          b ++= same
+          b ++= sort(upper)
+          b.result()
+        }
+    }
+  }
   object Worker {
     case object Start
     case object Do
@@ -126,7 +162,7 @@ class UtilSpec  extends Specification{
   class Worker extends Actor with ActorLogging {
     import Worker._
     import CounterService._
-    implicit val askTimeout=Timeout(5 seconds)
+    implicit val askTimeout=Timeout(5000 milli)
 
     override def supervisorStrategy: SupervisorStrategy = OneForOneStrategy() {
       case _: CounterService.ServiceUnavailable => Stop
@@ -139,7 +175,7 @@ class UtilSpec  extends Specification{
     def receive: Actor.Receive = LoggingReceive {
       case Start if progressListener.isEmpty =>
         progressListener=Some(sender)
-        context.system.scheduler.schedule(Duration.Zero,1 second,self,Do)
+        context.system.scheduler.schedule(Duration.Zero,1000 milli,self,Do)
       case Do =>
         counterService ! Increment(1)
         counterService ! Increment(1)
@@ -166,7 +202,7 @@ class UtilSpec  extends Specification{
     import Storage._
 
     override def supervisorStrategy: SupervisorStrategy = OneForOneStrategy(
-      maxNrOfRetries = 3,withinTimeRange = 5 seconds
+      maxNrOfRetries = 3,withinTimeRange = 5000 milli
     ) {
       case _ : StorageException => Restart
     }
@@ -192,7 +228,7 @@ class UtilSpec  extends Specification{
       case Terminated(actorRef) if Some(actorRef)==storage=>
         storage=None
         counter.foreach(_!UseStorage(None))
-        context.system.scheduler.scheduleOnce(10 seconds,self,Reconnect)
+        context.system.scheduler.scheduleOnce(10000 milli,self,Reconnect)
       case Reconnect=>
         initStorage()
     }
@@ -274,7 +310,7 @@ class UtilSpec  extends Specification{
   }
   class Listener extends Actor with ActorLogging {
     import Worker._
-    context.setReceiveTimeout(15 seconds)
+    context.setReceiveTimeout(15000 milli)
     def receive: Actor.Receive = {
       case Progress(percent) =>
         log.info("Current progress: {} %",percent)
