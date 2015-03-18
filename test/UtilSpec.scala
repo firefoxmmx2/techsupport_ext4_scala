@@ -119,14 +119,44 @@ class UtilSpec  extends Specification{
       worker.tell(Start,sender=listener)
       1 must be be_=== 1
     }
+
+    "actor search query" in {
+
+      1 must be be_=== 1
+    }
   }
 
   "Collection Implicit" should {
     "sort" in {
-
+      1 must be be_=== 1
     }
   }
 
+  case class SearchQuery(query:String,maxResult:Int)
+  trait SearchNode extends Actor{
+    type ScoreDocument = (Double,String)
+    val index: Map[String,Seq[ScoreDocument]] = ???
+    def receive: Actor.Receive = {
+      case SearchQuery(query,maxResults) =>
+        sender ! index.get(query).getOrElse(Seq()).take(maxResults)
+    }
+  }
+  trait HeadNode extends Actor {
+    val nodes:Seq[SearchNode] = ???
+
+    def receive: Actor.Receive = {
+      case s@ SearchQuery(query,maxResults) =>
+        val futureResults = nodes.map(_ !! s)
+        def comblineResults(current:Seq[(Double,String)],
+                             next: Seq[(Double,String)]) =
+          (current ++ next).view.sortBy(_._1).take(maxDocs),force
+      sender ! futureResult.foldLeft(Seq[ScoredDocument]()) {
+        (current,next) =>
+          comblineResults(current,next().asInstanceOf[Seq[ScoredDocmuent]])
+      }
+    }
+  }
+  //////////////////////////////////////////////////////////////////////////////////////////////////
   trait Sortable[A] {
     def sort(a:A):A
   }
