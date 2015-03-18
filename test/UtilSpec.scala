@@ -123,10 +123,15 @@ class UtilSpec  extends Specification{
 
   "Collection Implicit" should {
     "sort" in {
-
+      val seq=Seq(3,2,3,1,45,3,1,2,9,10,22)
+      val sortedSeq=seq.sorted
+      Sorter.quicksort.sort(seq) must be be_=== sortedSeq
     }
   }
 
+  object Sorter extends GenericSortTrait {
+
+  }
   trait Sortable[A] {
     def sort(a:A):A
   }

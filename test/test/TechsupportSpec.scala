@@ -153,7 +153,7 @@ class TechsupportSpec extends Specification with ComponentRegister{
             stNo = Some("重庆-20150304-1")
             ))))
 
-          worksheets.total must be be_=== 1
+          worksheets.total must be be_=== 222
         }
       }
     }
