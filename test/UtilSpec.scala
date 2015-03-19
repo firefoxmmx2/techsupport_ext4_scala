@@ -125,27 +125,27 @@ class UtilSpec  extends Specification{
     "sort" in {
       val seq=Seq(3,2,3,1,45,3,1,2,9,10,22)
       val sortedSeq=seq.sorted
-      Sorter.quicksort.sort(seq) must be be_=== sortedSeq
+      Sorter.sort(seq) must be be_=== sortedSeq
     }
   }
 
-  object Sorter extends GenericSortTrait {
-
-  }
   trait Sortable[A] {
     def sort(a:A):A
   }
 
+  object Sorter {
+    def sort[Coll](a:Coll)(implicit s:Sortable[Coll]):Coll = s.sort(a)
+  }
   trait GenericSortTrait {
     implicit def quicksort[T,Coll](
-                                  implicit ev0: Coll <:< IterableLike[T,Coll],
-                                  cbf: CanBuildFrom[Coll,T,Coll],
-                                  n:Ordering[T]
+                                    implicit ev0: Coll <:< IterableLike[T,Coll],
+                                    cbf: CanBuildFrom[Coll,T,Coll],
+                                    n:Ordering[T]
                                     ) = new Sortable[Coll] {
       def sort(a: Coll): Coll =
         if(a.size < 2)
           a
-      else{
+        else{
           import n._
           val pivot=a.head
           val (lower:Coll,tmp:Coll)  = a.partition(_ < pivot)
@@ -159,6 +159,9 @@ class UtilSpec  extends Specification{
         }
     }
   }
+
+  object Sortable extends GenericSortTrait
+
   object Worker {
     case object Start
     case object Do
