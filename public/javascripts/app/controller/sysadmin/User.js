@@ -261,6 +261,8 @@ Ext.define('Techsupport.controller.sysadmin.User', {
         // 更新用户
         if (form.getForm().isValid()) {
             var record = form.getForm().getRecord();
+            if(typeof record.data.userType == "string")
+                record.data.userType = record.data.userType.split(',');
             record.data.userType = record.data.userType.filter(function (v) {
                 return v;
             });
